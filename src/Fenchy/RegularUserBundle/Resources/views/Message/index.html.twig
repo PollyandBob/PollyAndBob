@@ -1,0 +1,96 @@
+{% extends 'FenchyRegularUserBundle::messages.html.twig' %}
+
+{% block javascripts %}
+    {{parent()}}
+    <script type="text/javascript" src="{{ asset('js/underscore-min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/underscore-min.js') }}"></script>
+    <script type="text/javascript" src="{{asset('js/regular_user/messages/loader.js')}}"></script>
+{% endblock %}
+    
+{% block message_content %}
+
+                        <div class="highlight-toolbar clearfix">
+                            <div class="msg-links">                                                                
+                                <a href="#" id="messages-delete" style="text-decoration: underline; color:#000;" title="{{'regularuser.message.delete_selected'|trans}}"><span>{{ 'regularuser.delete'|trans }}</span></a>
+                            </div>
+                            <div class="toolbar-item button select-button grey-button pull-right">
+                                <strong>{{ 'regularuser.message.show_dd'|trans }}:</strong>
+                                <div class="select-wrapper">
+                                    <span class="replacement">
+                                        <strong class="select-value">{{('regularuser.'~type)|trans}}</strong>
+                                        <i id="sortby-dropdown-icon" class="icon-caret-down" ></i>
+                                        <div class="drop-down">
+                                            <div>                                                                
+                                                <i class="icon-ok"></i>                                                                
+                                                <span>1</span>
+                                            </div>
+                                            <div>                                                                
+                                                <i class="icon-ok"></i>                                                                
+                                                <span>2</span>
+                                            </div>
+                                        </div>
+                                    </span>
+                                    <select class="custom-form message_type" id="messageType">
+                                        <option value="all">{{ 'regularuser.all'|trans }}</option>
+                                        <option value="unread">{{ 'regularuser.unread'|trans }}</option>
+                                        <option value="unreplied">{{ 'regularuser.unreplied'|trans }}</option>
+                                        <option value="sent">{{ 'regularuser.sent'|trans }}</option>
+                                    </select>
+                                </div>                                
+                            </div>                                                            
+                        </div>
+                        <div class="message-center-content clearfix">
+                            <form action="{{path('fenchy_regular_user_messages_delete_selected')}}" method="POST" id="messages-list-form">
+                                <table id="messages-list">
+                                    <tbody>
+                                        {% if messages %}
+                                            {% for message in messages %}
+                                                <tr {% if not message.read %}class="new"{% endif %}>
+                                                    <td><input class='message-check' rel='{{message.id}}' type="checkbox" name="message[{{message.id}}]"/></td>
+                                                    <td><a href="#"><i class=""></i></a></td>
+                                                    <td><span class="image-container vsmall-avatar"><img src="{{ asset(message.sender.regularuser.avatar) }}" /></span></td>
+                                                    <td class="table-sender">{{ message.system ? 'Fenchy' : message.sender.userregular.firstname }}</td>
+                                                    <td class="table-subject"><a href="{{ path('fenchy_regular_user_messages_view', {'id': message.id}) }}"{% if message.unread and message.receiver == app.user %} class="unread"{% endif %}>{{ message.title }}</a></td>
+                                                    <td><i class=""></i></td>
+                                                    <td>{{ message.createdAt|relative }}</td>
+                                                </tr>                                            
+                                            {% endfor %}
+                                        {% else %}
+                                        <tr id="no-messages">
+                                            <td colspan="6">{{'regularuser.message.no_messages'|trans}}</td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </form>                           
+                        </div>
+                    
+
+<script id="msg-row" type="text/template">
+<tr class="new">
+    <td><input class="message-check" rel="<%- id %>" type="checkbox" name="message[<%- id %>]"/></td>
+    <td><a href="#"><i class=""></i></a></td>
+    <td><span class="image-container vsmall-avatar"><img src="<%- avatar %>" /></span></td>
+    <td class="table-sender"><%- sender %></td>
+    <td class="table-subject"><a href="<%- url %>"class="<%- red %>"><%- title %></a></td>
+    <td><i class=""></i></td>
+    <td><%- date %></td>
+</tr>
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        //set right selection
+        $('#messageType').val('{{ type }}');
+
+        $('#messageType').change(function(){
+            var selected = $(this).val();
+            if (selected == 'all')
+                window.location.replace("{{ path('fenchy_regular_user_messages_index') }}");
+            else
+                window.location.replace("{{ path('fenchy_regular_user_messages_index') }}/" + selected);
+        });
+        new messageLoader($('#messages-list tbody'), '{{ path('fenchy_regular_user_messages_index', {_format: 'json', type: 'unread'}) }}');
+    });
+</script>
+{% endblock %}
+

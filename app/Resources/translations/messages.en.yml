@@ -1,0 +1,52 @@
+main:
+  title_suffix: Polly & Bob
+  this_field_is_required: This field is required
+  about_us: About us
+  jobs: Jobs
+  advertising: Advertising
+  terms: Terms
+  privacy: Privacy
+  imprint: Imprint
+  languages: Languages
+schema:
+# related to "db schema"  
+  events: Events
+  help: Help
+  goods: Goods
+  others: Others
+  for: For
+  when: When
+  what: What
+  direction: Direction
+  to_swap: To Swap
+  to_lend: To Lend
+  to_use: To Use
+  to_give_away: To Give Away
+  these_days: These Days
+  today: Today
+  date: Date
+  sports: Sports
+  party: Party
+  arts: Arts
+  music: Music
+  other: Other
+  offer: Offer
+  need: Need
+  contact: Viewable by all neighbours
+  men: Restricted to men
+  women: Restricted to women
+  male: Male
+  female: Female
+  emails_when_someone_sends_you_a_message: Emails when someone sends You a message
+  emails_when_someone_sends_you_a_request: Emails when someone sends You a request
+  emails_when_someone_edits_a_request: Emails when someone edist a request
+  emails_when_someone_transfers_currency: Emails when someone transfers currency
+  emails_when_someone_sends_you_a_contact_request: Emails when someone sends You a contact request
+  emails_when_someone_writes_a_reference_about_you: Emails when someone writes a reference about You
+  never: Never
+  immediately: Immediately
+  daily: Daily
+  create:
+    events: Create event
+    need: Create need
+    offer: Create offer  

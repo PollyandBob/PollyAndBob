@@ -1,0 +1,89 @@
+parameters:
+    database_driver: pdo_pgsql
+    database_host: localhost
+    database_port: 5432
+    database_name: fenchy
+    database_user: postgres
+    database_password: postgres
+    mailer_transport: smtp
+    mailer_host: smtp.googlemail.com
+    mailer_port: 465
+    mailer_user: info@fenchy.com
+    mailer_password: info12345678
+    mailer_encryption: ssl
+    mailer_auth_mode: login
+    from_email: info@fenchy.com
+    from_name: Fenchy Robot
+    locale: en
+    secret: 3fdd10f551014c353d06f419e23f2aff36
+    database_path: null
+    twitter_consumer_key: Jj087NLI2eF0FTbLGFqPDw
+    twitter_consumer_secret: mJYZxB06m787FPcgj64ZBLujRrstyadKp0Q3e0ZAdo
+    twitter_callback_url: http://fenchy/twitter/login_check
+    facebook_app_id: 290893684349911
+    facebook_secret: fbf887b69445ca240b5431d5407b667c
+    gallery_notice_max: 4
+    gallery_profile_max: 4
+    notice_menu_property: direction
+    title_to_content_search_ratio: 0.7
+    gallery_about_me_max: 4
+    initial_pagination_limit: 4
+    loaded_pagination_limit: 2
+    notice_days_before: 0
+    notice_days_after: 5
+    welcome_message_sender: matthias@fenchy.com
+    notifications_enabled: true
+    notification_queue_processing_hour: 2
+    dictionary_storage: 1
+    dictionary_non_tag_delimeter: /[\s,]+/
+    dictionary_tag_delimeter: /[,]+/
+    minimal_search_similarity_level: 0.25
+    points_notice: 1
+    points_got_review: 1
+    points_review: 1
+    points_facebook: 5
+    points_contact: 1
+    profile_about_percent: 0.25
+    profile_first_image_percent: 0.25
+    profile_next_image_percent: 0.0
+    profile_next_images_limit: 0
+    profile_gender_percent: 0.25
+    profile_link_percent: 0.0
+    profile_languages_percent: 0.25
+    profile_total_points: 20
+    filter_min_distance: 2000
+    filter_max_distance: 5000
+    filter_default_lat: 52.519171
+    filter_default_lng: 13.406091
+    file_uploader.max_number_of_files: 4
+    file_uploader.allowed_extensions:
+      - gif #image/gif
+      - png #image/png
+      - jpg #image/jpeg
+      - jpeg #image/jpeg
+    file_uploader.originals:
+        folder: originals
+    file_uploader.sizes:
+      
+      thumbnail:
+        folder: thumbnail
+        max_width: 124
+      medium:
+        folder: medium
+        max_width: 710
+        max_height: 330
+    file_uploader.crop:
+      small:
+        folder: crop_small
+        width: 60
+        height: 60
+      big:
+        folder: crop_big
+        width: 212
+        height: 212
+    reviews_pagination: 10
+    reviews_pagination: 10
+    distance_slider_default: 50000
+    distance_slider_snap: 100
+    listings_pagination: 10
+    not_found_suggestions: 5

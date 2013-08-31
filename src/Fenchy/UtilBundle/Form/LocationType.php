@@ -1,0 +1,36 @@
+<?php
+
+namespace Fenchy\UtilBundle\Form;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+class LocationType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('location', null, array(
+                'error_bubbling' => true,
+                'label' => 'regularuser.location',
+                'attr' => array(
+                    'placeholder' => ''
+                )))        
+            ->add('latitude', 'hidden')              
+            ->add('longitude', 'hidden');   
+        ;
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'Fenchy\UtilBundle\Entity\Location'
+        ));
+    }
+
+    public function getName()
+    {
+        return 'fenchy_utilbundle_locationtype';
+    }
+}

@@ -1,0 +1,98 @@
+{% extends 'FenchyAdminBundle::layout.html.twig' %}
+{% form_theme filter '::filterForm.html.twig' %}
+{% block admincontent %}
+    <form action="{{ path('fenchy_admin_notices') }}" method="post" {{ form_enctype(filter) }}>
+        {{ form_widget(filter) }}
+        <br/>
+        <input type="submit" value="Search"/>
+    </form>
+    <table class="admin-table">
+        <thead>
+            <tr><th>ID</th><th>Title</th><th>Type</th><th>Created at</th><th>Draft</th><th>Owner</th><th>Stickers</th><th>On dashboard</th><th>actions</th></tr>
+        </thead>
+        <tbody>
+            {% for notice in notices %}
+                <tr class="has-subrow">
+                    <td>#{{ notice.id }}</td>
+                    <td>{{ notice.title }}</td>
+                    <td>{{ notice.type }}</td>
+                    <td>{{ notice.createdAt|date('Y-m-d H:i') }}</td>
+                    <td>{{ notice.draft ? 'Yes' : 'No' }}</td>
+                    <td><a href="{{ url('fenchy_admin_user', {id: notice.user.id}) }}" style="color:black">{{ notice.user }}</a></td>
+                    <td>{{ notice.stickers.count }}</td>
+                    <td>{% if notice.onDashboard %}Yes{% else %}No{% endif %}</td>
+                    <td>
+                        <a href="{{ url('fenchy_admin_notice', {id: notice.id}) }}" style="color:black">Edit</a>
+                        {% if not notice.onDashboard %}
+                            | <a href="{{ url('fenchy_admin_notice_add_to_dashboard', {id: notice.id}) }}" style="color:black" class="confirm">Add to dashboard</a>
+                        {% else %}
+                            | <a href="{{ url('fenchy_admin_notice_remove_from_dashboard', {id: notice.id}) }}" style="color:black" class="confirm">Dashboard-Remove</a>
+                        {% endif %}
+                            | <a href="{{ url('fenchy_admin_notice_delete', {id : notice.id}) }}" onclick="return confirm('Are you sure you want to delete this Listing?');" style="color:black">Delete</a>
+                    </td>
+                </tr>
+                <tr class="subrow displayNone">
+                    <td>&nbsp;</td>
+                    <td colspan="8">
+                        <table>
+                            <tbody>
+                                <tr class="has-subrow"><td>Details</td></tr>
+                                <tr class="subrow displayNone">
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>Link:</td>
+                                                <td>{{ notice.link }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Content:</td>
+                                                <td>{{ notice.content }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Location:</td>
+                                                <td>{{ notice.location }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Values:</td>
+                                                <td>
+                                                    {% for val in notice.valuesList %}
+                                                        | {{ ('schema.'~val)|trans }}
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr class="has-subrow"><td>Stickers</td></tr>
+                                <tr class="subrow displayNone">
+                                    <td>
+                                        <table>
+                                            <thead>
+                                                <tr><th>Reporter</th><th>Reasons</th><th>Description</th><th>Created at</th></tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for sticker in notice.stickers %}
+                                                    <tr>
+                                                        <td>{{ sticker.reportedBy }}</td>
+                                                        <td><ul class="reasons">
+                                                            {% for reason in sticker.reason %}
+                                                                <li>{{ sticker.reasonName(reason)|trans }}</li>
+                                                            {% endfor %}
+                                                        </ul></td>
+                                                        <td>{{ sticker.description }}</td>
+                                                        <td>{{ sticker.createdAt|date('y-m-d H:i') }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+    

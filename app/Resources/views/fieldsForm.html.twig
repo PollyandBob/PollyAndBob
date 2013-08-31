@@ -1,0 +1,6 @@
+{% block field_label %}
+    {{ form_label(form)}}
+    {% if required %}
+        <span class="required" title="{{ 'main.this_field_is_required'|trans }}">*</span>
+    {% endif %}
+{% endblock %}

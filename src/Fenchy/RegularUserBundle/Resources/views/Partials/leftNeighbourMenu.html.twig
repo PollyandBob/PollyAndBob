@@ -1,0 +1,12 @@
+<div id="profile_image" class="pr_left_op">
+    {{ helper.profile_image(regularUser.user.mainImage) }}
+</div>
+<div id="profile_round">
+    <div>
+        {{ helper.trust_points(regularUser.user.id) }}
+    </div>
+</div>
+<div id="profile_options">
+    {{ getlink('regularuser.about_him'|trans, 'fenchy_regular_user_neighbour_about', {'id':regularUser.id})|raw }} 
+    {% render 'FenchyRegularUserBundle:Neighbours:submenu' with {'id':regularUser.id}%}
+</div>

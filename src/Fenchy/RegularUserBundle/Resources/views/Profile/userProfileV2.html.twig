@@ -1,0 +1,148 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# any view specific stylesheets for this view #}       
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/sidebar-v2.css')) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/search-bar-v2.css')) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/inner-content-v2.css')) }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/article-box-v2.css')) }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/tabs-v2.css')) }}" type="text/css" /> 
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/custom-form.css')) }}" type="text/css" /> 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/user-profile-view-model.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('http://connect.facebook.net/en_US/all.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script> 
+    <script type="text/javascript" src="{{ asset('js/fenchydropdown.js') }}"></script> 
+    <script type="text/javascript">
+        
+        var userProfileViewModel;
+        var spinnerHTML = '<div id="spinner-div"><i class="icon-spinner icon-spin"></i></div>';
+        var tabsJQ;
+        var profileHome = 1;
+
+        $(document).ready(function() {
+            
+            $('#spoken-languages').tagit({
+                readOnly: true
+            });
+        
+            $('.add-sticker').fancybox({type:'iframe'});
+
+            geocoder = new google.maps.Geocoder();
+            var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';
+            var pagination = {{pagination}};
+            var usersOwnProfile = {{ usersOwnProfile }};
+            {% if(app.security.token.user.id is defined) %}
+                var loggedInUserId = {{ app.security.token.user.id }};
+            {% else %}
+                var loggedInUserId = null;
+            {% endif %}
+            var initialReviews = {{ initialReviews | json_encode() | raw }};
+            var initialListings = {{ initialListings | json_encode() | raw }};
+            var initialReviewsOO = {{ initialReviewsOO | json_encode() | raw }};
+ 
+            var routes = {
+                fenchy_regular_user_reviewseditform: '{{  path('fenchy_regular_user_reviewseditform') }}',
+                fenchy_regular_user_reviewssave: '{{ path('fenchy_regular_user_reviewssave') }}',
+                fenchy_regular_user_reviewslist:'{{ path('fenchy_regular_user_reviewslist') }}',
+                fenchy_regular_user_listingslist: '{{ path('fenchy_regular_user_listingslist') }}'
+            }
+            
+            var displayUserId = {{ displayUser.id }};
+ 
+ 
+            tabsJQ = $("section.content .inner-content #reviews-tabs");
+            
+            userProfileViewModel = new UserProfileViewModel(
+                geocoder, 
+                baseSearchViewUri,
+                routes,
+                pagination,
+                usersOwnProfile,
+                displayUserId,
+                loggedInUserId,
+                initialReviews,
+                initialListings,
+                initialReviewsOO );
+            
+            ko.applyBindings( userProfileViewModel, document.getElementsByTagName('body')[0] );
+            
+            autocomplete = new GApiAutocomplete(
+                document.getElementById('location'),
+                userProfileViewModel );
+                
+            tabsJQ.tabs();
+            
+            if(typeof activateTabsJQ != 'undefined') {
+                tabsJQ.tabs("select", activateTabsJQ);
+            }
+            
+            $('a.facebook-invite-button').click(function(){
+                sendInvitationsFacebook();
+            });
+            
+            function sendInvitationsFacebook() {
+              FB.ui({method: 'apprequests',
+                message: '{{'regularuser.social.invite_facebook'|trans}}'
+              }, requestCallback);
+            }    
+            
+ 
+            function requestCallback(response) {
+                
+            }     
+            
+            var _default_location = '';
+
+            {% if app.user and not app.user.location.location %}
+                _default_location = '{{default_location}}';
+            {% elseif app.user and app.user.location.location %}
+                _default_location = '{{app.user.location.location|replace({"\n": ''})}}';
+            {% else %}
+                _default_location = '{{default_location}}';     
+            {% endif %}
+
+            $('input#location').val(_default_location);            
+            
+        });
+        
+    </script>
+    {# any view specific JS scripts for this view #}
+{% endblock %}
+
+{% block content %}
+    {# put view specific content here #}
+    {{ facebook_initialize({'frictionlessRequests': true }) }}
+    <section class="main content-rtl" data-role="main">
+        <div class="wrapper-inner-content">
+            <div class="clearfix">
+                
+                <section class="sidebar pull-left large-padding-top">
+                    {% include 'FenchyRegularUserBundle:Partials:userProfileLeftMenuV2.html.twig' %}
+                </section>
+                
+                <section class="content pull-right">
+                    {% include '::searchBarV2.html.twig' %}
+                        
+                    {% include 'FenchyRegularUserBundle:Partials:userProfileRightV2.html.twig' %}
+                </section>
+                
+            </div>
+        </div>
+    </section>
+
+    
+
+    
+
+{% endblock %}{# empty Twig template #}

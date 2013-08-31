@@ -1,0 +1,72 @@
+{% extends '::baseV2.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/regular_user/listing/create.css') }}" type="text/css" />    
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/regular_user/listing/create.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+     <section data-role="main" class="main">
+        <div id="main-container">
+            <div class="inner-content">
+                <header class="clearfix">
+                    <h1>{{ 'listing.create.title'|trans }}</h1>
+                    <div class="button grey-button pull-right">
+                        <a href="{{path('fenchy_regular_user_listing_manage')}}" class="wrapper">
+                            <strong>{{'listing.manage_listings'|trans}}</strong>
+                        </a>
+                    </div>
+                </header>
+                <div id="reviews-tabs">
+                    <ul id="tabs" class="clearfix">
+                        <li class="tabs-active"><a href="#"><strong class="circle-count">1</strong><strong>{{ 'listing.create.tab_title.1'|trans }}</strong></a></li>
+                        <li><a href="#"><strong class="circle-count">2</strong><strong>{{ 'listing.create.tab_title.2'|trans }}</strong></a></li>
+                    </ul>
+                    <div class="tabs-panel">
+                        <div id="tip">
+                            <h2>{{ 'listing.create.1.subtitle'|trans }}</h2>
+                            <p>{{ 'listing.create.1.description'|trans }}</p>
+                        </div>
+                        <ul id="type-choices">
+                        {% for type in types %}
+                            {% set dirProp = type.hasProperty(direction) %}
+                            {% if dirProp %}
+                                {% for opt in dirProp.options %}
+                                <li class="action-element">
+                                    <a href="{{path('fenchy_regular_user_notice_create2', {'typename':type.name, 'direction':opt})}}">
+                                        <span class="category-btn">
+                                            <img src="/images/types/{{type}}_{{opt}}_big.png" alt="{{ type|trans }} {{ opt|trans }}"/>
+                                        </span>
+                                        <strong class="info-by-line">{{ type|trans }} {{ opt|trans }}</strong>
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            {% else %}
+                                <li class="action-element">
+                                    <a href="{{path('fenchy_regular_user_notice_create2', {'typename':type.name, 'direction':null})}}">
+                                        <span class="category-btn">
+                                            <img src="/images/types/{{type}}_big.png" alt="{{ type|trans }}"/>
+                                        </span>
+                                        <strong class="info-by-line">{{ type|trans }}</strong>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>                         
+                    </div>    
+                </div>
+            </div>                                    
+        </div>
+    </section>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            createListing.step1.init();
+        });
+    </script>
+{% endblock %}

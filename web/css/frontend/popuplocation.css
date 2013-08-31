@@ -1,0 +1,186 @@
+.rounded
+{
+    width:99%;
+    margin-top:-20px;
+}
+
+#profile_left_menu #profile_image
+{
+    display:none;
+}
+
+#profile_left_menu
+{
+    padding:10px;
+    width:17%;
+}
+#profile_left_menu a
+{
+    padding:5px;
+}
+
+.rounded #settings_loc
+{
+    margin:20px;
+    margin-left:-5px;
+    margin-right: 0px;
+    float:left;
+    width:53%;
+}
+
+.rounded #settings_loc table
+{
+    width:97%;
+}
+
+.rounded #settings_loc table tr td:first-child{
+    text-align:right;
+    font-weight:bold;
+    width:30%;
+}
+
+.rounded #settings_loc table tr td:last-child{
+    width:80%;
+}
+
+.rounded #settings_loc table tr td input{
+    width:64%;
+}
+
+.rounded #settings_loc table tr td{
+    padding:5px;
+    text-align:left;
+    font-size:14px;
+}
+
+.rounded #settings_loc table tr td #not_shown{
+    color: #cacaca;
+    font-size:11px;
+    padding-left:10px;
+}
+.rounded #settings_loc table tr:last-child td input[type='submit']{
+    text-align:center;
+    width:40%;
+}
+
+.rounded #map_loc{
+    width:19%;
+    float:left;
+    margin-top:10px;
+}
+
+
+.rounded #settings_loc #map_canvas,
+.rounded #map_loc #map_canvas
+{
+    height:250px;
+    width:250px;
+    float:left;
+    margin-top:20px;
+    border: 1px solid black;
+}
+
+/*Registration picture*/
+#img_picture_upload{
+    width:27%;
+    min-width:100px;
+    min-height:100px;
+    float:left;
+}
+
+#img_picture
+{
+    width: 150px;
+    height: 150px;
+    margin:auto;
+    margin-top: 48px;
+    margin-right:10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border:1px solid #bcbcbc;
+}
+
+#img_upload_button
+{
+    cursor:pointer;
+    padding:5px;
+    margin:auto;
+    margin-top:10px;
+    margin-right:10px;
+    border:1px solid #bcbcbc;
+    display:none;
+    width:140px;
+    text-align:center;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#img_upload_button:hover{
+    background: #eeeeee
+}
+
+#under_button_text
+{
+    text-align: left;
+    margin-right:10px;
+    font-size:11px;
+    margin-bottom:5px;
+}
+
+#image-add-right {
+    float: left;
+    margin-top:50px;
+    width: 20%;
+    height: 165px;
+    margin-left:20%;
+}
+#image-add-right iframe {
+    width: 100%;
+    height: 195px;
+    overflow: hidden;
+}
+
+.pin_button{
+    width: 60%;
+    margin: auto;
+    position: relative;
+    top: 30px;
+}
+
+.pin_button a{
+    margin-top:10px;
+    width:auto;
+    text-decoration:none;
+    margin:auto;
+    border:0px;
+}
+.pin_button img{
+    margin-left:10px;
+}
+
+#start_fenchy_button{
+    margin-top:20px;
+    float:right;
+    margin-right:55px;
+}
+
+#start_fenchy_button input[type="submit"]{
+    border:0px;
+}
+
+.pin_button a:hover{
+    background: none;
+}
+
+.not_shown_location{
+    display: inline;
+    float: right;
+    position:relative;
+    top:5px;
+    font-size:11px;
+    padding-left:10px;  
+    text-align: right;
+    font-weight: bold;
+}

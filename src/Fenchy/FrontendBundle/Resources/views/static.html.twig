@@ -1,0 +1,61 @@
+{% extends '::baseV2.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/app/static-page-v2.css')}}" type="text/css" />
+    <link rel="stylesheet" href="{{asset('css/app/search-bar-v2.css')}}" type="text/css">
+{% endblock %}
+    
+{% block javascripts %}
+    {{parent()}}
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('js/mvvm/landing-page-view-model.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>    
+    
+    <script type="text/javascript">
+
+        var landingPageViewModel;
+
+        $(document).ready(function() {
+            geocoder = new google.maps.Geocoder();
+            var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';            
+            
+            landingPageViewModel = new LandingPageViewModel(geocoder, baseSearchViewUri);
+            
+            ko.applyBindings( landingPageViewModel, document.getElementsByTagName('body')[0] );
+            
+            autocomplete = new GApiAutocomplete(
+                document.getElementById('location'),
+                landingPageViewModel );
+                
+                var _default_location = '';
+                
+                {% if app.user and not app.user.location.location %}
+                    _default_location = '{{default_location}}';
+                {% elseif app.user and app.user.location.location %}
+                    _default_location = '{{app.user.location.location|replace({"\n": ''})}}';
+                {% else %}
+                    _default_location = '{{default_location}}';     
+                {% endif %}
+                    
+                $('input#location').val(_default_location);                
+        });
+        
+        
+        
+    </script>
+{% endblock %}
+
+{% block content %}
+    <section class="main" data-role="main">
+        <div class="container clearfix">
+            {% include 'FenchyFrontendBundle:Partials:topSearchBar.html.twig' %}
+                <div class="inner-content">
+                    {% block content_static %}{% endblock %}
+                </div>
+        </div>
+        <!-- container -->
+    </section> 
+{% endblock %}

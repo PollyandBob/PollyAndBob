@@ -1,0 +1,18 @@
+<ul>
+    <li {% if app.request.requestUri == path('fenchy_regular_user_settings_basic') %}class="active"{% endif %} >
+        <a href="{{ path('fenchy_regular_user_settings_basic') }}">{{ 'settings.general.name'|trans }}</a>
+    </li>
+    <li {% if app.request.requestUri == path('fenchy_regular_user_settings_location') %}class="active"{% endif %} >
+        <a href="{{ path('fenchy_regular_user_settings_location') }}">{{ 'settings.location.name'|trans }}</a>
+    </li>    
+    
+    <li {% if app.request.requestUri == path('fenchy_regular_user_settings_notifications') %}class="active"{% endif %} >
+        <a href="{{ path('fenchy_regular_user_settings_notifications') }}">{{ 'settings.emailnotifications.name'|trans }}</a>
+    </li>     
+    <li {% if app.request.requestUri == path('fenchy_regular_user_settings_socialnetworks') %}class="active"{% endif %} >
+        <a href="{{ path('fenchy_regular_user_settings_socialnetworks') }}">{{ 'settings.socialnetworks.name'|trans }}</a>
+    </li>     
+    <li {% if app.request.requestUri == path('fenchy_regular_user_settings_account') %}class="active"{% endif %} >
+        <a href="{{ path('fenchy_regular_user_settings_account') }}">{{ 'settings.account.name'|trans }}</a>
+    </li>      
+</ul>

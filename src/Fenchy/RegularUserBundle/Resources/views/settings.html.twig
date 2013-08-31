@@ -1,0 +1,38 @@
+{% extends '::baseV2.html.twig' %}
+{% form_theme form '::labelForm.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}    
+    <link rel="stylesheet" href="{{ asset('css/app/sidebar-v2.css') }}" type="text/css" />
+{% endblock %}
+
+{% block content %}
+<section class="main content-rtl">
+    <div id="main-container" class="wrapper-inner-content">
+        <div class="clearfix">            
+            {% block settings_content %}{% endblock %}            
+        </div>
+    </div>    
+</section>
+        
+{% endblock %}
+
+
+{% block galleryContainer %}
+    <div id="gallery-edit-container" class="file-uploader"></div>
+    
+    <div style="display:none">
+        <div id="crop-area">
+            <img src="" id="target" alt="" />
+            <table class="buttons-panel">
+                <tbody>
+                    <tr>
+                        <td><button id="crop-cancel" class="button gray">{{ 'btn.cancel'|trans }}</button></td>
+                        <td><button id="crop-submit" class="button green">{{ 'btn.ok'|trans }}</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+{% endblock %}

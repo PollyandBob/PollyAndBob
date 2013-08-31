@@ -1,0 +1,87 @@
+{% extends 'FenchyRegularUserBundle::settingsWithoutFormTheme.html.twig' %}
+
+{% form_theme form _self %}
+
+
+{% block form_label %}
+{% spaceless %}
+    {% if not compound %}
+        {% set label_attr = label_attr|merge({'for': id}) %}
+    {% endif %}
+    {% if required %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+    {% endif %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+<label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ ('schema.'~label )|trans }}</label>
+{% endspaceless %}
+{% endblock form_label %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+<link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+{% endblock %}
+
+
+{% block settings_content %}
+    <section id="profile_left_menu" class="sidebar pull-left">
+        <div class="wrapper">
+            {% include 'FenchyRegularUserBundle:Settings:menuV2.html.twig' %}
+        </div>        
+    </section>
+    <section class="content pull-right">
+        <div class="profile_right_content inner-content">
+            <header><h1>{{ 'regularuser.settings'|trans }}</h1></header>
+            <form action="{{ path('fenchy_regular_user_settings_notifications') }}" method="post" {{ form_enctype(form) }} class="course-form">
+                <div class="form-box-wrapper">
+                    <h2>{{ 'settings.emailnotifications.name'|trans }}</h2>
+                    <ul class="list-form">
+                        <div>
+                            {% for child in form.notification_group_intervals %}
+                            <li class="row options"><label>{{ ( 'regularuser.' ~ child.vars.value ) | trans }}</label> 
+                                <div class="input-element">
+                                    <div>
+                                    {% for group in child %} 
+                                        {% for option in child %}
+                                            {% for o in option %} {{ form_widget(o) }}{{ form_label(o) }} {% endfor %} 
+                                        {% endfor %}
+                                    {% endfor %}
+                                    </div>
+                                </div>
+                            </li>
+                {% endfor %}
+                                </div>
+                                <div class="row list-row">
+
+
+                {% for child in form.notifications %}
+                                    <li>
+                        {{ form_widget(child) }} {{ form_label(child) }}
+                                        </li>
+                {% endfor %}
+                                    </div>
+                                    
+                                </ul>
+            {{ form_widget(form) }}
+                    
+                    <footer class="clearfix">
+                        <div class="button grey-button pull-left" id="buttons">
+                            <a id="back" class="wrapper" href="{{path('fenchy_frontend_indexv2')}}">
+                                <strong>{{ 'btn.cancel'|trans }}</strong>
+                            </a>                            
+                        </div>
+                        <div class="button submit pull-right">
+                            <div>
+                                <input type="submit" id="continue" value="{{ 'btn.save'|trans }}"/>                                
+                            </div>
+                        </div>
+                    </footer>
+                            </div>                                     
+                        </form>
+                    </div>
+                </section>
+
+{% endblock %}

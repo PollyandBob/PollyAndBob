@@ -1,0 +1,70 @@
+@charset "utf-8";
+
+.main-wrapper header h1 {
+    text-align: center;
+    font-size: 35px;
+    line-height: 40px;
+    margin: 0 0 15px 0;
+    color: #333333;
+    text-shadow: 1px 1px 0 #FFFFFF;
+}
+#main-container {
+    padding: 79px 0 0 0;
+}
+#main-container.no-search {
+    padding-top: 10px;
+}
+.content-rtl #main-container,
+.content-ltr #main-container {
+    padding: 0 !important;
+}
+.flash-message + section.main #main-container {
+    padding: 0;
+}
+#main-container .inner-content {
+    padding: 15px 10px;
+}
+#main-container .inner-content header h1 {
+    font-size: 1.538em;
+    line-height: 24px;
+    color: #b8b7b7;
+    display: inline-block;    
+}
+#main-container.wrapper-inner-content .inner-content header h1 {
+    font-size: 1.692em;
+    color: #9c9c9c;
+    line-height: 26px;    
+}
+#main-container .inner-content > header h1 {
+    margin-left: 5px;
+}
+#main-container footer .button input,
+#main-container footer .button a strong {
+    font-size: 1.333em;
+    padding: 0 0.235em;
+}
+#main-container footer .button input {
+    width: 99.53%;
+    text-align: center;
+}
+#main-container footer .button {
+    min-width: 17.85%;
+    height: 31px;
+    line-height: 30px;    
+}
+#main-container footer .button.grey-button {
+    height: 33px;
+    line-height: 32px;
+}
+#main-container footer .submit strong {    
+    line-height: 31px;
+}
+#form-container {
+    padding: 15px 70px;
+    background: #f7f7f7;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px; 
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}

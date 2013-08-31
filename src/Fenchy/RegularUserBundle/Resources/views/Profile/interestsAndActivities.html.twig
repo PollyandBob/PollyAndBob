@@ -1,0 +1,51 @@
+{% extends 'FenchyRegularUserBundle::notice.html.twig' %}
+{% form_theme form 'FenchyRegularUserBundle:Notice:form.html.twig' %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript" src="{{ asset('js/notice.js') }}"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            notice.init();
+        });
+</script>
+{% endblock %}
+{% block notice_nav %}
+<ul id="notice-nav">
+    <li class="title">{{ 'regularuser.edit_I_or_A'|trans }}</li>
+    <li class="right">
+        <a class="cancelbutton" id="notice-cancel" href="
+           {% if  notice.id is null %}
+                {{ url('fenchy_regular_user_about_me') }}
+           {% else %}
+                {{ url('fenchy_regular_user_notice_delete', {'id': notice.id}) }}
+           {% endif %}
+           ">
+            <img src="{{ asset('images/cancelbutton.png') }}">
+            <br />{{ 'regularuser.delete'|trans }}
+        </a>
+    </li>
+    <li class="right">
+        <a class="savebutton" id="notice-save" href="#">
+            <img src="{{ asset('images/savebutton.png') }}">
+            <br />{{ 'regularuser.save'|trans }}
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block notice_content %}
+    
+    <div id="interests-and-activities">
+        <div id="interests-and-activities-left">
+            <div id="interests-and-activities-right">
+                <iframe id="gallery-frame" src="{{ url('fenchy_gallery_edit',{'type': 1, 'id':notice.id ? notice.gallery.id : null})}}"></iframe>
+            </div>
+            <form class="long" id="notice-form" action="{{ path('fenchy_regular_user_interests_and_activities', {'noticeId':notice.id}) }}" method="post" {{ form_enctype(form) }}>
+                {{ form_widget(form) }}
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+    

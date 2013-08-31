@@ -1,0 +1,45 @@
+{% extends "UserBundle::layout.html.twig" %}
+
+{% block content_inner %}
+
+    {% block fos_user_content %}
+<div class="password-reset-form">
+    <form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset">
+        <div class="error">
+                {{form_errors(form.new.first)}}
+                {{form_errors(form.new.second)}}
+            </div>
+            <div class="msgUser" id="msgUserReset">
+                <p>{{'user.rest_pass_msg'|trans}}</p>
+            </div>
+
+            <div class="row fieldInput">
+                 {{ form_label(form.new.first) }}
+                    {{ form_widget(form.new.first) }}
+                </div>
+
+                <div class="row fieldInput">
+                {{ form_label(form.new.second) }}
+                    {{ form_widget(form.new.second) }}
+                    </div>         
+                    
+                        <footer class="clearfix">
+                            <div class="button grey-button pull-left" id="buttons">
+                                <a id="back" class="wrapper" href="{{ path('fenchy_user_login') }}">
+                                    <strong>{{ 'user.back_to_login'|trans }}</strong>
+                                </a>                            
+                            </div>
+                            <div class="button submit pull-right">
+                                <div>
+                                    <input type="submit" id="continue" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}"/>                                
+                                </div>
+                            </div>
+                        </footer>                  
+
+            {{ form_rest(form) }}
+                    </form>
+                </div>
+
+    {% endblock %}
+
+{% endblock %}

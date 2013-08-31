@@ -1,0 +1,33 @@
+{% extends 'FenchyFrontendBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/frontend/index.css') }}" type="text/css" />
+{% endblock %}
+
+{% block header %}
+    
+{% endblock %}
+    
+{% block content %}
+    <script src="{{ asset('js/pretty_photo.js') }}" type="text/javascript" charset="utf-8"></script>
+    <div >
+        <a id="sign_in" href="{{ path('fenchy_frontend_signin') }}">{{ 'frontend.sign_in'|trans }}</a>
+        <div class="clear"></div>
+    </div>
+    {% include 'FenchyFrontendBundle:Partials:headerPartialLogo.html.twig' %}
+    <div class="sign_up_block">
+        <div>
+            <a id="sign_up" href="{{ path('fenchy_frontend_presignup') }}">{{ 'frontend.sign_up'|trans }}</a>
+        </div>
+    </div>
+    {#
+    <div class="rounded">
+        <a href="http://www.youtube.com/watch?v=wslum1WIf88&feature=player_embedded" rel="prettyPhoto">
+           <img src="{{ asset('images/crouchsurfing.png') }}" width="420px" height="233px" alt="" />
+        </a>
+    </div>
+    #}
+    
+{% endblock %}
+    

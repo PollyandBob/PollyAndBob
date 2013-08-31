@@ -1,0 +1,33 @@
+
+
+
+#nc-dialog {
+	text-align: center;
+	visibility: hidden;
+}
+
+.ui-dialog .ui-dialog-title { font-size: 14px; padding: 5px 0px;}
+
+.ui-widget-content { font-size: 12px; }
+
+.ui-dialog .ui-dialog-content p { padding: 5px 0px; }
+
+.ui-dialog .ui-dialog-content a.facebook {
+	display:  block;
+	line-height: 16px;
+    background: -moz-linear-gradient(center top , #6B8BBA, #3C5C95) repeat scroll 0 0 transparent;
+    margin: 15px 30px;
+    border-radius: 5px 5px 5px 5px;
+    color: white;
+    font-size: 16px;
+    padding: 10px 20px 14px 20px;
+}
+.ui-dialog .ui-dialog-content .firstletter {
+    font-size: 26px;
+    font-weight: bold;
+    left: -5px;
+    margin-right: 5px;
+    position: relative;
+    top: 4px;
+    
+}

@@ -1,0 +1,204 @@
+@charset "utf-8";
+
+#tagline+#page-wrapper .flash-message {
+    width: 76%;
+}
+#tagline+#page-wrapper .flash-message+.landingpage,
+#tagline+#page-wrapper .flash-message+#fb-root+.landingpage {
+    padding-top: 120px;
+}
+section.landingpage .container:before {
+    background: url("/images/bg/sidebar_landingpage.jpg") repeat-y;
+}
+section.landingpage .container.content-ltr:before {
+    opacity: 0.8;
+}
+section.landingpage .container.content-ltr:after {
+    display: none;
+}
+section.landingpage .container > .clearfix {
+    background: #ffffff;
+}
+.ie8 section.landingpage .container > .clearfix {
+    background: none;
+}
+section.landingpage .content {
+    margin-top: 22px;
+    margin-bottom: 19px;
+}
+section.landingpage .sidebar {
+    float: right !important;
+}
+section.landingpage .sidebar header {
+    margin-top: 20px;
+    background: url(/images/bg/sidebar_header.png) repeat;
+    position: relative;
+}
+section.landingpage .sidebar header h3 {
+    font-size: 1.231em; /* 16px */
+    line-height: 42px;
+    color: #149a9a;
+    text-align: center;
+}
+section.landingpage .sidebar header h3 strong {
+    font-size: 1.25em; /* 20px */
+}
+section.landingpage .sidebar header h3 img {
+    display: inline;
+    vertical-align: middle;
+    width: 36.44%;
+}
+section.landingpage .sidebar ul {
+    padding: 1px 11px 5px 10px;
+}
+section.landingpage .sidebar ul li {
+    border-bottom: 1px solid #d1f1ec;
+    border-top: 2px solid #acdfdd;
+    padding: 19px 3.721% 18px 42.33%;
+    position: relative;
+}
+section.landingpage .sidebar ul li:first-child {
+    border-top: 0;
+}
+section.landingpage .sidebar ul li:last-child {
+    border-bottom: 0;
+}
+section.landingpage .sidebar ul li img {
+    position: absolute;
+    left: 3px;
+    top: 18px;
+}
+section.landingpage .sidebar ul li p{
+    font-weight: bold;
+    color: #0e7777;
+    font-size: 0.923em;
+    line-height: 16px;
+}
+section.landingpage .sidebar footer {
+    position: relative;
+}
+section.landingpage .sidebar footer p {
+    font-size: 1.077em;
+    line-height: 22px;
+    padding: 6px 0;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: center;
+    text-shadow: 1px 0px 1px rgba(1, 1, 1, 0.45);
+    background: url(/images/bg/sidebar_footer.png) repeat;
+}
+section.landingpage .sidebar footer p span {
+    text-transform: uppercase;
+}
+
+aside.main {
+    position: relative;
+    background: #c1e1db;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 8px 1.345%;
+    behavior: url(/plugins/pie.php);
+}
+.content > aside.main {
+    margin-right: 2.8%; /* 21px; */
+}
+aside.main > p {
+    font-weight: bold;
+    color: #138f8f;
+    font-size: 1.154em;
+    line-height: 17px;
+    display: inline-block;
+    margin: 7px 0 0 0.867em;
+}
+aside.main .create-listing {    
+    border: 2px solid #0e7777;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    float: right;    
+    width: 37.88%;
+    background-color: #149a9a;
+}
+aside.main .create-listing:hover {
+    border: 2px solid #1b9393;
+}
+aside.main .create-listing .wrapper {
+    line-height: 44px;    
+}
+aside.main .create-listing:hover .wrapper {
+    background: rgba(255,255,255, 0.1);
+    -pie-background: rgba(255,255,255, 0.1);
+    behavior: url(/plugins/pie.php);
+}
+aside.main .create-listing .wrapper i {
+    font-size: 2.538em;
+    color: #45baba;
+}
+aside.main .create-listing .wrapper strong {    
+    color: #ffffff;
+}
+
+.facebook-like-box {
+    margin-top: 20px;
+    text-align: center;
+}
+
+@media screen and (max-width : 1024px) {
+   header.main .create-listing i {
+       font-size: 1.65em;
+   }
+   header.main .create-listing strong {
+       font-size: 1em;
+   }
+   aside.main .create-listing .wrapper i {
+        font-size: 2.167em;
+    }
+    aside.main .create-listing .wrapper strong {
+        font-size: 1.083em;
+    } 
+    section.landingpage .sidebar ul li img {
+        left: 0;
+    }
+}
+@media screen and (max-width : 992px) {
+    .fb_edge_widget_with_comment,
+    .fb_iframe_widget span, 
+    .fb_iframe_widget iframe {
+        width: 100% !important;
+    }
+}
+@media screen and (max-width : 810px) {       
+    section.main article h3 {
+        font-size: 1.083em;
+    }
+    section.landingpage .sidebar ul li p {
+        font-size: 1em;
+        text-align: center;
+    }    
+    section.landingpage .sidebar ul li {
+        padding: 9px 11px 18px;
+    }
+    section.landingpage .sidebar ul li img {
+        position: relative;
+        left: 0;
+        top: 0;
+        margin: 0 auto;
+        margin-bottom: 10px;
+    }
+}
+@media screen and (max-width : 768px) {
+    aside.main {
+        margin: 0 2.8%;
+    }
+    aside.main > p {
+        text-align: center;
+        display: block;
+        line-height: 22px;
+    }
+    aside.main .create-listing {
+        float: none;
+        margin: 9px auto 0;
+        width: 50%;
+    }
+}

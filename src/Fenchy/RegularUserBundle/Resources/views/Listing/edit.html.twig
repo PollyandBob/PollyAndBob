@@ -1,0 +1,175 @@
+{% extends 'FenchyGalleryBundle::galleryBase.html.twig' %}
+{% form_theme form '::noLabelForm.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}        
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/jquery.tagit.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/tagit.ui-zendesk.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/regular_user/listing/create.css') }}" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/regular_user/listing/create.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/landing-page-view-model.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.timepicker.js') }}"></script>
+    
+    <script type="text/javascript">
+
+        var landingPageViewModel;
+
+        $(document).ready(function() {
+            
+            $('#fenchy_noticebundle_noticetype_start_date, #fenchy_noticebundle_noticetype_end_date').datetimepicker({dateFormat: 'dd.mm.yy'});
+        
+            geocoder = new google.maps.Geocoder();
+            var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';            
+            
+            landingPageViewModel = new LandingPageViewModel(geocoder, baseSearchViewUri);
+            
+            ko.applyBindings( landingPageViewModel, document.getElementsByTagName('body')[0] );
+            
+            autocomplete = new GApiAutocomplete(
+                document.getElementById('location_gapi'),
+                landingPageViewModel );
+           
+                
+        });
+        
+    </script>
+    <script type="text/javascript" src="{{ asset('js/regular_user/listing/form.js') }}"></script>
+    
+{% endblock %}
+
+{% block content %}
+    {{ parent() }}
+    <section data-role="main" class="main">
+        <div id="main-container">
+            <div class="inner-content">
+                <header class="clearfix">
+                    <h1>{{ 'listing.edit.title'|trans }}</h1>
+                    <div class="button grey-button pull-right">
+                        <a href="{{path('fenchy_regular_user_listing_manage')}}" class="wrapper">
+                            <strong>{{'listing.manage_listings'|trans}}</strong>
+                        </a>
+                    </div>
+                </header>
+                <div id="reviews-tabs">
+                    <ul id="tabs" class="clearfix">
+                        <li>
+                            <a href="#" class="disable-cursor">
+                                <strong class="circle-count">1</strong>
+                                <strong>{{ 'listing.create.tab_title.1'|trans }}</strong>
+                            </a>
+                        </li>
+                        <li class="tabs-active">
+                            <a href="#">
+                                <strong class="circle-count">2</strong>
+                                <strong>{{ 'listing.create.tab_title.2'|trans }}</strong>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tabs-panel">
+                        <div id="tip">
+                            <h2>{{ 'listing.create.2.subtitle'|trans }}
+                                <span>{{ type.name|trans }}</span>
+                            </h2>
+                            <p>{{ 'listing.create.2.description'|trans }}</p>
+                        </div>  
+                    <form class="form-wrapper listing-form" action="{{ path('fenchy_regular_user_notice_edit', { id: notice.id }) }}" method="post" {{ form_enctype(form) }}>
+                        <div id="form-container" class="clearfix">
+                            {{ block('galleryContainer') }}
+                            <div id="form-fields">
+                                
+                                <div class="row fieldInput grid_6">
+                                    {{ form_row(form.title) }}
+                                </div>
+                                
+                                {% set subId = type.subcategoryId %}
+                                {% if subId %}
+                                <div class="row grid_4">
+                                        <div class="toolbar-item button select-button grey-button">
+                                            <strong>Category:</strong>
+                                            <div class="select-wrapper">
+                                                <span class="replacement">
+                                                    <strong class="select-value"></strong>
+                                                    <i id="sortby-dropdown-icon" class="icon-caret-down"></i>
+                                                </span>
+                                                <div class="custom-form">
+                                                    {{ form_row(form.type['value_'~subId]) }}
+                                                </div>                                                                                                            
+                                            </div>                                                
+                                        </div>
+                                </div>                                 
+                                {% endif %}
+                                
+                                <div class="row fieldInput textarea_content grid_10">
+                                {{ form_row(form.content) }}
+                                </div>
+
+                                <div class="row fieldInput with_icon grid_6 tags-container">
+                                    <i class="icon-tag"></i>
+                                    {{ form_row(form.tags) }}
+                                </div>                                
+                                
+                                    <div class="row fieldInput with_icon grid_2">
+                                        <i class="icon-calendar"></i>
+                                        {{ form_row(form.start_date) }}
+                                    </div>   
+                                    <div class="row fieldInput with_icon grid_2">
+                                        <i class="icon-calendar"></i>
+                                        {{ form_row(form.end_date) }}
+                                    </div> 
+                                {% if type.locationChangeAvailable %}
+                                        <div class="row fieldInput with_icon grid_4">
+                                            <i class="icon-map-marker"></i>
+                                            <input type="text" value="{% if location %}{{location.location}}{% endif %}" id="location_gapi" required="required" />
+                                        </div>
+                                {% endif %}
+                                    <div class="form-type-fields-container">
+                                        {{ form_widget(form.type) }}
+                                    </div>
+                                    <div class="row fieldInput noticebundle grid_2" style="display:none;">
+                                        {{ form_rest(form) }}
+                                    </div>     
+                            </div>
+                        </div>
+                           <footer class="clearfix">
+                                <div class="button grey-button pull-left" id="buttons">
+                                    <a id="back" class="wrapper" href="{{ path('fenchy_regular_user_listing_manage') }}">
+                                        <strong>{{ 'listing.edit.back_to_management'|trans }}</strong>
+                                    </a>    
+                                </div>
+                                <div class="button submit pull-right">
+                                    <div>
+                                        <input type="submit" id="continue" value="{{ 'btn.save'|trans }}"/>                                
+                                    </div>
+                                </div>
+                            </footer>  
+                    </form>
+                </div>
+                </div>
+            </div>                
+        </div>                    
+    </section>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var sampleTags = {{ tags|json_encode|raw }};
+        
+            createListing.step2.init();
+            
+            $('#fenchy_noticebundle_noticetype_tags').tagit({
+                availableTags: sampleTags,
+                allowSpaces: true
+            });
+        });
+    </script>
+{% endblock %}

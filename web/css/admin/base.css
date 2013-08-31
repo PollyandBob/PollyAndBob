@@ -1,0 +1,117 @@
+#admin-menu {
+    float: left;
+    clear: both;
+}
+#admin-menu li {
+    border: 1px solid #AAAAAA;
+    border-radius: 3px 3px 3px 3px;
+    color: #343434;
+    display: inline-block;
+    font-family: MYRIADPRO-SEMIBOLD,serif;
+    font-size: 18px;
+    margin: 20px 7px 12px;
+    min-width: 94px;
+    padding: 10px;
+    text-align: center;
+}
+#admin-content {
+    float: left;
+    clear: both;
+    width: 100%
+}
+.admin-table {
+    border: 1px solid #149A9A;
+    background-color: #149A9A;
+    text-align: center;
+    width: 100%;
+}
+.admin-table td, .admin-table th {
+    padding: 3px;
+}
+.admin-table tr td:nth-child(2n) {
+    background-color: #EfFeC8;
+}
+.admin-table thead tr {
+    background-color: #149A9A;
+}
+.admin-table th {
+    font-weight: bold;
+    color: white;
+}
+.admin-table td {
+    background-color: white;
+}
+.admin-table table {
+    border: 1px solid #142A9A;
+    background-color: #142A9A;
+    width: 100%;
+    margin: 5px 0;
+}
+.admin-table table thead tr {
+    background-color: #142A9A;
+}
+.admin-table table th {
+    font-weight: bold;
+    color: white;
+}
+.admin-table table td {
+    background-color: white;
+}
+.admin-table table tr td:nth-child(2n) {
+    background-color: #C7C8ED;
+}
+
+.displayNone {
+    display: none;
+}
+
+.switch {
+    cursor: pointer;
+}
+.switch:hover {
+    border: 1px solid black;
+    font-weight: bold;
+}
+.has-subrow:hover {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.filter-element {
+    float: left;
+    padding: 5px;
+    text-align: center;
+    height: 50px;
+}
+
+
+section.main .admin:before,
+section.main .admin:after {
+    width: 0 !important;
+}
+section.main .admin:before {
+    background: none !important;
+}
+
+section.main .admin {
+    padding: 20px 0px;
+}
+
+section.main .admin form fieldset, section.main .admin form input, section.main .admin form button, section.main .admin form textarea {
+background-color: #ffffff;
+border: 1px #ABADB3 solid;
+padding: 2px;
+margin: 2px;
+}
+
+section.main .admin form input[type="submit"] {
+background-color:#149A9A !important;  
+color: #fff;
+}
+
+section.main .admin .clearfix {
+    background: none;
+}
+ul.reasons {
+    list-style: disc;
+}

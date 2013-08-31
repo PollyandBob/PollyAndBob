@@ -1,0 +1,80 @@
+{% extends 'FenchyAdminBundle::layout.html.twig' %}
+{% form_theme filter '::filterForm.html.twig' %}
+{% block admincontent %}
+    <form action="{{ path('fenchy_admin_reviews') }}" method="post" {{ form_enctype(filter) }}>
+        {{ form_widget(filter) }}
+        <br/>
+        <input type="submit" value="Search"/>
+    </form>
+    <table class="admin-table">
+        <thead>
+            <tr><th>ID</th><th>Tex</th><th>Type</th><th>Stickers</th><th>Created at</th><th>Author</th><th>actions</th></tr>
+        </thead>
+        <tbody>
+            {% for review in reviews %}
+                <tr class="has-subrow">
+                    <td>#{{ review.id }}</td>
+                    <td>{{ review.text }}</td>
+                    <td>{{ review.typeName }}</td>
+                    <td>{{ review.stickers.count }}</td>
+                    <td>{{ review.createdAt|date('Y-m-d H:i') }}</td>
+                    <td><a href="{{ url('fenchy_admin_user', {id: review.author.id}) }}" style="color:black">{{ review.author }}</a></td>
+                    <td>
+                        <a href="{{ url('fenchy_admin_review', {id: review.id}) }}" style="color:black">Edit</a>
+                    </td>
+                </tr>
+                <tr class="subrow displayNone">
+                    <td>&nbsp;</td>
+                    <td colspan="7">
+                        <table>
+                            <tbody>
+                                <tr class="has-subrow"><td>Target</td></tr>
+                                <tr class="subrow displayNone">
+                                    <td>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        {% if review.aboutUser %}
+                                                            USER: {{ review.aboutUser }}
+                                                            {{ review.aboutUser.userRegular }}
+                                                        {% else %}
+                                                            Notice: #{{ review.aboutNotice.id }}
+                                                            {{ review.aboutNotice.title }}<br/>
+                                                            <p>{{ review.aboutNotice.content }}</p>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr class="has-subrow"><td>Stickers</td></tr>
+                                <tr class="subrow displayNone">
+                                    <td>
+                                        <table>
+                                            <thead>
+                                                <tr><th>Reporter</th><th>Reason</th><th>Description</th><th>Created at</th></tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for sticker in review.stickers %}
+                                                    <tr>
+                                                        <td>{{ sticker.reportedBy }}</td>
+                                                        <td>{{ sticker.reasonName }}</td>
+                                                        <td>{{ sticker.description }}</td>
+                                                        <td>{{ sticker.createdAt|date('y-m-d H:i') }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+    

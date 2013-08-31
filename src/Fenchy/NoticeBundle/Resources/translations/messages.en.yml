@@ -1,0 +1,84 @@
+notice:
+  title: Title
+
+  content: Your description
+
+  no_limit: no limit
+
+  tags: Tags
+
+  category:
+    help: Services/Help
+
+    goods: Goods
+
+    events: Events
+
+    others: Others
+
+  subcategory:
+    offer: Offers
+
+    need: Needs
+
+    to_swap: To swap
+
+    to_lend: To lend
+
+    to_use: To use
+
+    to_give_away: To give away
+
+    sports: Sports
+
+    party: Party
+
+    arts: Arts
+
+    music: Music
+
+    other: Others
+
+  filter:
+    filters: Filters
+
+    user: User
+
+    distance: Distance
+
+    post_date: Pending Listings
+
+    location: Location
+
+    phrase: Search Phrase
+
+    categories: Categories
+
+    clear: Clear All
+
+    today: Today
+
+    yesterday: Yesterday
+
+    this_week: This Week
+
+    last_week: Last Week
+
+    past_month: Past Month
+
+    sort:
+      rel: Relevance
+
+      dist: Distance
+
+      time: Time
+
+  x_listings: listings
+
+  sort_by: Sort by
+
+  similar_title: Similar listings
+
+  other_from: Other Listings from
+
+  other_from_title: 

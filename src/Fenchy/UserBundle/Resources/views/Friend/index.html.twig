@@ -1,0 +1,165 @@
+{% extends 'FenchyRegularUserBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/frontend/login.css') }}" type="text/css" />
+{% endblock %}
+
+{% block profil_content %}
+
+{% if null == app.user.facebookID %}
+    {{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
+{% endif %}
+
+{% if app.user.facebookID %}
+<div id="fb-root"></div>
+{% endif %}
+
+<div class="rounded"> 
+    <div id="friend">
+        <ul class="header">
+            <li><a href="{{ path('fenchy_user_friend_facebook')}}" class="header">{{ 'regularuser.facebook_friends'|trans }}</a></li>
+            <li><a href="{{ path('fenchy_user_friend_new_email')}}" class="header" style="width: 118px;">{{ 'regularuser.email'|trans }}</a></li>
+        </ul>
+
+        {% block invite_content %}    
+
+            {% if friends %}
+            {% for friend in friends %}
+                <ul class="row">
+                    <li>
+                        <div><img src="https://graph.facebook.com/{{ friend.id }}/picture"/></div>
+                        <div class="user_name">{{ friend.name }}</div>
+                        <div class="invite_button"><a id="{{ friend.id }}" href="#" class="invite_button" onclick="sendMessage('{{ friend.id }}');">{{ 'regularuser.invite'|trans }}</a></div>
+                    </li>
+                </ul>
+
+            {% endfor %}    
+            {% else%}
+                {% if ask_again %}
+                <div id="contact">
+                    <div>
+                        {{ 'regularuser.no_contacts'|trans }}
+                    </div>
+                    <div>
+                        <br />
+                        <input type="checkbox" name="ask_again" class="ask_again" value="{{ path('fenchy_regular_user_settings_ask_again',{'ask_again' : 0, 'address' : 'fenchy_user_friend'}) }}">{{ 'regularuser.dont_ask'|trans }}
+                    </div>
+                    <div class="tw_fb_logins">
+
+                        {% if null == app.user.facebookID %}
+                        <div class="connect">
+                            <a href="" id="connect-facebook" class="facebook">
+                                <span class="firstletter">f</span> | <span class="connect_content_fb">{{ 'regularuser.connect_to_facebook'|trans }}</span>
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="connect">
+                            <a href="{{ path('fenchy_disconnect_facebook') }}" class="facebook">
+                                <span class="firstletter">f</span> | <span class="connect_content_fb">{{ 'regularuser.disconnect_facebook'|trans }}</span>
+                            </a>
+                        </div>
+                        {% endif %}
+
+                        <div class="connect">
+                            <a href="{{ url(app.user.twitterID ? 'disconnect_twitter' : 'connect_twitter')}}" class="twitter">
+                                <span class="firstletter">t</span> | <span class="connect_content_tw">{{ app.user.twitterID ? 'regularuser.disconnect_twitter'|trans  : 'regularuser.connect_to_twitter'|trans }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+           {% endif %} 
+            
+        {% endblock %}       
+    </div>
+        
+    
+    
+    <div class="clear"></div> 
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+            function sendMessage(new_user_fb_id)
+            {            
+                FB.ui({
+                    method: 'send',
+                    name: '{{ 'regularuser.join_to_fenchy'|trans }}',
+                    link: '{{ url('fenchy_frontend_presignup') }}',
+                    redirect_uri: '{{ url('fenchy_user_friend_send_success') }}' + '?new_user_fb_id=' + new_user_fb_id,
+                    description: '{{ app.user.name }}' + ' {{ 'regularuser.would_like_to_invite_you'|trans }}',    
+                    to: new_user_fb_id,
+                    });              
+            } 
+    </script>
+    
+    {% if null == app.user.facebookID %}
+        <script type="text/javascript">                
+        function onFbInit() {
+            $('#connect-facebook').click(function(){
+                FB.login(function(response) {
+                    if (response.authResponse) {
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ path('fenchy_connect_facebook') }}",
+                            data: { token: response.authResponse.accessToken, facebookId: response.authResponse.userID }
+                        }).done(function( data ) {
+                            if (null != data.url) {
+                                window.location.replace( "{{ path('fenchy_user_friend') }}" );
+                            } else {
+                                alert( '{{ 'regularuser.unexpected_problem_facebook'|trans }}');
+                            }
+                        }).fail(function( data ) {
+                            if (null != data.responseText) {
+                                alert( data.responseText );
+                            } else {
+                                alert( '{{ 'regularuser.unexpected_problem_facebook'|trans }}');
+                            }
+                        });
+                    }
+                }, {
+                    scope: 'email, user_birthday, user_location'
+                });
+                return false;  
+            });
+        }
+        </script>
+    {% else %}
+        <script type="text/javascript">
+        $(document).ready(function() {    
+
+              window.fbAsyncInit = function() {
+                FB.init({
+                  appId: '{{ facebook_app_id }}',
+                  cookie: true,
+                  xfbml: true,
+                  oauth: true
+                });
+                FB.Event.subscribe('auth.login', function(response) {
+                  window.location.reload();
+                });
+                FB.Event.subscribe('auth.logout', function(response) {
+                  window.location.reload();
+                });
+              };
+
+              (function() {
+                var e = document.createElement('script'); e.async = true;
+                e.src = document.location.protocol +
+                  '//connect.facebook.net/en_US/all.js';
+                document.getElementById('fb-root').appendChild(e);
+              }());
+
+        });
+        </script>        
+    {% endif %}  
+        
+
+    
+  
+{% endblock %}    

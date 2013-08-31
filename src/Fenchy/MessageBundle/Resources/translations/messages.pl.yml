@@ -1,0 +1,24 @@
+message:
+  receiver: Adresat:
+
+  title: Temat
+
+  content: Napisz Treść
+
+  reply: Napisz Odpowiedź
+
+  welcome:
+    title: Witamy w Fenchy!
+
+    content: Witaj %firstname%,  Jestem Matthias, jeden z twórców Fenchy. Poprzez Fenchy chcemy zaoferować najprostszą możliwość połączenia Cię ze swoim sąsiedztwem. Są 3 rzeczy o których powinieneś wiedzieć:1. Jesteś jednym z pierwszych użytkowników Fenchy. Będziemy starali się stopniowo zwiększać funkcjonalność Fenchy. Możesz czuć się swobodnie wysyłając mi swoją opinię. 2. Możesz używać Fenchy z Twoimi przyjaciółmi z okolicy. Wystarczy, że klikniesz na odpowiednim przycisku by ich zaprosić do swoich kontaktów. 3. W celu uzyskania najlepszych wyników, możesz uzupełnić swój profil większą ilością informacji w sekcji ustawień swojego konta. Dziękuję za rejestrację i witaj w Fenchy ! Matthias
+
+  deleted_user:
+    firstname: Konto usunięte
+
+  notification:
+    email:
+      subject: Dostałeś wiadomość w Fenchy
+
+      body: Masz nową wiadomość w serwisie Fenchy
+
+      follow_link: Zobacz wiadomość w Fenchy

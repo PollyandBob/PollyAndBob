@@ -1,0 +1,12 @@
+{% extends 'FenchyFrontendBundle::static.html.twig' %}
+
+{% block content_static %}
+    <h1>{{ 'frontend.terms.title'|trans }}</h1>
+    {% if locale == 'de'%}
+        {% include 'FenchyFrontendBundle:Frontend:terms-content-de.html.twig' %}
+    {% elseif locale == 'en'%}
+        {% include 'FenchyFrontendBundle:Frontend:terms-content-en.html.twig' %}
+    {% else %}
+        {% include 'FenchyFrontendBundle:Frontend:terms-content-en.html.twig' %}
+    {% endif %}
+{% endblock %}

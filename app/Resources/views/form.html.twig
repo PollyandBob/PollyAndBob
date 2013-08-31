@@ -1,0 +1,7 @@
+{% block form_widget_simple %}
+{% spaceless %}
+    {% set type = type|default('text') %}
+    {% set placeholder = placeholder|default(label) %}
+<input type="{{ type }}" placeholder="{{ placeholder|trans({}, translation_domain)|lower|trim(':') }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{% endspaceless %}
+{% endblock form_widget_simple %}

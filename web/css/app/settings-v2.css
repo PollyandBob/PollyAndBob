@@ -1,0 +1,250 @@
+@charset "utf-8";
+
+#profile_left_menu > .wrapper {
+    padding: 87px 0 23px 4.66%;
+}
+#profile_left_menu ul li { 
+    background-color: #ffffff;
+    border: 1px solid rgba(44,148,148,0.25);
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin-bottom: 6px;
+    margin-right: 3.81%;
+    position: relative;
+    background-image: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(1,1,1,0.07) 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255,255,255,0)), color-stop(100%, rgba(1,1,1,0.07))); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(1,1,1,0.07) 100%); /* Chrome10+,Safari5.1+ */
+    background-image: -o-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(1,1,1,0.07) 100%); /* Opera 11.10+ */
+    background-image: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(1,1,1,0.07) 100%); /* IE10+ */
+    background-image: linear-gradient(to top, rgba(1,1,1,0.07) 0%, rgba(255,255,255,0) 100%); /* W3C */
+    -pie-background-image: linear-gradient(to top, rgba(1,1,1,0.07) 0%, rgba(255,255,255,0) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1affffff', endColorstr='#1a010101',GradientType=0 ); /* IE6-9 */
+    behavior: url(/plugins/pie.php);
+}
+.ie8 #profile_left_menu ul li {
+    border: 1px solid #a3d1ce;
+}
+#main-container .profile_right_content header h1 {
+    font-size: 1.692em !important;
+    color: #9c9c9c !important;
+    line-height: 26px !important; 
+}
+#profile_left_menu ul li a {
+   color: #48aeae;
+   font-weight: bold;
+   font-size: 1.154em;
+   line-height: 41px;
+   display: block;
+   padding-left: 5%;
+   padding-right: 3%;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+}
+#profile_left_menu li.active {
+    background-color: #29aeae;
+    border: 1px solid rgba(255,255,255,0.25); 
+    position: relative;
+    margin-right: 0;   
+}
+.ie8 #profile_left_menu li.active {   
+    border: 1px solid #d6ece8;     
+}
+#profile_left_menu li.active:after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: 0;
+    border-width: 19px 0 22px 20px;
+    border-style: solid;
+    border-color: transparent transparent transparent #29aeae;
+    width: 0;
+    height: 0;
+    background-image: -moz-linear-gradient(top, rgba(1,1,1,0.11) 0%, rgba(255,255,255,0.11) 67%, rgba(255,255,255,0.11) 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(1,1,1,0.11)), color-stop(67%,rgba(255,255,255,0.11)), color-stop(100%,rgba(255,255,255,0.11))); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, rgba(1,1,1,0.11) 0%,rgba(255,255,255,0.11) 67%,rgba(255,255,255,0.11) 100%); /* Chrome10+,Safari5.1+ */
+    background-image: -o-linear-gradient(top, rgba(1,1,1,0.11) 0%,rgba(255,255,255,0.11) 67%,rgba(255,255,255,0.11) 100%); /* Opera 11.10+ */
+    background-image: -ms-linear-gradient(top, rgba(1,1,1,0.11) 0%,rgba(255,255,255,0.11) 67%,rgba(255,255,255,0.11) 100%); /* IE10+ */
+    background-image: linear-gradient(to bottom, rgba(1,1,1,0.11) 0%,rgba(255,255,255,0.11) 67%,rgba(255,255,255,0.11) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1c010101', endColorstr='#1cffffff',GradientType=0 ); /* IE6-9 */
+}
+#profile_left_menu li.active a {
+    color: #ffffff;
+}
+#profile_left_menu li.selected a {
+   font-weight: bold;
+}
+#profile_left_menu+.content {
+    padding-top: 13px;
+}
+#main-container .profile_right_content.inner-content {
+    padding: 14px 11px 65px 27px;
+}
+.form-box-wrapper {
+    margin-top: 10px;
+    padding: 0 20px;
+    background-color: #ffffff;
+    border: 2px solid rgba(158,158,158,0.3);
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}
+.ie8 .form-box-wrapper {
+    border: 2px solid #dadada;
+}
+.form-box-wrapper > h2 {
+    color: #35b0b0;
+    font-size: 1.308em;
+    line-height: 56px;    
+}
+.form-box-wrapper .row {
+    border-top: 1px solid #e9e9e9;
+    padding: 0 4.27%; /* 27px; */
+}
+.form-box-wrapper .row .button {
+    line-height: 85px;
+}
+.form-box-wrapper .row > label,
+.form-box-wrapper .row > label+div {
+    display: inline-block;
+    vertical-align: middle;
+}
+.form-box-wrapper .row > label {
+    width: 28%; /* 200px;*/
+    line-height: 16px;
+}
+.form-box-wrapper .row > .input-element {
+    width: 70%; /* 500px;*/
+}
+.form-box-wrapper .allinone > div {
+    display: inline-block;
+}
+.form-box-wrapper .allinone.grid_2 > div:first-child {
+    margin-right: 2.37%;
+}
+.form-box-wrapper .allinone.grid_5 > div:first-child {
+    margin-right: 1.26%;
+}
+.form-box-wrapper .allinone.grid_2 .input-wrapper {
+    width: 11.4%;
+}
+.form-box-wrapper .allinone.grid_5 .input-wrapper {
+    width: 49%;
+}
+.form-box-wrapper .allinone label {
+    display: inline-block;
+    margin-right: 21px;
+    vertical-align: text-top;
+}
+.form-box-wrapper .allinone label+.input-element {
+    display: inline-block;
+}
+.form-box-wrapper .allinone label+.input-element label {
+    vertical-align: text-top;
+}
+.form-box-wrapper .list-row li {
+    line-height: 30px;    
+}
+.form-box-wrapper .input-element {
+    margin: 25px 0;    
+}
+.form-box-wrapper .input-wrapper {
+    position: relative;
+}
+.form-box-wrapper .input-wrapper .input-element {
+    border: 1px solid #C1C1C1;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    height: 33px;
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}
+.form-box-wrapper .custom-checkbox.input-wrapper .input-element {
+    border: 0;
+}
+.form-box-wrapper .input-wrapper .input-element input {
+    line-height: 33px;
+    height: 100%;
+    width: 94%;
+    padding: 0 3%;
+}
+.form-box-wrapper .textarea_content .input-element {
+    height: 122px;
+}
+.form-box-wrapper .textarea_content .input-element textarea {
+    height: 100px;
+    width: 94%;
+    padding: 11px 3%;
+}
+.form-box-wrapper .input-element > div input {
+    margin-right: 5px;
+}
+.form-box-wrapper .input-element > div label {
+    color: #000000;
+    margin-right: 15px;
+}
+
+.form-box-wrapper footer {
+    border-top: 1px solid #e9e9e9;
+    margin-bottom: 20px;
+    padding-top: 24px;
+}
+
+#map_canvas {
+    height: 490px;
+}
+
+#map_loc div.pin_button {
+    text-align: center;
+    padding: 20px;
+}
+
+div.form-box-wrapper p {
+    padding: 20px;
+}
+
+#crop-area {
+    width: 140px;
+    margin-left: 206px;
+}
+
+div.flash-message {    
+    text-align: center;
+    margin-bottom: 0;
+    background: #ffffff;
+    position: relative;
+    z-index: 1;
+}
+.flash-message + section.main {
+    padding-top: 0 !important;
+}
+
+.password-reset-form {
+    width: 500px;
+    margin: 0 auto;
+}
+.password-reset-form .form-box-wrapper label {
+    width: 100px;
+}
+.password-reset-form .form-box-wrapper .input-wrapper .input-element {
+    width: 300px;
+}
+#printable-wrapper div {
+    margin-bottom: 0;
+}
+#printable-wrapper .form-description {
+    padding: 10px 0;
+    color: #a6a6a6;
+}
+#printable-wrapper label {
+    margin-top: 25px;
+}
+
+.input-element-errors {
+    margin: 10px 0px;
+    color: red;
+}

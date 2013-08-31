@@ -1,0 +1,70 @@
+{% extends '::baseV2.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/frontend/frontend/index-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/editSmall.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('js/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/tapmodo-Jcrop-1902fbc/css/jquery.Jcrop.css') }}" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/underscore-min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/FileUploader.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/fancybox/jquery.fancybox-1.3.4.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/tapmodo-Jcrop-1902fbc/js/jquery.Jcrop.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/edit.js') }}"></script>
+{% endblock %}
+    
+{% block content %}
+    {# Underscore templates for the uploader #}
+    {% include "PunkAveFileUploaderBundle:Default:templates.html.twig" %}
+
+    <form class="edit-form" action="{{ path('fenchy_gallery_edit', { 'id': gallery.id }) }}" method="post" {#{ form_enctype(form) }#}>
+        {#{ form_widget(form) }#}
+
+        {# Hydrated by javascript #}
+        <div id="gallery-edit-container" class="file-uploader"></div>
+
+        <button class="btn btn-primary" type="submit">{{ "Save Changes" }}</button> 
+        <a class="btn" href="#{#{ cancel }#}">Cancel</a>
+
+
+    </form>
+
+    <div style="display:none">
+        <div id="crop-area">
+            <img src="/uploads/tmp/images/156/originals/5176bed9f2cc60.jpeg" id="target" alt="" />
+            <table class="buttons-panel">
+                <tbody>
+                    <tr>
+                        <td><button id="crop-cancel" class="button gray">Cancel</button></td>
+                        <td><button id="crop-submit" class="button green">OK</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+    // Enable the file uploader
+
+    $(function() {
+
+        gallery_edit.crop.init({
+            url     : '{{ path('fenchy_gallery_crop') }}',
+            punkAve : new PunkAveFileUploader({ 
+                'uploadUrl': '{{ path('fenchy_gallery_upload', { 'tmpGalleryId': gallery.id }) |  raw }}',
+                'viewUrl': '{{ ('/uploads/' ~ gallery.folder) | raw }}',
+                'el': '.file-uploader',
+                'existingFiles': {{ gallery.existingFiles | json_encode | raw }},
+                'delaySubmitWhileUploading': '.edit-form',
+                'max' : {{ max }},
+                'onImgClick' : gallery_edit.crop.takeImageToCrop
+            })
+        });
+    });
+    
+    </script>
+{% endblock %}

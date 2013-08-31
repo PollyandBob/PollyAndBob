@@ -1,0 +1,83 @@
+{% extends '::baseV2.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+        <link rel="stylesheet" href="{{ asset('css/app/custom-form.css') }}" type="text/css" />
+    {% if galleryType == 'big' %}
+        <link rel="stylesheet" href="{{ asset('css/gallery/punkave/editBig.css') }}" type="text/css" />
+    {% else %}
+        <link rel="stylesheet" href="{{ asset('css/gallery/punkave/editSmall.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('js/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('plugins/tapmodo-Jcrop-1902fbc/css/jquery.Jcrop.css') }}" type="text/css" />
+    {% endif %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/underscore-min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.iframe-transport.js') }}"></script>
+    {% if(galleryType == 'big') %}
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/FileUploaderBig.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/editBig.js') }}"></script>
+    {% else %}
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/FileUploaderSmall.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/fancybox/jquery.fancybox-1.3.4.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/tapmodo-Jcrop-1902fbc/js/jquery.Jcrop.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/editSmall.js') }}"></script>
+    {% endif %}
+    
+{% endblock %}
+    
+{% block content %}
+    {# Underscore templates for the uploader #}
+    {% include "PunkAveFileUploaderBundle:Default:templates.html.twig" %}
+    <script type="text/javascript">
+    // Enable the file uploader
+    $(function() {
+        
+        {% if galleryType == 'big' or true %}
+        new PunkAveFileUploader({ 
+            'uploadUrl': '{{ path('fenchy_gallery_upload', { 'tmpGalleryId': gallery.id }) |  raw }}',
+            'viewUrl': '{{ ('/uploads/' ~ gallery.folder) | raw }}',
+            'el': '.file-uploader',
+            'existingFiles': {{ gallery.existingFiles | json_encode | raw }},
+            'delaySubmitWhileUploading': '.edit-form',
+            'max' : {{ max }}
+        });
+        {% else %}
+        gallery_edit.crop.init({
+            url     : '{{ path('fenchy_gallery_crop') }}',
+            punkAve : new PunkAveFileUploader({ 
+                'uploadUrl': '{{ path('fenchy_gallery_upload', { 'tmpGalleryId': gallery.id }) |  raw }}',
+                'viewUrl': '{{ ('/uploads/' ~ gallery.folder) | raw }}',
+                'el': '.file-uploader',
+                'existingFiles': {{ gallery.existingFiles | json_encode | raw }},
+                'delaySubmitWhileUploading': '.edit-form',
+                'max' : {{ max }},
+                'onImgClick' : gallery_edit.crop.takeImageToCrop
+            })
+        });
+        {% endif %}
+    });
+    </script>
+{% endblock %}
+    
+{% block galleryContainer %}
+    <div id="gallery-edit-container" class="file-uploader"></div>
+    {% if galleryType == 'small' %}
+    <div style="display:none">
+        <div id="crop-area">
+            <img src="" id="target" alt="" />
+            <table class="buttons-panel">
+                <tbody>
+                    <tr>
+                        <td><button id="crop-cancel" class="button gray">{{ 'btn.cancel'|trans }}</button></td>
+                        <td><button id="crop-submit" class="button green">{{ 'btn.ok'|trans }}</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
+    

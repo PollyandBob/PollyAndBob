@@ -1,0 +1,406 @@
+fenchy_regular_user_index:
+    pattern:  /profile
+    defaults: { _controller: FenchyRegularUserBundle:Profile:index }
+
+fenchy_regular_user_friend_index:
+    pattern:  /contacts/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Friend:index, id:null }
+    requirements:
+        id: \d+
+
+fenchy_regular_user_friend_invite:
+    pattern:  /contact/invite/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Friend:invite }
+    requirements:
+        id: \d+
+        
+fenchy_regular_user_friend_invitations:
+    pattern:  /contact/list
+    defaults: { _controller: FenchyRegularUserBundle:Friend:invitations }
+        
+fenchy_regular_user_friend_invitation_response:
+    pattern:  /contact/invitation/{id}/{response}
+    defaults: { _controller: FenchyRegularUserBundle:Friend:invitationResponse }
+    requirements:
+        id: \d+
+        response: accept|reject
+        
+fenchy_regular_user_friend_delete:
+    pattern:  /contact/delete/{friendId}
+    defaults: { _controller: FenchyRegularUserBundle:Friend:delete }
+    requirements:
+        friendId: \d+
+
+fenchy_regular_user_friend_delete_confirm:
+    pattern:  /contact/delete-confirm/{friendId}
+    defaults: { _controller: FenchyRegularUserBundle:Friend:deleteConfirm }
+    requirements:
+        friendId: \d+
+        _method: POST
+
+fenchy_regular_user_settings_general:
+    pattern: /settings/general
+    defaults: { _controller: FenchyRegularUserBundle:Settings:general }
+    
+fenchy_regular_user_settings_general_save:
+    pattern: /settings/general/save
+    defaults: { _controller: FenchyRegularUserBundle:Settings:generalSave }
+    requirements:
+        _method: POST
+fenchy_regular_user_settings_general_changepasword:
+    pattern: /settings/general/changepassword
+    defaults: { _controller: UserBundle:ChangePassword:changePassword }
+
+fenchy_regular_user_settings_general_delete:
+    pattern: /settings/general/delete
+    defaults: { _controller: UserBundle:Default:delete }
+    
+fenchy_regular_user_settings_popuplocation:
+    pattern: /settings/popuplocation/{reset}
+    defaults: { _controller: FenchyRegularUserBundle:Settings:popupLocation, reset: null}
+
+fenchy_regular_user_settings_images:
+    pattern: /settings/images
+    defaults: { _controller: FenchyRegularUserBundle:Settings:images }
+    
+fenchy_regular_user_settings_location_save:
+    pattern: /settings/location/save
+    defaults: { _controller: FenchyRegularUserBundle:Settings:locationSave }
+    requirements:
+        _method: POST
+        
+fenchy_regular_user_settings_notification:
+    pattern: /settings/notification
+    defaults: { _controller: FenchyRegularUserBundle:Settings:notification }
+    
+fenchy_regular_user_settings_notification_save:
+    pattern: /settings/notification/save
+    defaults: { _controller: FenchyRegularUserBundle:Settings:notificationSave }
+    requirements:
+        _method: POST
+        
+fenchy_regular_user_settings_connect:
+    pattern: /settings/connect
+    defaults: { _controller: FenchyRegularUserBundle:Settings:connect }
+    requirements:
+        _method: GET
+
+fenchy_regular_user_settings_ask_again:
+    pattern: /settings/ask_again/{ask_again}
+    defaults: { _controller: FenchyRegularUserBundle:Settings:askAgain, ask_again:null }
+    
+fenchy_regular_user_notices:
+    pattern: /notices/{typeId}
+    defaults: { _controller: FenchyRegularUserBundle:Notice:index, search: null }
+    requirements:
+       typeId: \d+
+    
+fenchy_regular_user_notice_add:
+    pattern: /notice/create/{typeId}/{option}/{val}
+    defaults: { _controller: FenchyRegularUserBundle:Notice:add, option: 0, val: 0}
+    requirements:
+       typeId: \d+
+       option: \d+
+       val: \d+
+    
+fenchy_regular_user_notice_menu:
+    pattern: /notice/menu
+    defaults: { _controller: FenchyRegularUserBundle:Notice:menu }
+    
+fenchy_regular_user_notice_submenu:
+    pattern: /notice/submenu
+    defaults: { _controller: FenchyRegularUserBundle:Notice:submenu }
+    
+fenchy_regular_user_notice_cancel:
+    pattern: /notice/cancel/{id}/{option}/{val}
+    defaults: { _controller: FenchyRegularUserBundle:Notice:cancel }
+    requirements:
+        id: \d+
+        option: \d+
+        val: \d+
+        
+fenchy_regular_user_notices_type:
+    pattern: /notices/{type}/{option}/{val}
+    defaults: { _controller: FenchyRegularUserBundle:Notice:myList }
+    requirements:
+        type:   \d+
+        option: \d+
+        val:    \d+
+
+fenchy_regular_user_neighbour_notices_type:
+    pattern: /notices/{neighbour}/{type}/{option}/{val}
+    defaults: { _controller: FenchyRegularUserBundle:Notice:neighbourList }
+    requirements:
+        neighbour: \d+
+        type:   \d+
+        option: \d+
+        val:    \d+
+        
+#fenchy_regular_user_neighbours_notices:
+#    pattern: /neighbours/notices/{type}/{option}/{val}/{page}
+#    defaults: { _controller: FenchyRegularUserBundle:Notice:list, option: 0, val: 0, page: 0 }
+#    requirements:
+#        type: \d+
+#        option: \d+
+#        val: \d+
+#        page: \d+
+        
+fenchy_regular_user_neighbours_notices:
+    pattern: /neighbours/notices/
+    defaults: { _controller: FenchyRegularUserBundle:Notice:list}
+        
+fenchy_regular_user_notice:
+    pattern: /notice/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Notice:index }
+    requirements:
+        id: \d+
+        
+fenchy_regular_user_news:
+    pattern: /news/{time}/{page}
+    defaults: { _controller: FenchyRegularUserBundle:Notice:news, page: 1, }
+        
+fenchy_regular_user_notice_edit:
+    pattern: /notice/{id}/edit
+    defaults: { _controller: FenchyRegularUserBundle:Notice:edit }
+    requirements:
+        id: \d+
+
+fenchy_regular_user_notice_delete:
+    pattern: /notice/{id}/delete
+    defaults: { _controller: FenchyRegularUserBundle:Notice:delete }
+    requirements:
+        id: \d+
+        
+fenchy_regular_user_message_notice:
+    pattern: /notice/{id}/message
+    defaults: { _controller: FenchyRegularUserBundle:Message:notice }
+    requirements:
+        id: \d+
+
+fenchy_regular_user_message_notice_send:
+    pattern: /notice/{id}/message/send
+    defaults: { _controller: FenchyRegularUserBundle:Message:noticeSend }
+    requirements:
+        _method: POST
+        id: \d+
+
+fenchy_regular_user_messages_index:
+    pattern: /messages/{type}
+    defaults: { _controller: FenchyRegularUserBundle:Message:index, type: null }
+    requirements:
+      type: all|unread|unreplied|sent|about
+
+fenchy_regular_user_messages_read_all:
+    pattern: /messages/read
+    defaults: { _controller: FenchyRegularUserBundle:Message:read }
+    
+fenchy_regular_user_messages_view:
+    pattern: /messages/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Message:view }
+    requirements:
+        id: \d+
+        
+fenchy_regular_user_messages_delete_selected:
+    pattern: /messages/delete-selected
+    defaults: { _controller: FenchyRegularUserBundle:Message:deleteSelected }
+    requirements:
+        _method: POST
+    
+fenchy_regular_user_messages_new:
+    pattern: /messages/new/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Message:new }
+    requirements:
+        id: \d+
+    
+fenchy_regular_user_messages_send:
+    pattern: /messages/send/{prev_id}
+    defaults: { _controller: FenchyRegularUserBundle:Message:send, prev_id: null }
+    requirements:
+        _method: POST
+
+fenchy_regular_user_messages_delete:
+    pattern: /messages/{id}/delete
+    defaults: { _controller: FenchyRegularUserBundle:Message:delete }
+    requirements:
+        id: \d+
+            
+fenchy_regular_user_about_me:
+    pattern: /aboutMe
+    defaults: { _controller: FenchyRegularUserBundle:Profile:aboutMe }
+    
+fenchy_regular_user_interests_and_activities:
+    pattern: /interests_and_activities/{noticeId}
+    defaults: { _controller: FenchyRegularUserBundle:Profile:interestsAndActivities, noticeId: null }
+    
+fenchy_regular_user_neighbours:
+    pattern: /neighbours/{page}
+    defaults: { _controller: FenchyRegularUserBundle:Neighbours:index, page: 1 }
+    requirements:
+        page: \d+
+    
+fenchy_regular_user_neighbour_about:
+    pattern: /neighbour/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Neighbours:about }
+    requirements:
+        id: \d+
+        
+fenchy_regular_user_notice_ioa:
+    pattern: /interest_or_activity/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Notice:interestOrActivity }
+    requirements:
+      id: \d+
+
+fenchy_regular_user_chooselang:
+    pattern: /chooselang/{locale}
+    defaults: { _controller: FenchyRegularUserBundle:Profile:chooseLanguage }
+
+fenchy_regular_user_trust_points:
+    pattern: /trust_points
+    defaults: { _controller: FenchyRegularUserBundle:TrustPoints:index }
+
+fenchy_regular_user_email_change_confirm:
+    pattern: /emailconfirm/{token}
+    defaults: { _controller: FenchyRegularUserBundle:Settings:emailChangeConfirm, token: null }
+    requirements:
+        _method: GET
+        
+fenchy_regular_user_email_change_abort:
+    pattern: /emailabort/{token}
+    defaults: { _controller: FenchyRegularUserBundle:Settings:emailChangeAbort, token: null }
+    requirements:
+        _method: GET
+
+
+        
+# version 2.0
+
+fenchy_regular_user_notice_create1:
+    pattern: /create_listing/category
+    defaults: { _controller: FenchyRegularUserBundle:Listing:create1 }
+    
+fenchy_regular_user_notice_create2:
+    pattern: /create_listing/details/{typename}/{direction}
+    defaults: { _controller: FenchyRegularUserBundle:Listing:create2, direction: null }
+    
+fenchy_regular_user_user_profilev2:
+    pattern: /userprofile/{userId}
+    defaults: { _controller: FenchyRegularUserBundle:Profile:userProfileV2, userId: null }
+    
+fenchy_regular_user_reviewseditform:
+    pattern: /reviewseditform/{reviewId}
+    defaults: { _controller: FenchyRegularUserBundle:Profile:userReviewsEditForm, reviewId:null }
+
+fenchy_regular_user_reviewssave:
+    pattern: /reviewssave/{reviewId}/{targetNoticeId}/{targetUserId}
+    defaults: { _controller: FenchyRegularUserBundle:Profile:userReviewsSave, reviewId: null, targetNoticeId: null, targetUserId: null }
+    requirements:
+      reviewId: "[0-9]*"
+      targetNoticeId: "[0-9]*" 
+      targetUserId: "[0-9]*"
+
+fenchy_regular_user_reviewslist:
+    pattern: /reviewslist/{userId}/{noticeId}
+    defaults: { _controller: FenchyRegularUserBundle:Profile:userReviewsList, userId: null, noticeId: null }
+
+fenchy_regular_user_listingslist:
+    pattern: /listingslist/{userId}
+    defaults: { _controller: FenchyRegularUserBundle:Profile:userListingsList, userId: null }        
+        
+fenchy_notice_test:
+    pattern: /test
+    defaults: { _controller: FenchyRegularUserBundle:Notice:testTagSearch }
+    
+fenchy_regular_user_review_add:
+    pattern: /review/add/{type}/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Notice:addReview }
+    requirements:
+        _method: POST
+        id: \d+
+        
+fenchy_regular_user_notice_show:
+    pattern: /listing/show/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Listing:show }
+    requirements:
+      id: \d+
+      
+fenchy_regular_user_notice_edit:
+    pattern: /listing/edit/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Listing:edit }
+    requirements:
+      id: \d+
+      
+fenchy_regular_user_settings_basic:
+    pattern: /settings
+    defaults: { _controller: FenchyRegularUserBundle:Settings:basic }
+    
+fenchy_regular_user_settings_location:
+    pattern: /settings/location
+    defaults: { _controller: FenchyRegularUserBundle:Settings:location }
+    
+fenchy_regular_user_settings_account:
+    pattern: /settings/account
+    defaults: { _controller: FenchyRegularUserBundle:Settings:account }
+    
+fenchy_regular_user_settings_deleteaccount:
+    pattern: /settings/account/delete-account
+    defaults: { _controller: FenchyRegularUserBundle:Settings:deleteAccount }
+  
+fenchy_regular_user_settings_changepassword:
+    pattern: /settings/account/change-password
+    defaults: { _controller: FenchyRegularUserBundle:Settings:changePassword }
+    
+fenchy_regular_user_settings_notifications:
+    pattern: /settings/notifications
+    defaults: { _controller: FenchyRegularUserBundle:Settings:notifications }
+    
+fenchy_regular_user_settings_socialnetworks:
+    pattern: /settings/social-networks
+    defaults: { _controller: FenchyRegularUserBundle:Settings:social }  
+    
+fenchy_regular_user_listing_tags:
+    pattern: /listing/tags
+    defaults: { _controller: FenchyRegularUserBundle:Listing:tags }
+    defaults: { _controller: FenchyRegularUserBundle:Settings:social }  
+    
+fenchy_regular_user_settings_filllocationpopup:
+    pattern: /settings/fill-location-popup
+    defaults: { _controller: FenchyRegularUserBundle:Settings:fillLocationPopup }      
+    
+fenchy_regular_user_listing_manage:
+    pattern: /listing/manage
+    defaults: { _controller: FenchyRegularUserBundle:Listing:manage }
+    
+fenchy_regular_user_listing_delete:
+    pattern:  /listing/delete/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Listing:delete }
+    requirements:
+        id: \d+
+
+fenchy_regular_user_listing_delete_confirm:
+    pattern:  /listing/delete-confirm/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Listing:deleteConfirm }
+    requirements:
+        id: \d+
+        _method: POST
+
+# version 2.1
+
+fenchy_regular_user_user_myprofile_main:
+    pattern: /myprofile/{userId}
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:userProfileMain, userId: null}
+
+fenchy_regular_user_user_myprofile_aboutmychoice:
+    pattern: /aboutmychoice
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:aboutMyChoice }
+
+fenchy_regular_user_user_myprofile_mylocation:
+    pattern: /mylocation
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:myLocation }
+
+fenchy_regular_user_user_myprofile_mycommunitypoints:
+    pattern: /mycommunitypoints
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:myCommunityPoints }
+
+fenchy_regular_user_user_myprofile_myneighbors:
+    pattern: /myneighbors
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:myNeighbors }

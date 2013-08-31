@@ -1,0 +1,100 @@
+util:
+  relative:
+    now: Jetzt
+
+    just_now: Vor weniger als einer Minute
+
+    a_minute_ago: Vor einer Minute
+
+    x_minutes_ago: '{0,1}Vor einer Minute|[2,Inf]Vor %number% Minuten'
+
+    an_hour_ago: Vor einer Stunde
+
+    x_hours_ago: '{0,1}Vor einer Stunde|[2,Inf]Vor %number% Stunden'
+
+    today: Heute
+
+    yesterday: Gestern
+
+    x_days_ago: '{0,1}Gestern|[2,Inf]Vor %number% Tagen'
+
+    x_weeks_ago: '{0,1}vor einer Woche|[2,Inf]Vor %number% Wochen'
+
+    last_month: Letzten Monat
+
+    in_a_minute: In einer Minute
+
+    in_x_minutes: '{0,1}In einer Minute|[2,Inf]In %number% Minuten'
+
+    in_an_hour: In einer Stunde
+
+    in_x_hours: '{0,1}In einer Stunde|[2,Inf]In %number% Stunden'
+
+    tomorrow: Morgen
+
+    monday: Montag
+
+    tuesday: Dienstag
+
+    wednesday: Mittwoch
+
+    thursday: Donnerstag
+
+    friday: Freitag
+
+    saturday: Samstag
+
+    sunday: Sonntag
+
+    next_week: Nächste Woche
+
+    in_x_weeks: '{0,1}N?ñchste Woche|[2,Inf]In %number% Wochen'
+
+    next_month: Nächsten Monat
+btn:
+  continue: Weiter
+
+  back: Zurück
+
+  ok: OK
+
+  cancel: Abbrechen
+
+  save: Speichern
+
+  confirm: Bestätigen
+
+  login: Login
+
+  send: Versenden
+
+  delete: Löschen
+
+  yes: Ja
+
+  no: Nein
+
+  edit: Bearbeiten
+
+  send_message: Nachricht senden
+harass: hat mich oder einen Freund von mir benötigst.
+spam: hat gespammed oder betrogen.
+commercial: hat kommerzielle Inhalte veröffentlicht.
+forbidden: hat sexuelle, politische oder religiöse Inhalte veröffentlicht.
+behaviour: hat sich gewaltätig öder schädlich verhalten verhalten.
+sticker:
+  added_title: Dein Bericht wurde versendet.
+
+  reasons: Gründe
+
+  description: Zusätzliche Kommentare
+male: männlich
+female: weiblich
+or: oder
+load_more: Mehr laden
+never: Niemals
+immediately: Sofort
+daily: Täglich
+positive: Positiv
+negative: Negativ
+review_type: 

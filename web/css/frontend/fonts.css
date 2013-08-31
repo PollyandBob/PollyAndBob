@@ -1,0 +1,37 @@
+
+@font-face { 
+		font-family: MYRIADPRO-BOLD;
+		src: local("MYRIADPRO-BOLD"), url(fonts/MYRIADPRO-BOLD.OTF) format("opentype")
+		}
+@font-face { 
+		font-family: MYRIADPRO-BOLDCONDIT;
+		src: local("MYRIADPRO-BOLDCONDIT"), url(fonts/MYRIADPRO-BOLDCONDIT.OTF) format("opentype")
+		}
+@font-face { 
+		font-family: MYRIADPRO-COND;
+		src: local("MYRIADPRO-COND"), url(fonts/MYRIADPRO-COND.OTF) format("opentype")
+		}
+@font-face { 
+		font-family: MYRIADPRO-REGULAR;
+		src: local("MYRIADPRO-REGULAR"), url(fonts/MYRIADPRO-REGULAR.OTF) format("opentype")
+		}
+@font-face { 
+		font-family: MYRIADPRO-SEMIBOLDIT;
+		src: local("MYRIADPRO-SEMIBOLDIT"), url(fonts/MYRIADPRO-SEMIBOLDIT.OTF) format("opentype")
+		}
+@font-face { 
+		font-family: MYRIADPRO-BOLDCOND;
+		src: local("MYRIADPRO-BOLDCOND"), url(fonts/MYRIADPRO-BOLDCOND.OTF) format("opentype")
+		}
+@font-face { 
+		font-family: MYRIADPRO-BOLDIT;
+		src: local("MYRIADPRO-BOLDIT"), url(fonts/MYRIADPRO-BOLDIT.OTF) format("opentype")
+		}
+@font-face { 
+		font-family: MYRIADPRO-CONDIT;
+		src: local("MYRIADPRO-CONDIT"), url(fonts/MYRIADPRO-CONDIT.OTF) format("opentype")
+		}
+@font-face { 
+		font-family: MYRIADPRO-SEMIBOLD;
+		src: local("MYRIADPRO-SEMIBOLD"), url(fonts/MYRIADPRO-SEMIBOLD.OTF) format("opentype")
+}

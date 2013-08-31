@@ -1,0 +1,15 @@
+{% extends 'FenchyRegularUserBundle:Settings:layout.html.twig' %}
+
+{% block content %}
+<div class="rounded">
+    <div id="profile_left_menu">
+        {% include 'FenchyRegularUserBundle:Settings:menu.html.twig' %}
+    </div>
+    <div id="image-add-right">
+        <div id="under_button_text">{{ 'regularuser.only_jpg_png_maximum2m'|trans }}</div>
+        <iframe id="gallery-frame" src="{{ url('fenchy_gallery_edit',{'type': 2})}}"></iframe>
+    </div>
+</div>
+<div class="clear"></div>
+{% endblock %}
+    

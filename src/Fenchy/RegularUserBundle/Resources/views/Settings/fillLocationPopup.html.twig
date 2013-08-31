@@ -1,0 +1,98 @@
+{% extends '::baseMin.html.twig' %}
+{% form_theme form '::labelForm.html.twig' %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript" src="{{ asset('js/regular_user/listing/create.js') }}"></script>
+<script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+{% include '::gmapsApiAsset.html.twig' %}
+
+<script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/mvvm/user-settings-view-model.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+
+<script type="text/javascript">
+
+    userSettingsViewModel = null;
+
+    $(document).ready(function() {
+        geocoder = new google.maps.Geocoder();
+        var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';
+
+        userSettingsViewModel = new UserSettingsViewModel(geocoder, baseSearchViewUri);
+
+        ko.applyBindings(userSettingsViewModel, document.getElementsByTagName('body')[0]);
+
+        autocomplete = new GApiAutocomplete(
+                document.getElementById('fenchy_userbundle_user_locationtype_location_location'),
+                userSettingsViewModel);
+
+
+
+
+    });
+    function hasCoordinates()
+    {
+            {% if app.user.hasRequiredLocation %}
+        return true;
+            {% endif %}
+
+        return false;
+    }
+
+    function getLatitude()
+    {
+        return '{{ app.user.location.latitude }}'
+    }
+
+    function getLongitude()
+    {
+        return '{{ app.user.location.longitude }}';
+    }
+    </script>
+    
+    <script src="{{ asset('js/geolocalization.js') }}"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        initialize();
+    });
+        </script>
+        <script type="text/javascript" src="{{ asset('js/regular_user/settings/locationpopup.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <h1>{{'settings.locationpopup.name'|trans}}</h1>
+    <p>{{'settings.locationpopup.description'|trans}}</p>
+<form action="{{ path('fenchy_regular_user_settings_filllocationpopup') }}" method="post" {{ form_enctype(form) }} class="form-popup-location location">
+
+    <div class="form-box-wrapper">
+
+            <div class="row input-wrapper">
+    {{ form_row(form.location.location) }}
+                </div>
+
+
+
+        <div class="map_wrapper">
+            <div id="map_loc">
+                <div id="map_canvas"></div>
+                <div class="pin_button">
+                    <a class="button" href="#" onclick="putPin()">{{ 'regularuser.put_pin'|trans }}</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div style="display: none">
+            {{form_rest(form)}}
+        </div>
+    </div>
+    <footer class="clearfix">
+        <div class="button submit pull-right">
+            <div>
+                <input type="submit" id="continue" value="{{ 'btn.save'|trans }}"/>                                
+            </div>
+        </div>
+    </footer>
+
+</form>
+{% endblock %}

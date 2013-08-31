@@ -1,0 +1,13 @@
+{% autoescape false %}
+{{ 'regularuser.reviews.email.1'|trans({'%username%': user.regularuser.firstname }) }}
+
+{{ 'regularuser.reviews.email.2'|trans({'%username%': sender.regularuser.firstname, '%listing%': notice.title }) }}
+
+{{absolute(path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')}))}}
+
+{{sender.userRegular.firstname}} | {{review.createdAt|date('Y-m-d H:i')}}
+{{review.text}}
+
+{{ 'email.message.address'|trans({}, 'FOSUserBundle') }}
+
+{% endautoescape %}

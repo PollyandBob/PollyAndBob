@@ -1,0 +1,205 @@
+@charset "utf-8";
+
+#content {
+    width: 100%;
+}
+#content .header {
+    display: none;
+}
+section.main .comboSearch {
+    margin-left: 0;
+    margin-bottom: 13px;
+}
+.inner-content {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 26px 43px;
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}
+.inner-content.full-wide {
+    padding: 26px 0;
+}
+.inner-content.full-wide .intro {
+    padding: 0 43px;
+    margin-bottom: 47px;
+}
+.inner-content .intro {
+    text-align: center;
+    margin-top: 43px;
+    margin-bottom: 35px;
+    color: #b8b8b8;
+}
+.inner-content .intro hgroup {
+    margin-top: -25px;
+    padding: 0 100px;
+}
+.inner-content .intro hgroup h1 {
+   color: #aaaaaa;
+   margin-bottom: 15px;
+}
+.inner-content .intro h1 {
+    font-size: 33px;
+    line-height: 34px;
+}
+.inner-content .intro h2 {
+    font-size: 18px;
+    line-height: 20px;
+    color: #4e4e4e;
+}
+.inner-content .intro > h1 {
+    font-size: 46px;
+    line-height: 49px;
+    text-shadow: 1px 0px 0 #FFFFFF;
+    color: #b9b7b8;
+    margin-bottom: 13px;
+}
+.inner-content h1 {
+    font-size: 26px;
+    line-height: 28px;
+    color: #b8b7b7;
+    margin-bottom: 30px;
+}
+.inner-content p {
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: bold;
+    margin-bottom: 18px;
+    color: #c8c8c8;
+}
+.inner-content p:last-of-type {
+    margin-bottom: 22px;
+}
+.inner-content .intro p {
+    font-size: 26px;
+    line-height: 29px;
+    margin: 0;
+}
+.inner-content .intro .return {
+    font-size: 16px;
+    line-height: 18px;
+    font-weight: bold;
+    margin-top: 23px;
+}
+.inner-content > img {
+    margin: 0 auto;
+}
+.inner-content > strong {
+    color: #777777;
+    font-size: 15px;
+}
+.inner-content .button {
+    margin-top: 27px;
+    width: 22%;
+}
+.inner-content h3 {
+    color: #9a9a9a;
+    font-size: 14px;
+    line-height: 16px;
+    margin: 20px 0 19px
+}
+.inner-content .vcard div {
+    margin-bottom: 20px;
+}
+.inner-content .vcard span {
+    font-weight: bold;
+    line-height: 18px;
+    font-size: 14px;
+    color: #c8c8c8;
+}
+.inner-content .vcard a {
+    color: #C8C8C8;
+}
+#fenchy-values section {
+    margin-bottom: 1px;
+    display: table;
+    width: 100%;
+}
+#fenchy-values section:nth-child(even) {
+    background: #0a5151;
+}
+#fenchy-values section:nth-child(odd) {
+    background: #139090;
+}
+#fenchy-values section > div {
+    width: 50%;
+    height: 240px;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+}
+#fenchy-values section > div > img {
+    width: 100%;
+}
+#fenchy-values section p {
+    color: #fff;
+    font-size: 18px;
+    margin: 0 60px 13px;
+}
+#fenchy-values section:nth-child(even) p {
+    color: #54caca;
+}
+#fenchy-values+p {
+    color: #4f4f4f;
+    text-align: center;
+    margin: 22px 0;
+    font-size: 18px;
+}
+#current-positions {
+    background: #e7e7e7;
+    margin: 0 20px;
+    padding: 22px 26px;
+    text-align: center;
+}
+#current-positions > h1 {
+    font-size: 28px;
+    margin-bottom: 26px;
+    color: #b2b2b2;
+}
+#current-positions .box {
+    width: 49.7%;
+    height: 173px;
+}
+#current-positions .box header {
+    background: rgba(10,81,81,0.6);
+    margin-bottom: 22px;
+}
+.ie8 #current-positions .box header {
+    position: relative;
+    -pie-background: rgba(10,81,81,0.6);
+    behavior: url(/plugins/pie.php);
+}
+#current-positions .box header h1 {
+    color: #ffffff;
+    font-size: 28px;
+    line-height: 53px;
+    margin: 0;
+}
+#current-positions .box > span {
+    text-decoration: underline;
+    color: #3a3a3a;
+    font-size: 20px;
+    line-height: 23px;
+    font-weight: bold;
+}
+#current-positions .box .button {
+    margin: 26px auto 0;
+    width: 44%;
+}
+
+.inner-content .ordered-list {
+    list-style-type: decimal;
+    padding-left: 30px;
+    line-height: 140%;    
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.box-engineering {
+    background: url('../../images/careers/eng.jpg') no-repeat;
+}
+
+.box-product {
+    background: url('../../images/careers/prod.jpg') no-repeat;    
+}

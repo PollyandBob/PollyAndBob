@@ -1,0 +1,45 @@
+#content > .rounded{
+    width:73%;
+    padding:20px;
+}
+
+#notice_search{
+    margin-bottom: 10px;
+}
+
+#notice_search div{
+    float:left;
+    padding:5px;
+}
+
+#notice_search div:first-child{
+    margin-left:0px;
+    margin-right:16px;
+}
+
+#notice_search div:last-child{
+    margin-left:16px;
+    margin-right:0px;
+}
+#notice_search div:nth-child(2)
+{
+    width:50%;
+}
+
+#notice_search div select{
+    width:150px;
+}
+
+#notice_search div #search{
+    width:70%;
+}
+
+#content .message_image img{
+    width:75px;
+    height:75px;
+}
+
+#content #notice-right
+{
+    margin-left:10px;
+}

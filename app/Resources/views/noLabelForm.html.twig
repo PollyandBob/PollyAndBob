@@ -1,0 +1,25 @@
+{% block form_widget_simple %}
+{% spaceless %}
+    {% set type = type|default('text') %}
+    {% set placeholder = placeholder|default(label) %}
+    <input type="{{ type }}" placeholder="{{ placeholder|trans({}, translation_domain)|lower|trim(':') }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{% endspaceless %}
+{% endblock form_widget_simple %}
+
+{% block form_label %}{% endblock %}
+{% block checkbox_label %}<label>{{ label|trans }}</label>{% endblock %}
+    
+{% block textarea_widget %}
+{% spaceless %}
+    {% set placeholder = placeholder|default(label) %}
+    <textarea placeholder="{{ placeholder|trans({}, translation_domain)|lower|trim(':') }}" {{ block('widget_attributes') }} />{% if value is not empty %}{{ value }} {% endif %}</textarea>
+{% endspaceless %}
+{% endblock %}
+    
+{% block form_row %}
+{% spaceless %}
+    {{ form_label(form) }}
+    {{ form_errors(form) }}
+    {{ form_widget(form) }}
+{% endspaceless %}
+{% endblock form_row %}

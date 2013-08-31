@@ -1,0 +1,32 @@
+{% import '::helpers.html.twig' as helper %}
+<html xmlns:fb="http://www.facebook.com/2008/fbml">
+    <head>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+            <link rel="icon" href="{{ asset('favicon.ico') }}" />
+            {% block stylesheets %}
+                <link rel="stylesheet" href="{{ asset('css/app/base-min-v2.css') }}" type="text/css" />
+            {% endblock %}
+            {% block javascripts %}
+                <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
+                <!--[if lt IE 9]>
+                    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+                    <script type="text/javascript" src="{{ absolute(asset('js/respond.min.js')) }}"></script>	
+                    {#<script type="text/javascript" src="{{ absolute(asset('js/ie8fixV2.js')) }}"></script>	#}
+                <![endif]-->                
+            {% endblock %}
+                
+            {% block plugins %}
+            {% endblock %}
+            
+            <title>{% block title %}{{ 'main.title_suffix'|trans }}{% endblock %}</title>
+    </head>
+    <body>
+
+        <div id="sitebody">
+            {% block content %}
+                
+            {% endblock %}
+        </div>
+
+    </body>
+</html>

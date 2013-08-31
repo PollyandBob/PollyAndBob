@@ -1,0 +1,26 @@
+{% extends '::fieldsForm.html.twig'%}
+
+{% block form_row %}
+{% spaceless %}
+    <ul class="filter-element">
+        <li>{{ form_label(form) }}</li>
+        <li>{{ form_widget(form) }}</li>
+    </ul>
+{% endspaceless %}
+{% endblock form_row %}
+
+{% block form_widget_simple %}
+{% spaceless %}
+    {% set type = type|default('text') %}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{% endspaceless %}
+{% endblock form_widget_simple %}
+
+{% block hidden_row %}
+{% spaceless %}
+    <div style="display: none">
+        {{ form_widget(form) }}
+    </div>
+{% endspaceless %}
+{% endblock hidden_row %}
+

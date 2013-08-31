@@ -1,0 +1,164 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+
+
+{% block content %}
+	{% render 'FenchyRegularUserBundle:Myprofile:myAvatar' %}
+	{% include 'FenchyRegularUserBundle:Myprofile:menu.html.twig' %}
+	
+	
+			<div class="mycommunitypoints">
+				<h4>{{ 'regularuser.total_community_points'|trans }}<span>{{ displayUser.activity }}</span></h4>
+                <div class="clearfix"></div>
+                <div class="pointsdetail">
+                	<table width="700" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td width="40%">{{ 'regularuser.profile_completion'|trans }}</td>
+                        <td width="10%">{{ reputationPoints.profilePercent }}</td>
+                        <td width="10%">{{ displayUser.activity }}</td>
+                        <td width="40%"><a href="{{ path('fenchy_regular_user_user_myprofile_main') }}" class="categorylink">{{ 'regularuser.fill_my_profile_now'|trans }}</a></td>
+                      </tr>
+                      <tr>
+                        <td width="40%">{{ 'regularuser.my_neighbors'|trans }}</td>
+                        <td width="10%">25%</td>
+                        <td width="10%">5</td>
+                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.find_new_neighbours_now'|trans }}</a></td>
+                      </tr>
+                      <tr>
+                        <td width="40%">{{ 'regularuser.listings_posted'|trans }}</td>
+                        <td width="10%">{{ repBreakdown.listingCount }}</td>
+                        <td width="10%">{{ reputationPoints.notice }}</td>
+                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.create_listing'|trans }}</a></td>
+                      </tr>
+                      <tr>
+                        <td width="40%">{{ 'regularuser.neighbors_served'|trans }}</td>
+                        <td width="10%">25</td>
+                        <td width="10%">5</td>
+                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.uptodate_your_listings_now'|trans }}</a></td>
+                      </tr>
+                      <tr>
+                        <td width="40%">{{ 'regularuser.reviews_received'|trans }}</td>
+                        <td width="10%">{{ repBreakdown.positiveRevCount }}</td>
+                        <td width="10%">{{ reputationPoints.reviews }}</td>
+                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.ask_for_reviews'|trans }}</a></td>
+                      </tr>
+                      
+                      <!-- sdsadsad -->
+                      
+                      <tr>
+                        <td width="40%">{{ 'regularuser.completed_activities'|trans }}</td>
+                        <td width="10%">{{ repBreakdown.positiveRevCount }}</td>
+                        <td width="10%">{{ reputationPoints.reviews }}</td>
+                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.search_new_activity'|trans }}</a></td>
+                      </tr>
+                      
+                      <tr>
+                        <td width="40%">{{ 'regularuser.written_reviews'|trans }}</td>
+                        <td width="10%">{{ repBreakdown.revsOOCount }}</td>
+                        <td width="10%">{{ reputationPoints.ownReviews }}</td>
+                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.write_review_now'|trans }}</a></td>
+                      </tr>
+                      
+                      <tr>
+                        <td width="40%">{{ 'regularuser.invited_and_registered_users'|trans }}</td>
+                        <td width="10%">{{ reputationPoints.facebook }}</td>
+                        <td width="10%">{{ reputationPoints.reviews }}</td>
+                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.tell_friend_about_pollyandbob_now'|trans }}</a></td>
+                      </tr>
+                      
+                      <tr>
+                        <td width="40%">{{ 'regularuser.shareholder'|trans }}</td>
+                        <td width="10%">{{ repBreakdown.positiveRevCount }}</td>
+                        <td width="10%">{{ reputationPoints.reviews }}</td>
+                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.become_shareholder_now'|trans }}</a></td>
+                      </tr>
+                      
+                      
+                      <tr>
+                        <td width="40%">{{ 'regularuser.location_verified'|trans }}</td>
+                        <td width="10%">{{ repBreakdown.positiveRevCount }}</td>
+                        <td width="10%">{{ reputationPoints.reviews }}</td>
+                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.verify_your_location_now'|trans }}</a></td>
+                      </tr>
+                      
+                      <tr>
+                        <td width="40%">{{ 'regularuser.passport_verified'|trans }}</td>
+                        <td width="10%">{{ repBreakdown.positiveRevCount }}</td>
+                        <td width="10%">{{ reputationPoints.reviews }}</td>
+                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.verify_your_passport_now'|trans }}</a></td>
+                      </tr>
+                      
+                    </table>
+                </div>
+            </div>	
+            <div class="clearfix"></div>
+            <div class="bgbottom">
+            	<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
+            </div>
+	
+	<!-- 
+	 <div>
+	 	{{ 'regularuser.profile_completion'|trans }}
+	 	{{ reputationPoints.profilePercent }}
+	 	{{ displayUser.activity }}
+	 	<a href="{{ path('fenchy_regular_user_user_myprofile_main') }}" class="categorylink">{{ 'regularuser.fill_my_profile_now'|trans }}</a>
+	 	<br/><br/><hr style="width:50%" align="left">
+	 </div>
+	 <div>
+	 	{{ 'regularuser.my_neighbors'|trans }}
+	 	<a href="javascript:void(0);" class="categorylink">{{ 'regularuser.find_new_neighbours_now'|trans }}</a>
+	 	<br/><br/><hr style="width:50%" align="left">
+	 </div>
+	 <div>
+	 	{{ 'regularuser.listings_posted'|trans }}
+	 	{{ repBreakdown.listingCount }}
+	 	{{ reputationPoints.notice }}
+	 	<a href="javascript:void(0);" class="categorylink">{{ 'regularuser.create_listing'|trans }}</a>
+	 	<br/><br/><hr style="width:50%" align="left">
+	 </div>
+	 <div>
+	 	{{ 'regularuser.neighbors_served'|trans }}
+	 	<a href="javascript:void(0);" class="categorylink">{{ 'regularuser.uptodate_your_listings_now'|trans }}</a>
+	 	<br/><br/><hr style="width:50%" align="left">
+	 </div>
+	 <div>
+	 	{{ 'regularuser.reviews_received'|trans }}
+	 	{{ repBreakdown.positiveRevCount }}
+	 	{{ reputationPoints.reviews }}
+	 	<a href="javascript:void(0);" class="categorylink">{{ 'regularuser.ask_for_reviews'|trans }}</a>
+	 	<br/><br/><hr style="width:50%" align="left">
+	 </div>
+	 <div>
+	 	{{ 'regularuser.completed_activities'|trans }}
+	 	<a href="javascript:void(0);" class="categorylink">{{ 'regularuser.search_new_activity'|trans }}</a>
+	 	<br/><br/><hr style="width:50%" align="left">
+	 </div>
+	 <div>
+	 	{{ 'regularuser.written_reviews'|trans }}
+	 	{{ repBreakdown.revsOOCount }}
+	 	{{ reputationPoints.ownReviews }}
+	 	<a href="javascript:void(0);" class="categorylink">{{ 'regularuser.write_review_now'|trans }}</a>
+	 	<br/><br/><hr style="width:50%" align="left">
+	 </div>
+	 <div>
+	 	{{ 'regularuser.invited_and_registered_users'|trans }}
+	 	{{ reputationPoints.facebook }}
+	 	<a href="javascript:void(0);" class="categorylink">{{ 'regularuser.tell_friend_about_pollyandbob_now'|trans }}</a>
+	 	<br/><br/><hr style="width:50%" align="left">
+	 </div>
+	 <div>
+	 	{{ 'regularuser.shareholder'|trans }}
+	 	<a href="javascript:void(0);" class="categorylink">{{ 'regularuser.become_shareholder_now'|trans }}</a>
+	 	<br/><br/><hr style="width:50%" align="left">
+	 </div>
+	 <div>
+	 	{{ 'regularuser.location_verified'|trans }}
+	 	<a href="javascript:void(0);" class="categorylink">{{ 'regularuser.verify_your_location_now'|trans }}</a>
+	 	<br/><br/><hr style="width:50%" align="left">
+	 </div>
+	 <div>
+	 	{{ 'regularuser.passport_verified'|trans }}
+	 	<a href="javascript:void(0);" class="categorylink">{{ 'regularuser.verify_your_passport_now'|trans }}</a>
+	 	<br/><br/><hr style="width:50%" align="left">
+	 </div>
+	  -->
+{% endblock %}

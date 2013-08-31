@@ -1,0 +1,91 @@
+{% import '::helpers.html.twig' as helper %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>				<html lang="en" class="ie ie6 lte9 lte8 lte7">	<![endif]-->
+<!--[if IE 7]>					<html lang="en" class="ie ie7 lte9 lte8 lte7">	<![endif]-->
+<!--[if IE 8]>					<html lang="en" class="ie ie8 lte9 lte8">		<![endif]-->
+<!--[if IE 9]>					<html lang="en" class="ie ie9 lte9">			<![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->	<html lang="en">								<!--<![endif]-->
+        <head>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+            <link rel="icon" href="{{ asset('favicon.ico') }}" />
+            {% block stylesheets %}
+                <link rel="stylesheet" href="{{ absolute(asset('css/frontend/font-awesome.css')) }}" type="text/css" />                
+                <link rel="stylesheet" href="{{ absolute(asset('css/app/base-v2.css')) }}" type="text/css" />
+                <link rel="stylesheet" href="{{ asset('css/app/header-v2.css') }}" type="text/css" />
+                <link rel="stylesheet" href="{{ asset('css/app/foot-v2.css') }}" type="text/css" />
+                <link rel="stylesheet" href="{{ asset('js/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" />
+            {% endblock %}
+            {% block javascripts %}
+                {# any view specific JS scripts for this view #}                
+                <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
+                <!--[if lt IE 9]>
+                    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+                    <script type="text/javascript" src="{{ absolute(asset('js/respond.min.js')) }}"></script>		
+                <![endif]-->
+                <script type="text/javascript" src="{{ asset('plugins/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('plugins/jquery-blockui/jquery.blockui.js') }}" ></script>
+                <script type="text/javascript" src="{{ absolute(asset('js/footer-lang-dialog2.js')) }}"></script>
+                <script type="text/javascript" src="{{ asset('js/fancybox/jquery.fancybox-1.3.4.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/fancybox/jquery.mousewheel-3.0.4.pack.js') }}"></script>
+                <script type="text/javascript">
+                $(document).ready(function() {
+                    $("a#foot-terms").fancybox({
+                        type: 'iframe',
+                        href: '{{ path('fenchy_frontend_terms_popup') }}',
+                        width: 900,
+                        height: 550,
+                        centerOnScroll: true
+                    });
+                        
+                    $("a#foot-privacy").fancybox({
+                        type: 'iframe',
+                        href: '{{ path('fenchy_frontend_privacy_popup') }}',
+                        width: 900,
+                        height: 550,
+                        centerOnScroll: true
+                    });                    
+                });
+                </script>                
+            {% endblock %}
+                
+            {% block plugins %}
+            {% endblock %}
+            <title>{% block title %}{{ 'main.title_suffix'|trans }}{% endblock %}</title>
+            
+    </head>
+    <body>
+        <div id="page">            
+                {% block header %}
+                    {% include '::headerV2.html.twig' %}
+                {% endblock %}
+                <div id="page-spacer"></div>
+                {% block body %}
+                <div id="page-wrapper" class="container">                    
+                    {% block positive_msg %}
+                        {% set flash = app.session.flash('positive') %}
+                        {% if flash|length > 0 %}
+                            <span>{{ flash|trans }}</span>
+                        {% endif %}
+                    {% endblock %}
+
+                    {% block negative_msg %}
+                        {% set flash = app.session.flash('negative') %}
+                        {% if flash|length > 0 %}
+                            <span>{{ flash|trans }}</span>
+                        {% endif %}
+                    {% endblock %}
+
+
+                    {% block content %}
+
+                    {% endblock %}
+                
+                    <div class="footer-push"></div>
+                </div>
+            {% endblock %}
+            {% block foot %}
+                {% include '::footV2.html.twig' %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

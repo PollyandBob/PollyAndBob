@@ -1,0 +1,59 @@
+{% extends 'FenchyRegularUserBundle::settings.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+{% endblock %}
+
+{% block settings_content %}
+
+    <section id="profile_left_menu" class="sidebar pull-left">
+        <div class="wrapper">
+            {% include 'FenchyRegularUserBundle:Settings:menuV2.html.twig' %}
+        </div>   
+    </section>
+    <section class="content pull-right">
+        <div class="profile_right_content inner-content">
+            <header><h1>{{ 'regularuser.settings'|trans }}</h1></header>
+            <form action="{{ path('fenchy_regular_user_settings_account') }}" method="post" {{ form_enctype(form) }} class="form-settings general">
+
+                <div class="form-box-wrapper">
+                    <h2>{{ 'settings.account.name'|trans }}</h2>
+
+                    <div class="row input-wrapper">
+                            {{ form_row(form.email) }}
+                        </div>
+
+                    <div class="row input-wrapper">
+                            <label>{{'regularuser.change_password'|trans}}</label>
+
+                                <a href="{{path('fos_user_change_password')}}" class="button">{{'regularuser.change_your_password'|trans}}</a>
+
+                        </div>                
+
+                    <div class="row input-wrapper">
+                            <label>{{'regularuser.delete_account'|trans}}</label>
+
+                                <a href="{{path('fenchy_regular_user_settings_deleteaccount')}}" class="button">{{'regularuser.delete_your_account'|trans}}</a>
+
+                        </div>                                
+
+                        <div style="display:none;">{{ form_rest(form) }}</div>                                        
+                    <footer class="clearfix">
+                        <div class="button grey-button pull-left" id="buttons">
+                            <a id="back" class="wrapper" href="{{path('fenchy_frontend_indexv2')}}">
+                                <strong>{{ 'btn.cancel'|trans }}</strong>
+                            </a>                            
+                        </div>
+                        <div class="button submit pull-right">
+                            <div>
+                                <input type="submit" id="continue" value="{{ 'btn.save'|trans }}"/>                                
+                            </div>
+                        </div>
+                    </footer>
+                </div>   
+            </form>
+        </div>
+    </section>
+{% endblock %}

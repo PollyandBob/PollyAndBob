@@ -1,0 +1,160 @@
+@charset "utf-8";
+
+.toolbar-item {
+    height: 35px;
+    color: #a09f9f;
+}
+.ie8 .toolbar-item select {    
+    border: 1px solid #dadada;
+}
+.toolbar-item.select-button {
+    padding: 0 7px 0 13px;
+    line-height: 35px;    
+}
+.toolbar-item.select-button .replacement {
+    min-width: 128px;
+    border: 1px solid rgba(186,186,186, 0.28);
+    background: #f4f4f4;    
+    font-size: 0.923em;
+    display: inline-block;
+    line-height: 22px;
+    cursor: pointer;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}
+.toolbar-item.select-button .replacement .select-value {
+    padding: 0 25px 0 9px;
+}
+.toolbar-item.select-button .replacement i {
+    float: right;
+    margin-right: 8px;
+    font-size: 18px;
+    line-height: 22px;
+}
+.toolbar-item.select-button .replacement .drop-down {
+    position: absolute;
+    top: 20px;
+    left: -1px;
+    padding-left: 9px;
+    background: #f4f4f4;
+    z-index: 1;
+    width: 100%;
+    padding: 4px 0 0 0;
+    border: 1px solid rgba(186,186,186, 0.28);
+    border-top: 0;
+    -webkit-border-radius: 0 0 4px 4px;
+    -moz-border-radius: 0 0 4px 4px;
+    border-radius: 0 0 4px 4px;
+    display: none;
+    behavior: url(/plugins/pie.php);
+}
+.toolbar-item.select-button .replacement .drop-down i {
+    line-height: 19px;
+    margin-right: 5px;
+    font-size: 16px;
+}
+.toolbar-item.select-button .replacement .drop-down span {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+    padding-left: 9px;
+}
+.toolbar-item.select-button .replacement .drop-down div:hover {
+    color: #fff;
+    background: #C1C1C1;
+}
+#main-container .select-button .select-wrapper {
+    border: 1px solid rgba(186,186,186, 0.28);
+    background: #f4f4f4;
+    font-size: 0.923em;
+    line-height: 22px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    display: inline-block;
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}
+#main-container .select-button .replacement {    
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+#main-container  .select-button .custom-form {
+    visibility: visible;
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    padding: 0;
+}
+.ie8 #main-container .select-button .custom-form {
+    filter: alpha(opacity=0);
+}
+#main-container .select-button .custom-form select {
+    width: 100%;
+    cursor: pointer;
+}
+#main-container .select-button .custom-form option {
+    padding: 1px 0 1px 9px;
+}
+.switch-button {
+    cursor: pointer;
+}
+.switch-button > span {
+    width: 50px;
+    display: block;
+    text-align: center;
+    float: left;
+}
+.switch-button > span:first-child {
+    border-right: 1px solid #aeaeae;
+}
+.switch-button .wrapper {
+    border-radius: 0;
+    position: relative;
+}
+.switch-button:hover .switch-off .wrapper {
+    background-color: transparent;  
+}
+.switch-button:hover > span .wrapper {
+    background-color: transparent;  
+}
+.switch-button .switch-on:hover .wrapper { 
+    background: rgba(255,255,255, 0.3);
+}
+.ie8 .switch-button .switch-on:hover .wrapper { 
+    -pie-background: rgba(255,255,255, 0.3);
+    behavior: url(/plugins/pie.php);
+}
+.switch-button .switch-off:hover .wrapper {
+    background-color: transparent;  
+}
+.switch-button i.icon-align-justify {
+    font-size: 19px;
+}
+.switch-button i.icon-th-large {
+    font-size: 20px;
+}
+.switch-button.grey-button .switch-off {
+    background-color: #c1c1c1;
+}
+.switch-button i {
+    line-height: 35px;
+}
+.switch-button .switch-on i {
+    color: #a4a4a4;
+}
+.switch-button .switch-off i {
+    color: #e9e9e9;
+}
+.custom-form {
+    visibility: hidden;
+    display: none;
+    cursor: pointer;
+}

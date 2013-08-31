@@ -1,0 +1,11 @@
+{% extends 'FenchyRegularUserBundle::layout.html.twig' %}
+
+{% block profil_content %}
+<div class="rounded">
+    <div style="padding:10px;text-align: justify;font-size:20px;">
+        <div>{{ 'regularuser.all_trust_points'|trans }} <span style="color:green">{{ nrTrustPoints }}</span></div>
+        <div>{{ 'regularuser.ref_trust_points'|trans }} <span style="color:green">{{ nrReferences }}</span></div>
+        <div>{{ 'regularuser.con_trust_points'|trans }} <span style="color:green">{{ nrFriends }}</span></div>
+    </div> 
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'FenchyRegularUserBundle::messages.html.twig' %}
+{% form_theme form '::labelForm.html.twig' %}
+
+{% block message_content %}
+<div class="new-reply-message-box">
+    <form action="{{ path('fenchy_regular_user_messages_send') }}" method="post" {{ form_enctype(form) }}>
+        <div class="form-box-wrapper">
+            <h2>{{'regularuser.message.new_message'|trans}} {{'regularuser.message.to'|trans}} {{ user.regularuser.firstname }} {{ user.regularuser.lastname }}</h2>
+            
+            <div class="row input-wrapper">
+            {{ form_row(form.title) }}
+            </div>
+
+            <div class="row input-wrapper">
+            {{ form_row(form.content) }}
+            </div>                                    
+
+            {{ form_rest(form) }}
+        </div>
+
+        <footer class="clearfix">
+            <div class="button grey-button pull-left" id="buttons">
+                <a id="back" class="wrapper" href="{{path('fenchy_regular_user_user_profilev2', {'userId': user.id})}}">
+                    <strong>{{ 'btn.cancel'|trans }}</strong>
+                </a>                            
+            </div>
+            <div class="button submit pull-right">
+                <div>
+                    <input type="submit" id="continue" value="{{ 'btn.send'|trans }}"/>                                
+                </div>
+            </div>
+        </footer> 
+    </form>                                
+        </div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends '::baseV2.html.twig' %}
+
+{% block content %}
+<section class="main">
+    <div id="login-wrapper-wide" class="loginform loginform-ext">
+        <a href="#" class="sign-btn fb_btn clearfix login-with-facebook">
+            <span><i>facebook</i></span>
+            <span><strong>{{'frontend.sign_in_facebook'|trans}}</strong></span>
+        </a>
+        <a href="{{ path ('connect_twitter')}}" class="sign-btn tt_btn clearfix login-with-twitter">
+            <span><i>twitter</i></span>
+            <span><strong>{{'frontend.sign_in_twitter'|trans}}</strong></span>
+        </a>
+        <p><strong>or</strong></p>
+
+        <form action="{{ path("fos_user_security_check") }}" method="post">
+            <fieldset>
+                <div class="fieldInput">
+                    <input id="user-login-email-ext" name="_username" value="{{ last_username }}" required="required" type="text" placeholder="{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}"/>
+                </div>
+                <div class="fieldInput">
+                    <input id="user-login-pass-ext" type="password" name="_password" required="required" placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}" />
+                </div>                
+                <p><a class="forgot_pass" href="{{ path('fenchy_user_reset_password') }}"><strong>{{ 'user.forgot_your_password'|trans }}</strong></a></p>
+                <div class="submit">
+                    <div>
+                        <input type="submit" id="_submit-ext" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
+                    </div>                                        
+                </div>
+            </fieldset>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+        </form>       
+    </div>
+</section>                
+{% endblock %}

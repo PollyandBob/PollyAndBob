@@ -1,0 +1,524 @@
+/*Default tags */
+body{
+    background:#fbfbfb;
+    margin: 0px;
+
+}
+textarea{
+    resize: none; 
+}
+a{
+    color:white;
+    text-decoration: none;
+    border:0px;
+}
+
+img{
+    border:0px;
+    text-decoration: none;
+}
+
+/* Icons */
+a.icon {
+    display: block;
+    color: black;
+    text-align: center;
+    background: url('../../images/icons.png') no-repeat;
+    padding-top: 29px;
+    margin: 5px auto;
+}
+a.icon.message {
+    width: 55px;
+    background-position: 12px -1px;
+}
+a.icon.request {
+    width: 50px;
+    background-position: 10px -173px;
+}
+a.icon.share {
+    width: 40px;
+    background-position: -39px -172px;
+}
+a.icon.delete {
+    width: 40px;
+    background-position: 4px -130px;
+}
+.butt{
+    
+    background: #271e01;
+    background-repeat: repeat-x;
+    /* Safari 4-5, Chrome 1-9 */
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#3e3a2e), to(#271e01));
+    /* Safari 5.1, Chrome 10+ */
+    background: -webkit-linear-gradient(top, #3e3a2e, #271e01);
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #3e3a2e, #271e01);
+    /* IE 10 */
+    background: -ms-linear-gradient(top, #3e3a2e, #271e01);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(top, #3e3a2e, #271e01);
+    color: white;
+    cursor: pointer;
+    font-family: MYRIADPRO-REGULAR,sans-serif;
+    text-align: center;
+    font-size: 14px;
+    width: auto;
+    border: 1px solid #CACACA;
+    border-radius: 5px 5px 5px 5px;
+    padding: 5px 10px;
+    margin-left: 5px;
+}
+
+/*Body main block size */
+#sitebody,#header,#menubar #menubarcontent,#foot div{
+    margin:auto;	
+    width:1000px;
+    font-family: MYRIADPRO-REGULAR, sans-serif;
+    color:#343434;
+}
+
+
+
+/*Header Logo*/
+#header
+{
+    margin-top:70px;
+    text-align:center;
+    font-family: MYRIADPRO-REGULAR, sans-serif
+}
+
+#header img
+{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*Header Menu Bar*/
+#menubar
+{
+    font-family: MYRIADPRO-COND, sans-serif;
+    width:100%;
+    height:40px;
+    background:#cbc9c4;
+    background-repeat: repeat-x;
+    /* Safari 4-5, Chrome 1-9 */
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ededed), to(#cbc9c4));
+    /* Safari 5.1, Chrome 10+ */
+    background: -webkit-linear-gradient(top, #ededed, #cbc9c4);
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #ededed, #cbc9c4);
+    /* IE 10 */
+    background: -ms-linear-gradient(top, #ededed, #cbc9c4);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(top, #ededed, #cbc9c4);
+}
+
+#menubar{
+    padding:10px;
+    padding-top: 13px;
+    margin-bottom:5px;
+}
+
+#menubar #menubarcontent #logomenubar 
+{
+    width:155px;
+    float:left;
+    margin-left:35px;
+}
+
+#menubar #menubarcontent #menuoptions
+{
+    float:right;
+    margin:5px;
+    color:white;
+    margin-right:20px;
+}
+#menubar #menubarcontent #menuoptions .optionslist
+{
+    width: 30px;
+    height: 30px;
+    float:left;
+    margin-left:25px;
+    font-size:15px;
+}
+
+#menubar #menubarcontent #menuoptions .option_1 .op_image
+{
+    background-image: url('../../images/menubarop1.png');
+    background-repeat: no-repeat;
+    min-height: 30px;
+    min-width: 30px;
+}
+
+#menubar #menubarcontent #menuoptions .option_1 {
+    
+}
+
+#menubar #menubarcontent #menuoptions .option_2
+{
+    padding-top:5px;
+}
+#menubar #menubarcontent #menuoptions .option_2 .op_image
+{
+    background-image: url('../../images/menubarop2.png');
+    background-repeat: no-repeat;
+    min-height: 30px;
+    min-width: 30px;
+}
+
+#menubar #menubarcontent #menuoptions .op_image .op_count
+{
+    background: #ff6666;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+    text-align: center;
+    width: 25px;
+    height: 25px;
+    position:relative;
+    top:-10px;
+    left:14px;
+    font-size:13px;
+    
+}
+
+#menubar #menubarcontent #menuoptions .op_image .op_count div
+{
+    padding-top:5px;
+}
+
+#menubar #menubarcontent #menuoptions .option_2 .op_image .op_count
+{
+    position:relative;
+    top:-15px;
+    left:13px;
+}
+
+#menubar #menubarcontent #menuoptions .option_3
+{
+    background: #149a9a;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+    text-align: center;
+}
+
+#menubar #menubarcontent #menuoptions .option_3 div{
+    padding-top: 8px;
+}
+
+#menubar #menubarcontent #menuoptions .option_4{
+    position: relative;
+    height:45px;
+    overflow: hidden;
+}
+#menubar #menubarcontent #menuoptions .option_4:hover{
+    overflow: visible;
+}
+
+#menubar #menubarcontent #menuoptions .option_5 a {
+    font-size: 32px;
+    font-weight: bold;
+    color: #343434;
+}
+    
+#menubar #menubarcontent #menuoptions .username
+{
+    color:#343434;
+    width:150px;
+    text-align:right;
+    margin-right:0px;
+    margin-top:7px;
+}
+
+#menubar #menubarcontent #menuoptions .username a
+{
+    color:#343434;
+}
+/*Settings*/
+#menubar #triangle
+{
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid white;
+    float:right;
+    cursor: pointer;
+    padding-top: 5px;
+    position: relative;
+    right: 5px;
+}
+
+#menubar #settings
+{
+    position: relative;
+    right:151px;
+    padding:5px;
+    padding-top:0px;
+    width:172px;
+    height:70px;
+    text-align: right;
+    border: 1px solid #c5c5c5;
+    border-top: 0px;
+    background: white;
+    margin-top: 0px;
+    cursor: pointer;
+    color:#343434;
+}
+
+#menubar #settings .settings_options div
+{
+    padding:8px;
+}
+
+#menubar #settings .settings_options div:first-child
+{
+    padding-top:15px;    
+    border-bottom: 1px solid #c5c5c5;
+}
+
+#menubar #settings .settings_options div a
+{
+    background: none;
+    border:0px;
+    clear:both;
+    color:#343434;
+}
+
+/*Content */
+#content{
+    font-family: MYRIADPRO-REGULAR, sans-serif;
+}
+
+#content .rounded, #content .pictueholder img
+{
+    padding:5px;
+    border:1px solid #b7b7b7;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#content .rounded
+{
+    padding:15px;
+    text-align:justify;
+    font-size:14px;
+}
+
+#content > .rounded{
+    min-height: 400px;
+}
+
+#content .pictueholder img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+ 
+/*Email submit */
+#submit{
+    text-align:center;
+}
+
+#submit input.notClicked
+{
+    color:#cccccc;
+}
+
+/* Foot */	
+#foot{
+    margin-top:30px;
+    text-align:center;
+    width:100%;
+    background:#eeeeee;
+    padding:5px;
+    position: fixed;
+    bottom: 0;
+    height:30px;
+}
+#foot div{
+    padding:5px;
+}
+
+#foot a{
+    font-family: Helvetica,sans-serif;
+    color:#333333;
+    text-decoration:none;
+    font-size:14px;
+    margin-left: 12px;
+    margin-right: 12px;
+    padding:5px;
+    text-align:center;
+}
+#foot a:hover{
+ 
+}
+
+/*Clear class*/
+.clear
+{
+    clear:both;
+}
+
+/*Errors*/
+.error, #negative_msg{
+    color:red;
+    text-align:center;
+    font-family: MYRIADPRO-BOLD, sans-serif;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+/*Success*/
+.success, #positive_msg{
+    color:#2ccb29;
+    text-align:center;
+    font-family: MYRIADPRO-BOLD, sans-serif;
+    text-decoration: none;
+    font-size: 18px;
+}
+.msgSpace {
+    margin-top: 50px;
+}
+span.required{
+    color: red;
+}
+.msgUser{
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.flash-container {
+    width: 89%;
+    height: auto;
+    text-align: center;
+    margin: 0 5%;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.flash-container * {
+    padding: 10px;
+    display: block;
+}
+
+.fancy-container {
+    height: 500px;
+    min-width: 300px;
+    text-align: center;
+}
+
+.fancy-container img {
+    height: 400px;
+    margin-bottom: 50px;
+}
+.fancy-container .buttons {
+    float: left;
+    width: 100%;
+}
+.fancy-container .buttons a {
+    margin: 0 50px;
+    float: left;
+}
+.fancy-container .buttons a:last-child {
+    float: right;
+}
+
+.button {
+    display:block;
+    width:118px;
+    margin:auto;
+    margin-top:15px;
+    margin-bottom:10px;
+    padding:5px;
+    border:1px solid #aaaaaa;
+    color:#343434;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    text-align: center;
+    font-weight: bold;
+}
+.button.black {
+    color:white;
+    background: #271e01;
+    background-repeat: repeat-x;
+    /* Safari 4-5, Chrome 1-9 */
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#3e3a2e), to(#271e01));
+    /* Safari 5.1, Chrome 10+ */
+    background: -webkit-linear-gradient(top, #3e3a2e, #271e01);
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #3e3a2e, #271e01);
+    /* IE 10 */
+    background: -ms-linear-gradient(top, #3e3a2e, #271e01);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(top, #3e3a2e, #271e01);
+    padding: 3px;
+    margin: 0 3px;
+}
+
+#fancybox-frame {
+    height: 650px;
+}
+
+a.current {
+    background-color: #eeeeee;
+}
+a.dark {
+    color: #343434;
+    font-family: MYRIADPRO-SEMIBOLD,serif;
+    font-size: 16px;
+}
+.notice-link {
+    color: #343434;
+    font-family: MYRIADPRO-SEMIBOLD,serif;
+    font-size: 14px;
+}
+.right {
+    float: right;
+}
+.scrollable {
+    height: 65%;
+    overflow-y: scroll;
+	-moz-box-shadow: inset -9px 0px 16px 6px #d2d0d0;
+	-webkit-box-shadow: inset -9px 0px 16px 6px #d2d0d0;
+	box-shadow: inset -9px 0px 16px 6px #d2d0d0;
+	
+}
+
+.artificial-invalid {
+	box-shadow: 0 0 1.5px 1px red;
+}
+
+ol.ordered-list {
+	list-style-type:decimal;
+	padding: 0px 5px 0px 30px;
+	line-height: 0.5cm;
+}
+
+ol.ordered-list-alpha {
+	list-style-type:lower-alpha;
+	padding: 0px 5px 0px 30px;
+	line-height: 0.5cm;
+}
+a.add-sticker {
+    display: block;
+    height: 32px;
+    width: 38px;
+    background-image: url('../../images/exclamation.jpg');
+}
+#reviews-list {
+    float: left;
+    width: 100%;
+}
+#reviews-list h2 {
+    font-weight: bold;
+    border-top: 2px solid black;
+}
+#reviews-list p {
+    
+}

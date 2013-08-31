@@ -1,0 +1,11 @@
+{% autoescape false %}
+
+{{ 'invitations.email.1'|trans({'%username%': user.regularuser.firstname }) }}
+
+{{ 'invitations.email.2'|trans({'%username%': sender.regularuser.firstname }) }}
+
+{{absolute(path('fenchy_regular_user_friend_invitation_response', {'id': invitation.id, 'response': 'accept'}))}}
+
+{{ 'email.message.address'|trans({}, 'FOSUserBundle') }}
+
+{% endautoescape %}

@@ -1,0 +1,4 @@
+<script type="text/javascript" src="{{ asset('http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false') 
+    }}{% if app.security.token.user.userregular.preflocale is defined and
+            app.security.token.user.userregular.preflocale is not empty 
+    %}&language={{ app.security.token.user.userregular.preflocale }}{% endif %}"></script>

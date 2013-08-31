@@ -1,0 +1,35 @@
+fenchy_admin:
+    resource: "@FenchyAdminBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+fenchy_message:
+    resource: "@FenchyMessageBundle/Resources/config/routing.yml"
+    prefix:   /
+
+fenchy_notice:
+    resource: "@FenchyNoticeBundle/Resources/config/routing.yml"
+    prefix:   /
+
+fenchy_gallery:
+    resource: "@FenchyGalleryBundle/Resources/config/routing.yml"
+    prefix:   /
+
+fenchy_regular_user:
+    resource: "@FenchyRegularUserBundle/Resources/config/routing.yml"
+    prefix:   /user
+
+user:
+    resource: "@UserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+fenchy_frontend:
+    resource: "@FenchyFrontendBundle/Resources/config/routing.yml"
+    prefix:   /
+util:
+    resource: "@FenchyUtilBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+# Internal routing configuration to handle ESI
+#_internal:
+#    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
+#    prefix:   /_internal

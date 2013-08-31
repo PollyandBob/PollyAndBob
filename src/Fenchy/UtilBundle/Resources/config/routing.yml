@@ -1,0 +1,21 @@
+fenchy_util_homepage:
+    pattern:  /hellyeah/{name}
+    defaults: { _controller: FenchyUtilBundle:Default:index }
+    
+fenchy_create_user_sticker:
+    pattern:  /usersticker/{id}
+    defaults: { _controller: FenchyUtilBundle:Sticker:userSticker }
+    requirements:
+        id: \d+
+        
+fenchy_create_notice_sticker:
+    pattern:  /noticesticker/{id}
+    defaults: { _controller: FenchyUtilBundle:Sticker:noticeSticker }
+    requirements:
+        id: \d+
+        
+fenchy_create_review_sticker:
+    pattern:  /reviewsticker/{id}
+    defaults: { _controller: FenchyUtilBundle:Sticker:reviewSticker }
+    requirements:
+        id: \d+

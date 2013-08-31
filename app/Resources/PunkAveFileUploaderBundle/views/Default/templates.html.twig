@@ -1,0 +1,73 @@
+{# Contains Underscore templates for the file uploader. #}
+{# As long as the data-* attributes stay on the appropriate elements #}
+{# you can override the markup pretty extensively in a local version #}
+{# of this file. #}
+
+{# Include this file once in the page. You can instantiate many file uploaders. #}
+{# Each one must receive a distinct uploadUrl option. You can also pass #}
+{# an existingFiles option with a list of filenames that should appear in the #}
+{# editor as having been previously uploaded. #}
+
+<script type="text/template" id="file-uploader-template">
+    <!--[if IE]>
+        <label for="gallery-file" style="display:block;">
+    <![endif]-->
+    <div class="uploader" data-dropzone="1">
+      <div class="controls">
+        {# No name attribute please, that would cause it to submit with a regular form #}
+        <input id="gallery-file" type="file" data-files="1" multiple style="visibility:hidden;"/>
+        <div class="spinner" data-spinner="1" style="display: none">
+          <span>Uploading...</span><img src="{{ asset('bundles/punkavefileuploader/images/spinner.gif') }}" />         
+        </div>
+      </div>
+      <ul id="gallery-edit-images-container" class="thumbnails" data-thumbnails="1">
+          {# We populate the list via an API call #}
+      </ul>
+
+    </div>
+    <!--[if IE]>
+        </label>
+    <![endif]-->
+</script>
+
+{# parameters to underscore template: name, thumbnail_url, original_url #}
+<script type="text/template" id="file-uploader-file-template">
+    <li data-name="<%- name %>" class="thumbnail">
+        {# Some things can be thumbnailed, some things not #}
+        {# ACHTUNG: regular expression literals fail in Underscore templates #}
+        
+            <img src="<%- thumbnail_url %>" class="thumbnail-image" rel="<%- name %>" />
+            <img src="<%- medium_url %>" class="medium-image" rel="<%- name %>" />
+            <input type="hidden" name="original" value="<%- url %>" />
+       
+        <div class="caption">
+            <a rel="tooltip" title="Delete" data-action="delete" class="delete thumbnail-action btn" href="#delete"><i class="icon-remove-sign"></i></a>
+        </div>            
+    </li>
+</script>
+
+<script type="text/template" id="file-uploader-file-template-original">
+    <li data-name="<%- name %>" class="thumbnail">
+        {# Some things can be thumbnailed, some things not #}
+        {# ACHTUNG: regular expression literals fail in Underscore templates #}
+        
+            <img src="<%- thumbnail_url %>" class="thumbnail-image" rel="<%- name %>" />
+            <img src="<%- url %>" class="medium-image" rel="<%- name %>" />
+            <input type="hidden" name="original" value="<%- url %>" />
+       
+        <div class="caption">
+            <a rel="tooltip" title="Delete" data-action="delete" class="delete thumbnail-action btn" href="#delete"><i class="icon-remove-sign"></i></a>
+        </div>            
+    </li>
+</script>
+
+<script type="text/template" id="file-uploader-empty-file-template">
+    <li class="thumbnail empty">
+        <div class="caption">
+        </div>
+        <div class="add-center">
+            <i class="icon-camera"></i>
+            <strong class="info-by-line"><i class="icon-plus"></i>Add</strong>
+        </div>        
+    </li>
+</script>

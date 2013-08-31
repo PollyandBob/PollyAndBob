@@ -1,0 +1,37 @@
+fenchy_gallery_delete:
+    pattern:  /gallery/delete/{imageId}
+    defaults: { _controller: FenchyGalleryBundle:Default:deleteImage }
+    requirements:
+        imageId:   \d+
+        
+fenchy_gallery_edit_image:
+    pattern: /gallery/editImage/{id}
+    defaults: { _controller: FenchyGalleryBundle:Default:editImage }
+    requirements:
+        id: \d+
+        
+fenchy_gallery_close_and_refresh:
+    pattern: /gallery/refrest
+    defaults: { _controller: FenchyGalleryBundle:Default:closeAndRefresh }
+    
+fenchy_gallery_edit:
+    pattern: /gallery/edit/{id}
+    defaults: { _controller: FenchyGalleryBundle:Punkave:edit }
+    requirements:
+        id: \d+
+    
+fenchy_gallery_upload:
+    pattern: /gallery/upload/{tmpGalleryId}
+    defaults: { _controller: FenchyGalleryBundle:Punkave:upload }
+    requirements:
+        id: \d+
+        
+fenchy_gallery_show:
+    pattern: /gallery/show/{id}
+    defaults: { _controller: FenchyGalleryBundle:Punkave:show }
+    requirements:
+        id: \d+
+        
+fenchy_gallery_crop:
+    pattern: /gallery/crop
+    defaults: { _controller: FenchyGalleryBundle:Punkave:crop }

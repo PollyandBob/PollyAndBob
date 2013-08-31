@@ -1,0 +1,36 @@
+{% extends "FenchyFrontendBundle::layout.html.twig" %}
+
+{% block javascripts %}
+    {{ parent() }}
+<script type="text/javascript">
+function onFbInit() {
+    $('#facebook-login').click(function(){
+        FB.login(function(response) {
+
+            if (response.authResponse) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('fenchy_login_facebook') }}",
+                    data: { token: response.authResponse.accessToken, facebookId: response.authResponse.userID }
+                }).done(function( data ) {
+                    if (null != data.url) {
+                        window.location.replace( data.url );
+                    } else {
+                        alert( '{{ 'regularuser.unexpected_problem_facebook'|trans }}');
+                    }
+                }).fail(function( data ) {
+                    if (null != data.responseText) {
+                        alert( data.responseText );
+                    } else {
+                        alert( '{{ 'regularuser.unexpected_problem_facebook'|trans }}');
+                    }
+                });
+            }
+        }, {
+            scope: 'email, user_birthday, user_location'
+        });
+        return false;
+    });
+}
+</script>
+{% endblock %}

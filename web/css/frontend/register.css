@@ -1,0 +1,307 @@
+/*Registration picture*/
+#reg_picture_upload{
+    width:27%;
+    min-width:100px;
+    min-height:100px;
+    float:left;
+}
+
+#reg_picture
+{
+    width: 155px;
+    height: 155px;
+    margin:auto;
+    
+    margin-right:10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border:1px solid #bcbcbc;
+    padding-top:3px;
+    padding-left:3px;
+}
+
+#reg_picture #image-add-right {
+    width: 100%;
+    height: 165px;
+}
+#reg_picture #image-add-right iframe {
+    width: 100%;
+    height: 195px;
+    overflow: hidden;
+}
+
+#under_button_text
+{
+    margin-top: 48px;
+    margin-bottom:5px;
+    text-align: right;
+    margin-right:10px;
+    padding-right:10px;
+    font-size:10px;
+}
+
+
+/*Registration account details*/
+#reg_form{
+    width:60%;
+    float:left;
+    margin-left:25px;
+}
+
+#content form table
+{
+    margin:0px;
+}
+
+.loginbox form table tr td .create_account{
+    font-size:18px;
+    margin-bottom:10px;
+}
+
+#content .loginbox{
+    border:0px;
+}
+
+#content form table td:first-child{
+    padding-top: 10px;
+    font-size:20px;
+    width:170px;
+    font-weight:bold;
+    color:#464646;
+}
+
+#content form table td:last-child{
+    width:240px;
+}
+
+#reg_upload_button
+{
+    cursor:pointer;
+    padding:5px;
+    margin:auto;
+    margin-top:10px;
+    margin-right:10px;
+    border:1px solid #bcbcbc;
+    display:none;
+    width:140px;
+    text-align:center;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#reg_upload_button:hover{
+    background: #eeeeee
+}
+
+.reg_terms
+{
+    margin-top:25px;
+    margin-bottom:10px;
+    margin-left: 0px;
+    font-size:16px;
+    font-weight: normal;
+    color:#464646;
+}
+
+#content .loginbox .login{
+    margin-right:25px;   
+}
+
+.login a{
+    color:black;
+}
+
+.error ul{
+    list-style: none;
+    margin: 5px;
+}
+.error{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    width: 51%;
+}
+
+#addressDataRegisterForm {
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    width: 100%;
+}
+#map_reg{
+    float:right;
+}
+
+#map_reg .button{
+    width:40%;
+    padding-bottom:15px;
+}
+
+#map_reg #location_info {
+    float: right;
+    margin-top: 10px;
+    font-size: 12px;
+    font-family: MYRIADPRO-REGULAR, sans-serif;
+    margin-bottom: 30px;
+}
+
+#content #addressDataRegisterForm #map_canvas {
+    margin-top: 5px;
+    height:400px;
+    width:550px;
+    top:0px;
+    border: 1px solid black;
+}
+
+#content #map_reg input[type='submit']{
+   float:right; 
+   margin:0px;
+   width: 177px;
+   height: 66px;
+   font-size: 26px;
+   font-family: MYRIADPRO-BOLDCOND, sans-serif;   
+}
+
+#content form table#fenchy_regularuserbundle_userregular_locationtype {
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+
+#content form table#fenchy_regularuserbundle_userregular_locationtype .pin, #content form table#fenchy_userbundle_twitter .pin {
+    color: #464646;;
+}
+
+#content form table#fenchy_userbundle_facebook .pin {
+    color: #464646;
+}
+
+#content form table#fenchy_regularuserbundle_userregular_locationtype input, #content form table#fenchy_userbundle_twitter input {
+    margin: 0;
+}
+#content form table#fenchy_regularuserbundle_userregular_locationtype td:last-child {
+    text-align: left;
+}
+
+#content form table#fenchy_regularuserbundle_userregular_locationtype td:last-child input{
+  /*  width: 60%;*/
+}
+
+#content form table#fenchy_regularuserbundle_userregular_locationtype td #not_shown, #content form table#fenchy_userbundle_twitter td #not_shown{
+    color: #cacaca;
+    font-size:11px;
+    width: 100%;
+    float:left;
+    text-align: right;
+}
+
+#content form table#fenchy_regularuserbundle_userregular_locationtype tr:last-child td input[type='submit']{
+    text-align:center;
+    width:20%;
+    float:right;
+}
+
+#addressDataRegisterMsg {
+    margin-left: 255px;
+    margin-bottom: 30px;
+}
+
+#addressDataRegisterMsg p {
+    font-size:22px;
+    font-family: MYRIADPRO-BOLDCOND, sans-serif; 
+}
+
+#content form table#fenchy_regularuserbundle_userregular_locationtype td:first-child {
+    padding-top: 0;
+    width: 80px;
+}
+#content form table#fenchy_regularuserbundle_userregular_locationtype td ul {
+    margin: 0;
+    margin-bottom: 15px;
+    padding: 5px;
+    list-style: none;
+    color: red;
+    text-align: left;
+    font-size: 18px;
+}
+
+
+/*Preregister  */
+
+#content #preregister{
+    padding:10px;
+    width:50%;
+    margin:auto;
+}
+
+#content #preregister hr{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border:1px solid #e8e8e8;
+}
+
+#content #preregister .pre_reg_sign
+{
+    text-align: center;
+    margin-bottom:20px;
+}
+
+#content #preregister .bold_link{
+    color: #464646;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#content #preregister .new_at_fenchy{
+    margin-top:20px;
+    text-align: center;
+    font-size:22px;
+    font-family: MYRIADPRO-BOLD, serif;
+    color: #464646;
+}
+
+#content #preregister .tw_fb_logins
+{
+   width:100%;
+   margin-top:25px;
+   margin-bottom: 30px;
+}
+
+#content #preregister .tw_fb_logins a
+{
+    padding:20px;
+    padding-right:50px;
+    padding-left:50px;
+    font-size:24px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+#content #preregister .tw_fb_logins a.facebook
+{
+    margin:0px;
+    
+}
+
+#content #preregister .tw_fb_logins .firstletter{
+    font-weight:bold;
+    font-size:48px;
+    margin-right:0px;
+    position: relative;
+    top:8px;
+    left:-5px;
+}
+
+#content #preregister .tw_fb_logins .separator{
+    margin-right:10px;
+    margin-left:10px;
+    font-size:30px;
+}
+
+a#registration-terms, a#registration-privacy {
+    color: #464646;
+}

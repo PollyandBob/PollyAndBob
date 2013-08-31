@@ -1,0 +1,183 @@
+#header div, #header h2
+{
+    width:400px;
+    margin:auto;
+}
+
+/*Twitter and facebook buttons*/
+.tw_fb_logins
+{
+   width:60%;
+   margin:auto;
+   margin-top:40px;
+   margin-bottom:60px;
+   padding:10px;
+   text-align: center;
+}
+.tw_fb_logins div
+{
+    margin:10px;
+    padding:5px;
+}
+
+#content .tw_fb_logins a
+{
+    padding:10px;
+    padding-right:20px;
+    padding-left:20px;
+    font-size:16px;
+    color:white;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.connect_content_adt{
+    padding-right:64px;
+}
+
+disconected_content_adt{
+    
+}
+
+.connect_content_tw{
+    padding-right:48px;
+}
+
+.connect_content_fb{
+    padding-right:27px;
+}
+
+#content .tw_fb_logins a.twitter
+{
+    background:#66cbff;
+    margin-right: 10px;
+    background-repeat: repeat-x;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#b3e5fe), to(#66cbff));
+    background: -webkit-linear-gradient(top, #b3e5fe, #66cbff);
+    background: -moz-linear-gradient(top, #b3e5fe, #66cbff);
+    background: -ms-linear-gradient(top, #b3e5fe, #66cbff);
+    background: -o-linear-gradient(top, #b3e5fe, #66cbff); 
+}
+
+#content .tw_fb_logins a.facebook
+{
+    background:#3c5c95;
+    margin-left: 10px;
+    background-repeat: repeat-x;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6b8bba), to(#3c5c95));
+    background: -webkit-linear-gradient(top, #6b8bba, #3c5c95);
+    background: -moz-linear-gradient(top, #6b8bba, #3c5c95);
+    background: -ms-linear-gradient(top, #6b8bba, #3c5c95);
+    background: -o-linear-gradient(top, #6b8bba, #3c5c95);
+    
+}
+
+#content .tw_fb_logins .connect a.twitter{
+    margin-right: 0px;
+}
+
+#content .tw_fb_logins .connect a.facebook{
+    margin-left: 0px;
+}
+
+#content .tw_fb_logins .firstletter{
+    font-weight:bold;
+    font-size:26px;
+    margin-right:5px;
+    position: relative;
+    top:4px;
+    left:-5px;
+}
+/*Login box*/
+#content .loginbox{
+    width:95%;
+    padding:20px;
+    border-top:1px solid #e8e8e8;
+}
+#content form table{
+    padding: 20px;
+    margin: auto;
+}
+
+#content form table td:first-child{
+    padding-top: 10px;
+    font-size:20px;
+    width:auto;
+    padding-right:5px;
+    font-weight:bold;
+    color:#464646;
+}
+
+#content form table td:last-child{
+    width:300px;
+}
+
+#content form input[type="text"],
+#content form input[type="email"],
+#content form input[type="password"]{
+    padding:10px;
+    border:1px solid #999999;
+    background:white;
+    color:#999999;
+    width:100%;
+    margin:10px;
+    margin-bottom: 0px;
+}
+
+#content form input[type="submit"]
+{
+    margin:10px;
+}
+
+#content .reminder
+{
+    text-align:right;
+    font-size:13px;
+    font-weight: normal;
+    display:none;
+}
+
+#content .loginbox div.signup .signupbutton input
+{
+    background:#265e99;
+    background-repeat: repeat-x;
+    /* Safari 4-5, Chrome 1-9 */
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#3398cc), to(#265e99));
+    /* Safari 5.1, Chrome 10+ */
+    background: -webkit-linear-gradient(top, #3398cc, #265e99);
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #3398cc, #265e99);
+    /* IE 10 */
+    background: -ms-linear-gradient(top, #3398cc, #265e99);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(top, #3398cc, #265e99);
+}
+
+/* Sign in fields */
+
+#content .loginbox .login{
+    width:38%;
+    margin:auto;
+    margin-right: 0px;
+}
+
+#content .loginbox a.forgot_pass{
+    color:black;
+}
+
+.left-line, .right-line{
+        float:left;
+        border-bottom:1px solid #c2c2c2;
+        min-height:18px;
+        width:41%;
+        position:relative;
+        top:-7px;
+        margin-top:15px;
+        margin-bottom:15px;
+    }
+
+    .middle{
+        float:left;
+        margin:15px;
+    }

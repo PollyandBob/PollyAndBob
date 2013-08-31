@@ -1,0 +1,195 @@
+@charset "utf-8";
+
+#message-center-wrapper {
+    background: #ffffff;
+    margin-top: 10px;
+    padding: 0 20px;
+    background-color: #ffffff;
+    border: 2px solid rgba(158,158,158,0.3);
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}
+#message-center-wrapper header .icon-envelope-alt {
+    margin-right: 10px;
+}
+#message-center-wrapper .highlight-toolbar {
+    margin: 10px 0;
+}
+#message-center-wrapper .highlight-toolbar > div {
+    float: left;
+}
+#message-center-wrapper .msg-links {
+    margin-top: 10px;
+}
+#message-center-wrapper .highlight-toolbar .btn-group {
+    margin-right: 5px;
+    background: #eeeeee;
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+}
+#message-center-wrapper .highlight-toolbar a i {
+    font-size: 14px;
+    line-height: 30px;
+    color: #333333;
+}
+.message-center-content table {
+    text-align: left;
+}
+.message-center-content table thead {
+    color: #333333;
+    font-weight: bold;
+    background: #eaeaea;
+}
+.message-center-content table tr th,
+.message-center-content table tr td {
+    padding: 1.235%;     /*padding: 10px;*/
+}
+.message-center-content table tr td {
+    cursor: pointer;
+}
+#messages-list a {
+    
+}
+#messages-list .new {
+    font-weight: bold;
+}
+#messages-list {
+    font-size: 15px;
+    width: 100%;
+}
+#messages-list td {
+    vertical-align: middle;
+}
+.message-center-content table tbody > tr:nth-child(2n+1) {
+    background: #F9F9F9;
+}
+.message-center-content table .table-checkbox {
+    width: 1.852%; /* 15px; */
+}
+.message-center-content table .table-icon {
+    width: 2.469%; /* 20px; */
+}
+.message-center-content table .table-sender {
+    width: 28.395%; /* 230px; */
+}
+.message-center-content table .table-subject {
+    width: 37.037%; /* 300px; */
+}
+.message-center-content table .table-date {
+    width: 12.345%; /* 100px; */
+}
+
+table.messages-list a.unread {
+    font-weight: bold;
+}
+
+table.messages-list tr:hover {
+    background: #e5e5e5 !important;
+}
+
+table.messages-list {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#main-container {
+    margin-bottom: 10px;
+}
+
+div.new-reply-message-box {
+    margin: 20px;
+}
+
+div.new-reply-message-box label {
+    font-weight: bold;
+}
+
+div.new-reply-message-box input[type="text"], div.new-reply-message-box textarea {
+    border: 1px solid #C1C1C1;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;    
+    min-height: 33px;
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}
+
+div.new-reply-message-box div.input-element {
+    margin: 10px 0;
+}
+
+div.new-reply-message-box div.input-element input, div.new-reply-message-box div.input-element textarea {
+    width: 100%;
+    padding: 5px;
+}
+
+div.new-reply-message-box div.input-element textarea {
+    height: 300px;
+}
+
+div.new-reply-message-box h2 {
+    font-size: 1.3em;
+    line-height: 24px;
+    color: #b8b7b7;
+    display: inline-block;    
+    margin-bottom: 20px;
+}
+
+div.new-reply-message-box div.receiver {
+    margin: 30px 0px;
+}
+
+#message-center-wrapper div.message {
+    clear: both;
+    width: auto;
+    margin: 20px;
+    border-top: 1px solid #e9e9e9;
+    padding-top: 20px;
+}
+
+#message-center-wrapper div.message:first-child {
+    border-top: none;
+}
+
+
+
+#message-center-wrapper div.message_image {
+    width: 15%;
+    float: left;
+    min-height: 100px;
+}
+
+#message-center-wrapper div.message_right {
+    width: 80%;
+    float: left;    
+    min-height: 100px; 
+}
+
+#message-center-wrapper div.message_right div.message_header {
+    font-size: 1.1em;
+    line-height: 24px;
+    display: inline-block;    
+    margin-bottom: 10px;
+}
+
+#message-center-wrapper div.message_right div.message_content {
+    line-height: 140%;
+}
+
+div.reply-box div.input-element textarea {
+    height: 150px;
+}
+
+#message-center-wrapper i.icon-caret-down {
+    position: absolute;
+    right: -3px;
+}
+
+#message-center-wrapper span.replacement {
+    position: relative;
+}

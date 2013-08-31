@@ -1,0 +1,84 @@
+<div id="menubar">
+    <div id="menubarcontent">
+        <div id="logomenubar">
+            <a href="{{ path('fenchy_regular_user_news', {'time':'today'}) }}" >
+                <img src="{{ asset('images/logomenubar.png') }}" alt="{{ 'frontend.logo_alt'|trans }}" />
+            </a>
+        </div>
+        <div id="menuoptions">
+            <div class="username optionslist">
+                {% if(app.security.token.user is defined)%}
+                    <a href="{{ path('fenchy_regular_user_index') }}">{{ app.security.token.user.userregular.firstname }}</a>
+                {%endif %}
+            </div>
+            <div class="option_1 optionslist">
+                <a href="{{ path('fenchy_regular_user_friend_invitations') }}" >
+                    <div class="op_image">
+                        {% set count = countInvitations() %}
+                        {% if count > 0 %}
+                            <div class="op_count">
+                                <div>
+                                    {% if count < 100 %}
+                                        {{ count }}
+                                    {% else %}
+                                        99+
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+            <div class="option_2 optionslist ">
+                {% set count = countUnread() %}
+                {% if count > 0 %}
+                    <a href="{{ path('fenchy_regular_user_messages_index') }}" >
+                {% else %}
+                    <a href="{{ path('fenchy_regular_user_messages_index') }}" >
+                {% endif %}
+                    <div class="op_image">
+                        {% if count > 0 %}
+                            <div class="op_count">
+                                <div>
+                                    {% if count < 100 %}
+                                        {{ count }}
+                                    {% else %}
+                                        99+
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+            <a href="{{ path('fenchy_regular_user_trust_points') }}" >                
+                <div class="option_3 optionslist">
+                    <div>
+                        {{ helper.trust_points(app.security.token.user.id) }}
+                    </div>
+                </div>
+            </a>
+            <div class="option_4 optionslist">
+                <div>
+                    <a href="#" >
+                        <img src="{{ asset('images/menubarop4.png') }}" alt="" />
+                    </a>
+                </div>
+                <div id="triangle"></div>
+                <div class="clear"></div>
+                 <div id="settings">
+                    <div class="settings_options">
+                        <div><a href="{{ path('fenchy_regular_user_settings_location') }}">{{ 'frontend.settings'|trans }}</a></div>
+                        <div><a href="{{ path('fos_user_security_logout') }}" class="public">{{ 'frontend.log_out'|trans }}</a></div>
+                    </div>
+                </div>
+            </div>
+            {% if(is_granted('ROLE_ADMIN')) %}
+            <div class="option_5 optionsList">
+                <a href="{{ url('fenchy_admin_users') }}">A</a>
+            </div>
+            {% endif %}
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>

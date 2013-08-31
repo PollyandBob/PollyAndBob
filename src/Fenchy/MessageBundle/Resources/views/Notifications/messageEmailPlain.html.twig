@@ -1,0 +1,11 @@
+{% autoescape false %}
+{{ 'message.notification.email.body'|trans}}
+{{sender.userRegular.firstname}} | {{message.createdAt|date('Y-m-d H:i')}}
+
+{{message.title}}
+
+{{message.content}}
+                                              
+{{'message.notification.email.follow_link'|trans}}:
+{{absolute(path('fenchy_regular_user_messages_view', {'id':message.first.id}))}}
+{% endautoescape %}

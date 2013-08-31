@@ -1,0 +1,94 @@
+<section class="user-profile-group">
+    <h4>{{ 'reputation.title' | trans }}</h4>
+    <ul class="home-side-nav profile-summary-list">
+        <li><a href="#user-listings" rel="{{profileUrl}}">
+            <i class="icon-list-alt"></i>
+            <strong>{{ 'reputation.listings' | trans }}</strong>
+            <strong class="count">({{ repBreakdown.listingCount }})</strong>
+            <div class="pull-right">
+                <div class="points-flag status-flag">
+                    <strong>{{ reputationPoints.notice }}</strong>
+                </div>
+            </div>
+            </a>                                            
+        </li>
+        <li><a href="#user-reviews" rel="{{profileUrl}}">
+            <i class="icon-plus-sign"></i>
+            <strong>{{ 'reputation.positive_reviews' | trans }}</strong>
+            <strong class="count">({{ repBreakdown.positiveRevCount }})</strong>
+            <div class="pull-right">
+                <div class="points-flag status-flag">
+                    <strong>{{ reputationPoints.reviews }}</strong>
+                </div>
+            </div>
+            </a>                                            
+        </li>
+        <li><a href="#user-wrote-reviews" rel="{{profileUrl}}">
+            <i class="icon-pencil"></i>
+            <strong>{{ 'reputation.written_reviews' | trans }}</strong>
+            <strong class="count">({{ repBreakdown.revsOOCount }})</strong>
+            <div class="pull-right">
+                <div class="points-flag status-flag">
+                    <strong>{{ reputationPoints.ownReviews }}</strong>
+                </div>
+            </div>
+            </a>                                            
+        </li>
+        <li>
+            {% if app.user.id is defined and app.user.id == displayUser.id %}
+            <a href="{{path('fenchy_regular_user_settings_socialnetworks')}}">
+            {% else %}
+            <a href="#" class="cursor-default">        
+            {% endif %}
+            <i class="icon-facebook-sign"></i>
+            <strong>{{ 'reputation.facebook' | trans }}</strong>
+            {% if repBreakdown.fbConnect %}
+                <i class="count icon-ok"></i>
+            {% endif %}
+            <div class="pull-right">
+                <div class="points-flag status-flag">
+                    <strong>{{ reputationPoints.facebook }}</strong>
+                </div>
+            </div>
+            </a>                                            
+        </li>
+        <li>
+                {% if app.user.id is defined and app.user.id != displayUser.id %}
+                    <a href="{{path('fenchy_regular_user_friend_index', {id: displayUser.regularuser.id})}}">
+                    <i class="icon-user"></i>
+                {% elseif app.user.id is defined %}
+                    <a href="{{path('fenchy_regular_user_friend_invitations')}}">
+                    {% set countInv = countInvitations() %}
+                    <i class="icon-user{% if countInv %} font-decorated{% endif %}"></i>                        
+                {% else %}
+                    <a href="{{path('fenchy_regular_user_friend_index', {id: displayUser.regularuser.id})}}">
+                    <i class="icon-user"></i>
+                {% endif %}
+
+                <strong>{{ 'reputation.contacts' | trans }}</strong>
+                <strong class="count">({{ repBreakdown.contactsCount }})</strong>
+                <div class="pull-right">
+                    <div class="points-flag status-flag">
+                        <strong>{{ reputationPoints.contacts }}</strong>
+                    </div>
+                </div>
+                </a>              
+        </li>
+        <li>
+            {% if app.user.id is defined and app.user.id == displayUser.id %}
+            <a href="{{path('fenchy_regular_user_settings_basic')}}">
+            {% else %}
+            <a href="#" class="cursor-default">
+            {% endif %}
+            <i class="icon-user"></i>
+            <strong>{{ 'reputation.profile' | trans }}</strong>
+            <strong class="count">({{ reputationPoints.profilePercent }})</strong>
+            <div class="pull-right">
+                <div class="points-flag status-flag">
+                    <strong>{{ reputationPoints.profile }}</strong>
+                </div>
+            </div>
+            </a>                                            
+        </li>
+    </ul>
+</section>

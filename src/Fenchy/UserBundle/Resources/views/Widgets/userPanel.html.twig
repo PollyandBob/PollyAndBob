@@ -1,0 +1,102 @@
+<div class="right">
+                <ul>
+                    <li>
+	                    <a href="{{ path('fenchy_regular_user_user_profilev2') }}">
+	                    	<img alt="" src="{{ absolute(asset('images/icon_home.png')) }}">
+				            {% set countInv = countInvitations() %}
+				            {% if rev_unread_count or countInv %}
+				                <span class="badge">{{rev_unread_count+countInv}}</span>
+				            {% endif %}
+	                    </a>
+ 					</li>
+                    <li>
+				        <a href="#" class="wrapper-badge">
+				            {% set count = countUnread() %}
+				            {% if count > 0 %}
+				                <span class="badge">{{count}}</span>
+				            {% endif %}
+				        </a>
+                    	<a href="{{ path('fenchy_regular_user_messages_index') }}">
+                    		<img alt="" src="{{ absolute(asset('images/icon_message.png')) }}">
+                    	</a>
+                    </li>
+                    <li>
+                    	<a href="{{ path('fenchy_regular_user_user_myprofile_main') }}">
+                    		<img alt="" src="{{ absolute(asset('images/icon_login.png')) }}">
+                    	</a>
+                    </li>
+                </ul>
+</div>
+<!-- 
+<ul id="user-account-item" class="pull-right">
+    <li class="top-icons home">
+        <a href="{{ path('fenchy_regular_user_user_profilev2') }}">
+            {% set countInv = countInvitations() %}
+            {% if rev_unread_count or countInv %}
+                <span class="badge">{{rev_unread_count+countInv}}</span>
+            {% endif %}
+            <i class="icon-home"></i>                                        
+        </a>
+    </li>
+    <li class="top-icons">
+        <a href="#" class="wrapper-badge">
+            {% set count = countUnread() %}
+            {% if count > 0 %}
+                <span class="badge">{{count}}</span>
+            {% endif %}
+        </a>
+        <a href="{{ path('fenchy_regular_user_messages_index') }}">
+            <i class="icon-envelope"></i>                                        
+        </a>
+
+    </li>
+    <li id="user-account-login-menu">
+        <div>
+            <a href="#">
+                <span class="image-container vsmall-avatar">
+                    <img src="{{ absolute(asset(thumb)) }}" alt=""/>                        
+                </span>                            
+                <strong>{{name}}</strong>
+                <i class="icon-caret-down"></i>
+                <i class="icon-caret-up"></i>
+            </a>
+            <ul id="user-account-login-menu-wrapper">
+                {% if is_granted('ROLE_FULL_USER') %}
+                <li>
+                    <a href="{{path('fenchy_regular_user_listing_manage')}}">
+                        <strong>{{ 'frontend.manage_listings'|trans }}</strong>
+                    </a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="{{ path('fenchy_regular_user_user_profilev2') }}">
+                        <strong>{{ 'frontend.my_profile'|trans }}</strong>
+                    </a>
+                </li>          
+                <li>
+                    <a href="{{ path('fenchy_regular_user_user_myprofile_main') }}">
+                        <strong>{{ 'frontend.my_profile'|trans }}</strong>
+                    </a>
+                </li>    
+                <li>
+                    <a href="{{ path('fenchy_regular_user_settings_basic') }}">
+                        <strong>{{ 'frontend.settings'|trans }}</strong>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('fos_user_security_logout') }}">
+                        <strong>{{ 'frontend.log_out'|trans }}</strong>
+                    </a>
+                </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                <li>
+                    <a href="{{ path('fenchy_admin_notices') }}">
+                        <strong>{{ 'frontend.admin'|trans }}</strong>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>                
+    </li>
+</ul>
+ -->

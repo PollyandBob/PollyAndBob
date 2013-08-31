@@ -1,0 +1,34 @@
+{% extends '::baseAdmin.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+<link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('css/admin/base.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('css/regular_user/profile/userprofile-v2.css') }}" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+<script type="text/javascript" src="{{ asset('js/admin.js') }}"></script>
+{% endblock %}
+
+{% block header %}
+    {# include 'FenchyFrontendBundle:Partials:headerPartialMenuBar.html.twig' #}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<section class="main">
+    <div class="container admin">
+        <div class="clearfix">
+            <ul id="admin-menu">
+                <li>{{ getlink('Notices', 'fenchy_admin_notices', {}, {'class': 'dark'})|raw }}</li>
+                <li>{{ getlink('Reviews', 'fenchy_admin_reviews', {}, {'class': 'dark'})|raw }}</li>
+                <li>{{ getlink('Search', 'fenchy_admin_search', {}, {'class': 'dark'})|raw }}</li>
+                <li>{{ getlink('Users', 'fenchy_admin_users', {}, {'class': 'dark'})|raw }}</li>
+            </ul>
+            <div id="admin-content">
+                {% block admincontent %}{% endblock %}
+            </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

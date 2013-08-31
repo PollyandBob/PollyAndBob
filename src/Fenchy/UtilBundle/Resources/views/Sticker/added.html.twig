@@ -1,0 +1,51 @@
+<html lang="en">
+    <head>
+        <style type="text/css">
+            body {
+                color: #868686;
+                font-family: Helvetica,​Arial,​Verdana,​sans-serif;
+            }
+            h1 {
+                margin-bottom: 5px;
+                font-size: 18px;
+            }
+            ul {
+                list-style: none;
+                padding: 15px;
+                margin-top: 0;
+            }
+            #first {
+                font-weight: bold;
+            }
+            #second, p {
+                font-weight: normal;
+                padding-left: 15px;
+                margin: 0;
+                padding-top: 0;
+            }
+            #out {
+                background: none repeat scroll 0 0 #E8E8E8;
+                border: 0 none;
+                border-radius: 5px 5px 5px 5px;
+                padding: 8px 14px;
+                float: left;
+                width: 515px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>{{ 'sticker.added_title' | trans }}</h1>
+        <div id="out">
+            <ul id="first">
+                <li>{{ 'sticker.reasons' | trans }}: 
+                    <ul id="second">
+                        {% for reason in sticker.reason %}
+                            <li>{{ sticker.reasonName(reason)|trans }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li>{{ 'sticker.description' | trans }}: <p>{{ sticker.description }}<p></li>
+            </ul>
+        </div>
+    </body>
+</html>

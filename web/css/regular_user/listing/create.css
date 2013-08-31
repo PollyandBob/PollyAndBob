@@ -1,0 +1,355 @@
+@charset "utf-8";
+
+.inner-content header .button {
+    min-width: 10.45%;
+}
+.inner-content header .button .wrapper {
+    line-height: 25px;
+}
+#reviews-tabs {
+    margin-top: 20px;
+}
+#reviews-tabs > ul li {
+    width: 50%;
+    float: left;
+}
+#reviews-tabs > ul li a {
+    display: block;
+    background: #c6c6c6;
+    text-align: center;
+    line-height: 60px;
+    font-size: 1.333em;
+    border-left: 2px solid #bbbbbb;
+    border-right: 1px solid #d2d2d2;
+    color: #ffffff;
+    position: relative;
+}
+#reviews-tabs > ul li:first-child a {
+    border-left: 0;    
+    -webkit-border-radius: 7px 0 0 0;
+    -moz-border-radius: 7px 0 0 0;
+    border-radius: 7px 0 0 0;   
+}
+#reviews-tabs > ul li:last-child a {
+    border-right: 0;
+    -webkit-border-radius: 0 7px 0 0;
+    -moz-border-radius: 0 7px 0 0;
+    border-radius: 0 7px 0 0;    
+}
+.ie8 #reviews-tabs > ul li a {
+    border-radius: 0 7px 0 0; 
+    behavior: url(/plugins/pie.php);
+}
+.ie8 #reviews-tabs > ul li:first-child a {
+    border-radius: 7px 0 0 0; 
+}
+#reviews-tabs > ul li.tabs-active a {
+    color: #33aeac;
+    background: #9ddfdb;
+    position: relative;
+}
+
+#reviews-tabs > ul li.tabs-active a:after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 46%;
+    border-width: 0 30px 11px;
+    border-style: solid;
+    border-color: transparent transparent #fff;
+    width: 0;
+    height: 0;
+    z-index: 1;
+}
+.ie8 #reviews-tabs > ul li.tabs-active a:after {
+    z-index: 1;
+}
+#reviews-tabs > ul li.tabs-active a .circle-count {
+    color: #3db1b3;
+    background: #bcf7f3;
+    border-color: #82c5c4;
+}
+
+#reviews-tabs > ul li .circle-count {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: #acacac;
+    display: inline-block;
+    margin-right: 6px;
+    text-align: center;
+    background: #d6d6d6;
+    border: 1px solid #b8b8b8;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    border-radius: 100%;
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}
+#reviews-tabs .tabs-panel {
+    background: #fff;
+    padding: 20px 0;
+    -webkit-border-radius: 0 0 7px 7px;
+    -moz-border-radius: 0 0 7px 7px;
+    border-radius: 0 0 7px 7px;    
+    border: 2px solid rgba(158, 158, 158, 0.6);
+    position: relative;
+    z-index: 0;
+    behavior: url(/plugins/pie.php);
+}
+.ie8 #reviews-tabs .tabs-panel {
+    border: 2px solid #C6C6C6;
+}
+#tip {
+    margin-bottom: 20px;
+    background: #f5f5f5;
+    padding: 5px 0 8px;
+    text-align: center;
+}
+#tip h2 {
+    font-size: 1.500em;
+    line-height: 25px;
+    color: #949494;
+}
+#tip h2 span {
+    color: #6FB4AD;
+}
+#tip p {
+    line-height: 18px;
+    font-weight: bold;
+    color: #c2c2c2;
+}
+
+#type-choices {
+    text-align: center;
+    margin-bottom: 40px;
+}
+#type-choices .action-element {
+    display: inline-block;
+    vertical-align: top;
+    width: 105px;    
+    border: 2px solid transparent;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;    
+    margin: 0 4px;
+    height: 120px;
+    position: relative;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+    behavior: url(/plugins/pie.php);
+}
+#type-choices .action-element.selected,
+#type-choices .action-element:hover {
+    border: 2px solid rgba(144, 158, 158, 0.3);
+    background-color: #f6fcfc;
+}
+.ie8 #type-choices .action-element.selected,
+.ie8 #type-choices .action-element:hover {
+    border: 2px solid #ecefee;
+}
+#type-choices .action-element a {
+    display: block;
+    color: #b8b8b8;
+    text-align: center;
+    padding: 8px 8px 0;
+}
+#type-choices .action-element a .category-btn {
+    background: #F4F4F4;
+    border: 1px solid rgba(158, 158, 158, 0.3);
+    display: block;
+    width: 77px;
+    padding: 5px;
+    margin-bottom: 6px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}
+.ie8 #type-choices .action-element a .category-btn {
+    border: 1px solid #dfdfdf;
+}
+#type-choices .action-element a strong {
+    line-height: 15px;
+}
+#reviews-tabs .tabs-panel > footer {
+    padding: 0 10px;
+}
+#reviews-tabs .tabs-panel footer {
+    margin-top: 20px;
+}
+
+
+#reviews-tabs .form-wrapper {    
+    margin: 0 10px;
+}
+
+
+/* STEP 2 */
+#form-fields {
+    margin-left: -0.445%;
+}
+#form-fields .row {
+    float: left;
+    margin-left: 0.445%; /*3px;*/
+    margin-top: 11px;
+}
+#form-fields .row > ul:first-child > li {
+   position: absolute;
+   right: 2.01%;
+   color: red;
+   line-height: 33px;
+}
+#form-fields .row.with_icon.grid_2 > i+ul > li {   
+   position: absolute;
+   right: 2.01%;
+   top: 100%;
+   color: red;
+   line-height: 33px;
+}
+#form-fields .row .toolbar-item {
+    height: 33px;
+    line-height: 33px;
+}
+#form-fields .row > div,
+#form-fields .row > input {
+    padding: 0 2.217%; /* 11px */
+    width: 95.566%;
+}
+#form-fields .row > input[type="checkbox"] {
+    width: auto;
+    margin-left: 10px;
+}
+#form-fields .noticebundle div {
+    height: 100%;
+}
+#form-fields .grid_6.with_icon > div,
+#form-fields .grid_6.with_icon > input {
+    padding: 0 3% 0 7%; /* 33px */
+    width: 90%;
+}
+#form-fields .grid_4.with_icon > div,
+#form-fields .grid_4.with_icon > input {
+    padding: 0 4% 0 10%; /* 33px */
+    width: 86%;
+}
+#form-fields .grid_2.with_icon > div,
+#form-fields .grid_2.with_icon > input {
+    padding: 0 5% 0 20%; /* 0 30px 0 7px */
+    width: 75%;
+}
+#form-fields .grid_6.tags-container ul.tagit {
+   padding-left: 7%;   
+}
+#form-fields .tags-container ul.tagit {
+    background: none;
+    margin: 0;
+    border: 1px solid #C1C1C1;
+    cursor: text;
+}
+#form-fields .tags-container ul.tagit li {
+    line-height: 22px;    
+}
+.ie #form-fields .tags-container ul.tagit li {
+    line-height: 17px;  
+}
+#form-fields .grid_2 input {
+    padding: 0 4.73%;
+    width: 90.54%;
+}
+#form-fields .row.with_icon i {
+    font-size: 1.538em; /* 20px; */
+    left: 2.012%
+}
+#form-fields .row.with_icon i.icon-map-marker {
+    font-size: 2.000em; /* 26px; */
+}
+#form-fields .grid_6 {
+    width: 60.38%; /* 496px */
+}
+#form-fields .grid_4 {
+    width: 38.14%;
+}
+#form-fields .grid_2 {
+    width: 18.64%;
+}
+#form-fields .grid_10 {
+    width: 99.311%; /* 674px */
+}
+#form-fields .select-button {
+    padding: 0 2.229% 0 4.14%;
+}
+#form-fields .select-button .select-wrapper {
+    width: 77%;
+}
+#form-fields .select-button .replacement {
+    float: right;
+    margin-top: 7px;
+}
+#form-fields .textarea_content {
+    height: 213px;
+}
+#form-fields .textarea_content > div,
+#form-fields .textarea_content textarea {
+    padding: 11px 1.344%;
+    resize: none;
+    width: 97.312%;
+    height: 191px;
+}
+ul.tagit {
+    padding: 0;
+    margin: 0;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}
+#location {
+    width: 243px;
+}
+
+#fenchy_noticebundle_noticetype_start_date, #price {
+    width: 120px;
+}
+
+div#reviews-tabs a.disable-cursor {
+    cursor: default;
+}
+
+div.form-type-fields-container div div {
+    width: 18.64%;
+    float: left;
+    margin-left: 0.445%;
+    margin-top: 11px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #C1C1C1;
+    border-radius: 2px 2px 2px 2px;
+    height: 33px;
+    position: relative;
+}
+
+div.form-type-fields-container div div input {
+    padding: 0 2.217%;
+    width: 95.566%;
+    font-size: 1.077em;
+    font-weight: bold;
+    height: 100%;
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    font-family: Helvetica,Arial,Verdana,sans-serif;
+    margin: 0;
+}
+@media screen and (max-width : 910px) {
+    #form-fields .select-button .select-wrapper {
+        width: 74%;
+    }
+}
+@media screen and (max-width : 830px) {
+    #form-fields .select-button .select-wrapper {
+        width: 72%;
+    }
+}

@@ -1,0 +1,103 @@
+{% extends "FenchyFrontendBundle::layout.html.twig" %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/frontend/login.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/frontend/register.css') }}" type="text/css" />
+{% endblock %}
+    
+{% block header %}
+    {% include 'FenchyFrontendBundle:Partials:headerLogo.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("a#registration-terms").fancybox({
+            type: 'iframe',
+            href: '{{ path('fenchy_frontend_terms_popup') }}',
+            width: 900,
+            height: 550
+        });
+
+        $("a#registration-privacy").fancybox({
+            type: 'iframe',
+            href: '{{ path('fenchy_frontend_privacy_popup') }}',
+            width: 900,
+            height: 550
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+    {% block fos_user_content %}
+        <div class="loginbox">
+            <form class="form" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="post" autocomplete="off">
+                <div class="error">
+                    {{form_errors(form) }}
+                    {{form_errors(form.user_regular.firstname)}}
+                    {{form_errors(form.email)}}
+                    {{form_errors(form.plainPassword.first)}}
+                    {{form_errors(form.plainPassword.second)}}
+                </div>
+
+                <div id="reg_picture_upload">
+                   <div id="under_button_text">{{'regularuser.only_jpg_png_maximum2m'|trans}}</div> 
+                   <div id="reg_picture">
+                       <div id="image-add-right">
+                          <iframe id="gallery-frame" src="{# url('fenchy_gallery_edit',{'type': 2})#}"></iframe>
+                          
+                        </div>
+                   </div>
+                   <input class="hide-me" type="file" name="reg_upload_button">
+                </div>
+                <div id="reg_form">
+                    <table>
+                        <tr>
+                            <td colspan="2" >
+                                <div class="create_account">
+                                    {{'user.create_an_account'|trans}}
+                                </div>
+                            </td>
+                        </tr>   
+                        <tr>
+                            <td>{{ form_label(form.user_regular.firstname) }}</td>
+                            <td>{{ form_widget(form.user_regular.firstname) }}</td>
+                        </tr>   
+                        <tr>
+                            <td>{{ form_label(form.email) }}</td>
+                            <td>{{ form_widget(form.email) }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.plainPassword.first) }}</td>
+                            <td>{{ form_widget(form.plainPassword.first) }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ form_label(form.plainPassword.second) }}</td>
+                            <td>{{ form_widget(form.plainPassword.second) }}</td>
+                        </tr>
+                            {{ form_rest(form) }}
+                            
+                    </table>
+                    <div  class="reg_terms">
+                            {{'user.by_signing_up_accept_fenchys'|trans}}
+                            <span style="font-weight: bold"> 
+                                <a id="registration-terms" href="#">{{'user.terms_n_conditions'|trans}}</a>
+                            </span> 
+                            {{'user.and'|trans}}
+                            <span style="font-weight: bold">
+                                <a id="registration-privacy" href="#">{{'user.privacy_policy'|trans}}</a>
+                            </span>
+                    </div>
+                    <div class="login">
+                        <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" /> {{'user.or'|trans}} <a href="{{ path('fenchy_frontend_signin')}}" > {{'user.sign_in'|trans}}</a>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </form>
+        </div>
+    {% endblock %}
+{% endblock %}

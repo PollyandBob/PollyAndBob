@@ -1,0 +1,149 @@
+group:
+  edit:
+    submit: Gruppe ändern
+
+  show:
+    name: Gruppenname
+
+  new:
+    submit: Gruppe erstellen
+
+  flash:
+    updated: Die Gruppe wurde geändert.
+
+    created: Die Gruppe wurde erstellt.
+
+    deleted: Die Gruppe wurde gelöscht.
+"Bad credentials": Die E-Mail-Adresse und/oder das Passwort waren leider nicht korrekt.
+security:
+  login:
+    username: "E-Mail:"
+
+    password: "Passwort:"
+
+    remember_me: Zugangsdaten speichern
+
+    submit: Login
+profile:
+  show:
+    username: Nutzername
+
+    email: E-Mail-Adresse
+
+  edit:
+    submit: Bearbeiten
+
+  flash:
+    updated: Das Profil wurde geändert.
+change_password:
+  submit: Passwort ändern
+
+  flash:
+    success: Super! Das Passwort wurde geändert.
+registration:
+  check_email: An %email% wurde eine E-Mail mit einem Aktivierungslink versendet.
+
+  confirmed: Glückwunsch %username%, dein Account wurde aktiviert.
+
+  back: Zurück zur vorherigen Seite.
+
+  submit: Registrieren
+
+  flash:
+    user_created: Super! Dein Account wurde erstellt.
+
+  email:
+    subject: Willkommen %username%!
+
+    message:
+      1: Schließe deine Registrierung bei Fenchy ab.
+
+      button: Registrierung abschließen
+
+      3:
+        html: "Wenn dieser Button nicht funktioniert, kopiere einfach diesen Link in die Adresszeile deines Browsers."
+
+        txt: "Wenn dieser Button nicht funktioniert, kopiere einfach diesen Link in die Adresszeile deines Browsers."
+
+      4: Du hast uns nicht gebeten, dich bei Fenchy zu registrieren? Dann ignoriere bitte diese E-Mail. Vermutlich hat jemand versehentlich deine E-Mail-Adresse verwendet.
+resetting:
+  password_already_requested: The password for this user has already been requested within the last 24 hours.
+
+  check_email: An %email% wurde eine E-Mail versendet. Klicke einfach auf den in der E-Mail enthaltenen Link um dein Passwort zu ändern.
+
+  request:
+    invalid_username: Diese E-Mail-Adresse wurde bei uns nicht registriert.
+
+    username: "E-Mail"
+
+    submit: Zurücksetzen
+
+  reset:
+    submit: Senden
+
+  flash:
+    success: Super! Dein Passwort wurde geändert.
+
+  email:
+    subject: Passwort ändern
+
+  message:
+    1: Hallo %username%,
+
+    2: "um dein Fenchy Passwort zu ändern, klicke einfach auf folgenden Link:"
+
+    3: Du hast uns nicht gebeten, dein Passwort zu ändern? Dann ignoriere bitte diese E-Mail.
+
+    4: Vermutlich hat jemand versehentlich deine E-Mail-Adresse verwendet.
+
+    5: Vielen Dank!
+
+    6: Dein Fenchy-Team
+email:
+  message:
+    help: Benötigst du Hilfe? Schreibe eine E-Mail an julia at fenchy.com
+
+    address: Fenchy GmbH, Marchlewskistr. 16, D-10243 Berlin
+layout:
+  logout: Abmelden
+
+  login: Anmelden
+
+  register: Registrieren
+
+  logged_in_as: Angemeldet als %username%
+form:
+  group_name: "Gruppen-Name:"
+
+  username: "Nutzername:"
+
+  email: "E-Mail:"
+
+  current_password: "Aktuelles Passwort:"
+
+  password: "Passwort:"
+
+  password_confirmation: "Bitte wiederhole dein Passwort:"
+
+  new_password: "Neues Passwort"
+
+  new_password_confirmation: "Bitte bestätige dein neues Passwort"
+
+  validation:
+    invalid_password: Das Passwort ist ungültig
+
+    invalid_password2: Die Bestätigung deines Passworts ist ungültig.
+
+    invalid_pass_match: Die Passwörter stimmen nicht miteinander überein.
+
+    invalid_email: Die angegeben E-Mail-Adresse ist ungültig.
+invitation:
+  email:
+    button_name: "Akzeptieren"
+
+    message:
+      1: "%username% nutzt Fenchy und möchte dich zu Fenchy einladen. Fenchy ist ein lokales Vertrauensnetzwerk, das dir hilft, dich mit deiner Nachbarschaft zu verbinden. Nutzer von Fenchy können ganz einfach Aktivitäten, Veranstaltungen oder nützliche Dinge mit ihren Nachbarn teilen."
+
+      2: Wenn du keine weiteren Nachrichten von Fenchy erhalten möchtest, kannst du dich hier
+
+      3: abmelden.

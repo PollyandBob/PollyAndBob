@@ -1,0 +1,80 @@
+{% extends '::fieldsForm.html.twig'%}
+
+{% block form_row %}
+{% spaceless %}
+    {% if form.children|length == 0 %}
+    <tr>
+        <td>
+            {{ form_label(form) }}
+        </td>
+        <td>
+            {{ form_errors(form) }}
+            {% set attrs = form.get('attr') %}
+            {% if not ( attrs is empty ) and ( attrs['watermark'] is defined ) %}
+                {{ form_widget(form, { 'attr': {'watermark': attrs['watermark'] | trans } }) }}
+            {% else %}
+                {{ form_widget(form) }}
+            {% endif %}
+            {% if form.name=="postcode"  or form.name=="street"%}
+                <span id="not_shown">{{ 'main.not_shown_publicly'|trans }}</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% if form.name=="near_place" or form.name == "street" %}
+        <tr>
+            <td colspan="2">
+                 <div class="left-line"></div>
+                 <div class="middle">{{ 'main.or'|trans }}</div>
+                 <div class="right-line"></div>
+                 <div class="clear"></div>
+            </td>
+        </tr>
+    {% endif %}
+    {% else %}
+            {% set attrs = form.get('attr') %}
+            {% if not ( attrs is empty ) and ( attrs['watermark'] is defined ) %}
+                {{ form_widget(form, { 'attr': {'watermark': attrs['watermark'] | trans } }) }}
+            {% else %}
+                {{ form_widget(form) }}
+            {% endif %}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_row %}
+
+{% block hidden_row %}
+{% spaceless %}
+    <tr style="display: none">
+        <td colspan="2">
+            {{ form_widget(form) }}
+        </td>
+    </tr>
+{% endspaceless %}
+{% endblock hidden_row %}
+
+{% block form_widget_compound %}
+{% spaceless %}
+    {% if form.parent is empty %}
+        <table {{ block('widget_container_attributes') }} class="table-form">
+            {% if errors|length > 0 %}
+            <tr>
+                <td colspan="2">
+                    {{ form_errors(form) }}
+                </td>
+            </tr>
+            {% endif %}
+            {{ block('form_rows') }}
+            {{ form_rest(form) }}   
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <a href="#" class="pin" onclick="putPin()">{{ 'regularuser.put_pin'|trans }} <img src="/images/pin.png" />
+                    </a>
+                </td>
+            </tr>
+        </table>
+     
+    {% else %}
+        {{ block('form_rows') }}
+        {{ form_rest(form) }}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_widget_compound %}

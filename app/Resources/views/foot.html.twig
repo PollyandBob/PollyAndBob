@@ -1,0 +1,21 @@
+<div>
+    <a href="{{ path('fenchy_frontend_about') }}">{{ 'main.about_us'|trans }}</a>  
+    <a href="{{ path('fenchy_frontend_jobs') }}">{{ 'main.jobs'|trans }}</a>  
+    <a href="{{ path('fenchy_frontend_advertising') }}">{{ 'main.advertising'|trans }}</a>  
+    <a id="foot-terms" href="{{ path('fenchy_frontend_terms') }}">{{ 'main.terms'|trans }}</a>  
+    <a id="foot-privacy" href="{{ path('fenchy_frontend_privacy') }}">{{ 'main.privacy'|trans }}</a>  
+    <a href="{{ path('fenchy_frontend_imprint') }}">{{ 'main.imprint'|trans }}</a>  
+    <a id="foot-languages" href="{{ path('fenchy_frontend_languages') }}">{{ 'main.languages'|trans }}</a>  
+    <a href="{{ path('fenchy_frontend_facebook') }}">{{ 'main.facebook'|trans }}</a>
+</div>
+
+<div id="lang-menu-container">
+    
+    <ul id="lang-menu">
+    <p>{{ 'frontend.choose_your_language'|trans}}</p>
+        <li><a href="{{ path('fenchy_regular_user_chooselang', {'locale': 'en'}) }}"><img src="{{ asset('images/en-flag.png') }}" />{{ 'frontend.english'|trans}}</a></li>
+        <li><a href="{{ path('fenchy_regular_user_chooselang', {'locale': 'de'}) }}"><img src="{{ asset('images/de-flag.png') }}" />{{ 'frontend.deutsch'|trans}}</a></li>
+        <li><a href="{{ path('fenchy_regular_user_chooselang', {'locale': 'pl'}) }}"><img src="{{ asset('images/pl-flag.png') }}" />{{ 'frontend.polski'|trans}}</a></li>
+    </ul>
+    <div id="arrowl"></div>
+</div>

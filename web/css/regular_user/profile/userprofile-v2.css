@@ -1,0 +1,183 @@
+@charset "utf-8";
+
+#user-account-item {
+    margin: 4px -3px 0 0;
+}
+#user-account-item > li {
+    border-right: 1px solid #FFF;
+    padding: 0 4px 9px;
+}
+#user-account-item a {
+    margin: 0 6px 0 7px;
+    display: block;
+    position: relative;
+    z-index: 6;
+}
+#user-account-item > li a i {
+    font-size: 31px;
+    line-height: 24px;    
+    color: #FFF;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+}
+#user-account-item .icon-home {
+    font-size: 34px;
+}
+#user-account-item .wrapper-badge {
+    position: absolute;
+    right: 0;
+    z-index: 7;
+    bottom: 1px;
+}
+#user-account-item .badge {
+    background: url(/images/site/flag_small_rbg.png) no-repeat;
+    width: 16px;
+    height: 16px;
+    font-size: 0.846em; /* 11px */
+    line-height: 14px;
+    color: #0e7777;
+    display: block;
+    text-align: center;
+    padding-left: 5px;
+    position: absolute;
+    bottom: -3px;
+    right: -1px;
+}
+li#user-account-login-menu {
+    border-right: 0;
+    line-height: 23px;
+}
+#user-account-login-menu > div {
+    margin: 0 0 0 7px;
+    padding: 0 0 0 3px;
+    position: relative;
+}
+#user-account-login-menu .icon-caret-down {
+    color: #ffffff;
+}
+#user-account-login-menu .icon-caret-up {
+    color: #117070;
+}
+#user-account-login-menu div a i {
+    margin-right: 0; /* 4.24*/
+    font-size: 20px;
+    vertical-align: top;
+    text-align: center;
+}
+#user-account-login-menu div > a strong {
+    padding-left: 45px; /* 4.24*/
+}
+#user-account-login-menu div > ul {
+    display: none;
+}
+#user-account-login-menu.active div > ul {
+    display: block;
+}
+#user-account-login-menu div > ul {
+    
+}
+#user-account-login-menu a {
+    color: #117070;
+    margin: 0;
+}
+#user-account-login-menu div > a {
+    font-size: 1.154em;
+    color: #ffffff;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+}
+#user-account-login-menu.active div > a {
+    color: #117070;
+}
+#user-account-login-menu div > a > p {
+    background: #cdf0ee; 
+    line-height: 18px; 
+    padding: 3px 3px 3px 4px; 
+}
+#user-account-login-menu div > a span {
+    border: 1px solid #33abab;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px; 
+    
+    position: absolute;
+    top: -5px; 
+    left: 4px;
+}
+#user-account-login-menu div > ul li:hover {
+    background: rgba(255,255,255,0.3);
+}
+.ie8 #user-account-login-menu div > ul li:hover {
+    background: #dcf5f3;
+}
+#user-account-login-menu div > ul li a {
+    border-top: 1px solid #68c8c8;
+    line-height: 36px;
+    text-align: center;
+    margin: 0 6px;
+}
+
+#user-account-login-menu.active > a span {
+    border: none;
+}
+#user-account-login-menu.active img {
+    position: relative;
+    z-index: 4;
+}
+
+#user-account-login-menu span.spacer {
+    display: none;
+}
+
+#user-account-login-menu.active span.spacer {
+    z-index: 5;
+    width: 100%;
+    height: 4px;
+    background: #CDF0EE;
+    display: block;
+    position: absolute;
+    bottom: -3px;
+}
+
+#user-account-login-menu-wrapper {
+    background: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    -webkit-box-shadow: 0px 0px 3px rgba(2, 2, 2, 0.4);
+    -moz-box-shadow:    0px 0px 3px rgba(2, 2, 2, 0.4);
+    box-shadow:         0px 0px 3px rgba(2, 2, 2, 0.4);
+    width: 100%;
+    padding-top: 42px;
+    position: absolute;
+    top: -8px !important;
+    left: 0 !important;
+    z-index: 5;
+    behavior: url(/plugins/pie.php);
+}
+
+#user-account-login-menu-wrapper li a:hover {
+    color: #117070 !important;
+}
+#user-account-item li.home .badge {
+    bottom: -1px;
+}
+#user-account-login-menu.active > a, 
+#user-account-login-menu.active > a:hover {
+    color: #117070 !important
+}
+@media screen and (max-width : 620px) {
+    #user-account-item > li {
+        margin: 0 -1px 0 -2px;
+    }
+    #user-account-item li:first-child {
+        border-left: 0;
+    }
+    header.main #user-account-item + aside:after {
+        display: none;
+    }
+}

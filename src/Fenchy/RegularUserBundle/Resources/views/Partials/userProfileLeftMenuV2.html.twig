@@ -1,0 +1,52 @@
+{# empty Twig template #}
+<div class="wrapper">
+    <section class="user-profile-group">
+        <figure class="avatar">
+            <span class="image-container large-avatar bordered"><img src="{{ displayUser.regularuser.avatar(false) }}" alt=""/></span>
+            <div class="ranking-flag status-flag">
+                <strong>{{ displayUser.activity }}</strong>
+            </div>
+            <figcaption class="profile-master">
+                <strong class="info-by-line"><a href="{{  path('fenchy_regular_user_user_profilev2', {'userId': displayUser.id})  }}" class="name">{{ displayUser.userregular.firstname }}</a></strong>
+                <strong class="info-by-line"><span class="location"><i class="icon-map-marker"></i>{{ displayUser.location }}</span></strong>
+                {% if app.user.id is defined and app.user.id != displayUser.id %}
+                <a href="{{ url('fenchy_create_user_sticker', {id: displayUser.id}) }}" class="add-sticker icon-flag-alt"></a>
+                {% endif %}
+            </figcaption>
+        </figure>
+        {% if app.user.id is defined and app.user.id != displayUser.id %}
+        <div class="button green-button">
+            <a href="{{path('fenchy_regular_user_messages_new', {'id': displayUser.id})}}" class="wrapper">                                            
+                <i class="icon-envelope-alt"></i>
+                <strong>{{ 'btn.send_message' | trans }}</strong>
+            </a>
+        </div>
+        {% endif %}
+        {% if  (app.user.id is defined and app.user.id != displayUser.id) and not app.user.regularUser.myFriend(displayUser.regularUser) and not app.user.regularUser.isInvited(displayUser.regularUser) %}
+            <div class="button green-button button-margin">
+                <a href="{{path('fenchy_regular_user_friend_invite', {'id': displayUser.regularuser.id})}}" class="wrapper">                                            
+                    <i class="icon-user"></i>
+                    <strong>{{'regularuser.friends.invite'|trans}}</strong>
+                </a>
+            </div>          
+        {% endif %}
+    </section>
+        
+    {% render'FenchyRegularUserBundle:Profile:repBreakdownWidget' with { 'displayUserId': displayUser.id }  %}
+
+    <section class="user-profile-group">
+       <h4>{{ 'regularuser.additional_info' | trans }}</h4>
+       <ul class="additional-user-info profile-summary-list">
+           <li><p id="languages-container">
+                   <strong class="info-by-line">{{ 'regularuser.languages' | trans }}</strong>                                            
+                   <input id="spoken-languages" value="{{ displayUser.regularuser.languages }}"/>
+               </p>
+            </li>
+           <li><p>
+                   <strong class="info-by-line">{{ 'member_since' | trans }}:</strong>                                            
+                   <strong class="info-by-line">{{ displayUser.createdAt|date("F jS, Y") }}</strong>
+               </p>                                           
+            </li>
+        </ul>
+    </section>                                
+</div>

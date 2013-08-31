@@ -1,0 +1,104 @@
+body{
+    background: #fbfbfb;
+}
+#sitebody{
+    height:715px;
+}
+
+#header{
+    margin:0px;
+    margin-left:20px;
+    padding:0px;
+    margin-top:100px;
+    width:405px;
+}
+
+#header h2{
+    font-family: MYRIADPRO-BOLD, sans-serif; 
+    font-size:20px;
+    color:#464646;
+    padding:0px;
+    margin:10px;
+    margin-bottom:0px;
+}
+
+#header div{
+    font-family: MYRIADPRO-COND, sans-serif; 
+    color:#464646;
+    font-size:18px;
+    padding:10px;
+    border-bottom: 1px solid #b7b7b7;
+    margin-bottom:10px;
+}
+
+#sitebody{
+    background-image: url('../../images/start_page.png');
+    background-repeat: no-repeat;
+}
+
+#content .rounded
+{
+    background:none;
+    width:420px;
+    height:235px;
+    margin-left:35px;
+    margin-top:20px;
+}
+
+#content > .rounded
+{
+    min-height:235px;
+}
+
+#content div{
+    padding:15px;
+}
+
+#content div #sign_in, #content div #sign_up{
+    color:white;
+    background: #271e01;
+    background-repeat: repeat-x;
+    /* Safari 4-5, Chrome 1-9 */
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#3e3a2e), to(#271e01));
+    /* Safari 5.1, Chrome 10+ */
+    background: -webkit-linear-gradient(top, #3e3a2e, #271e01);
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #3e3a2e, #271e01);
+    /* IE 10 */
+    background: -ms-linear-gradient(top, #3e3a2e, #271e01);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(top, #3e3a2e, #271e01);
+    font-family: MYRIADPRO-REGULAR, sans-serif;
+    width:auto;
+    cursor:pointer;
+    font-size:16px;
+    padding:10px 30px 10px 30px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+#content div #sign_in{
+    float:right;
+    margin-right:20px;
+}
+
+#content div #sign_up{
+    margin-left: 14.5%;
+    min-width:152px;
+}
+
+#foot div{
+    padding:5px;
+}
+
+#foot{
+    width:990px;
+    margin:auto;
+    margin-top:0px;
+    text-align:center;
+    background:#eeeeee;
+    padding:5px;
+    position: relative;
+    height:30px;
+}
+

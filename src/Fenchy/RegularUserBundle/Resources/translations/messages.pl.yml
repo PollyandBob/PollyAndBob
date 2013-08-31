@@ -1,0 +1,540 @@
+regularuser:
+  leave_a_review: Napisz recenzję
+
+  edit_review: Edytuj recenzję
+
+  load_more: Załaduj więcej
+
+  positives: Pozytywne
+
+  negatives: Negatywne
+
+  positive: Pozytywny
+
+  negative: Negatywny
+
+  all_trust_points: Zdobyte punkty zaufania:
+
+  dont_ask: Nie pytaj ponownie
+
+  disable_connect: Wyłącz możliwość łaczenia się z podstron
+
+  no_contacts: Nie masz żadnych kontaktów. Połącz się z Facebookiem lub Twitterem, aby zaprosić swoich znajomych.
+
+  references: Referencje
+
+  reviews_: 
+
+  contacts: Kontakty
+
+  completed: Zakończone
+
+  facebook_friends: Przyjaciele z Facebooka
+
+  email: Email
+
+  invite: Zaproś do Fenchy
+
+  join_to_fenchy: Dołącz do fenchy.com
+
+  would_like_to_invite_you: chce zaprosić Cię do swoich kontaktów. Kliknij w link by kontynuować i dołączyć do fenchy.com
+
+  unexpected_problem_facebook: Wystąpił niespodziewany problem podczas łaczenia z Facebookiem. Prosimy spróbować ponownie.
+
+  all: Wszystkie
+
+  unread: Nieprzeczytane
+
+  unreplied: Bez odpowiedzi
+
+  sent: Wysłane
+
+  send_new_message: Wyślij wiadomość
+
+  change_password: Zmień hasło
+
+  delete_account: Usuń konto
+
+  message:
+    sent: Wiadomość wysłana!
+
+    deleted: Wiadomość usunięta!
+
+    about_pre_title: "O:"
+
+    no_messages: Brak wiadomości w Twojej skrzynce
+
+    check_any_message: Zaznacz przynajmniej jedną wiadomość do usunięcia
+
+    messages_has_been_deleted: Wiadomości zostały usunięte
+
+    to: do
+
+    new_message: Nowa wiadomość
+
+    delete_selected: Usuń zaznaczone
+
+    sender: Nadawca
+
+    subject: Temat
+
+    date: Data
+
+    read: Ustawiono wszystkie wiadomości jako przeczytane!
+
+    mark_all_as_read: Oznacz wszystkie jako przeczytane
+
+    refresh: Odśwież
+
+    show_dd: 
+
+    message_center: 
+
+  save: Zapisz
+
+  cancel: Anuluj
+
+  add: Dodaj
+
+  edit: Edytuj
+
+  delete: Usuń
+
+  show: Pokaż
+
+  about_me: O mnie
+  
+  my_community_ponts: MY COMMUNITY POINTS
+  
+  my_neighbours: MY NEIGHBOURS
+  
+  my_location: MY LOCATION
+
+  find_me_by_what_i_like: Find Me by what i like
+
+  i_like: I Like
+
+  hot_places: Hot Places in the neighborhood
+
+  promoted_initiaives: Promoted Initiatives in the
+
+  my_languages: My Languages
+
+  not_shown_information: Not shown information
+  
+  neighbours: Neighbors
+  
+  total_community_points: TOTAL COMUNITY POINTS
+  
+  profile_completion: PROFILE COMPLETION
+  
+  my_neighbors: MY NEIGHBORS
+  
+  listings_posted: LISTINGS POSTED
+  
+  neighbors_served: NEIGHBORS SERVED
+  
+  reviews_received: REVIEWES RECEIVED
+  
+  completed_activities: COMPLETED ACTIVITIES
+
+  written_reviews: WRITTEN REVIEWS
+
+  invited_and_registered_users: INVITED AND REGISTERED USERS
+  
+  shareholder: SHAREHOLDER
+  
+  location_verified: LOCATION VERIFIED
+  
+  passport_verified: PASSPORT VERIFIED
+  
+  fill_my_profile_now: FILL MY PROFILE NOW!
+  find_new_neighbours_now: FIND NEW NEIGHBOURS NOW!
+  create_listing: CREATE LISTINGS!
+  uptodate_your_listings_now: UPTODATE_YOUR_LISTINGS_NOW!
+  ask_for_reviews: ASK FOR REVIEWS!
+  search_new_activity: SEARCH NEW ACIVITY!
+  write_review_now: WRITE REVIEW NOW!
+  tell_friend_about_pollyandbob_now: TELL A FRIEND ABOUT POLLY&BOB NOW!
+  become_shareholder_now: BECOME SHAREHOLDER NOW!
+  verify_your_location_now: VERIFY YOUR LOCATION NOW!
+  verify_your_passport_now: VERYFY YOUR PASSPORT NOW!
+  
+  neighbours: Sąsiedzi
+
+  disconnect_twitter: Odłącz od Twittera
+
+  connect_to_twitter: Podłącz do Twittera
+
+  connect_to_facebook: Podłącz do Facebooka
+
+  disconnect_facebook: Odłącz od Facebooka
+
+  add_to_timeline: Dodaj do Tablicy
+
+  disconnect_timeline: Odłącz od Tablicy
+
+  only_jpg_png_maximum2m: tylko .jpg oraz .png. Maksymalnie 5MB
+
+  put_pin: Zrzuć pinezkę w lokalizacji
+
+  location: Lokalizacja
+
+  printable_location_description: Jeśli nie chcesz aby twój pełny adres wyświetlał się dla innych użytkowników, wprowadź jego zamiennik w tym polu.
+
+  printable_location: Wyswietlany adres
+
+  general: Ogólne
+
+  notification: Powiadomienia
+
+  image: Obraz
+
+  connect: Podłącz
+
+  submit: Wyślij
+
+  ivitation_to_fenchy_sent: Zaproszenie do fenchy.com wysłane!
+
+  no_search_results_for_criteria: Brak wyników dla wybranych kryteriów
+
+  about_him: O nim
+
+  put_on_fb: Umieść na tablicy Facebooka
+
+  filter_notSelected: Filtr
+
+  category_notSelected: Kategoria
+
+  about_you: O Tobie
+
+  link_to_your_page: Link do twojej strony
+
+  postcode: Kod pocztowy
+
+  your_postal_code: Twój kod pocztowy
+
+  city: Miasto
+
+  your_city: Twoje miasto
+
+  district: Dzielnica
+
+  your_district: Twoja dzielnica
+
+  street: Ulica
+
+  your_street: Twoja ulica
+
+  country: Kraj
+
+  your_country: Twój kraj
+
+  firstname: Imię:
+
+  your_firstname: Twoje pierwsze imię
+
+  lastname: Nazwisko:
+
+  your_lastname: Twoje nazwisko
+
+  gender: Płeć:
+
+  age: Wiek:
+
+  your_age: Twój wiek
+
+  friends:
+    exists: %friend% już jest w Twoich kontaktach
+
+    not: %friend% nie występuje w Twoich kontaktach
+
+    invite: Dodaj do kontaktów
+
+    invitation:
+      title: Oczekujące zaproszenia
+
+      no: Nie masz żadnych zaproszeń.
+
+      send: Zaproszenie zostało wysłane
+
+      already: %friend% już został/a przez Ciebie zaproszony/a
+
+      accept: Zaakceptuj
+
+      reject: Odrzuć
+
+      rejected: Odrzuciłeś zaproszenie od %friend%
+
+      invitefb: Zaproś znajomych
+
+    contacts:
+      no: Nie masz żadnych kontaktów na swojej liście.
+
+      no_other: Użytkownik nie ma kontaktów na swojej liście.
+
+      title: Lista kontaktów
+
+    delete:
+      1: Czy aby na pewno chcesz usunąć użytkownika %user% z Twojej listy kontaktów ?
+
+    added: %friend% został/a dodany/a do Twoich kontaktów
+
+    deleted: %friend% został/a usunięty/a z Twoich kontaktów
+
+  interval: Wysyłaj:
+
+  neighbours_filter:
+    today: Dziś
+
+    contacts: Kontakty
+
+    these_days: Na dniach
+
+  notice:
+    deleted: Wpis został usunięty
+
+  filter:
+    yesterday: Wczoraj
+
+    today: Dziś
+
+    tomorrow: Jutro
+
+  not_shown_publicy: Twój adres nie będzie pokazywany publicznie
+
+  start_fenchy: Rozpocznij z Fenchy
+
+  locationpopup:
+    required_confirmation_message: Kliknij link aktywacyjny wysłany na podany adres E-mail aby aktywować konto.
+
+    required_location_message: Lokalizacja jest wymagana do pełnej aktywacji konta.
+
+  languages: Język(i)
+
+  your_languages: Język bądź języki oddzielone przecinkiem
+
+  about_me_placeholder: Krótki tekst opisujący Ciebie.
+
+  change_your_password: Zmień swoje hasło
+
+  delete_your_account: Usuń swoje konto
+
+  social:
+    connected: Połączono
+
+    notconnected: Nie połączono
+
+    connect: Połącz
+
+    disconnect: Rozłącz
+
+    publish_facebook: publikuj posty na Facebooku
+
+    invite_facebook: Zaproś swoich znajomych do korzystania z Fenchy !
+
+  additional_info: Dodatkowe Informacje
+
+  validation:
+    invalid__firstname: Your first name is invalid
+
+  settings_delete: Usuń konto
+
+  end_of_list_msg: Co takiego? Dotarłeś do końca listy sąsiadów!
+
+  end_of_notice_list_msg: Co takiego? Dotarłeś do końca listy!
+
+  ref_trust_points: Punkty za referencje:
+
+  con_trust_points: Punkty za kontakty:
+
+  activ_trust_points: Punkty za aktywność:
+
+  reviews_tab: Recenzje
+
+  listings_tab: Wpisy
+
+  reviews_of_others_tab: Napisane Recenzje
+
+  about: Tematyczne
+
+  read_all_messages: Oznacz wszystkie jako przeczytane
+
+  settings: Ustawienia
+
+  interests_and_activities: "Zainteresowania i aktywności:"
+
+  a_place_near_you: Miejsce blisko Ciebie
+
+  interest_or_activity:
+    deleted: Zainteresowanie lub aktywność zostało usunięte
+
+  edit_I_or_A: Edytuj zainteresowanie lub aktywność
+
+  reviews:
+    email:
+      subject: %username% napisał recenzję
+
+      1: 
+
+      2: 
+
+    form:
+      title: Tytuł recenzowanego wpisu
+
+      text: Treść
+emailchange:
+  flash:
+    change_requested: Zażądałeś zmiany adresu e-mail. Aby zmiany odniosły skutek musisz kliknąć w link potwierdzający wysłany na Twój nowy adres e-mail.
+
+    request_denied: W ciągu ostatnich %ttlh% godzin zarządałeś już zmiany adresu e-mail. Możesz ją zatwierdzić lub odrzucić klikając odpowiedni link w mailu wysłanym na nowy adres. Do tego czasu, lub do czasu wygaśnięcia żądania nie możesz dokonać nowej zmiany.
+
+    token_expired: Próba zmiany adresu miała miejsce dawniej niż %ttlh% godzin temu. Jej ważność już wygasła. Aby zmienić swój adres e-mail spróbuj ponownie.
+
+    change_success: Zmiana adresu e-mail zakończona powodzeniem.
+
+    change_aborted: Anulowano zmianę adresu e-mail.
+
+  email:
+    subject: Zmiana adresu e-mail w Fenchy
+
+    1: Witaj %username%,
+
+    2: Aby zmienić adres e-mail swojego konta w Fenchy prosimy kliknąć w poniższy link:
+
+    3: Zmień adres e-mail.
+
+    4: Jeżeli powyższy odnośnik nie działa, proszę skopiuj adres i wklej go do paska adresu przeglądarki:
+
+    6: Anuluj zmianę adresu e-mail.
+
+    7: lub skopiować poniższy link do paska adresu Twojej przeglądarki
+
+    8: Jeśli nie próbowałeś zmienić adresu e-mail, prosimy zignorować tę wiadomość.
+
+    9: Prawdopodobnie ktoś omyłkowo użył‚ Twojego adresu e-mail.
+
+    10: Dziękujemy,
+
+    11: Zespół Fenchy
+
+    5: Aby anulować zmianę adresu e-mail prosimy klinąć poniższy link:
+help: Usługi / Pomoc
+goods: Towary
+events: Wydarzenia
+others: Inne
+help_prefix: ''
+goods_prefix: ''
+events_prefix: ''
+others_prefix: ''
+offer: Oferuję
+need: Potrzebuję
+listing:
+  create:
+    title: Utwórz swój wpis
+
+    tab_title:
+      1: Kategoria wpisu
+
+      2: Szczegóły wpisu
+
+    1:
+      subtitle: Wybierz kategorię
+
+      description: Wybierz kategorię która najlepiej określa Twój wpis
+
+    2:
+      subtitle: Na temat
+
+      description: Powiedz nam więcej na temat Twojego wpisu
+
+    start_date: 
+
+    end_date: 
+
+  show:
+    tags: tagi
+
+    description: Opis
+
+  edit:
+    title: Edytuj swój wpis
+
+    back_to_management: Powrót do listy
+
+    flash_success: Dane wpisu zostały zapisane.
+
+  manage_listings: Moje wpisy
+
+  no: Nie dodałeś jeszcze żadnego wpisu.
+
+  delete:
+    msg: 
+
+  manage:
+    flash:
+      delete: 
+
+  category: Category
+settings:
+  general:
+    name: Podstawowe informacje
+
+    profile_photo: Zdjęcie profilowe
+
+  location:
+    name: Lokalizacja
+
+    label: Twoja lokalizacja
+
+  emailnotifications:
+    name: Powiadomienia e-mail
+
+  socialnetworks:
+    name: Serwisy społecznościowe
+
+  account:
+    name: Konto
+
+    delete_confirm_action: Potwierdź usunięcie konta. Operacja jest nieodwracalna.
+
+    change_password_name: Zmień hasło do konta
+
+  flash:
+    data_saved: Profil użytkownika został zaktualizowany
+
+    form_errors: Wystąpił błąd w przesłanym formularzu
+
+  locationpopup:
+    success: Thank you for providing us your Location.
+
+    name: Podaj swoją lokalizację
+
+    description: Wymagane jest podanie swojej lokalizacji by mieć pełny dostęp do wyszukiwania
+reputation:
+  title: Podział Reputacji
+
+  listings: Wpisy
+
+  positive_reviews: Pozytywne Opinie
+
+  written_reviews: Napisane Opinie
+
+  facebook: Połączenie z FB
+
+  contacts: Kontakty
+
+  profile: Profil
+member_since: Użytkownik od
+invitations:
+  email:
+    subject: %username% wysłał(a) zaproszenie do kontaktu
+
+    1: Witaj %username%,
+
+    2: "%username% wysłał(a) prośbę o dodanie Cię do swoich kontaktów. By potwierdzić %username% jako swój kontakt, proszę kliknij w link poniżej:"
+
+  buttons:
+    accept: Akceptuj
+
+    reject: Ignoruj

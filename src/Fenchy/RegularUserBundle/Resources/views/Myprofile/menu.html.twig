@@ -1,0 +1,8 @@
+<nav>
+	<ul>
+       	<li><a {% if app.request.get('_route') == 'fenchy_regular_user_user_myprofile_aboutmychoice' %} class="selected"" {% endif %} href="{{ path('fenchy_regular_user_user_myprofile_aboutmychoice') }}">{{ 'regularuser.about_me' |trans|upper}}</a></li>
+      	<li><a {% if app.request.get('_route') == 'fenchy_regular_user_user_myprofile_myneighbors' %} class="selected"" {% endif %} href="{{ path('fenchy_regular_user_user_myprofile_myneighbors') }}">{{ 'regularuser.my_neighbours'|trans|upper }}</a></li>
+       	<li><a {% if app.request.get('_route') == 'fenchy_regular_user_user_myprofile_mycommunitypoints' %} class="paddingset selected"" {% endif %} href="{{ path('fenchy_regular_user_user_myprofile_mycommunitypoints') }}" class="paddingset">{{ 'regularuser.my_community_ponts'|trans|upper }}</a></li>
+    	<li><a {% if app.request.get('_route') == 'fenchy_regular_user_user_myprofile_mylocation' %} class="selected"" {% endif %} href="{{ path('fenchy_regular_user_user_myprofile_mylocation') }}">{{ 'regularuser.my_location'|trans|upper }}</a></li>
+    </ul>
+</nav>

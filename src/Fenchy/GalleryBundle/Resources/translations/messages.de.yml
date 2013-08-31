@@ -1,0 +1,10 @@
+gallery:
+  change_image: Bild ändern
+
+  delete: Löschen
+
+  change: Ändern
+
+  file_too_big_choose_smaller: Bitte entschuldige! Diese Datei ist leider zu groß?. Bitte wähle ein kleineres Bild aus.
+
+  file_should_have_jpeg_png: Bitte entschuldige! Wir k?Ânnen leider nur Dateien im Jpeg- oder im PNG-Format anzeigen.

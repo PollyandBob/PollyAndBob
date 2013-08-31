@@ -1,0 +1,18 @@
+{% extends 'FenchyFrontendBundle::static.html.twig' %}
+
+{% block content_static %}
+
+<h1>{{ 'frontend.about.title'|trans }}</h1>
+<p>{{ 'frontend.about.article.par_1'|trans }}</p>
+<p>{{ 'frontend.about.article.par_2'|trans }}</p>
+<p>{{ 'frontend.about.article.par_3'|trans }}</p>
+<p>{{ 'frontend.about.article.par_4'|trans }}</p>
+{% if not app.user %}
+<strong>{{ 'frontend.about.article.par_5'|trans }}</strong>
+<div class="button submit">
+    <a href="#" class="wrapper sign-up-btn">
+        <strong>{{ 'frontend.about.article.sign_up_here'|trans }}</strong>
+    </a>
+</div>        
+{% endif %}
+{% endblock %}

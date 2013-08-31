@@ -1,0 +1,11 @@
+parameters:
+    dictionary_class: Fenchy\NoticeBundle\Services\Dictionary
+
+services:
+    fenchy_dictionary:
+        class: %dictionary_class%
+        arguments: [%dictionary_storage%, %dictionary_non_tag_delimeter%, %dictionary_tag_delimeter%, "@doctrine"]
+
+#    fenchy_notice.type_repo:
+#        class: %fenchy_notice.type_repo.class%
+#        arguments: [@service_id, "plain_value", %title_to_content_search_ratio%]

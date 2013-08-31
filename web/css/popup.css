@@ -1,0 +1,67 @@
+@charset "utf-8";
+/* CSS Document */
+
+.close {
+}
+
+#mask {
+  position:fixed;
+  left:0;
+  top:0;
+  height:100%;
+  background-color:#808080;
+  display:none;
+  margin:0px; 
+  padding:0px;
+  width:100%;
+  z-index:1001;
+  -moz-opacity: 6.4;
+  opacity:.64;
+  filter: alpha(opacity=64);
+  display:none;
+}
+
+#boxes2 .window {
+  position:fixed;
+  left:0;
+  top:0;
+  width:auto;
+  height:auto;
+  display:none;
+  z-index:9999;
+  background:url(../images/bg_popup.png) no-repeat;
+  
+
+/*  padding:20px;*/
+}
+
+#boxes2 #dialog1 {
+  width:590px; 
+  height:265px;
+  padding:30px 0 0 28px;
+}
+
+.patternover {
+	position:absolute;
+	top:0%;
+	left:0%;
+	width:auto;
+	height:auto;
+	text-align:center;
+	padding-top:50px;
+}
+
+.patternover img {
+}
+
+.big_popupclose .close {
+	position:absolute; 
+	top:17px;
+    left:574px;
+	margin-right:0px; 
+	background:url(../images/icon_close.png) no-repeat;
+	height:25px; 
+	width:25px; 
+	padding:0px;
+	z-index:9999;
+}

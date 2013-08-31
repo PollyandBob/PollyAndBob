@@ -1,0 +1,12 @@
+{% extends 'FenchyFrontendBundle::static.html.twig' %}
+
+{% block content_static %}
+<div class="intro">
+    <h1>Ooops!</h1>
+    <p>{{'frontend.404.par_1'|trans}}</p>
+    <p>{{'frontend.404.par_2'|trans}}</p>
+    <span class="info-by-line return"><a href="#">{{'frontend.404.link'|trans}}</a></span>
+</div>                            
+<img src="{{asset('images/404-dog.jpg')}}" alt="404"/>
+{% endblock %}
+

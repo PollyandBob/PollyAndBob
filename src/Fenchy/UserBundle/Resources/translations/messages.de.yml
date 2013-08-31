@@ -1,0 +1,103 @@
+user:
+  rest_pass_msg: Bitte gib ein neues Passwort ein
+
+  enter_pass_again: Bitte gib dein Passwort erneut ein
+
+  forgot_your_password: Passwort vergessen?
+
+  password_changed_msg: Dein Passwort wurde erfolgreich geändert!
+
+  password_changed_link_msg: Clicke hier um fortzufahren.
+
+  password_changed_alternative: oder
+
+  sign_in: Login
+
+  back_to_login: Zurück zum Login
+
+  password_reset:
+    name: Passwort zur Zurücksetzen
+
+  account_deleted: Dein Account wurde gelöscht
+
+  twitter_disconnected: Twitter ist nicht connected
+
+  could_not_get_token: Entschuldige, ein Problem ist aufgetreten. Bitte versuche es nochmal.
+
+  could_not_verify_credentials_twitter: Entschuldige, wir konnten deine Zugangsdaten nicht überprüfen oder deinTwitter-Account ist in Benutzung.
+
+  could_not_sign_in_via_facebook: Entschuldige! Der Login über Facebook hat nicht funktioniert, bitte versuche es nochmal.
+
+  problem_with_logging_try_again:
+    : Entschuldige! Ein Problem ist aufgetreten. Bitte versuche es noch einmal.
+
+  user_with_confirmation_token_not_exist: Dieser Nutzer konnte nicht gefunden werden.
+
+  your_facebook_account_already_connected: Dein Facebook-Account ist bereits mit einem anderen Fenchy-Account verbunden.
+
+  facebook_connected: Facebook ist verbunden.
+
+  facebook_disconnected: Facebook ist nicht verbunden.
+
+  facebook_timeline_connected: Facebook Timeline ist verbunden
+
+  facebook_timeline_disconnected: Facebook Timeline ist nicht verbunden
+
+  twitter_user_exists:
+    0: ~
+
+    1: Wenn du deinen Account mit deinem Twitter-Profil verbinden m?Âchtest,
+
+    2: melde dich bitte mit deiner E-Mail-Adresse und deinem Passwort an und gehe zu Einstellungen, Soziale Netzwerke.
+
+    3: Du kannst auch einen neuen Fenchy Account mit Hilfe deines Twitter Profils erstellen. Bitte teile uns dann eine neue E-Mail-Adresse mit.
+
+    4: und einen neuen Nutzernamen
+
+  some_fb_data_invalid_for_fenchy: Entschuldige, wir können einige Daten von Facebook nicht für Fenchy verwenden.
+
+  facebook_user_exists:
+    0: Ein Account wurde bereits mit deinem Facebook-Profil verbunden.
+
+    1: Wenn du deinen Account mit Facebook verbinden möchtest,
+
+    2: melde dich bitte mit deiner E-Mail-Adresse und deinem Passwort an und gehe zu Einstellungen, Soziale Netzwerke.
+
+    3: Du kannst auch einen neuen Fenchy Account mit Hilfe deines Facebook-Profils erstellen. Bitte teile uns dann eine neue E-Mail-Adresse mit
+
+    4: und einen neuen Nutzernamen
+
+  new_user_created: Der Account wurde erstellt.
+
+  token_expired: Der Nutzername wird bereits benutzt oder ist abgelaufen.
+
+  user_twitter_reg_not_exist: Dieser Twittername existiert nicht.
+
+  registration: Registrierung
+
+  register_welcome_msg_twitter: Du bist mit deinem Twitter-Account eingeloggt. Um die Registrierung abzuschlie?en, bitte klicke auf den folgenden Link.
+
+  go_to_main_page: Zurück zur Hauptseite
+change_password:
+  facebook_user_exists:
+    submit: Passwort ändern
+
+    flash:
+      success: Das Passwort wurde geändert
+register:
+  footer_message:
+    1: Wenn du auf "Registrieren" klickst, akzeptierst du unsere 
+
+    2: AGB
+
+    3: und unsere
+
+    4: Datenschutzerklärung
+
+  save_button: Registrieren
+
+  title: Registrieren
+
+  with_fb: Über Facebook registrieren
+
+  with_twitter: Über Twitter registrieren

@@ -1,0 +1,140 @@
+{% extends 'FenchyRegularUserBundle::settingsWithoutFormTheme.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    
+        <script type="text/javascript">
+        
+        var blocked_action = false;
+        
+        function onFbInit() {
+        
+            
+        
+            $('#connect-facebook').click(function(){
+                FB.login(function(response) {
+                    if (response.authResponse) {
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ path('fenchy_connect_facebook') }}",
+                            data: { token: response.authResponse.accessToken, facebookId: response.authResponse.userID }
+                        }).done(function( data ) {
+                            if (null != data.url) {
+                                window.location.replace( data.url );
+                            } else {
+                                alert( '{{ 'regularuser.unexpected_problem_facebook'|trans }}');
+                            }
+                        }).fail(function( data ) {
+                            if (null != data.responseText) {
+                                alert( data.responseText );
+                            } else {
+                                alert( '{{ 'regularuser.unexpected_problem_facebook'|trans }}');
+                            }
+                        });
+                    }
+                }, {
+                    scope: 'email, user_birthday, user_location'
+                });
+                return false;
+            });
+        
+        
+            $('#facebook_publish').click(function(){
+                if(!blocked_action) {
+                    
+                    blocked_action = true;
+                
+                    if($(this).is(':checked')) {
+
+                        FB.login(function(response) {
+                            if (response.authResponse) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "{{ path('fenchy_addtimeline_facebook') }}",
+                                    data: { token: response.authResponse.accessToken, facebookId: response.authResponse.userID }
+                                }).done(function( data ) {
+                                    if (null != data.url) {
+                                        window.location.replace( data.url );
+                                    } else {
+                                        alert( '{{ 'regularuser.unexpected_problem_facebook'|trans }}');
+                                    }
+                                }).fail(function( data ) {
+                                    if (null != data.responseText) {
+                                        alert( data.responseText );
+                                    } else {
+                                        alert( '{{ 'regularuser.unexpected_problem_facebook'|trans }}');
+                                    }
+                                });
+                            }
+                        }, {
+                            scope: 'email, user_birthday, user_location, publish_stream'
+                        });
+                    } else {
+                        var url = '{{ path('fenchy_disconnect_timeline_facebook') }}';
+                        window.location.replace(url);
+                    }
+                    
+                    return true;
+                    
+                } else {
+                    return false;
+                }
+                
+            });
+        
+        }
+        </script>
+    
+{% endblock %}    
+    
+{% block settings_content %}
+
+
+    {{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
+
+        
+    <section id="profile_left_menu" class="sidebar pull-left">
+        <div class="wrapper">
+            {% include 'FenchyRegularUserBundle:Settings:menuV2.html.twig' %}
+        </div>    
+    </section>
+    <section class="content pull-right">
+        <div class="profile_right_content inner-content">
+            <header><h1>{{ 'regularuser.settings'|trans }}</h1></header>
+            <div class="form-box-wrapper">
+                <h2>{{ 'settings.socialnetworks.name'|trans }}</h2>
+
+                <div class="row fieldInput social-network social-network-facebook">
+                        <label>Facebook</label>
+                        <div class="input-element">
+                            {% if app.user.facebookid %}
+                                <div class="row-inner"><span class="social-network-state facebook-connected">{{'regularuser.social.connected'|trans}}</span> <a href="{{ path('fenchy_disconnect_facebook') }}" class="facebook">({{'regularuser.social.disconnect'|trans}})</a></div>
+                            {% else %}
+                                <div class="row-inner"><span class="social-network-state facebook-disconnected">{{'regularuser.social.notconnected'|trans}}</span> <a href="#" id="connect-facebook" class="facebook">({{'regularuser.social.connect'|trans}})</a></div>
+                            {% endif %}
+                                
+                                <div class="row-inner row-inner-input"><input type="checkbox" id="facebook_publish" name="facebook_publish" value="1" {% if app.user.userregular.facebookpublish %}checked="checked"{% endif %} /> <span>{{'regularuser.social.publish_facebook'|trans}}</span></div>
+                        </div>
+                    </div>
+
+                <div class="row fieldInput social-network social-network-twitter">
+                    <label>Twitter</label>
+                    <div class="input-element">
+                        {% if app.user.twitterid %}
+                            <div class="row-inner"><span class="social-network-state twitter-connected">{{'regularuser.social.connected'|trans}}</span> <a href="{{ url(app.user.twitterID ? 'disconnect_twitter' : 'connect_twitter')}}" class="twitter">({{'regularuser.social.disconnect'|trans}})</a></div>
+                        {% else %}
+                            <div class="row-inner"><span class="social-network-state twitter-disconnected">{{'regularuser.social.notconnected'|trans}}</span> <a href="{{ url(app.user.twitterID ? 'disconnect_twitter' : 'connect_twitter')}}" class="twitter">({{'regularuser.social.connect'|trans}})</a></div>
+                        {% endif %}
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </section>
+{% endblock %}

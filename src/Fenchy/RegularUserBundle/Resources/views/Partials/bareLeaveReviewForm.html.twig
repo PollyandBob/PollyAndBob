@@ -1,0 +1,46 @@
+{% if form.title is defined %}
+{% form_theme form.title '::noLabelForm.html.twig' %}
+{% endif %}
+{% form_theme form.text '::noLabelForm.html.twig' %}
+<form id="leave-review" class="clearfix simple-form" action="" method="post"  {{form_enctype(form)}}>    
+    <div id="fenchy_regularuserbundle_leavereviewprofiletype">
+        {% if form.title is defined %}
+            <div class="title">{{ form_row(form.title) }}</div>
+        {% endif %}
+        <div class="content">{{ form_row(form.text) }}</div>
+        <div>
+            <div id="review-type-selector" class="toolbar-item button select-button grey-button pull-right">
+                <strong class="selector-title"></strong>
+                <span class="replacement">
+                    <strong class="select-value"></strong>
+                    <i id="sortby-dropdown-icon" class="icon-caret-down" ></i>
+                    <div class="drop-down">
+
+                    </div>
+                </span>
+                <div class="dd-element" style="display:none">
+                    {{ form_widget(form.type) }}
+                </div>
+                <div class="dd-label" style="display:none">
+                    {{ form_label(form.type) }}
+                </div>                             
+            </div> 
+        </div>
+        {{ form_rest(form) }}
+    </div>
+    <div class="action-buttons pull-right">
+        <div class="button green-button button-margin">
+            <a class="wrapper leave-review-submit" href="/app_dev.php/user/contact/invite/1">
+                <strong>{{ 'btn.save' | trans }}</strong>
+            </a>
+        </div>
+        <div class="button green-button button-margin">
+            <a class="wrapper leave-review-cancel" href="/app_dev.php/user/contact/invite/1">
+                <strong>{{ 'btn.cancel' | trans }}</strong>
+            </a>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    new fenchyDropdown($('#review-type-selector'));
+</script>

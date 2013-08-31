@@ -1,0 +1,287 @@
+#lang-menu-wrapper {
+    -webkit-box-shadow: 0px 0px 3px rgba(2, 2, 2, 0.4);
+    -moz-box-shadow:    0px 0px 3px rgba(2, 2, 2, 0.4);
+    box-shadow:         0px 0px 3px rgba(2, 2, 2, 0.4);
+    -webkit-border-radius: 3px 0 3px 3px;
+    -moz-border-radius: 3px 0 3px 3px;
+    border-radius: 3px 0 3px 3px;
+    position: absolute;
+    top: 32px;
+    padding: 8px 10px 6px;
+    width: 140px;
+    z-index: 2;
+    display: none;
+    background: #cdf0ee;  
+    behavior: url(/plugins/pie.php);
+}
+
+div.social-lang li.active {
+    background-color: #CDF0EE !important;
+    color: #117070;
+    -webkit-border-radius: 3px 3px 0 0;
+    -moz-border-radius: 3px 3px 0 0;
+    border-radius: 3px 3px 0 0;
+    -webkit-box-shadow: 0px 0px 3px rgba(2, 2, 2, 0.4);
+    -moz-box-shadow:    0px 0px 3px rgba(2, 2, 2, 0.4);
+    box-shadow:         0px 0px 3px rgba(2, 2, 2, 0.4);
+    z-index: 4;  
+    behavior: url(/plugins/pie.php);
+}
+
+div.social-lang li.active a:hover,
+div.social-lang li.active, 
+div.social-lang li.active a,
+div.social-lang li.active i{
+    color: #117070 !important;
+}
+
+
+div.social-lang li.active a {
+    display: block;
+    width: 100%;
+    bottom: 4px;
+    position: relative;
+    background: #CDF0EE url(/images/site/globe_icon.png) 11px 6px no-repeat;
+}
+
+#lang-menu {
+    width: 160px !important;
+}
+
+div.social-lang li.active #lang-menu-chosen {
+    padding: 0;
+    width: 100%;
+}
+
+div.social-lang li.active span {
+    margin-left: 43px;
+}
+
+#lang-menu-wrapper li, #lang-menu-wrapper li a {
+    color: #117070;
+}
+
+#lang-menu-wrapper li {
+    display: block;
+    width: 100%;
+}
+
+#lang-menu-wrapper li.pl-flag {
+    background: url('/images/flags/pl-flag.png') 2px 4px no-repeat;
+}
+
+#lang-menu-wrapper li.en-flag {
+    background: url('/images/flags/en-flag.png') 2px 4px no-repeat;
+}
+
+#lang-menu-wrapper li.de-flag {
+    background: url('/images/flags/de-flag.png') 2px 4px no-repeat;
+}
+
+#lang-menu-wrapper li a {
+    display: block;
+    padding: 7px 0px;
+    padding-left: 33px;    
+    -webkit-border-radius: 3px 0 3px 3px;
+    -moz-border-radius: 3px 0 3px 3px;
+    border-radius: 3px 0 3px 3px;  
+    behavior: url(/plugins/pie.php);
+}
+
+#lang-menu-wrapper li a:hover {
+    background: rgba(255, 255, 255, 0.5);
+    -pie-background: rgba(255, 255, 255, 0.5);
+    behavior: url(/plugins/pie.php);
+}
+
+#user-account-item li.top-icons {
+    /*padding: 6px 0px;*/
+}
+
+#user-account-item li.home .badge {
+    bottom: 1px;
+}
+
+#user-account-item li.top-icons i.icon-home {
+    /*margin-top: 2px;*/
+}
+
+#user-account-login-menu.active {
+    /*    position: relative;
+        padding: 0;
+        border-left: none;
+        border-right: none;
+        margin-left: 2px;
+        margin-right: 2px;
+        -webkit-box-shadow: 0px 0px 3px rgba(2, 2, 2, 0.4);
+        -moz-box-shadow:    0px 0px 3px rgba(255, 255, 255, 0.4);
+        box-shadow: 0px 0px 3px rgba(2, 2, 2, 0.4); 
+        behavior: url(/plugins/pie.php);*/
+}
+
+#user-account-login-menu.active > a, #user-account-login-menu.active > a:hover {
+    color: #117070 !important
+}
+
+
+#user-account-login-menu.active a {
+    /*margin: 2px 12px 0 13px;*/
+
+}
+
+#user-account-login-menu img {
+    width: 32px;
+    height: 32px;
+}
+
+#user-account-login-menu.active > a span {
+    border: none;
+}
+#user-account-login-menu.active img {
+    position: relative;
+    z-index: 4;
+}
+
+#user-account-login-menu span.spacer {
+    display: none;
+}
+
+#user-account-login-menu.active span.spacer {
+    z-index: 2;
+    width: 100%;
+    height: 4px;
+    background: #CDF0EE;
+    display: block;
+    position: absolute;
+    bottom: -3px;
+}
+
+#user-account-login-menu-wrapper {
+    background: #cdf0ee;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    -webkit-box-shadow: 0px 0px 3px rgba(2, 2, 2, 0.4);
+    -moz-box-shadow:    0px 0px 3px rgba(2, 2, 2, 0.4);
+    box-shadow:         0px 0px 3px rgba(2, 2, 2, 0.4);
+    width: 100%;
+    padding-top: 42px;
+    position: absolute;
+    top: -8px !important;
+    left: 0 !important;
+    behavior: url(/plugins/pie.php);
+
+
+    /*    -webkit-border-radius: 3px 0 3px 3px;
+        -moz-border-radius: 3px 0 3px 3px;
+        border-radius: 3px 0 3px 3px;
+        top: 37px;
+        left: 0px;
+        z-index: -1;
+        display: none;  
+        text-align: center;
+        padding-top: 5px;*/
+}
+
+#user-account-login-menu-wrapper li a {
+    /*    -webkit-border-radius: 3px 0 3px 3px;
+        -moz-border-radius: 3px 0 3px 3px;
+        border-radius: 3px 0 3px 3px;    
+        margin: 2px 5px 2px 5px !important;
+        behavior: url(/plugins/pie.php);*/
+}
+
+#user-account-login-menu-wrapper li a:hover {
+    color: #117070 !important;
+    /*    background: rgba(255, 255, 255, 0.5);
+        -pie-background: rgba(255, 255, 255, 0.5);
+        behavior: url(/plugins/pie.php);*/
+}
+
+form .fieldInput span.ajaxgif {
+    display: block;
+    width: 33px;
+    height: 25px;
+    position: absolute;
+    right: 10px;
+    top: 4px;    
+}
+
+div.article-list-wrapper article.business-user{
+    border: 1px #bf0000 solid;
+    background: rgba(216,216,216,0.3);
+}
+
+section.main .main-wrapper .clearfix {
+    background: none;
+}
+
+section.main .main-wrapper:before,
+section.main .main-wrapper:after {
+    width: 0 !important;
+}
+section.main .main-wrapper:before {
+    background: none !important;
+}
+
+section.main #profile_left_menu {
+    width: 20%;
+    float: left;
+}
+
+section.main .profile_right_content {
+    width: 80%;
+    float: left;
+}
+
+
+.profile_right_content #map_canvas
+{
+    height:250px;
+    width:100%;
+    float:left;
+    border: 1px solid black;
+}
+
+div#map_loc {
+    width: 50%;
+    margin: 0 auto;
+}
+
+div.map_wrapper {
+    width:100%;
+    float:left;    
+    margin-top:20px;    
+}
+
+.pin_button {
+    clear: both;
+    text-align: center;
+}
+
+.pin_button a.button {
+    padding: 0;
+}
+
+
+div.form-error {
+    color: red !important;
+}
+
+#signup-wrapper {
+    position: relative;
+}
+
+div.loginform-ext {
+    display: block;
+    width: 400px;
+    margin: 10px auto;
+}
+
+div.loginform-ext .fb_btn {
+    background: #5F78AB !important;
+}
+
+div.loginform-ext .tt_btn {
+    background: #a0e7eb !important;
+}

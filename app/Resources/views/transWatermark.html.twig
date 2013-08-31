@@ -1,0 +1,7 @@
+
+{% block form_row %}
+{% spaceless %}
+   {{ form_label(form) }}
+   {{ form_widget(form, { 'attr': {'watermark': form.get('attr')['watermark'] | trans } }) }}
+{% endspaceless %}
+{% endblock %}

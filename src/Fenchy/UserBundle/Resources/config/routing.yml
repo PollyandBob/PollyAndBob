@@ -1,0 +1,147 @@
+fenchy_login_facebook:
+    pattern: /user/signin/facebook
+    defaults: { _controller: UserBundle:Security:loginFacebook }
+    requirements:
+        _method: POST
+
+fenchy_facebook_login_check:
+    pattern: /facebook/login_check
+    defaults: { _controller: UserBundle:Facebook:loginCheck }
+      
+fenchy_facebook_login_finalize:
+    pattern: /facebook/login/finalize
+    defaults: { _controller: UserBundle:Facebook:finalize }
+
+fenchy_connect_facebook:
+    pattern: /user/connect/facebook
+    defaults: { _controller: UserBundle:Facebook:connect }
+    requirements:
+        _method: POST
+
+fenchy_disconnect_facebook:
+    pattern: /user/disconnect/facebook
+    defaults: { _controller: UserBundle:Facebook:disconnect }
+    requirements:
+        _method: GET
+
+fenchy_addtimeline_facebook:
+    pattern: /user/addtimeline/facebook
+    defaults: { _controller: UserBundle:Facebook:addTimeline }  
+    requirements: 
+        _method: POST
+
+fenchy_disconnect_timeline_facebook:
+    pattern: /user/disconnect/fbtimeline
+    defaults: { _controller: UserBundle:Facebook:disconnectTimeline}
+    requirements:
+        _method: GET
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /user/profile
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /user/settings
+    
+fenchy_user_reset_password:
+    pattern:  /reset-password
+    defaults: { _controller: UserBundle:Resetting:request }
+
+reg_token_expired:
+    pattern:  /expired
+    defaults: { _controller: UserBundle:Default:tokenExpired }
+    
+#redirect after password resetting action
+fos_user_profile_show:
+  pattern:  /user/neighbours
+  defaults: { _controller: FenchyRegularUserBundle:Neighbours:index }
+  
+connect_twitter:
+    pattern: /connect/twitter
+    defaults: { _controller: UserBundle:Twitter:connect }
+    
+disconnect_twitter:
+    pattern: /disconnect/twitter
+    defaults: { _controller: UserBundle:Twitter:disconnect }
+    
+fenchy_twitter_oauth:
+    pattern:  /twitter
+    defaults: { _controller: UserBundle:Twitter:index }
+
+fenchy_twitter_login:
+    pattern: /twitter/login
+    defaults: { _controller: UserBundle:Twitter:login }
+    requirements:
+      _method: GET
+      
+fenchy_twitter_login_check:
+    pattern: /twitter/login_check
+    defaults: { _controller: UserBundle:Twitter:loginCheck }
+    requirements:
+      _method: GET
+      
+fenchy_twitter_login_finalize:
+    pattern: /twitter/login/finalize
+    defaults: { _controller: UserBundle:Twitter:finalize }
+  
+fos_user_registration_confirm:
+  pattern: /confirm/{token}
+  defaults: { _controller: UserBundle:Default:confirm, token: null }
+  requirements:
+    _method: GET
+    
+fos_user_registration_confirm_finish:
+  pattern: /confirm/{token}
+  defaults: { _controller: FOSUserBundle:Registration:confirm }
+  requirements:
+    _method: GET
+    
+fos_user_resetting_reset:
+  pattern: /reset/{token}
+  defaults: { _controller:UserBundle:Resetting:reset }
+  requirements:
+    _method: GET|POST
+  
+fos_user_resseting_success:
+  pattern:  /reset-password-success
+  defaults: { _controller: UserBundle:Resetting:success }
+
+fenchy_user_friend:
+    pattern:  /user/friend
+    defaults: { _controller: UserBundle:Friend:index }
+        
+fenchy_user_friend_send_success:
+    pattern:  /user/friend/send-success
+    defaults: { _controller: UserBundle:Friend:sendSuccess }  
+    
+fenchy_user_friend_new_email:
+    pattern:  /user/friend/new-email
+    defaults: { _controller: UserBundle:Friend:newEmail }
+
+fenchy_user_friend_facebook:
+    pattern:  /user/friend/facebook
+    defaults: { _controller: UserBundle:Friend:facebook }
+    
+fenchy_user_unsubscribe:
+    pattern:  /user/unsubscribe/{hashed_email}
+    defaults: { _controller: UserBundle:Default:unsubscribe, hashed_email:null }    
+
+fenchy_user_login:
+    pattern: /user/login
+    defaults: { _controller: UserBundle:Security:loginExtended }
+    
+fenchy_user_widget_test:
+    pattern:  /user/widget/test
+    defaults: { _controller: UserBundle:Widgets:test }

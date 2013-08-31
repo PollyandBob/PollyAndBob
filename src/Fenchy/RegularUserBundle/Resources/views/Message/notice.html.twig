@@ -1,0 +1,39 @@
+{% extends 'FenchyRegularUserBundle::messages.html.twig' %}
+{% form_theme form 'FenchyMessageBundle::form.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/frontend/notice.css') }}" type="text/css" />
+{% endblock %}
+
+{% block message_back %}
+    <a href="{{ path('fenchy_regular_user_notice', {'id':notice.id}) }}">{{ 'btn.back'|trans }}</a>
+    <div class="clear"></div>
+{% endblock %}
+
+{% block message_content %}
+    <div id="notice-content">
+        <div class="notice">
+            <div class="notice-left">
+                <img src="{{ notice.gallery.mainImage }}"/>
+            </div>
+            <div class="notice-right">
+                <a href="{{ url('fenchy_regular_user_notice', {'id':notice.id}) }}">
+                    <div class="title">{{ notice.title }}</div>
+                </a>
+                <div class="start">{{ notice.startDate|date('d.m.Y') }}</div>
+                <p class="description">{{ notice.content }}</p>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    
+    <form action="{{ path('fenchy_regular_user_message_notice_send', {'id':notice.id}) }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        {{ form_rest(form) }}
+
+        <input type="submit" value="{{ 'main.send'|trans }}" />
+    </form>
+{% endblock %}
+    

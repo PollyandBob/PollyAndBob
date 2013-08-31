@@ -1,0 +1,23 @@
+{% extends 'FenchyRegularUserBundle:Settings:layout.html.twig' %}
+{% form_theme form '::tableFormWithoutSubmit.html.twig' %}
+
+
+{% block content %}
+<div class="rounded">
+    <div id="profile_left_menu">
+        {% include 'FenchyRegularUserBundle:Settings:menu.html.twig' %}
+    </div>
+    <div id="settings_loc">
+        <form action="{{ path('fenchy_regular_user_settings_general') }}" method="post" {{ form_enctype(form) }} class="course-form">
+
+            {{ form_widget(form) }}
+            <br />
+            <input type="submit" value="{{ 'main.save'|trans }}"/></td>
+            <a href="{{ url('fenchy_regular_user_settings_general_changepasword') }}" class="button1"><nobr>{{ 'regularuser.change_password'|trans }}</nobr></a></td>
+            <a href="{{ url('fenchy_regular_user_settings_general_delete')}}" class="button1"><nobr>{{ 'regularuser.delete_account'|trans }}</nobr></a></td>
+        </form>
+    </div>
+</div>
+<div class="clear"></div>
+{% endblock %}
+    

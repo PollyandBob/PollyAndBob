@@ -1,0 +1,149 @@
+group:
+  edit:
+    submit: Update group
+
+  show:
+    name: Group name
+
+  new:
+    submit: Create group
+
+  flash:
+    updated: The group has been updated
+
+    created: The group has been created
+
+    deleted: The group has been deleted
+"Bad credentials": Email or password were not correct
+security:
+  login:
+    username: "Email:"
+
+    password: "Password:"
+
+    remember_me: Remember me
+
+    submit: Login
+profile:
+  show:
+    username: Username
+
+    email: Email
+
+  edit:
+    submit: Update
+
+  flash:
+    updated: The profile has been updated
+change_password:
+  submit: Change password
+
+  flash:
+    success: The password has been changed
+registration:
+  check_email: An email has been sent to %email%. It contains an activation link you must click to activate your account.
+
+  confirmed: Congrats %username%, your account is now activated.
+
+  back: Back to the originating page.
+
+  submit: Sign up
+
+  flash:
+    user_created: The user has been created successfully
+
+  email:
+    subject: Complete your registration
+
+    message:
+      1: Complete your registration.
+
+      button: Complete registration
+
+      3:
+        html: If this button doesn't work, please copy the following link and paste it into your browser.
+
+        txt: "Please copy the following link and paste it into your browser:"
+
+      4: You have not registered ? Please ignore this mail. Probably someone used your email address accidentally.
+resetting:
+  password_already_requested: The password for this user has already been requested within the last 24 hours.
+
+  check_email: An email has been sent to %email%. It contains a link you must click to reset your password.
+
+  request:
+    invalid_username: Email address "%username%" does not exist.
+
+    username: "Email"
+
+    submit: Reset
+
+  reset:
+    submit: Submit
+
+  flash:
+    success: The password has been reset successfully
+
+  email:
+    subject: Reset Password
+
+  message:
+    1: Hi %username%,
+
+    2: "To change your Fenchy password, please click on the following link:"
+
+    3: You did not ask for changing your Fenchy password? Please ignore this mail.
+
+    4: Probably somebody used your e-mail address accidentally.
+
+    5: Thank you,
+
+    6: Your Fenchy team
+email:
+  message:
+    help: Need help? Email us at julia@fenchy.com
+
+    address: Fenchy GmbH, Marchlewskistr. 16, D-10243 Berlin
+layout:
+  logout: Logout
+
+  login: Login
+
+  register: Register
+
+  logged_in_as: Logged in as %username%
+form:
+  group_name: "Group name:"
+
+  username: "Username:"
+
+  email: "Email:"
+
+  current_password: "Current Password:"
+
+  password: "Password:"
+
+  password_confirmation: "Repeat password:"
+
+  new_password: "New password"
+
+  new_password_confirmation: "Confirm"
+
+  validation:
+    invalid_password: The Password is invalid
+
+    invalid_password2: The Password confirmation is invalid
+
+    invalid_pass_match: The Passwords does not match
+
+    invalid_email: The provided email is invalid
+invitation:
+  email:
+    button_name: "Accept"
+
+    message:
+      1: "%username% has been using Fenchy and wants you to join. Fenchy is a local network that connects you with your neighborhood. It helps you finding the right people, their events and the useful goods near you."
+
+      2: If you prefer not to receive emails like this from Fenchy, you may
+
+      3: unsubscribe.

@@ -1,0 +1,99 @@
+jms_security_extra:
+    secure_all_services: false
+    expressions: true
+
+security:
+    always_authenticate_before_granting: true
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+        FOS\UserBundle\Model\UserInterface: sha512
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        in_memory:
+            memory:
+                users:
+                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+        fos_userbundle:
+            id: fos_user.user_provider.username_email
+        my_fos_twitter_provider:
+            id: my.twitter.user
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        login:
+            pattern:  ^/demo/secured/login$
+            security: false
+
+        secured_area:
+            pattern:    ^/demo/secured/
+            form_login:
+                check_path: /demo/secured/login_check
+                login_path: /demo/secured/login
+            logout:
+                path:   /demo/secured/logout
+                target: /demo/
+            #anonymous: ~
+            #http_basic:
+            #    realm: "Secured Demo Area"
+        main:
+            pattern: ^/
+            form_login:
+                login_path: /user/login
+                check_path: /login_check              
+                provider: fos_userbundle
+                csrf_provider: form.csrf_provider
+                default_target_path: /listings
+            logout:       
+                target: /indexv2
+            anonymous:    true
+        secured:
+            pattern:   /secured/.*
+            fos_twitter: true
+        public:
+            pattern:   /.*
+            anonymous: true
+            fos_twitter: true
+            logout: true
+            pattern:  /
+            fos_twitter:
+                login_path: /user/login
+                check_path: /login_check
+                use_twitter_anywhere: true
+                provider: my_fos_twitter_provider
+
+    access_control:
+        - { path: ^/user/chooselang/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/signin/facebook, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/emailconfirm/.+, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/emailabort/.+, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/userprofile/*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/reviewslist, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/listingslist, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        #- { path: ^/_internal/secure, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
+        #- { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/connect, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/user/settings, role: ROLE_USER }
+        - { path: ^/user/create_listing, role: ROLE_USER }
+        - { path: ^/user/chooselang/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/messages, role: ROLE_USER }
+        - { path: ^/user/, role: ROLE_FULL_USER }
+        - { path: ^/businessuser/, role: ROLE_BUSINESSUSER }
+        - { path: /.*, role: [IS_AUTHENTICATED_ANONYMOUSLY] }
+        
+    role_hierarchy:
+        ROLE_FULL_USER: ROLE_USER
+        ROLE_ADMIN:       ROLE_FULL_USER
+        ROLE_SUPER_ADMIN: ROLE_ADMIN

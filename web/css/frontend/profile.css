@@ -1,0 +1,507 @@
+/*Top menu */
+#content #profile_top_menu{
+    min-height:40px;
+    margin:5px;
+    margin-left:212px;
+}
+
+#content #profile_top_menu a
+{
+    padding:10px;
+    margin:7px;
+    margin-top:20px;
+    margin-bottom:12px;
+    border:1px solid #aaaaaa;
+    color:#343434;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    font-size: 18px;
+    font-family: MYRIADPRO-SEMIBOLD,serif;
+    text-align: center;
+    display: inline-block;
+    min-width: 94px;
+}
+
+/*Left menu */
+#content #profile_left_menu
+{
+    width:20%;
+    float:left;
+    margin:5px;
+    padding:5px;
+}
+
+#content #profile_left_menu a:first-child{
+margin-top:15px;
+}
+#content #profile_left_menu a,
+#content #profile_left_menu #profile_image
+{
+    display:block;
+    width:118px;
+    margin:auto;
+    margin-bottom:10px;
+    padding:5px;
+    border:1px solid #aaaaaa;
+    color:#343434;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#content #profile_left_menu a.profile_img_link{
+    padding:0px;
+    margin:0px;
+    border:0;
+}
+
+#content #profile_left_menu #profile_image img{
+    width:118px;
+    height:118px;
+}
+
+
+#content #profile_left_menu a{
+    font-size:14px;
+}
+
+#content #profile_left_menu #profile_image{
+    min-width:118px;
+    min-height:120px;
+    margin-top: 0px;
+
+}
+
+#profile_options
+{
+    margin-top: -30px;    
+}
+
+#content #profile_left_menu #profile_round
+{
+    font-family: MYRIADPRO-REGULAR, sans-serif;
+    background: #149a9a;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+    text-align: center;
+    color:white;
+    width: 35px;
+    height: 35px;
+    margin:auto;
+    margin-right:25px;
+    position:relative;
+    top:-35px;
+    left:0px;
+    font-size:14px;
+}
+#content #profile_left_menu #profile_round div{
+    padding:9px;
+}
+
+#content #profile_left_menu a:hover
+{
+    background: #eeeeee;
+}
+#content #profile_top_menu a:hover
+{
+    background: #009999;
+    color:white;
+}
+
+#content .rounded {
+    
+    background:white;
+    float:left;
+    border:1px solid #999999;
+    text-align: center;
+    padding-bottom:5px;
+    padding-left:5px;
+    padding-top:5px;
+}
+#content > .rounded {
+    
+    margin:auto;
+    margin-top: 10px;
+    margin-bottom: 50px;
+    padding: 15px;
+    width: 74%;
+}
+
+#content .profile_summary {
+    float:left;
+    width:75%;
+    min-height:100px;
+}
+
+#content .profile_summary ul{
+    margin-top: 10px;
+    padding-left:5px;
+    font-size:14px;
+}
+
+#content .profile_summary li{
+    float:left;
+    margin: 0 1em 0 0;
+    font-family: MYRIADPRO-REGULAR,serif;
+    font-size: 16px;
+}
+
+#content .profile_summary li a{
+    color: inherit;
+}
+
+#content .profile_summary h2 {
+    font-weight: bold;
+    border-bottom: 1px solid #999999;
+    margin-left:0px;
+    padding-left:5px;
+    padding-bottom: 5px;
+    font-size: 24px;
+    font-family: MYRIADPRO-BOLDCOND,serif;
+}
+
+
+/* profile messages */
+
+
+#profile_messages .message{
+    overflow:auto;
+    min-height:100px;
+   /* text-align: left;*/
+    border-top: 1px solid #999999;
+    padding-top: 15px;
+    margin-top: 10px;
+}
+
+#profile_messages .message_image{
+    float:left;
+}
+
+#profile_messages .message_image img{
+    width: 75px;
+    height: 75px;
+}
+
+#profile_messages .message_right{
+    /*float:right;*/
+ display: inline-block;
+ width: 86%;    
+ text-align: left;
+ margin-left: 20px;
+}
+
+#profile_messages .message .message_header{
+    margin-bottom: 15px;
+}
+
+#profile_messages .message h2{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#profile_messages .message h2 span{
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#profile_messages .message h3 {
+    font-style: italic;
+}
+
+select.message_type {
+    float:left;
+}
+
+#content #friend  .tw_fb_logins{
+    width: 68%;
+    margin-top:10px;
+}
+
+#content #friend {
+    margin: 0 auto;
+    width: 55%;
+}
+
+#content #friend li {
+    float:left;
+    font-family: MYRIADPRO-BOLDCOND,serif;
+    font-size: 22px;    
+}
+
+#content #friend li.right {
+    float:right;
+}
+
+#content #friend img {
+    margin-right: 5px;
+    vertical-align:middle;
+}
+
+#content #friend a.header {
+    border: 1px solid #AAAAAA;
+    border-radius: 3px 3px 3px 3px;
+    color: #fff;
+    background: #333333;
+    display: block;
+    margin: 15px auto 10px;
+    margin-right:25px;
+    padding: 5px;
+    width:200px;
+    text-align: center;
+    font-size: 20px;
+    font-family: MYRIADPRO-BOLDCOND,serif;    
+}
+
+#content #friend a.invite_button {
+    border: 1px solid #AAAAAA;
+    border-radius: 3px 3px 3px 3px;
+    color: #343434;
+    display: block;
+    margin: 15px auto 10px;
+    padding: 5px;
+    text-align: center;
+    width: 118px;
+    font-family: MYRIADPRO-BOLDCOND,serif;
+    font-size: 20px;
+}
+
+#content #friend ul.header {
+    margin-bottom: 25px;
+    overflow: auto;
+}
+
+#content #friend ul.row {
+    
+    margin-bottom: 25px;
+    overflow: auto;
+}
+
+#content #friend ul.row li {
+    font-size:18px;
+    font-family: MYRIADPRO-BOLDCOND,serif;
+}
+
+#content #friend ul.row li div{
+    float:left;
+}
+#content #friend ul.row li div.user_name{
+    width: 150px;
+    text-align: left;
+}
+
+#content #friend ul.row li div.invite_button{
+    margin-left:32px;
+    margin-top:-15px;
+}
+
+#content #friend .inv_email_block,
+#content #friend .inv_email_block_error{
+    width:90%;
+    margin:5px;
+    margin-bottom:10px;
+}
+
+#content #friend .inv_email_block input,
+#content #friend .inv_email_block textarea{
+    width: 100%;
+    margin:0px;
+}
+
+.inv_email_block_error ul li{
+    color:red;
+    padding-bottom:10px;
+    width:100%;
+}
+
+.right_space{
+    margin-right: 10px;
+}
+#aboutMe-left {
+    float: left;
+    width:69%;
+}
+#aboutMe-right {
+    float:left;
+    width: 30%;
+}
+
+#aboutMe-left textarea, #aboutMe-left .description {
+    width: 90%;
+    height: 300px;
+    margin-bottom: 10px;
+    text-align:justify;
+    padding:10px;
+}
+#aboutMe-left input[type="text"], #aboutMe-left .link, #aboutMe-left .title {
+    width: 90%;
+    margin-bottom: 10px;
+    -ms-word-break: break-all;
+    word-wrap: break-word;
+}
+#aboutMe-left .link a{
+    color:#3780e6;
+}
+#aboutMe-right iframe {
+    width: 100%;
+    height: 300px;
+}
+#interests-activities {
+    width: 100%;
+    clear: both;
+}
+#interests-activities h3 {
+    font-weight: bold;
+    text-align: left;
+    padding-top: 20px;
+    margin-bottom:10px;
+}
+#interests-activities .rounded {
+    display: inline-block;
+    margin: 7px;
+    padding: 5px 7px;
+}
+#interests-and-activities-left {
+    float: left;
+    width: 100%;
+    height: 500px
+}
+#interests-and-activities-left textarea,
+#interests-and-activities-left input[type="text"] {
+    width: 60%;
+    margin-bottom: 7px;
+    float:left;
+}
+#interests-and-activities-left select {
+    float: right;
+}
+#interests-and-activities-left input[type="submit"] {
+    clear: both;
+    float: left;
+}
+#interests-and-activities-left textarea {
+    height: 300px;
+}
+#interests-and-activities-right {
+    float: right;
+    width: 30%;
+    height: 320px;
+}
+#interests-and-activities-right #gallery-frame {
+    height: 300px;
+    width: 225px;
+}
+interests-and-activities-left form {
+    float: left;
+}
+
+/*My profile*/
+#my_profile{
+    text-align: justify;
+}
+
+#my_profile .notice-right{
+    width:85%;
+    padding-left:20px;
+}
+
+#my_profile .message_image img{
+    width:75px;
+    height:75px;
+}
+
+#my_profile #contact{
+    text-align: center;
+}
+
+#my_profile #contact input[type='checkbox']{
+    margin:10px;
+}
+
+#my_profile .notice-right a .title{
+    width:80%;
+    float:left;
+}
+
+#my_profile #contact .tw_fb_logins{
+    margin-top:0px;
+}
+
+/*Delete actions*/
+#my_profile .notice-right a.deletebutton{
+    width:60px;
+    color:#343434;
+    padding:5px;
+    float:left;
+    margin-left:50px;
+    margin-top:-5px;
+    border:1px solid #c5c5c5;
+    text-align:center;
+    font-family: MYRIADPRO-SEMIBOLD,serif;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+	
+}
+
+#my_profile .notice-right a.deletebutton:hover,
+#my_profile .delete_options a:hover{
+	background: #eeeeee
+}
+
+#my_profile .delete_options a:hover,
+#my_profile .delete_options
+{
+    width:50%;
+    margin:auto;
+    margin-top:10px;
+    text-align:center;
+}
+
+#my_profile .delete_options a{
+	color: black;
+	-moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+	border:1px solid #c5c5c5;
+    text-align:center;
+	font-family: MYRIADPRO-BOLD,serif;
+	padding:2px;
+	padding-right:8px;
+	padding-left:8px;
+}
+
+#my_profile .user_to_delete{
+	font-family: MYRIADPRO-BOLD,serif;
+}
+
+#my_profile .delete_msg{
+    text-align: center;
+}
+
+#my_profile .circle,
+#profile_messages .circle{
+    background: #149A9A;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    position:relative;
+    top:-16px;
+    left:57px;
+    font-size:13px;
+    
+}
+
+#my_profile .circle .circle_content,
+#profile_messages .circle .circle_content{
+    color:white;
+    padding-top:9px;
+    padding-left:1px;
+}

@@ -1,0 +1,540 @@
+regularuser:
+  leave_a_review: Bewertung verfassen
+
+  edit_review: Bewertung bearbeiten
+
+  load_more: Referenz bearbeiten
+
+  positives: Positiv
+
+  negatives: Negativ
+
+  positive: Positiv
+
+  negative: Negativ
+
+  all_trust_points: Reputation:
+
+  dont_ask: Diese Frage nicht nochmal stellen.
+
+  disable_connect: Diese Frage nicht nochmal stellen.
+
+  no_contacts: Du hast noch keine Kontakte auf Fenchy. Verbinde einfach deinen Account, um Freunde aus Facebook einzuladen.
+
+  references: Bewertungen
+
+  reviews_: Bewertungen
+
+  contacts: Kontakte
+
+  completed: Beendet
+
+  facebook_friends: Facebook Freunde
+
+  email: Email
+
+  invite: Zu Fenchy einladen
+
+  join_to_fenchy: Fenchy beitreten
+
+  would_like_to_invite_you: möchte dich als Kontakt hinzufügen. Folge einfach dem Link und trete Fenchy bei.
+
+  unexpected_problem_facebook: Bitte entschuldige! Ein unerwarteter Fehler beim Erstellen der Verbindung zu Facebook ist aufgetreten. Bitte versuche es noch einmal.
+
+  all: Alle
+
+  unread: Ungelesen
+
+  unreplied: Unbeantwortet
+
+  sent: Gesendet
+
+  send_new_message: Nachricht senden
+
+  change_password: Passwort ändern
+
+  delete_account: Account löschen
+
+  message:
+    sent: Deine Nachricht wurde gesendet!
+
+    deleted: Die Nachricht wurde gelöscht.
+
+    about_pre_title: "Über:"
+
+    no_messages: Du hast noch keine Nachrichten erhalten.
+
+    check_any_message: Bitte wähle mindestens eine Nachricht aus.
+
+    messages_has_been_deleted: Die Nachrichten wurden gelöscht.
+
+    to: zu
+
+    new_message: Neue Nachricht
+
+    delete_selected: Lösche die ausgewählten Nachrichten
+
+    sender: Von
+
+    subject: Betreff
+
+    date: Datum
+
+    read: Alle Nachrichten wurden als gelesen markiert.
+
+    mark_all_as_read: Alle Nachrichten als gelesen markieren
+
+    refresh: Neu laden
+
+    show_dd: Zeige
+
+    message_center: Nachrichten
+
+  save: Speichern
+
+  cancel: Abbrechen
+
+  add: Hinzufügen
+
+  edit: Bearbeiten
+
+  delete: Löschen
+
+  show: Zeigen
+
+  about_me: Über mich
+
+  my_community_ponts: MY COMMUNITY POINTS
+  
+  my_neighbours: MY NEIGHBOURS
+  
+  my_location: MY LOCATION
+  
+  find_me_by_what_i_like: Find Me by what i like
+
+  i_like: I Like
+
+  hot_places: Hot Places in the neighborhood
+
+  promoted_initiaives: Promoted Initiatives in the
+
+  my_languages: My Languages
+
+  not_shown_information: Not shown information
+
+  neighbours: Neighbors
+  
+  total_community_points: TOTAL COMUNITY POINTS
+  
+  profile_completion: PROFILE COMPLETION
+  
+  my_neighbors: MY NEIGHBORS
+  
+  listings_posted: LISTINGS POSTED
+  
+  neighbors_served: NEIGHBORS SERVED
+  
+  reviews_received: REVIEWES RECEIVED
+  
+  completed_activities: COMPLETED ACTIVITIES
+
+  written_reviews: WRITTEN REVIEWS
+
+  invited_and_registered_users: INVITED AND REGISTERED USERS
+  
+  shareholder: SHAREHOLDER
+  
+  location_verified: LOCATION VERIFIED
+  
+  passport_verified: PASSPORT VERIFIED
+  
+  fill_my_profile_now: FILL MY PROFILE NOW!
+  find_new_neighbours_now: FIND NEW NEIGHBOURS NOW!
+  create_listing: CREATE LISTINGS!
+  uptodate_your_listings_now: UPTODATE_YOUR_LISTINGS_NOW!
+  ask_for_reviews: ASK FOR REVIEWS!
+  search_new_activity: SEARCH NEW ACIVITY!
+  write_review_now: WRITE REVIEW NOW!
+  tell_friend_about_pollyandbob_now: TELL A FRIEND ABOUT POLLY&BOB NOW!
+  become_shareholder_now: BECOME SHAREHOLDER NOW!
+  verify_your_location_now: VERIFY YOUR LOCATION NOW!
+  verify_your_passport_now: VERYFY YOUR PASSPORT NOW!
+  
+  neighbours: Nachbarn
+
+  disconnect_twitter: Verbindung zu Twitter trennen
+
+  connect_to_twitter: Mit Twitter verbinden
+
+  connect_to_facebook: Mit Facebook verbinden
+
+  disconnect_facebook: Verbindung zu Facebook trennen
+
+  add_to_timeline: Auf Timeline posten
+
+  disconnect_timeline: Verbindung zur Timeline trennen
+
+  only_jpg_png_maximum2m: bitte nur jpg oder png Dateien verwenden.
+
+  put_pin: Pin auf auf gewünschten Standort setzen.
+
+  location: Dein genauer Standort
+
+  printable_location_description: Wird allen Nachbarn angezeigt.
+
+  printable_location: Deine Nachbarschaft
+
+  general: Allgemein
+
+  notification: Benachrichtigung
+
+  image: Bild
+
+  connect: Verbinden
+
+  submit: Senden
+
+  ivitation_to_fenchy_sent: Eine Einladung zu Fenchy wurde gesendet!
+
+  no_search_results_for_criteria: Wir konnten zu deiner Suchanfrage keine passenden Ergebnisse finden.
+
+  about_him: Über
+
+  put_on_fb: Auf Timeline veröffentlichen.
+
+  filter_notSelected: Filter
+
+  category_notSelected: Kategorie
+
+  about_you: Beschreibung
+
+  link_to_your_page: Link auf deine Seite
+
+  postcode: Postleitzahl
+
+  your_postal_code: Deine Postleitzahl
+
+  city: Stadt
+
+  your_city: Deine Stadt
+
+  district: Stadtteil
+
+  your_district: Dein Stadtteil
+
+  street: Straße
+
+  your_street: Deine Straße
+
+  country: Land
+
+  your_country: Dein Land
+
+  firstname: Vorname:
+
+  your_firstname: Dein Vorname
+
+  lastname: Nachnahme
+
+  your_lastname: Dein Nachname
+
+  gender: Geschlecht:
+
+  age: Alter:
+
+  your_age: Dein Alter
+
+  friends:
+    exists: %friend% ist bereits in deiner Kontaktliste.
+
+    not: %friend% ist noch nicht in deiner Kontaktliste.
+
+    invite: Kontaktanfrage
+
+    invitation:
+      title: Offene Kontaktanfragen.
+
+      no: Du hast keine offenen Kontaktanfragen.
+
+      send: Kontaktanfrage wurde versendet.
+
+      already: %friend% wurde bereits von dir eingeladen.
+
+      accept: Annehmen
+
+      reject: Ablehnen
+
+      rejected: Du hast die Kontaktanfrage von %friend% abgelehnt.
+
+      invitefb: Freunde einladen
+
+    contacts:
+      no: In deiner Kontaktliste befinden sich noch keine Kontakte.
+
+      no_other: In dieser Kontaktliste befinden sich noch keine Kontakte.
+
+      title: Kontaktliste
+
+    delete:
+      1: Willst du %user% wirklich aus deiner Kontaktliste löschen?
+
+    added: %friend% ist jetzt in deiner Kontaktliste.
+
+    deleted: %friend% wurde aus deiner Kontaktliste entfernt.
+
+  interval: Wie häufig:
+
+  neighbours_filter:
+    today: Heute
+
+    contacts: Kontakte
+
+    these_days: 
+
+  notice:
+    deleted: Das Listing wurde gelöscht.
+
+  filter:
+    yesterday: Gestern
+
+    today: Heute
+
+    tomorrow: Morgen
+
+  not_shown_publicy: Dein Standort wird nicht öffentlich angezeigt.
+
+  start_fenchy: Starte Fenchy
+
+  locationpopup:
+    required_confirmation_message: Account bestätigen
+
+    required_location_message: 
+
+  languages: Gesprochene Sprache (n)
+
+  your_languages: Gesprochene Sprache (n)
+
+  about_me_placeholder: Kurze Beschreibung über dich selbst.
+
+  change_your_password: Passwort ändern
+
+  delete_your_account: Passwort löschen
+
+  social:
+    connected: Verbunden
+
+    notconnected: Nicht verbunden
+
+    connect: Verbinden
+
+    disconnect: Trennen
+
+    publish_facebook: Listings auf Facebook veröffentlichen
+
+    invite_facebook: Lade deine Freunde zu Fenchy ein.
+
+  additional_info: Zusätzliche Infos
+
+  validation:
+    invalid__firstname: Dein Vorname enthält ungültige Satzzeichen.
+
+  settings_delete: 
+
+  end_of_list_msg: 
+
+  end_of_notice_list_msg: 
+
+  ref_trust_points: 
+
+  con_trust_points: 
+
+  activ_trust_points: 
+
+  reviews_tab: Bewertungen
+
+  listings_tab: Listings
+
+  reviews_of_others_tab: Verfasste Bewertungen
+
+  about: Über
+
+  read_all_messages: Als gelesen markieren
+
+  settings: Einstellungen
+
+  interests_and_activities: 
+
+  a_place_near_you: 
+
+  interest_or_activity:
+    deleted: 
+
+  edit_I_or_A: 
+
+  reviews:
+    email:
+      subject: %username% hat eine Bewertung geschrieben
+
+      1: Hallo %username%,
+
+      2: "%username% hat eine Bewertung zu deinem Listing %listing% geschrieben. Um darauf zu antworten, folge einfach dem folgenden Link:"
+
+    form:
+      title: Titel des Listings
+
+      text: Dein Text
+emailchange:
+  flash:
+    change_requested: Um die Änderung deiner E-Mail-Adresse zu bestätigen, folge bitte dem Link, den wir soeben an deine neue E-mail-Addresse versendet haben.
+
+    request_denied: Du hast bereits innerhalb der letzten %ttlh% Stunden eine Anfrage zur ?änderung deiner E-mail-Addresse gesendet. Bitte best?ñtige den Link um deine E-Mail-Addresse zu ?ñndern. Bitte pr??fe auch deinen Spamordner.
+
+    token_expired: Die Änderung deiner E-Mail-Adresse wurde vor mehr als %ttlh% Stunden angefordert und ist leider abgelaufen. Bitte sende eine neue Anfrage zur Änderung deiner E-Mail-Adresse.
+
+    change_success: Du hast deine E-Mail-Adresse erfolgreich geändert.
+
+    change_aborted: Die Vorgang zur Änderung deiner E-Mail-Adresse wurde abgebrochen.
+
+  email:
+    subject: E-Mail-Adresse ändern
+
+    1: Hallo %username%,
+
+    2: um deine Fenchy E-Mail-Adresse zu ändern, folge bitte diesem Link:
+
+    3: E-Mail-Adresse ändern
+
+    4: Falls dieser Link nicht funktioniert, kopiere bitte die URL und füge sie in die Addresszeile deines Browsers ein.
+
+    6: Änderung der E-Mail-Addresse abbrechen.
+
+    7: oder kopiere den folgenden Link in die Adresszeile deines Browsers.
+
+    8: Du hast nicht die Änderung deiner Email-Addresse angefordert? Bitte ignoriere diese E-mail.
+
+    9: Wahrscheinlich hat jemand ausversehen deine E-Mail-Adresse verwendet.
+
+    10: Vielen Dank!
+
+    11: Dein Fenchy-Team
+
+    5: Um die Änderung deiner E-Mail-Adresse abzubrechen, folge bitte dem untenstehenden Link: 
+help: Dienste/Hilfe
+goods: Dinge
+events: Veranstaltung erstellen
+others: Sonstiges
+help_prefix: dein
+goods_prefix: dein
+events_prefix: deine
+others_prefix: dein
+offer: anbieten
+need: suchen
+listing:
+  create:
+    title: Listing erstellen
+
+    tab_title:
+      1: Kategorie
+
+      2: Details des Listings
+
+    1:
+      subtitle: Kategorie auswählen
+
+      description: Wähle die Kategorie, die dein Listing am besten beschreibt.
+
+    2:
+      subtitle: Über
+
+      description: Erzähle uns mehr über dein Listing.
+
+    start_date: Start
+
+    end_date: Ende
+
+  show:
+    tags: Tags
+
+    description: Beschreibung
+
+  edit:
+    title: Listing bearbeiten
+
+    back_to_management: Zurück zur Liste
+
+    flash_success: Die Änderungen wurden gespeichert.
+
+  manage_listings: Meine Listings
+
+  no: Du hast noch kein Listing erstellt.
+
+  delete:
+    msg: Möchtest du das Listing %notice% wirklich löschen?
+
+  manage:
+    flash:
+      delete: Das Listing wurde gelöscht.
+
+  category: Kategorie
+settings:
+  general:
+    name: Profilinformationen
+
+    profile_photo: Profilbild
+
+  location:
+    name: Standort
+
+    label: Dein Standort
+
+  emailnotifications:
+    name: E-Mail Benachrichtigungen
+
+  socialnetworks:
+    name: Soziale Netzwerke
+
+  account:
+    name: Account
+
+    delete_confirm_action: Bitte bestätige die Löschung deines Accounts. Nach der Löschung kann dein Account nicht wieder hergestellt werden.
+
+    change_password_name: Passwort deines Accounts ändern
+
+  flash:
+    data_saved: Die Profilinformationen wurden geändert.
+
+    form_errors: Ein Fehler ist aufgetreten. Bitte entschuldige.
+
+  locationpopup:
+    success: Danke für das Angeben deines Standorts.
+
+    name: Bitte gib deinen aktuellen Standort an.
+
+    description: Bitte teile uns deinen Standort mit, damit du die Suchfunktionen vollständig nutzen kannst.
+reputation:
+  title: Reputation
+
+  listings: Listings
+
+  positive_reviews: Positive Bewertungen
+
+  written_reviews: Verfasste Bewertungen
+
+  facebook: Facebook Connect
+
+  contacts: Kontakte
+
+  profile: Profil-Informationen
+member_since: Mitglied seit
+invitations:
+  email:
+    subject: %username% hat eine Kontaktanfrage gesendet.
+
+    1: Hallo %username%,
+
+    2: "%username% hat dir eine Kontaktanfrage auf Fenchy gesendet. Um die Anfrage zu bestätigen, folge einfach dem untenstehenden Link:"
+
+  buttons:
+    accept: Akzeptieren
+
+    reject: Ablehnen

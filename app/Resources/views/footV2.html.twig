@@ -1,0 +1,91 @@
+{# empty Twig template #}
+
+    <footer>
+        
+	        <div class="wrapper">
+	        	<ul>
+					<li><a href="http://www.blog.pollyandbob.com" target="_blank">{{ 'frontend.footer.blog.title'|trans }}</a></li>            
+	                <li><a href="http://blog.pollyandbob.com/story/" target="_blank">{{ 'frontend.footer.story.title'|trans }}</a></li>
+	                <li><a href="http://blog.pollyandbob.com/what-we-want/" target="_blank">{{ 'frontend.footer.what.title'|trans }}</a></li>
+	                <li><a href="http://blog.pollyandbob.com//get-shares/" target="_blank">{{ 'frontend.footer.shares.title'|trans }}</a></li>
+	                <li><a href="http://blog.pollyandbob.com/first-crowd/" target="_blank">{{ 'frontend.footer.firstcrowd.title'|trans }}</a></li>
+	                <li><a href="http://blog.pollyandbob.com/about/" target="_blank">{{ 'frontend.footer.about.title'|trans }}</a></li>
+	                <li><a href="http://blog.pollyandbob.com/imprint/" target="_blank">{{ 'main.imprint'|trans }}</a></li>
+	            	<li><a target="_blank" class="nomargin" href="https://www.facebook.com/pages/PollyBob/180213475475729?fref=ts">
+	            	<img src="{{ asset ('images/btn_fblike.png') }}" alt=""></a></li>
+	            </ul>
+	        </div>
+           
+{#         <div class="container clearfix">#}
+{#             <nav class="main clearfix">#}
+{#                 <ul>#}
+{#                     <li><a href="{{path('fenchy_frontend_about')}}">{{ 'main.about_us'|trans }}</a></li>#}
+{#                     <li><a href="{{path('fenchy_frontend_jobs')}}">{{ 'main.jobs'|trans }}</a></li>#}
+{#                     <li><a href={{path('fenchy_frontend_advertising')}}>{{ 'main.advertising'|trans }}</a></li>#}
+{#                     <li><a href={{path('fenchy_frontend_terms')}}>{{ 'main.terms'|trans }}</a></li>#}
+{#                     <li><a href={{path('fenchy_frontend_privacy')}}>{{ 'main.privacy'|trans }}</a></li>#}
+{#                     <li class="last"><a href={{path('fenchy_frontend_imprint')}}>{{ 'main.imprint'|trans }}</a></li>#}
+{#                 </ul>#}
+{#             </nav>#}
+{#             <div class="social-lang">#}
+{#                 <ul>#}
+{#                     <li class="soc_btn fb"><a href="#"><i>f</i></a></li>#}
+{#                     <li class="soc_btn tt"><a href="#"><i>t</i></a></li>                                    #}
+{#                     <li id="lang-menu" class="lang">                #}
+{#                         <ul class="clearfix">#}
+{#                             <li id="lang-menu-chosen">#}
+{#                                 <a href="#" id="choose-lang"><strong>#}
+{#                                             {% if app.request.locale == 'pl' %}#}
+{#                                                 {{ 'frontend.polski'|trans}}#}
+{#                                             {% elseif app.request.locale == 'en' %}#}
+{#                                                 {{ 'frontend.english'|trans}}#}
+{#                                             {% elseif app.request.locale == 'de' %}#}
+{#                                                 {{ 'frontend.deutsch'|trans}}#}
+{#                                             {% endif %}#}
+                                                
+{#                                             </strong>                                        #}
+{#                                     </a>#}
+{#                                     <i class="icon-caret-down"></i>#}
+{#                                     <i class="icon-caret-up"></i>#}
+{#                             </li>#}
+{#                         </ul>#}
+{#                     </li>                                    #}
+{#                 </ul>#}
+                    
+{#                 <div id="lang-menu-wrapper">#}
+{#                     <ul>#}
+{#                         {% if app.request.locale != 'en' %}#}
+{#                             <li class="en-flag">#}
+{#                                 <a href="{{ path('fenchy_regular_user_chooselang', {'locale': 'en'}) }}"><strong>{{ 'frontend.english'|trans}}</strong></a>#}
+{#                             </li>#}
+{#                         {% endif %}#}
+                            
+{#                         {% if app.request.locale != 'de' %}                            #}
+{#                         <li class="de-flag">#}
+{#                             <a href="{{ path('fenchy_regular_user_chooselang', {'locale': 'de'}) }}"><strong>{{ 'frontend.deutsch'|trans}}</strong></a>#}
+{#                         </li>#}
+{#                         {% endif %}#}
+                        
+{#                         {% if app.request.locale != 'pl' %}                        #}
+{#                         <li class="pl-flag">#}
+{#                             <a href="{{ path('fenchy_regular_user_chooselang', {'locale': 'pl'}) }}"><strong>{{ 'frontend.polski'|trans}}</strong></a>#}
+{#                         </li>#}
+{#                         {% endif %}                        #}
+                        
+{#                     </ul>#}
+{#                 </div>                    #}
+                    
+{#             </div>#}
+{#         </div>#}
+
+        <!-- container -->
+    </footer>
+    <!-- main -->
+    
+    {% if not app.user %}
+    <div id="signup-wrapper" class="loginform">
+        
+        {% render 'UserBundle:Registration:register' %}
+        
+    </div>
+    {% endif %}

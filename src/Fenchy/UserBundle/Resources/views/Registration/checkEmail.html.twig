@@ -1,0 +1,11 @@
+{% extends "UserBundle::registration.html.twig" %}
+    
+{% block registration_content %}
+    {% block fos_user_content %}
+    <div class="success msg-space">
+        <p>{{ 'registration.check_email'|trans({'%email%': user.email}, 'FOSUserBundle') }}</p>
+    </div>
+    {% endblock %}
+
+    <div class="main-page-link"><a href="{{ path('fenchy_frontend_indexv2') }}">{{'user.go_to_main_page'|trans}}</a></div>
+{% endblock %}

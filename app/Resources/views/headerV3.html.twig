@@ -1,0 +1,95 @@
+{# empty Twig template #}
+	<header>
+        <section class="wrapper">
+            <div class="left">
+                <a href="{{path('fenchy_frontend_indexv2')}}"><img width="44" alt="Polly&Bob" src="{{ absolute(asset('images/logo.png')) }}"></a>
+            </div>
+            
+            {% block tagline_content %}
+      			{% include '::searchBarV3.html.twig' %}                          
+			{% endblock %}
+            
+            {% if not is_granted('ROLE_USER') %}
+                <ul id="user-account-login">                    
+                    <li id="user-account-login-login">
+                        <a href="#">
+                            <span>{{'frontend.sign_in'|trans}}
+                                <i class="icon-caret-down"></i>
+                                <i class="icon-caret-up"></i>
+                            </span>
+                            <!--[if IE 8]>
+                                <div class="before"></div>
+                                <div class="after"></div>
+                            <![endif]-->
+                        </a>                        
+                    </li>
+                    <li id="user-account-login-signup">
+                        <a href="#"><span>{{'frontend.sign_up'|trans}}</span></a>
+                    </li>
+                </ul>
+                {% else %}
+                    {% render 'UserBundle:Widgets:userPanel' %}
+                {% endif %}
+            
+            
+        </section>
+    </header>
+	<div class="clearfix"></div>
+
+<!-- 
+    <header class="main" data-role="header">
+        <div id="top-menu-container" class="container clearfix">
+            <h1><a href="{{path('fenchy_notice_indexv2')}}"><img width="61" src="{{ absolute(asset('images/logo.png')) }}" alt="Fenchy"/></a></h1>
+            <div id="user-account-nav" class="pull-right">
+                {% if not is_granted('ROLE_USER') %}
+                <ul id="user-account-login">                    
+                    <li id="user-account-login-login">
+                        <a href="#">
+                            <span>{{'frontend.sign_in'|trans}}
+                                <i class="icon-caret-down"></i>
+                                <i class="icon-caret-up"></i>
+                            </span>  -->
+                            <!--[if IE 8]>
+                                <div class="before"></div>
+                                <div class="after"></div>
+                            <![endif]-->
+<!--                    </a>                        
+                    </li>
+                    <li id="user-account-login-signup">
+                        <a href="#"><span>{{'frontend.sign_up'|trans}}</span></a>
+                    </li>
+                </ul>
+                {% else %}
+                  
+                {% endif %}
+                <aside>
+                    <div class="button green-button create-listing">
+                        <a href="{{path('fenchy_regular_user_notice_create1')}}" class="wrapper">
+                            <i class="icon-list-alt"></i>
+                            <strong>{{'frontend.create_listing'|trans}}</strong>
+                        </a>
+                    </div>
+                </aside>                
+            </div>
+                    
+                    
+            {% if not is_granted('ROLE_USER') %}
+                <div id="login-wrapper" class="loginform">
+                     <a href="#" class="sign-btn fb_btn clearfix login-with-facebook">
+                        <span><i>facebook</i></span>
+                        <span><strong>{{'frontend.sign_in_facebook'|trans}}</strong></span>
+                    </a>
+                    <a href="{{ path ('connect_twitter')}}" class="sign-btn tt_btn clearfix login-with-twitter">
+                        <span><i>twitter</i></span>
+                        <span><strong>{{'frontend.sign_in_twitter'|trans}}</strong></span>
+                    </a>
+                    <p><strong>or</strong></p>
+                    {% render "UserBundle:Security:login" %}
+                </div>                    
+            {% endif %}      
+        </div> -->
+        <!--[if IE 8]>
+            <div class="after"></div>
+        <![endif]-->
+<!--   </header> -->
+    <!-- main -->

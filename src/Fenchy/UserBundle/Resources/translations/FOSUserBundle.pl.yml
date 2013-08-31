@@ -1,0 +1,149 @@
+group:
+  edit:
+    submit: Edytuj grupę
+
+  show:
+    name: Nazwa grupy
+
+  new:
+    submit: Utwórz grupę
+
+  flash:
+    updated: Grupa została zaktualizowana
+
+    created: Grupa została utworzona
+
+    deleted: Grupa została usunięta
+"Bad credentials": Nieprawidłowa nazwa użytkownika lub hasło
+security:
+  login:
+    username: "Email:"
+
+    password: "Hasło:"
+
+    remember_me: Nie wylogowuj mnie
+
+    submit: Zaloguj
+profile:
+  show:
+    username: Nazwa użytkownika
+
+    email: E-mail
+
+  edit:
+    submit: Edytuj użytkownika
+
+  flash:
+    updated: Zapisano zmiany w profilu
+change_password:
+  submit: Zmień hasło
+
+  flash:
+    success: Hasło zostało zmienione
+registration:
+  check_email: Na adres %email% wysłano wiadomość e-mail. Zawiera ona link w którego należy kliknąć aby aktywować konto.
+
+  confirmed: Gratulacje %username%, potwierdziłeś konto.
+
+  back: Powrót do poprzedniej strony
+
+  submit: Zarejestruj
+
+  flash:
+    user_created: Stworzono użytkownika
+
+  email:
+    subject: Witaj %username%!
+
+    message:
+      1: Dokończ rejestrację swojego konta.
+
+      button: Dokończ rejestrację
+
+      3:
+        html: Jeśli ten przycisk nie działa, prosimy skopiować poniższy link i wkleić go do paska adresu przeglądarki
+
+        txt: "Prosimy skopiować poniższy link i wkleić go do paska adresu przeglądarki"
+
+      4: Nie rejestrowałeś się? W takim razie zignoruj tę wiadomość. Pradwopodobnie ktoś przypadkowo użył Twojego adresu e-mail.
+resetting:
+  password_already_requested: W przeciągu ostatnich 24 godzin nastąpiła już próba odzyskania hasła.
+
+  check_email: Na adres %email% wysłano wiadomość e-mail. Zawiera ona link w którego należy kliknąć aby zresetować hasło.
+
+  request:
+    invalid_username: E-mail "%username%" nie istnieje.
+
+    username: "E-mail:"
+
+    submit: Resetuj hasło
+
+  reset:
+    submit: Zmień hasło
+
+  flash:
+    success: Hasło zostało zresetowane
+
+  email:
+    subject: Resetowanie hasła
+
+  message:
+    1: Witaj %username%,
+
+    2: "Aby zmienić swoje hasło na Fenchy, prosimy kliknąć poniższy link:"
+
+    3: Jeśli nie próbowałeś zmienić hasła, prosimy zignorować tę wiadomość.
+
+    4: Prawdopodobnie ktoś omyłkowo użył Twojego adresu e-mail.
+
+    5: Dziękujemy,
+
+    6: Zespół Fenchy
+email:
+  message:
+    help: Potrzebujesz pomocy? Napisz do nas na adres julia@fenchy.com
+
+    address: Fenchy GmbH, Wühlischstr. 12, D-10245 Berlin
+layout:
+  logout: Wyloguj
+
+  login: Zaloguj
+
+  register: Zarejestruj
+
+  logged_in_as: Zalogowano jako %username%
+form:
+  group_name: "Nazwa grupy:"
+
+  username: "Nazwa użytkownika:"
+
+  email: "E-mail:"
+
+  current_password: "Obecne hasło:"
+
+  password: "Hasło:"
+
+  password_confirmation: "Powtórz hasło:"
+
+  new_password: "Nowe hasło:"
+
+  new_password_confirmation: "Powtórz hasło:"
+
+  validation:
+    invalid_password: Password is invalid
+
+    invalid_password2: Password confirmation is invalid
+
+    invalid_pass_match: Passwords does not match
+
+    invalid_email: Provided e-mail is invalid
+invitation:
+  email:
+    button_name: "Akceptuj"
+
+    message:
+      1: "%username% używa Fenchy i chce abyś dołączył/a. Fenchy jest siecią społecznościową, która łączy Cię z sąsiedztwem. Pomoga znaleźć odpowidnich ludzi, wydarzenia i zasoby blisko Ciebie."
+
+      2: Jeśli nie chcesz dostawać więcej podobnych wiadomości od Fenchy, możesz
+
+      3: wypisać się.

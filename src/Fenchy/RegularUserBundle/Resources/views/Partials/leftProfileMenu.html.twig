@@ -1,0 +1,14 @@
+<div id="profile_image" class="pr_left_op">
+    <a class="profile_img_link" href="{{ path('fenchy_regular_user_index') }}">
+        {{ helper.profile_image(app.user.mainImage) }}
+    </a>
+</div>
+<div id="profile_round">
+    <div>
+        {{ helper.trust_points(app.security.token.user.id) }}
+    </div>
+</div>
+<div id="profile_options">
+    {{ getlink('regularuser.about_me'|trans, 'fenchy_regular_user_about_me')|raw }} 
+    {% render 'FenchyRegularUserBundle:Notice:submenu' %}
+</div>

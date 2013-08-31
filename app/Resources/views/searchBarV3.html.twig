@@ -1,0 +1,45 @@
+{# commonly used search bar #}
+
+		<form id="sb-form">
+				<input id="search" type="text" autocomplete="off" onFocus="myFocus(this);" onBlur="myBlur(this);" value="{{ 'frontend.placeholder_what'|trans }}"
+                   data-bind="jqAutocomplete: { autoFocus: false }, 
+                              jqAutocompleteSource: fenSuggestionsArr, 
+                              jqAutocompleteQuery: fenRetrieveSuggestions,
+                              jqAutocompleteValue: fcPhrase,
+                              jqAutocompleteAppendTo: '#sb-form',
+                              event: {'keypress': inputPressEnter },    value: fcPhrase, valueUpdate:'afterkeydown'       " />
+                
+                <!-- <input id="location" type="text" data-bind="value: fcGFormattedAddress" onFocus="myFocus(this);" onBlur="myBlur(this);" value="{{ 'frontend.placeholder_where'|trans }}" style="width:120px;" /> -->
+                <a href="#dialog1" name="modal" id="vzoom_1944" class="zoomthis">
+                <div data-bind="click: function(data,event) { doSearch(false);  }">
+                     <button type="button" ></button>
+               </div> 
+        </form>
+            
+        <!--     
+        <div class="comboSearch">
+            <form id="sb-form">
+                <fieldset>
+                    <div class="fieldInput searchInput">
+                        <input id="search" type="text" autocomplete="off" placeholder="{{ 'frontend.placeholder_what'|trans }}"
+                   data-bind="jqAutocomplete: { autoFocus: false }, 
+                              jqAutocompleteSource: fenSuggestionsArr, 
+                              jqAutocompleteQuery: fenRetrieveSuggestions,
+                              jqAutocompleteValue: fcPhrase,
+                              jqAutocompleteAppendTo: '#sb-form',
+                              event: {'keypress': inputPressEnter },    value: fcPhrase, valueUpdate:'afterkeydown'       " />
+                    </div>
+                    <div class="fieldInput locationInput">
+                        <i class="icon-map-marker"></i>
+                        <input id="location" type="text" data-bind="value: fcGFormattedAddress" />
+                    </div>                                        
+                    <div class="submit">
+                        <div data-bind="click: function(data,event) { doSearch(false);  }">
+                             <i class="icon-search"></i>
+                            <button type="button" >{{'frontend.search'|trans}}</button>
+                        </div>                       
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+         -->

@@ -1,0 +1,65 @@
+
+{% block stylesheets %}    
+    <link rel="stylesheet" href="{{ asset('js/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/tapmodo-Jcrop-1902fbc/css/jquery.Jcrop.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/jquery.tagit.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/tagit.ui-zendesk.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/editSmall.css') }}" type="text/css" />
+{% endblock %}
+        
+{% block javascripts %}    
+    <script type="text/javascript" src="{{ asset('js/underscore-min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.iframe-transport.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/FileUploaderSmall.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/fancybox/jquery.fancybox-1.3.4.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/tapmodo-Jcrop-1902fbc/js/jquery.Jcrop.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/editSmall.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+	<div class="profile">
+                <div class="left">
+                    <div class="persen">
+                    	<img alt="" src="{{ displayUser.regularuser.avatar(false) }}">
+                        <div class="persenname">
+                        	<p>{{ displayUser.name }}</p>
+                            <a href="{{ path('fenchy_regular_user_settings_basic') }}">Edit</a>
+						</div>
+                        <div class="neighbor orange">
+                        	<p>N</p>
+                            <span>168</span>
+						</div>		                            
+                    </div>
+                    <div class="clearfix"></div>
+                    <details>
+                    	<span>Community Manager</span><br>
+                        <span>
+                        	{{ displayUser.location }}
+                        </span>
+                    </details>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="right">
+                	<a href="#" class="location">Location</a>
+                    <a href="#" class="identity">Identity</a>
+                </div>
+     </div>
+     <div class="clearfix"></div>
+	<!-- 
+	<section class="user-profile-group">
+        <figure class="avatar">
+            <span class="image-container large-avatar bordered"><img src="{{ displayUser.regularuser.avatar(false) }}" alt=""/></span>
+            <div class="ranking-flag status-flag">
+                <strong>{{ displayUser.activity }}</strong>
+            </div>
+        </figure>
+    </section>
+     -->
+{% endblock %}

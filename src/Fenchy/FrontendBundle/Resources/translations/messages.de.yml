@@ -1,0 +1,255 @@
+frontend:
+  about:
+    title: Über uns
+
+    article:
+      par_1: Fenchy ist ein lokales Vertrauensnetzwerk, das Menschen mit ihrer Nachbarschaft verbindet. Mit Fenchy k?Ânnen Nutzer ganz einfach Aktivit?ñten, Veranstaltungen oder n??tzliche Dinge mit den Menschen in der N?ñhe teilen.
+
+      par_2: Mit nur einem Click kann Fenchy mit Facebook oder Twitter verbunden werden.
+
+      par_3: Fenchy kann von überall aus mit einem Webbrowser verwendet werden.
+
+      par_4: Mit Fenchy wollen wir Vertrauen und Vernetzung in den Nachbarschaften dieser Welt stärken.
+
+      par_5: Du hast noch keinen kostenlosen Account?
+
+      sign_up_here: Registriere dich hier.
+
+  advertising:
+    article:
+      par_1: .
+
+      par_2: .
+
+      par_3: .
+
+    title: 
+
+  facebook:
+    title: Facebook
+
+  imprint:
+    title: Impressum
+
+    fenchy_gmbh: Fenchy GmbH
+
+    fenchy_address_1: Marchlewskistr. 16,
+
+    fenchy_address_2: D-10243 Berlin
+
+    registered_office: Sitz der Gesellschaft:Berlin
+
+    registered_court: Amtsgericht:HRB 143139 B Charlottenburg
+
+    managing_directiors: Geschäftsführer: Matthias Eisele
+
+    contact: Kontakt
+
+    email: E:contact@fenchy.com
+
+    disclaimer: Haftungsausschluss
+
+    disclaimer_body: Diese Website kann Links zu externen Webseiten enthalten. Fenchy ist nicht verantwortlich für die Inhalte der externen Webseiten, die auf eigenes Risiko hin besucht werden. Allein die Betreiber der externen Webseiten sind für die jeweiligen Inhalte auf den Webseiten verantwortlich.
+
+    office: 
+
+    office_address: 
+
+    phone: 
+
+  jobs:
+    title: Jobs
+
+    header_1: Wir wollen Vertrauen und Vernetzung in den Nachbarschaften dieser Welt stärken.
+
+    header_2: Lust, zu helfen? Hier unsere Werte:
+
+    1:
+      par_1: Zuallererst versuchen wir zu verstehen, was unsere Nutzer bewegt.
+
+      par_2: Alles was wir tun, soll wirklichen Wert für sie schaffen.
+
+    2:
+      par_1_1: Wir folgen keinen Anleitungen.
+
+      par_1_2: Wir streben nach den besten Lösungen indem wir schnell umsetzen und verbessern.
+
+      par_2: Fehler zu machen und von ihnen zu lernen ist dabei entscheidend.
+
+    3:
+      par_1: Wir versuchen, so viele Ideen und Informationen wie möglich zu teilen.
+
+      par_2: Wir stellen uns selbst und unsere Annahmen in Frage, um uns konstant zu verändern und zu verbessern.
+
+    4:
+      par_1: Wir schätzen die  Fähigkeiten unserer Mitmenschen und respektieren persönliche Dinge.
+
+      par_2: Wir versuchen direkt, ehrlich und warmherzig miteinander umzugehen - innerhalb und außerhalb von Fenchy.
+
+    5:
+      par_1: Mit Fenchy wollen wir Vertrauen und Vernetzung in den Nachbarschaften dieser Welt stärken.
+
+      par_2: Deshalb beachten wir kulturelle Besonderheiten und vergessen niemals die Skalierbarkeit.
+
+    bottom:
+      text: Du denkst, du passt zu Fenchy? Wir würden uns freuen, von dir zu hören.
+
+      current_positions: Hier unsere offenen Stellen:
+
+      apply_now: Bewirb dich jetzt!
+
+  languages:
+    title: Sprachen
+
+  privacy:
+    title: Datenschutz
+
+  terms:
+    title: AGB
+
+  logo_alt: Fenchy
+
+  my_profile: Mein Profil
+
+  manage_listings: Listings bearbeiten
+
+  settings: Einstellungen
+
+  log_out: Logout
+
+  admin: Administration
+
+  sign_in: Login
+
+  sign_up: Registrieren
+
+  english: Englisch
+
+  deutsch: Deutsch
+
+  polski: Polnisch
+
+  header:
+    slogan: Finde alles & jeden in deiner Nachbarschaft.
+
+    photo_sign: 
+
+  foot:
+    slogan1: Du hast was für deine Nachbarn?
+
+    slogan2: Etwas zu verkaufen oder zu tauschen?
+
+  create_listing_now: Erstelle hier dein Listing.
+
+  search: Suche
+
+  so_what_is: So... was ist
+
+  right_sidebar:
+    what_we_do1: Wir verbinden dich mit allem in deiner direkten Nähe.
+
+    what_we_do2: Vernetze dich mit den Veranstaltungen und den Menschen in deiner Umgebung.
+
+    what_we_do3: Du hast unendlich viele Möglichkeiten, Fenchy für dich zu nutzen.
+
+    summary:
+      1: Das ist
+
+      2: Deine
+
+      3: Nachbarschaft.
+
+  create_listing: Listing erstellen
+
+  sign_in_facebook: Mit Facebook anmelden
+
+  sign_in_twitter: Mit Twitter anmelden
+
+  placeholder_what: Search
+  
+  placeholder_where: Where
+
+  take_the_time: Take the time
+  
+  enrich_your_life: Enrich your life!
+  
+  welcome_to_neighborhood: Welcome to the new Neighborhood!
+  
+  404:
+    par_1: Sieht so aus, als wärst du falsch abgebogen.
+
+    par_2: Keine Sorge... Kann jedem mal passieren.
+
+    link: Zurück zur Homepage
+
+  choose_your_language: Sprache wählen
+    
+  slider:
+    discovery:
+      name: Entdeckung
+      title: Entdecke Deine Nachbarschaft.
+      content: Deine Nachbarschaft wartet darauf entdeckt zu werden. So viele interessante Leute um uns herum, die wir nicht kennen. So viele Sachen, die wir zusammen machen könnten, wenn wir uns kennen würden. Nachbarschaftliche Hilfe und soviele nützliche Dinge die ungenutzt rumstehen, die wir benutzen könnten. Entdecke die Möglichkeiten deiner Nachbarschaft. Log dich ein!
+
+    trust:
+      name: Vertrauen
+      title: Wem kann man heute noch vertrauen?
+      content: Überall fake, make up, stalking, fishing, spam, versteckte Fallen und ungewünschte Zusätze auf den Rechnungen. Für einen kollaborativen Lebensstil brauchen wir Vertrauen. Vertrauen das wir in der nachbarschaftlichen Gemeinschaft aufbauen. Jeder der etwas in der Nachbarschaft macht oder Nachbarn in seiner Meine Nachbarn Liste aufnimmt, bekommt Community Points. Die meisten Menschen sind vertrauenswürdig, die wenigen anderen, schliessen wir aus. Mit der Zeit entsteht eine neue Kultur des Vertrauens in der Nachbarschaft.
+
+    sharing:
+      name: Teilen
+      title: KoKonsum auf Polly & Bob.
+      content: Nutze was andere haben. Teile was du hast. „Wer leiht mir sein Auto für wenig Geld?“, „Wer braucht einen Babysitter heute Nacht?“, „Wer isst die Lebensmittel, die ich nicht mehr brauche vor dem Urlaub?“ Tausche, verkaufe, teile, schenke, miete, kaufe, biete, vermiete und verschenke an Nachbarn, mit Nachbarn, für Nachbarn. Polly & Bob bringt die guten Leute zusammen.
+
+    new_neighborhood:
+      name: New Neighborhood
+      title: Willkommen in der Neuen Nachbarschaft.
+      content: Vereinzelung aufhalten und abbauen. Das wichtige im Leben. AFZ Real people. The 99.
+    
+    our_neighborhood:
+      name: Our Neighborhood
+      title: Unsere Plattform
+      content: Nimm teil und nimm deinen Teil. Die Nutzer schaffen die Werte. Daher sollen die Nutzer auch die Profite bekommen. Budgets sollen dahin zurück gehen, wo sie entstehen: in den Nachbarschaften. Besonders aktive Nachbarn können Neighborhood-Manager werden und Geld für ihre Projekte und ihren Lebensunterhalt bekommen. Wichtige Enscheidungen sollen von den Nutzern mitbestimmt werden. Jeder Nutzer können Anteile an Polly & Bob kaufen, auf diese Weise Polly & Bob dabei unterstützen zu wachsen und selbst mitbestimmen.
+      
+    small_data:
+      name: Small Data
+      title: Small Data is not watching you.
+      content: Big Data ist zentralisiert. Zentralisierte Daten können und werden missbraucht, um Menschen auszuspieonieren, zu kontrollieren, zu steuern und mit ungewünschter Werbung vollzumüllen. Polly & Bob möchte soweit wie möglich Small Data bleiben. Die Daten über die Nutzer sollten so gering wie möglich gehalten werden. Die Daten sollen lokal gelagert und nicht zentral zugänglich sein. Zur Zeit haben wir diese technischen Möglichkeiten noch nicht. Wenn Du Ahnung hast, hilf uns bitte dabei, dies umzusetzen!
+    
+    community:
+      name: Gemeinschaft 2.0
+      title: Bilde Deine eigene Gemeinschaft.
+      content: Polly & Bob ist eine neue Art des Zusammenlebens mit den Leuten um Dich herum. Es ist nicht diese alte, stickige unselige Nachbarschaft die wir kennen. Die Neue Nachbarschaft braucht keine lämenden Strukturen der Vereine und Bürokratien. Die Neue Nachbarschaft ist frisch und individulaisiert. Jeder kann etwas starten, jeder kann rein kommen. Jeder kann seine eigene Gemeinschaft um sich herum bilden. Diese Gemeinschaften sind nicht an Regionen oder lokale Einheiten gebunden. Jeder kann das. Schaffe dir deine eigene Gemeinschaft in deiner Nachbarschaft, schaffe dir deine eigene Arschloch freie Zone (AFZ). Individualisiert aber nicht vereinzelt. Zusammengehörigkeit aber keine Hierarchien.
+
+    real_life:
+      name: Reales Leben
+      title: Der Mensch, das menschliche Dasein. Worum geht’s da?
+      content: Augen können sich nur im wirklichen Leben treffen, im Internet treffen sich die Blicke nie. Auf Polly & Bob machen wir clickclickclick oder touchscreentouch. Aber wir machen das nur, um uns danach offline zu treffen. Wir sagen: „Nimm dir die Zeit. Bereichere Dein Leben”. Wir glauben die Zeit mit anderen zu verbringen, zu spielen, zu teilen und zusammen etwas zu tun, ist der Sinn des menschlichen Daseins.
+    
+    fun:
+      name: Fun
+      title: Was passiert heute Abend?
+      content: Wo kann ich spontan hingehen? Wer hat gerade Lust einen Kaffee zu trinken? Wer kommt zum Fußball heute Abend? Wer möchte mit mir zusammen die Stadt erkunden? Wer organisiert was spannendes am Wochenende? Wer kommt heute Abend zum essen vorbei? Spaß, in meiner Nähe, jederzeit. Mach es möglich auf Polly & Bob.
+
+    access:
+      name: Zugang
+      title: Soviele nützliche Dinge sind ungenutzt.
+      content: Millionen von Autos stehen in den Straßen. Millionen von Gegenständen verstauben in den Selfstorages, Dachböden, Rumpelkammern oder auch Wohnzimmern dieser Welt. Warum benutzen wir die Sachen nicht? Im 21ten Jahrhundert wird wir eine andere Wirtschaft entstehen, eine Wirtschaft die viel mehr auf Zugang und nicht mehr soviel auf Eigentum beruht. Das organisieren wir auf Polly & Bob.
+
+  footer:
+    blog:
+      title: Blog
+
+    story:
+      title: The Story of Polly & Bob
+
+    what:
+      title: What we want
+
+    shares:
+      title: Get shares of Polly & Bob
+
+    firstcrowd:
+      title: First Crowd
+
+    about:
+      title: About 

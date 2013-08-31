@@ -1,0 +1,100 @@
+
+#content form.fos_user_resetting_request input,
+#content form.fos_user_resetting_reset input{
+    margin: 0;
+}
+
+#content form.fos_user_resetting_request table td:first-child {
+    padding-top: 0;
+}
+
+#content form.fos_user_resetting_request  table td:last-child,
+#content form.fos_user_resetting_reset  table td:last-child{
+    width: auto;
+}
+#resetRoom{
+    width: 330px;
+}
+#backLink{
+    color: black;
+    padding-left: 10px;
+    padding-top: 7px;
+}
+#backLink a{
+    color: black;
+}
+
+#resetPasswordContent{
+    padding-left: 147px !important;
+}
+
+#content table {
+    border-collapse: separate; 
+}
+
+#content form.fos_user_resetting_reset table td{
+    padding-bottom:10px;
+}
+#content form.fos_user_resetting_reset table td:first-child
+{
+    padding-right: 35px;
+    width: auto;
+}
+#content form.fos_user_resetting_reset table td:last-child,
+#submitButton
+{
+    text-align: right;
+}
+#content form.fos_user_resetting_reset table td:last-child input,
+#submitButton input{
+    margin: 0 !important;
+    margin-top: 10px !important;
+}
+
+form.fos_user_resetting_reset .error ul{
+    list-style: none;
+}
+
+#repeatPasswordContent {
+    padding-left: 100px !important;
+}
+.msgUser{
+    font-size: 19px;
+    font-weight: bold;
+}
+#msgUserReset{
+    margin-left: 218px;
+    margin-bottom:20px;
+}
+#resetRequestPassBox{
+    margin-top: 80px;
+    
+}
+#mainPageLink {
+    margin-top: 50px;
+    text-align: center;
+}
+#mainPageLink a {
+    color: black;
+    text-decoration: underline;
+    font-size: 18px;
+}
+
+#passwordChangedMsg {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 50px;
+    text-align: center;
+}
+#passwordChangedMsg a{
+    color: black;
+    text-decoration: underline;
+}
+
+#passwordChangedLogin {
+    text-align: right;
+    margin-right: 172px;
+}
+#passwordChangedLogin span {
+    margin-right: 10px;
+}

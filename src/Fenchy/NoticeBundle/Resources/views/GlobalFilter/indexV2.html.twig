@@ -1,0 +1,125 @@
+{% extends 'FenchyNoticeBundle::layoutV2.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# any view specific stylesheets for this view #}
+    <link rel="stylesheet" href="{{ absolute(asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css')) }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/inner-content-v2.css')) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/article-box-v2.css')) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/custom-form.css')) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/search-bar-v2.css')) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/sidebar-v2.css')) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/notice/globalfilter/global-filter-v2.css')) }}" type="text/css" />    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('plugins/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/moment-js/moment.min.js') }}"> </script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-slider.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/global-filter-view-model.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ absolute(asset('js/global-filter-widgets.js')) }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.tinyscrollbar.js') }}"></script>
+    <script type="text/javascript">
+        // model object instantination here
+        var globalFilterViewModel;
+        var autocomplete;
+        var geocoder;
+        var emptyCategories = {{ filterEmptyCat | json_encode() | raw }};
+        var emptyPostDates = {{ filterEmptyPD | json_encode() | raw }};
+        var baseViewUri = '{{ path(app.request.attributes.get('_route')) }}';
+        var pagination = {{ listingsPagination }};
+        var paramDistDefaults = {
+            'distanceSliderMin': {{ filterDistanceSliderMin }},
+            'distanceSliderMax': {{ filterDistanceSliderMax }},
+            'distanceSliderDefault': {{ filterDistanceSliderDefault }},
+            'distanceSliderSnap': {{ filterDistanceSliderSnap }}
+        };
+        var notice_tinyscroll;
+        
+        window.translations = {
+            'no_limit': '{{ 'notice.no_limit' | trans }}',
+            'sort_rel': '{{ 'notice.filter.sort.rel' | trans }}',
+            'sort_dist': '{{ 'notice.filter.sort.dist' | trans }}',
+            'sort_time': '{{ 'notice.filter.sort.time' | trans }}'
+        };
+
+
+        $(document).ready(function() {
+            
+            notice_tinyscroll = $('#scrollable').tinyscrollbar();
+            ko.bindingHandlers['class'] = {
+                'update': function(element, valueAccessor) {
+                    if (element['__ko__previousClassValue__']) {
+                        $(element).removeClass(element['__ko__previousClassValue__']);
+                    }
+                    var value = ko.utils.unwrapObservable(valueAccessor());
+                    $(element).addClass(value);
+                    element['__ko__previousClassValue__'] = value;
+                }
+            };
+            
+            geocoder = new google.maps.Geocoder();
+            
+            var routes = {
+                fenchy_filter_content: '{{path('fenchy_filter_content')}}',
+                fenchy_what_autocomplete_suggestions: '{{path('fenchy_what_autocomplete_suggestions')}}',
+            };
+            
+            var filterLastUrl = '{{ filterLastUrl }}';
+            
+            globalFilterViewModel = new GlobalFilterViewModel(geocoder, baseViewUri, routes, pagination, emptyCategories, emptyPostDates, paramDistDefaults, translations, filterLastUrl);
+            
+                  
+            ko.applyBindings( globalFilterViewModel, document.getElementById('globalFilter'));
+            globalFilterViewModel.retrieveFilterContent( true );
+            
+            autocomplete = new GApiAutocomplete(
+                document.getElementById('location'),
+                globalFilterViewModel );
+            
+                var _default_location = '';
+                
+                {% if app.user and not app.user.location.location %}
+                    _default_location = '{{default_location}}';
+                {% elseif app.user and app.user.location.location %}
+                    _default_location = '{{app.user.location.location|replace({"\n": ''})}}';
+                {% else %}
+                    _default_location = '{{default_location}}';     
+                {% endif %}
+                    
+                $('input#location').val(_default_location);            
+            
+        });
+        // apply binding here
+    </script>
+    {# any view specific JS scripts for this view #}
+{% endblock %}
+
+{% block content %}
+    {# put view specific content here #}
+<section class="main content-rtl" data-role="main">
+    <div id="globalFilter" class="wrapper-inner-content"> 
+        <div class="clearfix">
+
+            {% include 'FenchyNoticeBundle:PartialsV2:leftFilterMenuV2.html.twig' %}
+
+            <section class="content pull-right">
+                {% include '::searchBarV2.html.twig' %}
+
+                {% include 'FenchyNoticeBundle:PartialsV2:rightFilterResultsListV2.html.twig' %}
+            </section>
+
+            {# set notice_id while displaying notice#}
+            {# render "FenchyNoticeBundle:Widgets:userListings" with {'notice_id' : 2} #}
+            {# render "FenchyNoticeBundle:Widgets:similarListings" with {'notice_id' : 2} #}
+
+        </div>
+    </div>
+</section>    
+{% endblock %}

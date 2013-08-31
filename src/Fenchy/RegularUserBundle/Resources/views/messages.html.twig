@@ -1,0 +1,29 @@
+{% extends '::baseV2.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/message/index-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/custom-form.css') }}" type="text/css" />
+{% endblock %}
+    
+{% block javascripts %}
+    {{parent()}}
+    <script type="text/javascript" src="{{asset('js/regular_user/messages/scripts.js')}}"></script>
+{% endblock %}
+
+    
+{% block content %}
+<section data-role="main" class="main">
+        <div id="main-container" class="wrapper-inner-content no-search">
+            <div class="inner-content">                
+                <header>
+                    <h1><a href="{{ path('fenchy_regular_user_messages_index') }}">{{ 'regularuser.message.message_center'|trans }}</a></h1>
+                </header>
+                <div id="message-center-wrapper">
+                        {% block message_content %}{% endblock %}
+                </div>                
+            </div>
+        </div>
+</section>
+{% endblock %}

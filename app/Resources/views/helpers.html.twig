@@ -1,0 +1,230 @@
+{% macro button(uri, label, attrs) %}
+    {% set class = 'button' %}
+    {% set attr_string = '' %}
+    {% if attrs is defined %}
+        {% for name,value in attrs %}
+            {% if 'class' == name %}
+                {% set class = class ~ ' ' ~ value %}
+            {% else %}
+                {% set attr_string = attr_string ~ ' ' ~ name ~ '"' ~ value ~ '"' %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <a class="{{ class }}" {{ attr_string }} href="{{ uri }}">{{ label|trans }}</a>
+{% endmacro %}
+
+{% macro image(src, attrs) %}
+    {% if src is null or '/' == src %}
+        {% set src = default_picture %}
+    {% endif %}
+    {% set attr_string = ' ' %}
+    {% if attrs is defined %}
+        {% for name,value in attrs %}
+            {% if 'size' == name %}
+                {% set attr_string = attr_string ~ ' width=' ~ value ~ ' height=' ~ value %}
+            {% else %}
+                {% set attr_string = attr_string ~ ' ' ~ name ~ '=' ~ value %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <img src="{{ asset(src) }}"{{ attr_string }} />
+{% endmacro %}
+
+{% macro profile_image(src, attrs) %}
+    {% import _self as helper %}
+
+    {% if src is null or '/' == src %}
+        {% set src = default_profile_picture %}
+    {% endif %}
+    {{ helper.image(src, attrs) }}
+{% endmacro %}
+
+{% macro icon(type, uri, attrs) %}
+    {% set text = 'main.icons.' ~ type %}
+    {% set class = '' %}
+    {% if attrs is defined %}
+        {% for name,value in attrs %}
+            {% if 'class' == name %}
+                {% set class = class ~ ' ' ~ value %}
+            {% elseif 'text' == name %}
+                {% set text = value %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <a class="icon {{ type }}{{ class }}" href="{{ uri }}">{{ text|trans|default('') }}</a>
+{% endmacro %}
+
+{% macro triangles_buttons(id,content,color,bgcolor,bordercolor,padding,width,height,fontsize,direction,link,display) %}
+    <style>
+        
+        .triangle_button_{{ id }}{
+            {% if width == "auto" %}
+            width:width;
+            {% else %}
+            width:{{width+(padding*2)+(height + 2 * padding + 4)+1}}px;
+            {% endif %}
+            font-family:MYRIADPRO-SEMIBOLD,serif;
+            
+        }
+        
+        .triangle_button_{{ id }} a{
+            color:{{color}};
+        }
+        
+        .triangle_button_content_{{ id }}{
+            background:{{bgcolor}};
+            {% if width == "auto" %}
+            width:width;
+            {% else %}
+            width:{{width}}px;
+            {% endif %}
+            height:{{height}}px;
+            border:1px solid {{ bordercolor }};
+            float:left;
+            -ms-word-break: break-all;
+            word-wrap: break-word;
+            padding:{{padding}}px;
+            font-size:{{fontsize}}px;
+        }
+        
+        .no_triangle_button_content_{{ id }}
+        {
+            margin-right:10px;
+            background:{{bgcolor}};
+            {% if width == "auto" %}
+            width:width;
+            {% else %}
+            width:{{width}}px;
+            {% endif %}
+            height:{{height}}px;
+            border:1px solid {{ bordercolor }};
+            float:left;
+            -ms-word-break: break-all;
+            word-wrap: break-word;
+            border-radius: 5px;
+            padding:{{padding}}px;
+            font-size:{{fontsize}}px;
+        }
+        
+        .triangle_button_content_rdir_{{ id }}{
+            border-right:0;
+            border-bottom-left-radius: 5px;
+            border-top-left-radius: 5px;
+            margin-left:10px;
+        }
+        
+        .triangle_button_content_ldir_{{ id }}{
+            border-left:0;
+            border-bottom-right-radius: 5px;
+            border-top-right-radius: 5px;
+            margin-right:10px;
+        }
+        
+        .triangle_button_right_{{ id }} {
+            width: 0;
+            height: 0;
+            float:left;
+            border-top: {{(height + 2 * padding + 3)/2}}px solid transparent;
+            border-left: {{(height + 2 * padding + 4)/2}}px solid {{ bordercolor }};
+            border-bottom: {{(height + 2 * padding + 3)/2}}px solid transparent;
+        }
+
+        .triangle_button_right_inside_{{ id }}{
+            width: 0;
+            height: 0;
+            position:relative;
+            left:-{{(height + 2 * padding + 4)/2}}px;
+            top:-{{(height + 2 * padding + 1)/2}}px;
+            border-top: {{(height + 2 * padding + 1)/2}}px solid transparent;
+            border-left: {{((height + 2 * padding + 3)-1)/2}}px solid {{bgcolor}};
+            border-bottom: {{(height + 2 * padding + 1)/2}}px solid transparent;
+        }
+        
+        
+        .triangle_button_left_{{ id }} {
+            width: 0;
+            height: 0;
+            float:left;
+            border-top: {{(height + 2 * padding + 3)/2}}px solid transparent;
+            border-right: {{(height + 2 * padding + 2)/2}}px solid {{ bordercolor }};
+            border-bottom: {{(height + 2 * padding + 3)/2}}px solid transparent;
+        }
+
+        .triangle_button_left_inside_{{ id }}{
+            width: 0;
+            height: 0;
+            position:relative;
+            left:1;
+            top:-{{(height + 2 * padding + 1)/2}}px;
+            border-top: {{(height + 2 * padding + 1)/2}}px solid transparent;
+            border-right: {{((height + 2 * padding))/2}}px solid {{bgcolor}};
+            border-bottom: {{(height + 2 * padding + 1)/2}}px solid transparent;
+        }
+        
+    </style>
+    <div class="triangle_button_{{ id }}">
+        {% if direction=="right" %}
+        <div class="triangle_button_content_{{ id }} triangle_button_content_rdir_{{ id }}">
+            {% if link!='' %}
+                <a href="{{ path(link, { 'id': id }) }}">
+                    {{ content }}
+                </a>                    
+            {% else %}
+                <div>
+                    {{ content }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="triangle_button_right_{{ id }}">
+            <div class="triangle_button_right_inside_{{ id }}" >
+
+            </div>
+        </div>
+        {% elseif direction=="left" %}
+        <div class="triangle_button_left_{{ id }}">
+            <div class="triangle_button_left_inside_{{ id }}" >
+
+            </div>
+        </div>  
+        <div class="triangle_button_content_{{ id }} triangle_button_content_ldir_{{ id }}">
+            {% if link!='' %}
+            <a href="{{ path(link, { 'id': id }) }}">
+                {{ content }}
+            </a>                    
+            {% else %}
+                <div>
+                    {{ content }}
+                </div>
+            {% endif %}
+        </div>
+        {% else %}    
+        <div class=" no_triangle_button_content_{{ id }}">
+            {% if link!='' %}
+                <a href="{{ path(link, { 'id': id }) }}">
+                    {{ content }}
+                </a>                    
+            {% else %}
+                <div>
+                    {{ content }}
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% if display != "float" %}
+            <div style="clear:both;"></div>
+        {% endif %}
+    </div>
+    {% if display != "float" %}
+        <div style="clear:both;"></div>
+    {% endif %}
+{% endmacro %}    
+        
+        
+{% macro trust_points(id) %}
+    {% set count = trustPoints(id) %}
+    {% if count < 100 %}
+        {{ count }}
+    {% else %}
+        99+
+    {% endif %}
+{% endmacro %}

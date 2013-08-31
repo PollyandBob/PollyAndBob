@@ -1,0 +1,129 @@
+{% extends 'FenchyAdminBundle::layout.html.twig' %}
+{% form_theme filter '::filterForm.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $().ready(function () {
+            $('.search-activated').click(function() {
+                var id = $(this).attr('rel');
+                $.ajax({
+                    type:     'POST',
+                    dataType: 'json',
+                    data:     { 'id' : id, type: 'SearchActivated' },
+                    url: "{{ path('fenchy_admin_dictionary_switch') }}",
+                    success: function (result) {
+                        if (result !== false) {
+                            if (result.status === 1) {
+                                $('td.search-activated[rel="'+result.id+'"]').text('Yes');
+                            } else if (result.status === 0) {
+                                $('td.search-activated[rel="'+result.id+'"]').text('No');
+                            }
+                        } else {
+                            alert(result);
+                        }
+                    },
+                    errors: function (result) {
+                        alert(result);
+                    }
+                });
+            });
+            $('.tag-activated').click(function() {
+                var id = $(this).attr('rel');
+                $.ajax({
+                    type:     'POST',
+                    dataType: 'json',
+                    data:     { 'id' : id, type: 'TagActivated' },
+                    url: "{{ path('fenchy_admin_dictionary_switch') }}",
+                    success: function (result) {
+                        if (result !== false) {
+                            if (result.status === 1) {
+                                $('td.tag-activated[rel="'+result.id+'"]').text('Yes');
+                            } else if (result.status === 0) {
+                                $('td.tag-activated[rel="'+result.id+'"]').text('No');
+                            }
+                        } else {
+                            alert(result);
+                        }
+                    },
+                    errors: function (result) {
+                        alert(result);
+                    }
+                });
+            });
+            $('.disabled').click(function() {
+                var id = $(this).attr('rel');
+                $.ajax({
+                    type:     'POST',
+                    dataType: 'json',
+                    data:     { 'id' : id, type: 'Disabled' },
+                    url: "{{ path('fenchy_admin_dictionary_switch') }}",
+                    success: function (result) {
+                        if (result !== false) {
+                            if (result.status === 1) {
+                                $('td.disabled[rel="'+result.id+'"]').text('Yes');
+                            } else if (result.status === 0) {
+                                $('td.disabled[rel="'+result.id+'"]').text('No');
+                            }
+                        } else {
+                            alert(result);
+                        }
+                    },
+                    errors: function (result) {
+                        alert(result);
+                    }
+                });
+            });
+            $('.is-tag').click(function() {
+                var id = $(this).attr('rel');
+                $.ajax({
+                    type:     'POST',
+                    dataType: 'json',
+                    data:     { 'id' : id, type: 'Tag' },
+                    url: "{{ path('fenchy_admin_dictionary_switch') }}",
+                    success: function (result) {
+                        if (result !== false) {
+                            if (result.status === 1) {
+                                $('td.is-tag[rel="'+result.id+'"]').text('Yes');
+                            } else if (result.status === 0) {
+                                $('td.is-tag[rel="'+result.id+'"]').text('No');
+                            }
+                        } else {
+                            alert(result);
+                        }
+                    },
+                    errors: function (result) {
+                        alert(result);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block admincontent %}
+    <form action="{{ path('fenchy_admin_search') }}" method="post" {{ form_enctype(filter) }}>
+        {{ form_widget(filter) }}
+        <br/>
+        <input type="submit" value="Search"/>
+    </form>
+    <table class="admin-table">
+        <thead>
+            <tr><th>ID</th><th>Text</th><th>Search Q.</th><th>Tag Q.</th><th>Is Tag</th><th>Search Act.</th><th>Tag Act.</th><th>Disabled</th></tr>
+        </thead>
+        <tbody>
+            {% for word in dictionary%}
+                <tr>
+                    <td>{{ word.id }}</td>
+                    <td>{{ word.text }}</td>
+                    <td>{{ word.quantitySearch }}</td>
+                    <td>{{ word.quantityTag }}</td>
+                    <td class="is-tag switch" rel="{{word.id}}">{{ word.tag ? 'Yes' : 'No' }}</td>
+                    <td class="search-activated switch" rel="{{word.id}}">{{ word.searchActivated ? 'Yes' : 'No' }}</td>
+                    <td class="tag-activated switch" rel="{{word.id}}">{{ word.tagActivated ? 'Yes' : 'No' }}</td>
+                    <td class="disabled switch" rel="{{word.id}}">{{ word.disabled ? 'Yes' : 'No' }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+    

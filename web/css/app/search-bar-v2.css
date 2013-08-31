@@ -1,0 +1,111 @@
+@charset "utf-8";
+
+form .submit i {
+    color: #45BABA;
+}
+section.main .comboSearch {
+    margin: 16px 0 16px 2.47%; /* 19px; */   
+}
+
+section.main .comboSearchWide {
+    margin: 16px 0 16px 0px !important;
+}
+section.main .comboSearch form {
+    border: 1px solid rgba(175,175,175, 0.25);
+}
+.comboSearch form {
+    position: relative;
+    padding: 4px 5px 5px 7px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background: -moz-linear-gradient(top, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.06) 33%, rgba(1,1,1,0.06) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.06)), color-stop(33%,rgba(255,255,255,0.06)), color-stop(100%,rgba(1,1,1,0.06))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(255,255,255,0.06) 0%,rgba(255,255,255,0.06) 33%,rgba(1,1,1,0.06) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(255,255,255,0.06) 0%,rgba(255,255,255,0.06) 33%,rgba(1,1,1,0.06) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(255,255,255,0.06) 0%,rgba(255,255,255,0.06) 33%,rgba(1,1,1,0.06) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(255,255,255,0.06) 0%,rgba(255,255,255,0.06) 33%,rgba(1,1,1,0.06) 100%); /* W3C */
+    -pie-background: linear-gradient(to bottom, rgba(255,255,255,0.06) 0%,rgba(255,255,255,0.06) 33%,rgba(1,1,1,0.06) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0fffffff', endColorstr='#0f010101',GradientType=0 ); /* IE6-9 */
+    behavior: url(/plugins/pie.php);
+}
+.comboSearch fieldset > div {
+    display: inline-block;
+    vertical-align: middle;
+}
+.comboSearch .searchInput {
+    width: 48.57%; 
+    margin-right: -5px;
+    -webkit-border-radius: 4px 0 0 4px;
+    -moz-border-radius: 4px 0 0 4px;
+    border-radius: 4px 0 0 4px;
+    behavior: url(/plugins/pie.php);
+}
+.comboSearch .searchInput #search {
+    width: 92.14%;
+    padding: 0 3.93%;
+}
+.comboSearch .locationInput {
+    width: 32.65%; 
+    -webkit-border-radius: 0 4px 4px 0;
+    -moz-border-radius: 0 4px 4px 0;
+    border-radius: 0 4px 4px 0;
+    behavior: url(/plugins/pie.php);
+}
+.comboSearch .locationInput i:after {
+    content: '';
+    position: absolute;
+    width: 14.6%; /* 35px; */;
+    height: 100%;
+    background: #fff;
+    left: -4.17%; /* -10px; */
+    top: 0;
+    display: block;
+    z-index: -1;
+}
+.comboSearch .locationInput #location {
+    width: 79.5%;
+    padding: 0 5.9% 0 14.6%;
+}
+.ie8 .comboSearch .searchInput input {
+    padding: 0 !important;
+    display: block;
+    margin: 0 auto!important;
+}
+.comboSearch .submit {
+    float: right;
+}
+.comboSearch .submit .icon-search {
+    font-size: 1.692em; /* 22px;*/
+    margin-right: 1px;    
+}
+.comboSearch form .submit button {
+    line-height: 31px;
+}
+
+
+
+
+/* "Search Phrese" autocomplete menu */
+.ui-helper-hidden-accessible {
+    display: none;
+    background-color: red;
+    color: yellow;
+}
+
+.ui-autocomplete {
+    width: 260px;
+    padding: 0 14px;
+    background-color: white;
+}
+
+li.ui-menu-item {
+    line-height: 30px;
+}
+
+li.ui-menu-item:hover {
+background-color: yellow;    
+}
+/* END - "Search Phrese" autocomplete menu */
+
+

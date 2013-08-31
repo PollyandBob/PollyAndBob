@@ -1,0 +1,183 @@
+@charset "utf-8";
+
+.ui-widget-content a {
+    color: #149A9A;
+}
+#reviews-tabs {
+    background: #e8e8e8;
+     -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 8px 14px;
+    border: 0;
+    font-size: 1em;
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}
+#reviews-tabs header .reviews-person-summary {
+    float: left;
+}
+#reviews-tabs header .edit-btn {
+    width: 23.36%; /* 164px; */
+}
+#reviews-tabs .ui-tabs-nav {
+    float: left;    
+    margin-right: 10px;
+    padding: 0;
+    border: 0;
+    background: none;
+}
+#reviews-tabs .reviews-person-summary p {
+    font-size: 1.077em;
+    font-weight: bold;
+    line-height: 33px;
+    color: #6c6c6c;
+}
+#reviews-tabs .reviews-person-summary p .count {
+    color: #a1a1a1;   
+}
+#reviews-tabs .ui-tabs-nav li {
+    border-top: 1px solid #d0cfcf;
+    border-left: 1px solid #d0cfcf;
+    border-right: 1px solid #d0cfcf;
+     -webkit-border-radius: 3px 3px 0 0;
+    -moz-border-radius: 3px 3px 0 0;
+    border-radius: 3px 3px 0 0;
+    background: #dedcdc;
+    position: relative;
+    margin: 0 0.2em -1px 0;
+    padding: 0;
+    behavior: url(/plugins/pie.php);
+}
+#reviews-tabs .ui-tabs-nav li a {
+    display: block;
+    color: #6c6c6c;
+    font-size: 1.077em;
+    line-height: 34px; 
+    padding: 0 1em 0 0.857em;
+    float: none;
+}
+#reviews-tabs.opinion-reviews .ui-tabs-nav li a {
+    font-size: 0.923em;    
+}
+#reviews-tabs .ui-tabs-nav li.ui-state-active {
+    background: #ffffff;
+    border-top: 1px solid #dddcdc;
+    border-left: 1px solid #dddcdc;
+    border-right: 1px solid #dddcdc;
+}
+#reviews-tabs .ui-tabs-nav li a .count,
+#reviews-tabs.opinion-reviews .ui-tabs-nav li a strong {
+    opacity: 0.7;
+}
+.ie8 #reviews-tabs .ui-tabs-nav li a .count,
+.ie8 #reviews-tabs.opinion-reviews .ui-tabs-nav li a strong {
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+}
+#reviews-tabs .ui-tabs-nav li a strong,
+#reviews-tabs.opinion-reviews .ui-tabs-nav li a .count {
+    opacity: 1;
+}
+.ie8 #reviews-tabs .ui-tabs-nav li a strong,
+.ie8 #reviews-tabs.opinion-reviews .ui-tabs-nav li a .count {
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+}
+#reviews-tabs .count {
+    margin: 0 4px 0 0;    
+}
+#reviews-tabs.opinion-reviews .ui-tabs-nav .count {
+    margin: 0 0 0 4px;    
+}
+#reviews-tabs .ui-tabs-nav li a .count {
+    color: #a1a1a1;  
+}
+#reviews-tabs .ui-tabs-panel {
+    padding: 18px 10px 22px;
+    background: #ffffff;
+    border: 1px solid #dddcdc;
+    border-radius: 0;
+}
+#reviews-tabs .ui-tabs-panel > article,
+#spinner-div,
+#leave-review {
+    border-top: 1px solid #d1d2d2;
+    padding: 18px 0 10px;
+}
+#reviews-tabs .ui-tabs-panel > article:first-child,
+#reviews-tabs .ui-tabs-panel > div:first-child, 
+#reviews-tabs .ui-tabs-panel > form:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+#reviews-tabs .tabs-reviews article .img {
+    width: 8.82%; /* 60px; */
+    max-height: 60px;
+    max-width: 60px;
+}
+#reviews-tabs .tabs-reviews article .img img {
+    border: 1px solid #777777;
+}
+#reviews-tabs .tabs-reviews article .img .name {
+    font-size: 0.923em;
+    text-align: center;
+    word-break: break-all;
+}
+#reviews-tabs .tabs-reviews article .post {
+    width: 86.17%; /* 586px; */
+    margin-left: 2.21%; /* 15px; */        
+    margin-bottom: 13px;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+#reviews-tabs .tabs-reviews article .post p {
+    color: #868686;
+    line-height: 20px;
+    max-height: 160px;
+}
+#reviews-tabs .tabs-reviews article footer {
+    clear: both;
+    text-align: right;
+    padding-right: 27px;
+}
+#reviews-tabs .tabs-reviews article footer a {
+    margin-left: 8px;
+}
+#reviews-tabs .tabs-reviews article footer a strong {
+    font-size: 0.923em;
+    color: #6c6c6c;
+    opacity: 0.7;
+}
+.summary-icon {
+    background: url(/images/site/summary_icon.png) no-repeat;
+    width: 21px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.positive-icon {
+    background-position: -29px -2px;
+}
+.negative-icon {
+    background-position: -2px -2px;
+}
+#reviews-tabs .summary-icon {
+    margin-right: 4px;
+}
+
+#reviews-tabs.content-rtl header > .button {
+    display: inline-block;
+    text-align: right;
+}
+#reviews-tabs header .button .wrapper {
+    line-height: 25px;
+}
+#reviews-tabs > .button a {
+    line-height: 25px;
+}
+
+#reviews-tabs .ui-tabs-panel #spinner-div {
+    text-align: center;
+    width: 100%;
+    padding-top: 30px;
+    padding-bottom: 42px;
+}

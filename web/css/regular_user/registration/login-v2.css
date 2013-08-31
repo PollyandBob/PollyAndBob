@@ -1,0 +1,308 @@
+@charset "utf-8";
+
+
+#user-account-login {
+    margin-top: 5px;
+}
+#user-account-login > li:first-child {
+    border-left: 0;
+    border-right: 1px solid #15a7a7;
+}
+#user-account-login > li > a {
+    margin: 0 9px;
+    font-size: 16px;
+    position: relative;
+    display: inline-block;
+}
+#user-account-login .icon-caret-down, 
+#user-account-login .icon-caret-up {
+    margin-right: -6px;
+    margin-left: 4px;
+    font-size: 18px;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+}
+#user-account-login > li > a span {
+    padding: 0 8px;
+    display: block;
+    position: relative;
+    line-height: 24px;
+    z-index: 7;
+}
+#user-account-login .active > a:hover,
+#user-account-login .active > a i {
+    color: #117070 !important;
+}
+#user-account-login-login.active > a {
+    color: #117070;
+}
+#user-account-login-login.active > a:after {
+    content: '';
+    position: absolute;
+    z-index: 6;
+    left: -8px;
+    bottom: -4px;
+    width: 100%;
+    height: 4px;
+    background: #CDF0EE;
+    display: block;
+    padding: 0 4px;
+}
+.ie8 #user-account-login-login.active > a:after {
+    display: none;
+}
+.ie8 #user-account-login-login > a .after {
+    position: absolute;
+    z-index: 6;
+    left: -9999px;
+    bottom: -1px;
+    width: 100%;
+    height: 4px;
+    background: #CDF0EE;
+    padding: 0 4px;
+}
+.ie8 #user-account-login-login.active > a .after {
+    left: -8px;
+}
+#user-account-login-login.active > a:before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: #CDF0EE;
+    display: block;
+    padding: 4px;
+     -webkit-border-radius: 3px 3px 0 0;
+    -moz-border-radius: 3px 3px 0 0;
+    border-radius: 3px 3px 0 0;
+    -webkit-box-shadow: 0px 0px 3px rgba(2, 2, 2, 0.4);
+    -moz-box-shadow:    0px 0px 3px rgba(2, 2, 2, 0.4);
+    box-shadow:         0px 0px 3px rgba(2, 2, 2, 0.4);
+    z-index: 6;
+}
+.ie8 #user-account-login-login.active > a:before {
+    display: none;
+}
+.ie8 #user-account-login-login > a .before {
+    position: absolute;
+    left: -9999px;
+    bottom: 1px;
+    width: 100%;
+    height: 100%;
+    padding: 4px 4px 0; 
+    background: #CDF0EE;
+    border-radius: 3px 3px 0 0;
+    box-shadow: 0px 0px 3px rgba(2, 2, 2, 0.4);
+    behavior: url(/plugins/pie.php);
+}
+.ie8 #user-account-login-login.active > a .before {    
+    left: -8px;
+}
+.loginform {
+    display: none;
+    background: #cdf0ee;
+}
+li.active .loginform {
+    display: block;
+}
+.loginform header {
+    padding-left: 14px;
+    position: relative;
+    text-align: left;
+}
+.loginform header:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #31a4a4;
+    opacity: 0.2;
+}
+.ie8 .loginform header:before {
+    background: #aee1df;
+}
+.loginform header h2 {
+    font-size: 16px;
+    line-height: 30px;
+    color: #31a4a4;
+}
+.loginform > div {
+    padding: 15px 42px 25px 44px;
+}
+.loginform p {
+    text-align: center;
+    font-size: 11px;
+    margin-top: 8px;
+}
+.loginform .sign-btn + p {
+    position: relative;
+    top: 7px;
+    border-top: 1px solid #68c8c8;
+}
+.loginform .sign-btn + p strong {
+    background: #CDF0EE;
+    padding: 0 9px;
+    position: relative;
+    top: -9px;
+    color: #117070;
+}
+.loginform form {
+    margin-top: 4px;
+}
+.loginform form p {
+    margin-top: 5px;
+}
+.loginform form a {
+    color: #63abab;
+}
+.loginform .sign-btn {
+    position: relative;
+    height: 20px;
+     -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px; 
+    display: block;
+    margin-top: 7px;
+    behavior: url(/plugins/pie.php);
+}
+.loginform .sign-btn > span {
+    float: left;    
+    text-align: center;
+    width: 140px;    
+    display: block;
+    line-height: 18px;
+}
+.loginform .sign-btn > span:first-child {
+    width: 34px; 
+    height: 100%;
+}
+.loginform .sign-btn > span:first-child i {
+    display: none;
+}
+.loginform .sign-btn strong {
+    display: block;
+    text-align: center;
+    font-size: 11px;
+    line-height: 18px;
+    white-space: nowrap;
+}
+.loginform .fb_btn {
+    background: #5F78AB;
+    color: #ffffff;
+    border-left: 1px solid #455e8b;
+    border-top: 1px solid #58709f;
+    border-right: 1px solid #38527d;
+    border-bottom: 1px solid #284470;
+}
+.loginform .fb_btn > span {
+    border-top: 1px solid #8096bf;
+    border-left: 1px solid #839ac4;    
+}
+.loginform .fb_btn > span:first-child {
+    border-right: 1px solid #4b68a2;
+    border-left: 0;
+    background: url(/images/site/fb_form_btn_icon.png) no-repeat center;
+}
+.loginform .tt_btn {
+    background: #a0e7eb;
+    color: #5c91b3;
+    border-left: 1px solid #6cc8dc;
+    border-top: 1px solid #96dbe6;
+    border-right: 1px solid #70cadc;
+    border-bottom: 1px solid #4db9d3;
+}
+.loginform .tt_btn > span {
+    border-top: 1px solid #d9f4f7;
+    border-left: 1px solid #d4f5f6;
+}
+.loginform .tt_btn > span:first-child {
+    border-right: 1px solid #77d4eb;
+    border-left: 0;
+    background: url(/images/site/tt_form_btn_icon.png) no-repeat center;
+}
+.loginform form .fieldInput {
+    margin-top: 5px;
+    height: 24px;
+}
+.loginform form .fieldInput input {
+    width: 92.046%;
+    padding: 0 3.977%;     
+    font-size: 12px; 
+}
+.ie8 .loginform form .fieldInput input {
+    display: block;
+    margin: 0 auto;
+    line-height: 24px;
+}
+.loginform form .submit {
+    margin: 10px auto 0;
+    width: 173px;
+}
+.loginform form .submit input {
+    width: 100%;
+    text-align: center;
+}
+#login-wrapper {    
+    -webkit-box-shadow: 0px 0px 3px rgba(2, 2, 2, 0.4);
+    -moz-box-shadow:    0px 0px 3px rgba(2, 2, 2, 0.4);
+    box-shadow:         0px 0px 3px rgba(2, 2, 2, 0.4);
+    -webkit-border-radius: 3px 0 3px 3px;
+    -moz-border-radius: 3px 0 3px 3px;
+    border-radius: 3px 0 3px 3px;
+    position: absolute;
+    top: 32px;
+    padding: 8px 10px 11px;
+    width: 178px;
+    z-index: 5;
+    behavior: url(/plugins/pie.php);
+}
+#signup-wrapper {
+    border: 3px solid #149797;
+    width: 291px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+#signup-wrapper form p {
+    margin: 18px 0 0 19px;
+    font-weight: bold;
+    line-height: 15px;
+    text-align: left;
+    color: #777777;
+}
+#signup-wrapper form p a {
+    color: #63ABAB;
+}
+
+@media screen and (max-width : 768px) {
+    #login-wrapper {
+        width: 186px;
+    }
+    .loginform .sign-btn > span {
+        width: 148px;
+    }
+    .loginform .sign-btn > span:first-child {
+        width: 26px;
+    }
+    .loginform .sign-btn span {        
+        overflow: hidden;
+    }
+    .loginform .sign-btn strong {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+@media screen and (max-width : 620px) {
+    #user-account-login {
+        /*text-align: center;*/
+    }    
+    #user-account-login-login {
+        margin-right: -3px;
+    }
+}

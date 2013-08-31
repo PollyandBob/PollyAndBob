@@ -1,0 +1,24 @@
+message:
+  receiver: Receiver:
+
+  title: Title
+
+  content: Write a Message
+
+  reply: Write a Reply
+
+  welcome:
+    title: Welcome to Fenchy!
+
+    content: Hi %firstname%,  I am Matthias, one of the creators of Fenchy. With Fenchy we want to offer the easiest way to connect with your neighborhood.  There are 3 things we think you should know:1. You are one of the very first Fenchy users. We will constantly increase the functionality of Fenchy. Feel free to directly sending me your feedback.  2. You can easily use Fenchy with your local friends. Just click on your ÔÇ£contactsÔÇØ if you want to invite them.  3. For best results, you can complete your profile information under the settings section in the top of the right corner.  Thank you for your registration and welcome to Fenchy!  Matthias
+
+  deleted_user:
+    firstname: This account was deleted.
+
+  notification:
+    email:
+      subject: New message from %username%
+
+      body: You have got new message on Fenchy.
+
+      follow_link: View conversation on Fenchy

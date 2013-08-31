@@ -1,0 +1,538 @@
+regularuser:
+  leave_a_review: Leave a review
+
+  edit_review: Edit Review
+
+  load_more: Load more
+
+  positives: Positive
+
+  negatives: Negative
+
+  positive: Positive
+
+  negative: Negative
+
+  all_trust_points: Reputation:
+
+  dont_ask: Don't ask this question again.
+
+  disable_connect: Don't ask this question again.
+
+  no_contacts: You don't have any contacts yet. Just connect your account to invite your Facebook or Twitter friends.
+
+  references: References
+
+  reviews_: 
+
+  contacts: Contacts
+
+  completed: Completed
+
+  facebook_friends: Facebook Friends
+
+  email: Email
+
+  invite: Invite to Fenchy
+
+  join_to_fenchy: Join Fenchy
+
+  would_like_to_invite_you: would like to invite you to his contacts. Just follow this link and join Fenchy
+
+  unexpected_problem_facebook: Sorry, un unexpected problem while connecting Facebook appeared. Please try it again.
+
+  all: All
+
+  unread: Unread
+
+  unreplied: Unreplied
+
+  sent: Sent
+
+  send_new_message: Send message
+
+  change_password: Change password
+
+  delete_account: Delete account
+
+  message:
+    sent: Your message has been sent!
+
+    deleted: Message deleted!
+
+    about_pre_title: "About:"
+
+    no_messages: You don't have any messages in your inbox.
+
+    check_any_message: Please select at least one message.
+
+    messages_has_been_deleted: The messages have been deleted.
+
+    to: to
+
+    new_message: New message
+
+    delete_selected: Delete selected
+
+    sender: Sender
+
+    subject: Subject
+
+    date: Date
+
+    read: All messages have been set as read!
+
+    mark_all_as_read: Mark all messages as read
+
+    refresh: Refresh
+
+    show_dd: Show
+
+    message_center: Messages
+
+  save: Save
+
+  cancel: Cancel
+
+  add: Add
+
+  edit: Edit
+
+  delete: Delete
+
+  show: Show
+
+  about_me: About Me
+
+  my_community_ponts: MY COMMUNITY POINTS
+  
+  my_neighbours: MY NEIGHBOURS
+  
+  my_location: MY LOCATION
+  
+  find_me_by_what_i_like: Find Me by what i like
+
+  i_like: I Like
+
+  hot_places: Hot Places in the neighborhood
+
+  promoted_initiaives: Promoted Initiatives in the
+
+  my_languages: My Languages
+
+  not_shown_information: Not shown information
+
+  neighbours: Neighbors
+  
+  total_community_points: TOTAL COMUNITY POINTS
+  
+  profile_completion: PROFILE COMPLETION
+  
+  my_neighbors: MY NEIGHBORS
+  
+  listings_posted: LISTINGS POSTED
+  
+  neighbors_served: NEIGHBORS SERVED
+  
+  reviews_received: REVIEWES RECEIVED
+  
+  completed_activities: COMPLETED ACTIVITIES
+
+  written_reviews: WRITTEN REVIEWS
+
+  invited_and_registered_users: INVITED AND REGISTERED USERS
+  
+  shareholder: SHAREHOLDER
+  
+  location_verified: LOCATION VERIFIED
+  
+  passport_verified: PASSPORT VERIFIED
+  
+  fill_my_profile_now: FILL MY PROFILE NOW!
+  find_new_neighbours_now: FIND NEW NEIGHBOURS NOW!
+  create_listing: CREATE LISTINGS!
+  uptodate_your_listings_now: UPTODATE YOUR LISTINGS NOW!
+  ask_for_reviews: ASK FOR REVIEWS!
+  search_new_activity: SEARCH NEW ACIVITY!
+  write_review_now: WRITE REVIEW NOW!
+  tell_friend_about_pollyandbob_now: TELL A FRIEND ABOUT POLLY&BOB NOW!
+  become_shareholder_now: BECOME SHAREHOLDER NOW!
+  verify_your_location_now: VERIFY YOUR LOCATION NOW!
+  verify_your_passport_now: VERYFY YOUR PASSPORT NOW!
+  
+  disconnect_twitter: Disconnect Twitter
+
+  connect_to_twitter: Connect to Twitter
+
+  connect_to_facebook: Connect to Facebook
+
+  disconnect_facebook: Disconnect Facebook
+
+  add_to_timeline: Post on Timeline
+
+  disconnect_timeline: Disconnect from Timeline
+
+  only_jpg_png_maximum2m: Please use only .jpg and .png files. Maximum 5MB
+
+  put_pin: Drop pin on your location
+
+  location: Your detailed location
+
+  printable_location_description: Will be shown to all neighbors.
+
+  printable_location: Your neighborhood
+
+  general: General
+
+  notification: Notification
+
+  image: Image
+
+  connect: Connect
+
+  submit: Submit
+
+  ivitation_to_fenchy_sent: An Invitation to Fenchy has been sent!
+
+  no_search_results_for_criteria: We could not find any results that matched your search criteria.
+
+  about_him: About him
+
+  put_on_fb: Publish on Facebook Timeline.
+
+  filter_notSelected: Filter
+
+  category_notSelected: Category
+
+  about_you: About You
+
+  link_to_your_page: Link to your page
+
+  postcode: Postcode
+
+  your_postal_code: Your postal code
+
+  city: City
+
+  your_city: Your city
+
+  district: District
+
+  your_district: Your district
+
+  street: Street
+
+  your_street: Your street
+
+  country: Country
+
+  your_country: Your country
+
+  firstname: First name:
+
+  your_firstname: Your first name
+
+  lastname: Last name:
+
+  your_lastname: Your last name
+
+  gender: Gender:
+
+  age: Age:
+
+  your_age: Your age
+
+  friends:
+    exists: %friend% is already your contact list.
+
+    not: %friend% is not yet in your contactlist.
+
+    invite: Contact Request
+
+    invitation:
+      title: Pending Invitations
+
+      no: You have no pending invitations.
+
+      send: A contact request has been sent.
+
+      already: You have already invited %friend%.
+
+      accept: Accept
+
+      reject: Reject
+
+      rejected: You have rejected contact invitation from %friend%
+
+      invitefb: Invite friends
+
+    contacts:
+      no: There are no contacts in your contact list.
+
+      no_other: There are no contacts in this contact list.
+
+      title: contact list
+
+    delete:
+      1: Do you really want to delete user %user% from your contacts ?
+
+    added: %friend% is now your contact.
+
+    deleted: %friend% has been removed from your contacts
+
+  interval: How often:
+
+  neighbours_filter:
+    today: Today
+
+    contacts: Contacts
+
+    these_days: These days
+
+  notice:
+    deleted: The listing has been deleted.
+
+  filter:
+    yesterday: Yesterday
+
+    today: Today
+
+    tomorrow: Tomorrow
+
+  not_shown_publicy: Your location will not be shown publicy
+
+  start_fenchy: Start Fenchy
+
+  locationpopup:
+    required_confirmation_message: Please confirm your account
+
+    required_location_message: Enter your location
+
+  languages: Spoken Language(s)
+
+  your_languages: Language or languages separated by comma
+
+  about_me_placeholder: Short text describing yourself.
+
+  change_your_password: Change your password
+
+  delete_your_account: Delete your account
+
+  social:
+    connected: Connected
+
+    notconnected: Not connected
+
+    connect: Connect
+
+    disconnect: Disconnect
+
+    publish_facebook: Publish listings on Facebook
+
+    invite_facebook: Invite your friends to Fenchy !
+
+  additional_info: Additional Info
+
+  validation:
+    invalid__firstname: Your first name contains invalid signs.
+
+  settings_delete: Usu?ä konto
+
+  end_of_list_msg: 
+
+  end_of_notice_list_msg: 
+
+  ref_trust_points: Trust points from references:
+
+  con_trust_points: Trust points from contacts:
+
+  activ_trust_points: Trust points from activities:
+
+  reviews_tab: Reviews
+
+  listings_tab: Listings
+
+  reviews_of_others_tab: Reviews written 
+
+  about: About
+
+  read_all_messages: Set all as read
+
+  settings: Account Settings
+
+  interests_and_activities: "Interests & Activities:"
+
+  a_place_near_you: A place near You
+
+  interest_or_activity:
+    deleted: Interest or activity has been deleted
+
+  edit_I_or_A: Edit interest or activity
+
+  reviews:
+    email:
+      subject: %username% wrote a review
+
+      1: Hi %username%,
+
+      2: "%username% wrote a review to your listing %listing%. To reply to this review, please follow the url below:"
+
+    form:
+      title: Title of listing
+
+      text: Text
+emailchange:
+  flash:
+    change_requested: To confirm the change of your email address, please click on the confirmation link we just sent to your new email address.
+
+    request_denied: You have already requested to change your email address within the last %ttlh% hours. Please confirm the link we sent to your new email address. Please check your spam folder, in case you did not receive the mail.
+
+    token_expired: The change of your email address was requested more than %ttlh% hours ago and is unfortunately expired. Please submit a new reqest to change your email address.
+
+    change_success: Your email address has been changed sucessfully.
+
+    change_aborted: The process of changing your email address was stopped.
+
+  email:
+    subject: Change email address
+
+    1: Hi %username%,
+
+    2: To change your Fenchy email, please click on the following link:
+
+    3: Change Email address
+
+    4: If this link doesn't work, please copy the following URL and paste it into your browser:
+
+    6: Stop process of changing the email address.
+
+    7: or copy the following link and paste it into your browser:
+
+    8: You did not ask for changing the Email address on your Fenchy account ? Please ignore this mail.
+
+    9: Probably somebody used your e-mail address accidentally.
+
+    10: Thank you,
+
+    11: Your Fenchy team
+
+    5: To stop your Fenchy e-mail change, please click on the following link:
+help: Services / Help
+goods: Goods
+events: Create Event
+others: Other
+help_prefix: ''
+goods_prefix: ''
+events_prefix: ''
+others_prefix: ''
+offer: Offered
+need: Needed
+listing:
+  create:
+    title: Create Your Listing
+
+    tab_title:
+      1: Listing Category
+
+      2: Listing Details
+
+    1:
+      subtitle: Select a Category
+
+      description: Pick the category that best describe your listing
+
+    2:
+      subtitle: About Your
+
+      description: Tell us more about your listing
+
+    start_date: Start Time
+
+    end_date: End Time
+
+  show:
+    tags: Tags
+
+    description: Description
+
+  edit:
+    title: Edit Your Listing
+
+    back_to_management: Back to list
+
+    flash_success: The changes has been saved successfully.
+
+  manage_listings: My listings
+
+  no: You didn't add any listing yet.
+
+  delete:
+    msg: Do you really want to delete your listing %notice% ?
+
+  manage:
+    flash:
+      delete: Listing has been deleted.
+
+  category: Category
+settings:
+  general:
+    name: Profile information
+
+    profile_photo: Profile Picture
+
+  location:
+    name: Location
+
+    label: Your location
+
+  emailnotifications:
+    name: Email notifications
+
+  socialnetworks:
+    name: Social networks
+
+  account:
+    name: Account
+
+    delete_confirm_action: Please confirm the deletion of your account. Once your account is deleted, it can't be restored.
+
+    change_password_name: Change account password
+
+  flash:
+    data_saved: The profile information has been changed.
+
+    form_errors: An error occured in submitted form
+
+  locationpopup:
+    success: Thank you for providing us with your location.
+
+    name: Please provide your current location.
+
+    description: Please provide your current location to have full access to the search.
+reputation:
+  title: Reputation Breakdown
+
+  listings: Listings
+
+  positive_reviews: Positive Reviews
+
+  written_reviews: Reviews Written
+
+  facebook: Facebook Connect
+
+  contacts: Contacts
+
+  profile: Profile information
+member_since: Member Since
+invitations:
+  email:
+    subject: %username% sent a contact request
+
+    1: Hi %username%,
+
+    2: "%username% sent you a contact request on Fenchy. To confirm %username% as a contact, just follow the link below:"
+
+  buttons:
+    accept: Accept
+
+    reject: Reject

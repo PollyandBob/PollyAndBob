@@ -1,0 +1,139 @@
+@charset "utf-8";
+
+header.main {
+    padding: 12px 0 5px;
+    min-height: 44px;
+    position: fixed;    
+    width: 100%;
+    margin: 0;
+    z-index: 5;
+    background-color: #149A9A;
+    background-image: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(1,1,1,0.1) 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(1,1,1,0.1))); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(1,1,1,0.1) 100%); /* Chrome10+,Safari5.1+ */
+    background-image: -o-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(1,1,1,0.1) 100%); /* Opera 11.10+ */
+    background-image: -ms-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(1,1,1,0.1) 100%); /* IE10+ */
+    background-image: linear-gradient(to top, rgba(1,1,1,0.1) 0%, rgba(255,255,255,0) 100%); /* W3C */    
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1affffff', endColorstr='#1a010101',GradientType=0 );  
+}
+header.main:after {
+    content: '';
+    position: absolute;
+    z-index: 4;
+    bottom: -3px;
+    height: 3px;
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+}
+.ie8 header.main > .after {
+    position: absolute;
+    bottom: -3px;
+    height: 3px;
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    -pie-background: rgba(0,0,0,0.4);
+    behavior: url(/plugins/pie.php);
+}
+.lte9 header.main {
+    filter: none;
+}
+
+#user-account-nav {
+    margin: 2px -2px 0 0;
+}
+#user-account-nav > ul,
+#user-account-nav > aside {
+    float: left;
+}
+#user-account-nav > ul > li {
+    float: left;
+    border-left: 1px solid #157a7a;        
+    position: relative;
+}
+#user-account-nav > ul > li > a {
+    font-weight: bold;
+}
+header.main h1 {
+    float: left;
+    margin-left: 2px;
+}
+
+header.main #user-account-item+aside {
+    position: relative;
+    margin-right: 11px;
+}
+header.main #user-account-item+aside:after {
+    content: '';
+    position: absolute;
+    right: -11px;
+    top: 4px;
+    border-right: 1px solid #15A7A7;
+    line-height: 24px;
+    height: 24px;
+    width: 0;
+}
+header.main .create-listing {     
+    width: 147px; 
+    margin-left: 1px;
+}
+header.main .create-listing .wrapper {
+    line-height: 33px;
+}
+header.main .create-listing strong {    
+    font-size: 0.923em; /* 12px */        
+}
+header.main .create-listing i {    
+    letter-spacing: 0.02em;
+    font-size: 1.538em; /* 20px */
+    margin-right: 4px;
+}
+
+@media screen and (max-width : 1024px) {
+    header.main .create-listing strong {
+        font-size: 1em;
+    }
+    header.main .create-listing i {
+        font-size: 1.65em;
+    }    
+}
+@media screen and (max-width : 768px) {    
+    #user-account-nav {
+        margin-top: 5px;
+    }    
+    #top-menu-container {
+        width: 100% !important;
+        min-width: 320px;
+    }
+}
+@media screen and (max-width : 620px) {    
+    #top-menu-container h1 {
+        text-align: center;
+        width: 100%;
+    }
+    #top-menu-container h1 a {
+        display: inline-block;
+    }
+    #user-account-nav {
+        width: 100%;
+        margin: 0 !important;
+    }
+    #user-account-nav > ul {
+        text-align: center;
+        width: 100%;
+    }
+    #user-account-nav > ul, 
+    #user-account-nav > aside {
+        float: none !important;
+    }
+    #user-account-nav > ul > li {
+        display: inline-block;
+        float: none;
+        vertical-align: middle;
+    }
+    header.main #user-account-item + aside {
+        margin-right: 0;
+    }
+    #user-account-nav aside .create-listing {
+        margin: 8px auto 0;
+    }
+}

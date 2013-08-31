@@ -1,0 +1,84 @@
+notice:
+  title: Tytuł
+
+  content: Zawartość
+
+  no_limit: bez limitu
+
+  tags: Tags
+
+  category:
+    help: Pomoc
+
+    goods: Towary
+
+    events: Wydarzenia
+
+    others: Inne
+
+  subcategory:
+    offer: Oferuję
+
+    need: Potrzebuję
+
+    to_swap: Na wymianę
+
+    to_lend: Wypożyczenie
+
+    to_use: Do użytku
+
+    to_give_away: Do oddania
+
+    sports: Sportowe
+
+    party: Imprezy
+
+    arts: Sztuka
+
+    music: Muzyka
+
+    other: Inne
+
+  filter:
+    filters: Filtry
+
+    user: Użytkownik
+
+    distance: Dystans
+
+    post_date: Data
+
+    location: Lokacja
+
+    phrase: Fraza
+
+    categories: Kategorie
+
+    clear: Wyczyść
+
+    today: Dzisiaj
+
+    yesterday: Wczoraj
+
+    this_week: Ten Tydzień
+
+    last_week: Poprzedni Tydzień
+
+    past_month: Poprzedni Miesiąc
+
+    sort:
+      rel: Trafność
+
+      dist: Odległość
+
+      time: Czas
+
+  x_listings: wpisów
+
+  sort_by: Sortuj po
+
+  similar_title: Podobne wpisy
+
+  other_from: 
+
+  other_from_title: Inne wpisy od

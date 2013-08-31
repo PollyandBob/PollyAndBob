@@ -1,0 +1,21 @@
+{% extends '::baseMin.html.twig' %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/frontend/foot-popup.css') }}" type="text/css" />
+{% endblock %}
+
+
+    
+{% block body %}
+    {% include 'FenchyFrontendBundle:Partials:headerLogo.html.twig' %}
+    <div class="rounded footpopup">
+        <h2>{{ 'frontend.privacy.title'|trans }}</h2>
+        {% if locale == 'de'%}
+            {% include 'FenchyFrontendBundle:Frontend:privacy-content-de.html.twig' %}
+        {% elseif locale == 'en' or locale == 'pl' %}
+            {% include 'FenchyFrontendBundle:Frontend:privacy-content-en.html.twig' %}
+        {% endif %}
+    </div>
+{% endblock %}

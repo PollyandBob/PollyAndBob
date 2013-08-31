@@ -1,0 +1,201 @@
+@charset "utf-8";
+
+.inner-content {
+    padding: 14px 11px 0 27px !important;
+}
+.inner-content .intro {
+    background: #ffffff;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    padding: 21px 57px 24px;
+    position: relative;
+    margin-bottom: 15px;
+    behavior: url(/plugins/pie.php);
+}
+
+blockquote.intro p {
+    overflow: hidden;
+}
+
+.inner-content .intro > i {
+    position: absolute; 
+    color: #e0e0e0;
+    font-size: 24px;
+}
+.inner-content .intro .icon-quote-left {
+    top: 3px;
+    left: 8px;
+}
+.inner-content .intro .icon-quote-right {
+    bottom: 3px;
+    right: 8px;
+}
+.inner-content .intro p {
+    font-size: 1.154em;
+    line-height: 18px;
+    color: #48b7b7;
+    letter-spacing: 0.01em;
+    font-weight: bold;
+}
+.inner-content .command-bar {
+    padding-bottom: 14px;
+    /*margin-right: 11px;*/
+}
+.inner-content .command-bar .toolbar-item {
+    float: left;
+    margin-left: 8px;
+}
+.inner-content .listing-count {
+    background: #ffffff;
+    color: #adadad;
+    line-height: 21px;
+    display: inline-block;
+    font-weight: bold;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    margin: 9px 0 0 2px;
+    width: 92px;
+    text-align: center;
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}
+.inner-content .listing-count span {
+    color: #36b9b9;
+}
+.select-button .replacement .drop-down span {
+    line-height: 21px;
+}
+.select-button .replacement .drop-down span:hover {
+    color: #fff;
+    background: #C1C1C1;
+}
+.has-more-items {
+    clear: both;
+    margin-top: 8px;
+    width: 99.8%;
+}
+.has-more-items .wrapper {
+    line-height: 35px;
+}
+.has-more-items .wrapper .icon-spinner {
+    font-size: 23px;
+    vertical-align: text-bottom;
+    margin-right: 4px;
+}
+.has-more-items .wrapper strong {
+    font-size: 1.077em !important;
+}
+
+.simple-form label {
+   display: inline-block;
+   vertical-align: baseline;
+   line-height: 16px;
+   margin-right: 8px;
+}
+.simple-form textarea, 
+.simple-form input,
+.simple-form select {
+    border: 1px solid #C1C1C1;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px; 
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}
+/*.simple-form .action-buttons a {
+    line-height: 21px;
+    padding: 0 9px;
+    margin-left: 8px;
+    background: #f3f3f3;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    display: inline-block;
+    border: 1px solid #C1C1C1;
+    position: relative;
+    behavior: url(/plugins/pie.php);
+}*/
+/*.simple-form .action-buttons a:hover {
+    background: #EAEAEA;
+}
+.simple-form .action-buttons a strong {
+    color: #ADADAD;
+    font-size: 1em;
+}*/
+.simple-form .action-buttons a i {
+    margin-right: 5px;
+}
+#fenchy_regularuserbundle_leavereviewtype > div {
+    float: right;
+    margin-top: 26px;
+}
+#fenchy_regularuserbundle_leavereviewtype > div:first-child {
+    float: left;
+    margin: 0;
+    width: 70.588%; /* 480px */ 
+}
+#fenchy_regularuserbundle_leavereviewtype > div:first-child label {
+    display: block;
+    margin-bottom: 4px;
+}
+#fenchy_regularuserbundle_leavereviewtype textarea {
+    height: 150px;  
+    width: 93.45%;
+    padding: 11px 3.125%;
+}
+
+
+/* profile review form */
+#fenchy_regularuserbundle_leavereviewprofiletype > div {
+    float: right;
+    margin-top: 26px;
+}
+
+#fenchy_regularuserbundle_leavereviewprofiletype > div.title {
+    float: none;
+    margin: 0 0 15px;
+    width: 70.588%;    
+}
+
+
+#fenchy_regularuserbundle_leavereviewprofiletype > div.title input {
+    padding: 11px 3.125%;
+    width: 93.45%;    
+}
+
+#fenchy_regularuserbundle_leavereviewprofiletype > div.content {
+    float: left;
+    margin: 0;
+    width: 70.588%;
+}
+#fenchy_regularuserbundle_leavereviewprofiletype > div.content label {
+    display: block;
+    margin-bottom: 4px;
+}
+
+#fenchy_regularuserbundle_leavereviewprofiletype > div.titlelabel {
+    display: block;
+    margin-bottom: 4px;
+}
+
+#fenchy_regularuserbundle_leavereviewprofiletype textarea {
+    height: 150px;
+    padding: 11px 3.125%;
+    width: 93.45%;
+}
+#leave-review .action-buttons {
+    margin-top: 67px;
+    width: 28%;
+}
+#leave-review .action-buttons .button {
+    float: left;
+    padding: 0 8px;
+}
+#leave-review .action-buttons .button:first-child {
+    margin-right: 10px;
+}
+#leave-review .action-buttons .button a {
+    width: 72px;
+}

@@ -1,0 +1,52 @@
+<html>
+    <body style="font-family: MYRIADPRO-REGULAR, sans-serif;">
+        <table style="border: 1px #000 solid; width: 100%; border-collapse: collapse;">
+            <tr style="
+                height: 61px;
+                background-color: #149A9A;
+                border: 3px #149A9A solid;
+                background-image: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(1,1,1,0.1) 100%); /* FF3.6+ */
+                background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(1,1,1,0.1))); /* Chrome,Safari4+ */
+                background-image: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(1,1,1,0.1) 100%); /* Chrome10+,Safari5.1+ */
+                background-image: -o-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(1,1,1,0.1) 100%); /* Opera 11.10+ */
+                background-image: -ms-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(1,1,1,0.1) 100%); /* IE10+ */
+                background-image: linear-gradient(to top, rgba(1,1,1,0.1) 0%, rgba(255,255,255,0) 100%); /* W3C */    
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1affffff', endColorstr='#1a010101',GradientType=0 );
+                ">
+				<td style="padding: 12px 0 5px 20px">
+                <img src="{{absolute(asset('images/site/fenchy_logo.png'))}}" alt="Fenchy" />
+				</td>
+            </tr>
+            <tr style="
+                border: 3px #000 solid;
+                border-top: none;
+                ">
+				<td style="padding: 20px;">
+                                    <p style="margin: 30px 0">
+                                        {{ 'regularuser.reviews.email.1'|trans({'%username%': user.regularuser.firstname }) }}
+                                    </p>
+                                    <p style="margin: 30px 0">
+                                        {{ 'regularuser.reviews.email.2'|trans({'%username%': sender.regularuser.firstname, '%listing%': ('<strong>'~notice.title~'</strong>') })|raw }}
+                                    </p>
+                                    <p style="margin: 30px 0">
+                                        <a href="{{absolute(path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')}))}}">{{absolute(path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')}))}}</a>
+                                    </p>
+                                    <table style="border: 0; width: 100%; border-collapse: collapse; border-top: 3px #000 solid; border-bottom: 3px #000 solid">
+                                        <tr>
+                                            <td style="width: 118px; padding: 20px 0px 20px 20px">
+                                                <img src="{{absolute(asset(sender.userRegular.avatar))}}" alt="avatar" />
+                                            </td>
+                                            <td style="padding: 20px 20px 20px 30px">
+                                                <p><span style="font-weight: bold; color: #149a9a">{{sender.userRegular.firstname}}</span> | {{review.createdAt|date('Y-m-d H:i')}}</p>
+                                                <p>{{review.text|nl2br}}</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <p style="text-align: center; margin-top: 50px">
+                                        {{ 'email.message.address'|trans({}, 'FOSUserBundle') }}
+                                    </p>                                    
+				</td>
+            </tr>
+        </table>
+    </body>
+</html>

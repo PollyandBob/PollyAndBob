@@ -1,0 +1,421 @@
+/* RESET CSS */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video, input {
+	margin:0;
+	padding:0;
+	border:0;
+	font-size:100%;
+	font:inherit;
+	vertical-align:baseline;
+}
+
+html {
+	overflow-x:hidden;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+	display:block;
+}
+ol, ul {
+	list-style:none;
+}
+blockquote, q {
+	quotes:none;
+}
+blockquote:before, blockquote:after, q:before, q:after {
+	content:'';
+	content:none;
+}
+/* GENERIC CSS */
+body {
+	background:#e9e6e0;
+}
+.wrapper {
+	width:970px;
+	margin:0px auto;
+	display:block;
+	overflow:hidden;
+}
+h2 {
+	width:100%;
+	text-align:center;
+	font-size:65px;
+	color:#fff;
+	font-family:mathletebulky;
+	margin-top:70px;
+}
+h3 {
+	font-size:30px;
+	color:#000;
+	font-family:mathletebulky;
+	letter-spacing:0.5px;
+}
+.clearfix {
+	clear:both;
+}
+.left {
+	float:left;
+}
+.right {
+	float:right;
+}
+a {
+	text-decoration:none;
+}
+a img {
+	border:0;
+}
+@font-face {
+    font-family: 'mathletebulky';
+    src: url('../fonts/mathlete-bulky-webfont.eot');
+    src: url('../fonts/mathlete-bulky-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/mathlete-bulky-webfont.woff') format('woff'),
+         url('../fonts/mathlete-bulky-webfont.ttf') format('truetype'),
+         url('../fonts/mathlete-bulky-webfont.svg#mathletebulky') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'code_boldregular';
+    src: url('../fonts/code_bold-webfont.eot');
+    src: url('../fonts/code_bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/code_bold-webfont.woff') format('woff'),
+         url('../fonts/code_bold-webfont.ttf') format('truetype'),
+         url('../fonts/code_bold-webfont.svg#code_boldregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*================= HEADER ======================*/
+header {
+	padding-top:10px;	
+}
+header li {
+	float:left;
+	padding-right:24px;	
+}
+header li a {
+	display:inline-block;
+	height:15px;
+	font-family:code_boldregular;
+	font-size:11px;
+	color:#fff;
+	text-transform:uppercase;
+	line-height:22px;
+}
+header li .login {
+	background:url(../images/icon_login.png) left no-repeat;
+	padding-left:23px;
+	margin-top:23px;
+}
+header li .signup {
+	background:url(../images/icon_signup.png) left no-repeat;
+	padding-left:23px;
+	margin-top:23px;
+}
+
+/*================= SLIDERCONTENT ======================*/
+#slider {
+	width:100%;
+}
+.homebanner1, .homebanner2, .homebanner3 {
+	height:668px !important;		
+}
+.homebanner1 {
+	background:url(../images/bg_slider1.png) 50% 100% no-repeat;	
+	background-size:cover;
+}
+.homebanner2 {
+	background:url(../images/bg_slider2.png) 50% 100% no-repeat;	
+	background-size:cover;
+}
+.homebanner3 {
+	background:url(../images/bg_slider3.png) 50% 100% no-repeat;	
+	background-size:cover;
+}
+#slidercontent {
+	margin-top:85px;	
+}
+#slidercontent .text1 {
+	float:left;
+	font-size:90px;
+	color:#fff;
+	font-family:mathletebulky;
+	padding-top:50px;
+	text-align:right;
+	padding-left:45px;
+}
+#slidercontent .text2 {
+	float:left;
+	font-size:90px;
+	color:#fff;
+	font-family:mathletebulky;
+	padding-top:95px;
+}
+#slidercontent a {
+	float:left;
+	padding-left:31px;
+	padding-right:17px;
+}
+#slidercontent form {
+	margin:60px auto 0 auto;
+	width:687px;
+	position:relative;
+	height:55px;
+	background:url(../images/bg_search.png) no-repeat;
+}
+#slidercontent input[type="text"] {
+	width:450px;
+	height:30px;
+	margin-top:15px;
+	margin-left:25px;
+	border:none;
+	font-family:code_boldregular;
+	font-size:16px;
+	color:#000;
+	text-transform:uppercase;
+	letter-spacing:2px;
+}
+#slidercontent button {
+	position:absolute;
+	background:url(../images/icon_search.png) no-repeat;
+	width:25px;
+	height:25px;
+	right:20px;
+	top:15px;
+	cursor:pointer;
+	border:none;
+}
+
+/*================= CONTENT ======================*/
+#content {
+	display:inline-block;
+	width:100%;
+	margin-top:100px;	
+}
+.event {
+	float:left;
+	width:224px;
+	background:#fff;
+	margin-right:24px;
+}
+.nomargin {
+	margin:0 !important
+}
+.eventcontent {
+	width:188px;
+	display:inline-block;
+	background:url(../images/bg_eventdescription.png) no-repeat;
+	padding:10px 18px 13px;
+}
+.otherdetail {
+	width:100%;
+	font-family:code_boldregular;
+	font-size:15px;
+	color:#51b9d4;
+	display:inline-block;
+	margin:7px 0 3px;
+}
+.eventcontent p {
+	font-family:code_boldregular;
+	font-size:13px;
+	color:#000;
+	line-height:16px;
+	height:95px;
+	overflow-x:hidden;
+	overflow-y:hidden;
+	letter-spacing:1px;
+}
+.eventcontent p:hover {
+	overflow-y:scroll;
+}
+#bottomlink {
+	float:left;
+	margin:60px 0;
+}
+#bottomlink a {
+	float:left;
+	font-family:mathletebulky;
+	color:#000;
+	letter-spacing:2px;
+}
+#bottomlink a:hover, #bottomlink .selected {
+	color:#51b9d4 !important;
+}
+.first {
+	width:85px;
+	margin-left:85px;
+	margin-right:95px;
+	margin-top:45px;
+	font-size:30px;
+}
+.second {
+	width:125px;
+	margin-right:95px;
+	font-size:80px;
+	color:#444 !important;
+	letter-spacing:5px !important;
+}
+.third {
+	width:70px;
+	margin-left:300px;
+	margin-right:20px;
+	font-size:30px;
+	text-align:right;
+	color:#444 !important;
+}
+.four {
+	width:330px;
+	margin-right:70px;
+	font-size:50px;
+	letter-spacing:7px !important;
+	margin-top:10px;
+}
+.five {
+	width:330px;
+	margin-right:55px;
+	margin-left:46px;
+	margin-top:-15px;
+	font-size:60px;
+	letter-spacing:5px !important;
+	color:#444 !important;
+}
+.six {
+	width:105px;
+	margin-right:125px;
+	font-size:30px;
+	padding-top:10px;
+}
+.seven {
+	width:250px;
+	margin-right:20px;
+	font-size:80px;
+	text-align:right;
+	letter-spacing:8px !important;
+	color:#444 !important;
+}
+.eight {
+	width:175px;
+	margin-right:180px;
+	font-size:60px;
+	margin-left:160px;
+	margin-top:-30px;
+	color:#444 !important;
+	letter-spacing:5px !important;
+}
+.nine {
+	width:85px;
+	margin-right:115px;
+	font-size:90px;
+	letter-spacing:8px !important;
+	color:#444 !important;
+	margin-top:-50px;
+}
+.ten {
+	width:95px;
+	margin-left:70px;
+	margin-right:10px;
+	font-size:44px;
+	text-align:right;
+	letter-spacing:4px !important;
+	color:#444 !important;
+}
+
+#bottomlink b {
+	display:none;
+}
+/*================= innerpage ======================*/
+.jcarousel-skin-tango {
+	position:relative;
+}
+#mycarousel-prev {
+	position:absolute;
+	left:-70px;
+	top:70px;
+}
+#mycarousel-next {
+	position:absolute;
+	right:-70px;
+	top:70px;
+}
+#mycarousel .right {
+	width:466px;
+	padding:0 15px;
+	margin:15px 20px 15px 0;
+}
+#mycarousel .right p:hover {
+	overflow-y:scroll;
+}
+#mycarousel .right h4 {
+	width:480px;
+	font-size:25px;
+	color:#51b9d4;
+	font-family:code_boldregular;
+	letter-spacing:2px;
+}
+#mycarousel .right p {
+	width:480px;
+	font-size:12px;
+	color:#000;
+	font-family:code_boldregular;
+	line-height:18px;
+	margin-top:5px;
+	letter-spacing:1px;
+	height:125px !important;
+	overflow-x:hidden;
+	overflow-y:hidden
+}
+
+/*================= FOOTER ======================*/
+footer {
+	width:100%;
+	background:url(../images/bg_footer.png) repeat-x;
+	padding-top:24px;
+	height:45px;
+}
+footer li {
+	float:left;
+}
+footer li a {
+	color:#fff;
+	font-family:code_boldregular;
+	font-size:12px;
+	margin-right:50px;
+	letter-spacing:1px;
+}
+
+#boxes2 #dialog1 .title {
+	font-family:mathletebulky;
+	color:#51b9d4;
+	font-size:60px;
+	letter-spacing:2px;
+}
+
+#boxes2 #dialog1 p {
+	font-family:mathletebulky;
+	color:#000;
+	font-size:40px;	
+	padding-top:10px;
+	letter-spacing:2px;
+	line-height: 40px;
+}
+#boxes2 #dialog1 form {
+	float:right;
+	margin-top:20px;
+	margin-right:50px;
+}
+#boxes2 #dialog1 input[type="email"] {
+	border:1px dashed #333;
+	width:220px;
+	height:35px;
+	text-align:center;
+	font-size:14px;
+	font-family:code_boldregular;
+	letter-spacing:1px;
+}
+#boxes2 #dialog1 input[type="submit"] {
+	width:41px;
+	height:27px;
+	background:url(../images/icon_register.png) no-repeat;
+	margin-left:10px;
+	cursor:pointer;
+}

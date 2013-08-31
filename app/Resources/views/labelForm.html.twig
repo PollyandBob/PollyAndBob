@@ -1,0 +1,40 @@
+{% block form_widget_simple %}
+{% spaceless %}
+    {% set type = type|default('text') %}
+    {% set placeholder = placeholder|default(label) %}
+    <input type="{{ type }}" placeholder="{{ placeholder|trans({}, translation_domain)|lower|trim(':') }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{% endspaceless %}
+{% endblock form_widget_simple %}
+    
+{% block textarea_widget %}
+{% spaceless %}
+    {% set placeholder = placeholder|default(label) %}
+    <textarea placeholder="{{ placeholder|trans({}, translation_domain)|lower|trim(':') }}" {{ block('widget_attributes') }} />{% if value is not empty %}{{ value }} {% endif %}</textarea>
+{% endspaceless %}
+{% endblock %}
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+        <ul class="input-element-errors">
+            {% for error in errors %}
+                <li>{{
+                    error.messagePluralization is null
+                        ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                        : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+                }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+    
+{% block form_row %}
+{% spaceless %}
+    {{ form_errors(form) }}
+    {{ form_label(form) }}
+    <div class="input-element">
+    {{ form_widget(form) }}
+    </div>
+{% endspaceless %}
+{% endblock form_row %}

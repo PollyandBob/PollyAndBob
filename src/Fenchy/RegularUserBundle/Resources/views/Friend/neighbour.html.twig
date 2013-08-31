@@ -1,0 +1,53 @@
+{% extends 'FenchyRegularUserBundle::neighbour.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/frontend/notice.css') }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ asset('css/frontend/login.css') }}" type="text/css" />
+{% endblock %}
+
+{% block profil_content %}
+<div class="rounded">
+    <div id="my_profile">
+        <div id="profile_messages">
+            {% for contact in contacts %}
+                <div class="notice message">
+                    <div class="notice-left message_image">
+                        {% if contact.user.gallery != null and contact.user.gallery.hasImages %}
+                            <img src="{{ asset(contact.user.gallery.getMainImage) }}"/>
+                        {% elseif contact.gallery.hasImages %}
+                            <img src="{{ asset(contact.gallery.getMainImage) }}"/>
+                        {% else %}
+                            <img src="/images/default_profile_picture.png">
+                        {% endif %}
+                        <div class="circle">
+                            <div class="circle_content">
+                                {{ helper.trust_points(contact.id) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notice-right">
+                        <div>
+                            <a href="{{ path('fenchy_regular_user_neighbour_about', {'id':contact.id}) }}">
+                                <div class="title">{{ contact.firstname ? contact.firstname : contact.user.username }}{% if contact.address %}, {{ contact.address }}{% endif %}</div>
+                            </a>
+                        </div>
+                        <p class="description">{{ contact.aboutMe }}</p>
+                        <div class="clear"></div>
+                        <div class="notice_activities">
+                            {% for notice in contact.user.interestsAndActivities %}
+                                {% if notice.title%}
+                                   <div class="rounded">{{ getlink(notice.title, 'fenchy_regular_user_notice_ioa', {'id': notice.id}, {'class': 'dark'})|raw }}</div> 
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+    

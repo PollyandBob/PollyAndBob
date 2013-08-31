@@ -1,0 +1,22 @@
+{% if listings %}                                
+<section class="user-profile-group">
+    <h4>{{ 'notice.similar_title' | trans }}</h4>
+    <ul class="profile-summary-list additional-user-info">
+            {% for item in listings %}
+            <li>
+                <div class="event-master clearfix">
+                    
+                    <div class="widget-image-recent">
+                        <img src="{{ asset(item.avatar) }}" alt=""/>
+                    </div>                    
+                    <div>
+                        <strong class="info-by-line"><a href="{{path('fenchy_notice_show_slug', {'slug': item.slug, 'year': item.createdAt|date('Y'), 'month': item.createdAt|date('m'), 'day': item.createdAt|date('d')  })}}">{{item.title|truncate(15)}}</a></strong>
+                        <strong class="info-by-line"><a href="#" class="location"><i class="icon-map-marker"></i><span>{{item.location}}</span></a></strong>                                                    
+                    </div>
+                </div>
+            </li>
+            {% endfor %}     
+
+        </ul>
+    </section>
+{% endif %}

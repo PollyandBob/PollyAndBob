@@ -1,0 +1,183 @@
+{# empty Twig template #}
+
+<section class="sidebar pull-left">
+    <div class="wrapper">
+        <section id="sidebar-filters" class="group clearfix">
+            <header>
+                <h3>{{ 'notice.filter.filters'|trans }}</h3>
+                <strong class="clear-all" data-bind="click: xBoxAll">{{ 'notice.filter.clear'|trans }}</strong>
+            </header>
+            <div class="wrapper">
+
+                <!-- ko if: boxUserId -->
+                <div class="tag-button">
+                    <stron>{{ 'notice.filter.user'|trans }}</stron>
+                    <i class="icon-remove" data-bind="click: xBoxUserId"></i>
+                </div>
+                <!-- /ko -->
+                
+                <!-- ko if: boxCategory -->           
+                <div class="tag-button">
+                    <strong>{{ 'notice.filter.categories'|trans }}</strong>
+                    <i class="icon-remove" data-bind="click: xBoxCategory"></i>
+                </div>
+                <!-- /ko -->
+
+                <!-- ko if: boxDistance -->
+                <div class="tag-button">
+                    <strong>{{ 'notice.filter.distance'|trans }}</strong>
+                    <i class="icon-remove" data-bind="click: xBoxDistance"></i>
+                </div>
+                <!-- /ko -->
+
+                <!-- ko if: boxPostDate -->
+                <div class="tag-button">
+                    <strong>{{ 'notice.filter.post_date'|trans }}</strong>
+                    <i class="icon-remove" data-bind="click: xBoxPostDate"></i>
+                </div>
+                <!-- /ko -->
+
+                <!-- ko if: boxWhere -->
+                <div class="tag-button">
+                    <strong>{{ 'notice.filter.location'|trans }}</strong>
+                    <i class="icon-remove" data-bind="click: xBoxWhere"></i>
+                </div>
+                <!-- /ko -->
+
+                <!-- ko if: boxWhat -->
+                <div class="tag-button">
+                    <strong>{{ 'notice.filter.phrase'|trans }}</strong>
+                    <i class="icon-remove" data-bind="click: xBoxWhat"></i>
+                </div>
+                <!-- /ko -->
+
+
+            </div>
+        </section>
+        <section class="group clearfix">
+            <header><h3>{{ 'notice.filter.categories'|trans }}</h3>
+                <div class="pull-right with-arrow">
+                    <i class="icon-caret-down"></i>
+                    <i class="icon-caret-up"></i>
+                </div>            
+            </header>
+            <div class="wrapper">
+                <div class="checkbox-button">
+
+                    <div class="bord" data-bind="template: {name: categoriesTemplate()}" ></div>  
+
+                </div>
+            </div>
+        </section>
+            
+            
+        <section class="group clearfix">
+            <header><h3>{{ 'notice.filter.post_date'|trans }}</h3>
+                <div class="pull-right with-arrow">
+                    <i class="icon-caret-down"></i>
+                    <i class="icon-caret-up"></i>
+                </div>            
+            </header>
+            <div class="wrapper">
+                <div id="filter-datepicker" data-bind="jqDatepicker: {}, jqDatepickerValue: fcPostDatePick, jqDatepickerOnPick: selectDatePick" ></div>    
+            </div> 
+        </section>            
+            
+            
+        <section class="group clearfix">
+            <header><h3>{{ 'notice.filter.post_date'|trans }}</h3>
+                <div class="pull-right with-arrow">
+                    <i class="icon-caret-down"></i>
+                    <i class="icon-caret-up"></i>
+                </div>
+            </header>
+            <div class="wrapper">
+                <div class="select-button">
+                    <ul class="replacement side-summary-list" data-bind="foreach: availablePostDates">
+                        <li data-bind="attr: { 'class': $parent.fcPostDateBar()==id ? 'select-value' : '' },
+                                       click: $parent.selectDateBar">
+                            <strong data-bind="text: name"></strong><div class="counter"><strong data-bind="text: count"></strong></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>                                
+        </section>
+
+        <section class="group clearfix">
+            <header><h3>{{ 'notice.filter.distance'|trans }}</h3>
+                <div class="with-arrow pull-right">
+                    <i class="icon-caret-down"></i>
+                    <i class="icon-caret-up"></i>  
+                </div>
+            </header>
+            <div class="wrapper" style="text-align: center">
+                <div id="filter-distance-slider" 
+                data-bind="jqSlider: {
+                    value: {{ filterDistanceSliderDefault }}, 
+                    min: {{ filterDistanceSliderMin }}, 
+                    max: {{ filterDistanceSliderMax }}, 
+                    step: {{ filterDistanceSliderSnap }}
+                },
+                jqSliderValue: fcDistance" class="bord ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all jq-slider">
+                    <a href="#" class="ui-slider-handle ui-state-default ui-corner-all">
+                        <i class="icon-align-justify"></i>
+                        <span class="inner-tooltip">
+                            <strong class="tooltip-value" data-bind="text: fcDistanceText"></strong>
+                            <span class="tooltip-arrow">
+                            </span>
+                        </span>                                            
+                    </a>
+                </div>
+                <div class="slider-value">
+                    <strong class="pull-left">&lt; 2km</strong>
+                    <strong class="pull-right">&gt; 5km</strong>
+                </div>                                            
+            </div>
+        </section>
+    </div>
+</section>
+
+
+<script type="text/html" id="categories-template">
+    <ul data-bind="foreach: fcCategories " class="replacement">
+        <li>
+            <div class="checkbox-wrapper noactive">
+                <span class="checkbox" data-bind="click: $parent.categoryCheck">
+                    <!-- ko if: checked -->
+                        <span class="check-knob">
+                            <i class="icon-ok"></i>
+                        </span>
+                    <!-- /ko -->
+                    <!--<input type="checkbox" data-bind="checked: checked" />-->
+                </span>
+                <label><strong data-bind="text: name">Help</strong></label>
+                <div class="counter">
+                    <strong data-bind="text: count">0</strong>
+                </div>
+                <!-- ko if: subcategoriesObs[0] -->
+                <div class="with-arrow pull-right">
+                    <i class="icon-caret-down"></i>
+                    <i class="icon-caret-up"></i>  
+                </div>
+                <!-- /ko -->
+            </div>
+            <ul data-bind="foreach: subcategoriesObs">
+                <li class="bord">
+                    <ul data-bind="foreach: subcategoriesObs"> 
+                        <li class="clearfix">
+                            <span class="checkbox" data-bind="click: $parents[2].categoryCheck">
+                                <!-- ko if: checked -->
+                                    <span class="check-knob">
+                                        <i class="icon-ok"></i>
+                                    </span>
+                                <!-- /ko -->
+                                <!--<input type="checkbox" data-bind="checked: checked" />-->
+                            </span>                                                                
+                            <label for="checkbox-1-1"><strong data-bind="text: name"></strong></label>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</script>

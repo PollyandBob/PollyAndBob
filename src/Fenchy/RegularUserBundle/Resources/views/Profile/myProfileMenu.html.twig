@@ -1,0 +1,12 @@
+<div class="profile_summary">
+    <h2>{{ user.firstname ? user.firstname : (user.user.username|capitalize) }}, {{ user.user.location.address }}</h2>
+    <ul>
+        <li>
+            <a href="{{ url('fenchy_create_user_sticker', {id: user.user.id}) }}" class="add-sticker"></a>
+            <a href="{{ path('fenchy_regular_user_friend_index', {'id':(user == app.user.regularuser) ? null : user.id}) }}">
+                {{ 'regularuser.contacts'|trans}} ({{ user.countMyFriends }})
+            </a>
+        </li>
+    </ul>
+</div>
+

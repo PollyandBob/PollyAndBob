@@ -1,0 +1,60 @@
+@charset "utf-8";
+
+#gallery-edit-images-container {
+    position: relative;
+}
+#gallery-edit-images-container .thumbnail {
+    background-color: #eaeaea;
+    float: left;   
+    overflow: hidden;    
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+}
+.profile_picture #gallery-edit-images-container .thumbnail {
+    z-index: 0;
+}
+#gallery-edit-images-container .empty .add-center {
+    position: absolute;   
+    cursor: pointer;
+}
+#gallery-edit-images-container .empty .add-center .icon-camera {
+    color: #d1d1d1;
+    font-size: 33px;
+}
+#gallery-edit-images-container .empty:first-child .add-center .icon-camera {
+    font-size: 65px; 
+}
+#gallery-edit-images-container .empty .add-center strong {
+    display: none;
+    font-size: 21px;
+    color: #c8c8c8;
+    text-transform: uppercase;    
+    text-align: left;
+}
+#gallery-edit-images-container .empty:first-child .add-center strong {
+    display: block;
+}
+
+#gallery-edit-container .controls .spinner {
+    position: relative;
+    z-index: 2;
+}
+#gallery-edit-container .controls .spinner span {
+    display: inline-block;
+    line-height: 19px;
+    vertical-align: top;
+}
+#gallery-edit-container .controls .spinner img {
+    display: inline-block;
+}
+.button.green {
+    color: #FFFFFF;
+    background-color: #149A9A;
+    border: 2px solid #0E7777;
+}
+.button.gray {
+    color: #B7B7B7;
+    background-color: #e4e4e4;
+    border: 2px solid rgba(100, 100, 100, 0.3);
+}

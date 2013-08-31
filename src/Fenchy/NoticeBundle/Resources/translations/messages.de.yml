@@ -1,0 +1,84 @@
+notice:
+  title: Title
+
+  content: Deine Beschreibung
+
+  no_limit: kein Limit
+
+  tags: Tags
+
+  category:
+    help: Dienste/Hilfe
+
+    goods: Dinge
+
+    events: Veranstaltungen
+
+    others: Sonstiges
+
+  subcategory:
+    offer: Angebote
+
+    need: Gesuche
+
+    to_swap: Zu Tauschen
+
+    to_lend: Zum Ausleihen
+
+    to_use: Zum Nutzen
+
+    to_give_away: Zum Verschenken
+
+    sports: Sport
+
+    party: Party
+
+    arts: Kunst
+
+    music: Musik
+
+    other: Sonstiges
+
+  filter:
+    filters: Filter
+
+    user: Nutzer
+
+    distance: Entfernung
+
+    post_date: Laufende Listings
+
+    location: Standort
+
+    phrase: Suchbegriff
+
+    categories: Kategorien
+
+    clear: Alle löschen
+
+    today: Heute
+
+    yesterday: Gestern
+
+    this_week: Diese Woche
+
+    last_week: Letzte Woche
+
+    past_month: Letzten Monat
+
+    sort:
+      rel: Relevanz
+
+      dist: Entfernung
+
+      time: Zeit
+
+  x_listings: Listings
+
+  sort_by: Sortieren nach
+
+  similar_title: Änliche Listings
+
+  other_from: Andere Listings von
+
+  other_from_title: 

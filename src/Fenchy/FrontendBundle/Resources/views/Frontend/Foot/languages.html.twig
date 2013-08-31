@@ -1,0 +1,21 @@
+{% extends 'FenchyFrontendBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/frontend/index.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/frontend/foot.css') }}" type="text/css" />
+{% endblock %}
+
+{% block header %}
+    
+{% endblock %}
+    
+{% block content %}
+    {% include 'FenchyFrontendBundle:Partials:headerPartialLogo.html.twig' %}
+    <div class="rounded">
+        <h2>{{ 'frontend.languages.title'|trans }}</h2>
+        <p>{{ 'frontend.languages.article.par_1'|trans }}</p>
+        <p>{{ 'frontend.languages.article.par_2'|trans }}</p>
+        <p>{{ 'frontend.languages.article.par_3'|trans }}</p>
+    </div>
+{% endblock %}

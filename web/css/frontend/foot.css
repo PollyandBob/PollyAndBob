@@ -1,0 +1,67 @@
+#header img{
+    margin-top:50px;
+}
+#header h2, #header div{
+    display:none;
+}
+#content .rounded{
+    border:0px;
+    width:370px;
+    height: auto;
+    margin-top:0px;
+    height:450px;
+    overflow: auto;
+    
+}
+
+#content .rounded{
+    padding-top:0px;
+}
+
+#content .rounded div{
+    margin:0px;
+    padding:0px;
+    padding-bottom:5px;
+    font-size:13px;
+}
+#content .rounded  a{
+    color:#333333;
+}
+
+
+#content .rounded h2{
+    margin-left:0px;
+    font-family: MYRIADPRO-BOLD, sans-serif; 
+    font-size:20px;
+    color:#464646;
+    padding:0px;
+    margin:10px;
+    margin-bottom:20px;
+}
+
+#content .rounded h3{
+    margin-left:0px;
+    font-family: MYRIADPRO-BOLD, sans-serif; 
+    font-size:14px;
+    color:#464646;
+    padding:0px;
+    margin:10px;
+    
+}
+
+#content .rounded p{
+    color:#464646;
+    padding:10px;
+    line-height: 0.5cm; 
+}
+
+#content .rounded div{
+    color:#464646;
+    padding-left:10px;
+    line-height: 0.5cm; 
+}
+
+.ordered-list-letter li{
+    list-style-type: lower-alpha;
+    margin-left:20px;
+}

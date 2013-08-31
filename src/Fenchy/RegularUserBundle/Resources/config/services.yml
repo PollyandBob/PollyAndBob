@@ -1,0 +1,13 @@
+parameters:
+#    fenchy_regular_user.example.class: Fenchy\RegularUserBundle\Example
+
+services:
+    twig.extension.regularuser:
+        class: Fenchy\RegularUserBundle\Twig\FenchyRegularUserExtension
+        arguments: ["@service_container"]
+        tags:
+            - { name: twig.extension }
+    listfilter:
+        class: Fenchy\NoticeBundle\Services\ListFilter
+        arguments: ["@service_container", "@doctrine", "@request", %title_to_content_search_ratio%, %minimal_search_similarity_level%, "@fenchy_dictionary"]
+        scope: request

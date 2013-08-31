@@ -1,0 +1,75 @@
+<html lang="en">
+    <head>
+        <style type="text/css">
+            body {
+                color: #868686;
+                font-family: Helvetica,​Arial,​Verdana,​sans-serif;
+            }
+            h1 {
+                margin-bottom: 5px;
+                font-size: 18px;
+            }
+            #out {
+                background: none repeat scroll 0 0 #E8E8E8;
+                border: 0 none;
+                border-radius: 5px 5px 5px 5px;
+                padding: 8px 14px;
+                float: left;
+            }
+            #desc-cont {
+                background: none repeat scroll 0 0 #FFFFFF;
+                border: 1px solid #C1C1C1;
+                border-radius: 2px 2px 2px 2px;
+            }
+            #fenchy_utilbundle_stickertype_reason input {
+                display: inline-block;
+                float: left;
+                clear: left;
+                margin-bottom: 15px;
+            }
+            #fenchy_utilbundle_stickertype_reason label {
+                display: inline-block;
+                float: left;
+                clear: right;
+            }
+            #desc-cont textarea {
+                padding: 5px;
+                width: 515px;
+                height: 75px;
+                border: none;
+                resize: none;
+            }
+            #save {
+                cursor: pointer;
+                display: inline-block;
+                font-size: 14px;
+                font-weight: bold;
+                padding: 5px 25px;
+                text-align: center;
+                background-image: linear-gradient(to top, rgba(1, 1, 1, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+                border-radius: 3px 3px 3px 3px;
+                text-align: center;
+                font-family: Helvetica,​Arial,​Verdana,​sans-serif;
+                color: #FFFFFF;
+                background-color: #149A9A;
+                border: 2px solid #0E7777;
+                float: right;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Report</h1>
+        <div id="out">
+            <form action="{{ path('fenchy_create_'~sticker.target~'_sticker', {id: sticker.targetId}) }}" method="post" {{ form_enctype(form) }} class="student-form">
+                {{ form_widget(form.reason) }}
+                <div style="clear: both;"></div>
+                <div id='desc-cont'>
+                    {{ form_widget(form.description) }}
+                </div>
+                <input id="save" type="submit" value="{{ 'btn.send' | trans }}"/>
+                {{ form_rest(form) }}
+            </form>
+        </div>
+    </body>
+</html>

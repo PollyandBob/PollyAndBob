@@ -1,0 +1,21 @@
+
+
+div.footpopup {
+    
+    font-size: 0.85em;
+}
+
+div#sitebody {
+    width: 840px;
+    margin: 20px;
+    font-family: MYRIADPRO-REGULAR, sans-serif;
+    color:#343434;
+}
+
+div#header {
+    margin:auto;    
+    width:840px;
+    font-family: MYRIADPRO-REGULAR, sans-serif;
+    color:#343434;
+    text-align: center;
+}

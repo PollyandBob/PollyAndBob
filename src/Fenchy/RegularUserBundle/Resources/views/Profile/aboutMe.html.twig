@@ -1,0 +1,37 @@
+{% extends 'FenchyRegularUserBundle::layout.html.twig' %}
+{% form_theme form '::transWatermark.html.twig' %}
+
+{% block profil_content %}
+
+<div class="rounded"> 
+        
+    <div class="clear"></div>
+    
+    <div id="aboutMe">
+        <div id="aboutMe-left">
+            <form action="{{ path('fenchy_regular_user_about_me') }}" method="post" {{ form_enctype(form) }}>
+                            {{ form_row(form.aboutMe) }}
+                            {{ form_row(form.link) }}
+                            {{ form_rest(form) }}
+                <input type="submit" value="{{ 'regularuser.submit'|trans }}"/>
+            </form>
+        </div>
+        <div id="aboutMe-right">
+            <iframe id="gallery-frame" src="{{ url('fenchy_gallery_edit',{'type': 3})}}"></iframe>
+        </div>
+    </div>
+    <div id="interests-activities">
+        <h3>{{ 'regularuser.interests_and_activities'|trans}}</h3>
+        <a class="addbutton right dark" href="{{ path('fenchy_regular_user_interests_and_activities') }}">
+            <img src="{{ asset('images/addbutton.png') }}">
+            <br />
+            {{ 'regularuser.add'|trans }}
+        </a>
+        {% for element in intAndAct %}
+            <div class="rounded">{{ getlink(element.title, 'fenchy_regular_user_interests_and_activities', {'noticeId': element.id}, {'class': 'dark'})|raw }}</div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+    

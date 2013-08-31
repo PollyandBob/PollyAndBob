@@ -1,0 +1,53 @@
+main:
+  title_suffix: Fenchy
+  this_field_is_required: To pole jest wymagane
+  about_us: O nas
+  jobs: Praca
+  advertising: Reklama
+  terms: Warunki
+  privacy: Prywatność
+  imprint: Wydawca
+  languages: Języki
+schema:
+# related to "db schema"  
+  events: Wydarzenia
+  help: Pomoc
+  goods: Zasoby
+  others: Inni
+  for: Dla
+  when: Kiedy
+  what: Co
+  direction: Kierunek
+  to_swap: Do zamiany
+  to_lend: Do wypożyczenia
+  to_use: Do użytku
+  to_give_away: Do oddania
+  these_days: Na dniach
+  today: Dzisiaj
+  date: Data
+  sports: Sporty
+  party: Imprezy
+  arts: Sztuka
+  music: Muzyka
+  other: Inne
+  offer: Oferta
+  need: Zapotrzebowanie
+  contact: Widoczne dla wszystkich sąsiadów
+  men: Widoczne tylko dla Mężczyzn
+  women: Widoczne tylko dla Kobiet
+  male: Mężczyzna
+  female: Kobieta
+  emails_when_someone_sends_you_a_message: Email, gdy ktoś wysyła Ci wiadomość
+  emails_when_someone_sends_you_a_request: Email, gdy ktoś wysyła Ci zgłoszenie
+  emails_when_someone_edits_a_request: Email, gdy ktoś modyfikuje zgłoszenie
+  emails_when_someone_transfers_currency: Email, gdy ktoś transferuje środki
+  emails_when_someone_sends_you_a_contact_request: Email, gdy ktoś zaprasza Cię do kontaktów
+  emails_when_someone_writes_a_reference_about_you: Email, gdy ktoś wystawia Ci referencję
+  never: Nigdy
+  immediately: Natychmiast
+  daily: Raz dziennie
+  create:
+    events: Dodawanie wydarzenia
+    need: Dodawanie zapotrzebowania
+    offer: Dodawanie oferty
+# end related to "db schema"  

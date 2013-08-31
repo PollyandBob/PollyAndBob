@@ -1,0 +1,39 @@
+{# empty Twig template #}
+<div class="wrapper">
+    <section class="user-profile-group">
+        <figure class="avatar">
+            <img src="{{ displayUser.regularuser.avatar(false) }}" alt=""/>
+            <div class="ranking-flag status-flag">
+                <strong>{{ displayUser.activity }}</strong>
+            </div>
+            <figcaption class="profile-master">
+                <strong class="info-by-line"><a href="{{  path('fenchy_regular_user_user_profilev2', {'userId': displayUser.id})  }}" class="name">{{ displayUser.name }}</a></strong>
+                <strong class="info-by-line"><span class="location"><i class="icon-map-marker"></i>{{ displayUser.location.location }}</span></strong>
+                <p>{{displayUser.regularuser.aboutMe|truncate(200)}}</p>                
+            </figcaption>
+        </figure>
+        {% if app.user.id is defined and app.user.id != displayUser.id %}
+        <div class="button green-button">
+            <a href="{{path('fenchy_regular_user_messages_new', {'id': displayUser.id})}}" class="wrapper">                                            
+                <i class="icon-envelope-alt"></i>
+                <strong>Send Message</strong>
+            </a>
+        </div>
+        {% endif %}
+    </section>
+    <section class="user-profile-group">
+       <h4>Additional Info</h4>
+       <ul class="additional-user-info profile-summary-list">
+           <li><p>
+                   <strong class="info-by-line">Language:</strong>                                            
+                   <strong class="info-by-line">{{ displayUser.regularuser.languages }}</strong>                                            
+               </p>
+            </li>
+           <li><p>
+                   <strong class="info-by-line">Member Since:</strong>                                            
+                   <strong class="info-by-line">{{ displayUser.createdAt|date("F jS, Y") }}</strong>
+               </p>                                           
+            </li>
+        </ul>
+    </section>                                
+</div>

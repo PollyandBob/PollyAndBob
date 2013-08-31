@@ -1,0 +1,15 @@
+{% extends "UserBundle::layout.html.twig" %}
+
+{% block content_inner %}
+    <div class="password-reset-message">
+    <div class="password-changed-msg">
+        {{'user.password_changed_msg'|trans}} <a href="{{ path('fenchy_frontend_homepage') }}">{{'user.password_changed_link_msg'|trans}}</a>
+        </div>
+        {% if not app.user %}
+            <div id="password-changed-login">
+                <span>{{'user.password_changed_alternative'|trans}}</span>
+                <a href="{{ path('fenchy_user_login') }}"><input type="button" value="{{'user.sign_in'|trans}}" /></a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

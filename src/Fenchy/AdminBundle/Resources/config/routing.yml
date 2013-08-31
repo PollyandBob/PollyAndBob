@@ -1,0 +1,45 @@
+fenchy_admin_users:
+    pattern:  /users/
+    defaults: { _controller: FenchyAdminBundle:Default:users }
+    
+fenchy_admin_user:
+    pattern:  /user/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:user }
+    
+fenchy_admin_search:
+    pattern:  /search/
+    defaults: { _controller: FenchyAdminBundle:Default:search }
+    
+fenchy_admin_dictionary_switch:
+    pattern: /dictionary/switch
+    defaults: { _controller: FenchyAdminBundle:Default:dictionarySwitch }
+    
+fenchy_admin_notices:
+    pattern: /notices/
+    defaults: { _controller: FenchyAdminBundle:Default:notices }
+    
+fenchy_admin_notice_add_to_dashboard:
+    pattern: /notices/add-to-dashboard/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:addToDashboard }
+    
+fenchy_admin_notice_remove_from_dashboard:
+    pattern: /notices/remove-from-dashboard/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:removeFromDashboard }    
+
+fenchy_admin_notice:
+    pattern:  /notice/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:notice }
+    
+fenchy_admin_reviews:
+    pattern: /reviews/
+    defaults: { _controller: FenchyAdminBundle:Default:reviews }
+    
+fenchy_admin_review:
+    pattern: /review/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:review }
+
+fenchy_admin_notice_delete:
+    pattern: /notice/delete/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:noticeDelete }
+    requirements:
+        id: \d+

@@ -1,0 +1,163 @@
+/* Notice dynamic triangles */
+.columns{
+    float:left;
+    padding-left: 18px;
+}
+
+.triangle_main_block{
+    margin-top:10px;
+    width:130px;
+}
+.triangle_main_block.small {
+    width: 50px;
+    display: inline-block;
+    font-size: 10px;
+    margin-top: 2px;
+    margin-left: 5px;
+}
+
+.notice-right .title {
+    display: inline-block;
+    float: left;
+}
+.triangle_content{
+    width:70%;
+    background:#eeeeee;
+    float:left;
+    border:1px solid #989898;
+    -ms-word-break: break-all;
+    word-wrap: break-word;
+    font-family: MYRIADPRO-BOLD, sans-serif;
+}
+
+.triangle_dir_right
+{
+    border-right:0px;
+}
+
+.small .triangle_content {
+    -ms-word-break: keep-all;
+    word-wrap: normal;
+    border-color: #ccc;
+    background-color: #ccc;
+}
+
+.small.need .triangle_content {
+    background-color: #ccf;
+    border-color: #ccf;
+}
+
+.triangle_dir_offer{
+    border-right:0px;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.triangle_dir_need{
+    border-left:0px;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.small .triangle_dir_offer {
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+}
+
+.small .triangle_dir_need {
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+.triangle_dir_{
+    width:80%;
+    background:#eeeeee;
+    float:left;
+    border:1px solid #989898;
+    border-radius: 5px;
+    -ms-word-break: break-all;
+    word-wrap: break-word;
+    font-family: MYRIADPRO-BOLD, sans-serif;
+    margin-left:10px;    
+}
+
+.small .triangle_dir_{
+
+    -ms-word-break: keep-all;
+    word-wrap: normal;
+    border-color: #ccc;
+    margin-left:5px;    
+}
+
+.small.need .triangle_dir_{
+    border-color: #ccf;
+}
+
+.triangle_content div,
+.no_triangle_content div{
+    padding:10px;
+    text-align: center;    
+}
+.no_triangle_content div
+{
+    width:60%;
+    background:#eeeeee;
+    float:left;
+    border:1px solid #989898;
+    border-radius: 5px;
+    -ms-word-break: break-all;
+    word-wrap: break-word;
+    font-family: MYRIADPRO-BOLD, sans-serif;
+    margin-left:6px;   
+}
+.small .triangle_content div {
+    padding:1px;
+}
+
+.triangle_right {
+    width: 0;
+    height: 0;
+    float:left;
+    border-left: 20px solid #989898;
+}
+
+.triangle_right_inside{
+    width: 0;
+    height: 0;
+    position:relative;
+    left:-20px;
+    border-left: 19px solid #eeeeee;
+}
+
+.triangle_left {
+    width: 0;
+    height: 0;
+    float:left;
+    border-right: 19px solid #989898;
+}
+
+.triangle_left_inside{
+    width: 0;
+    height: 0;
+    position:relative;
+    left:1px;
+    border-right: 19px solid #eeeeee;
+}
+
+.small .triangle_right {
+    border-left: 6px solid #ccc;
+    border-bottom: 7px solid transparent;
+    border-top: 7px solid transparent;
+}
+.small.need .triangle_right {
+    border-left: 6px solid #ccf;
+}
+.small .triangle_left {
+    border-right: 6px solid #ccc;
+    border-bottom: 7px solid transparent;
+    border-top: 7px solid transparent;
+}
+
+.small.need .triangle_left {
+    border-right: 6px solid #ccf;
+}

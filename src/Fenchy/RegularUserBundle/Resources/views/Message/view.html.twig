@@ -1,0 +1,76 @@
+{% extends 'FenchyRegularUserBundle::messages.html.twig' %}
+{% if form %}
+{% form_theme form '::labelForm.html.twig' %}
+{% endif %}
+{% block message_content %}
+
+        {% for message in messages %}
+        <div class="message clearfix">
+            <div class="message_image">
+                <div class="message_image_avatar">
+                    {% if message.request %}
+                        <a href="{{ path('fenchy_regular_user_notice', {'id':message.notice.id}) }}">
+                            <img src="{{message.notice.avatar }}"/>
+                        </a>
+                    {% elseif message.system %}
+                        <span class="image-container big-avatar bordered"><img src='/images/logo.png'/></span>
+                    {% else %}
+                        <a href="{{path('fenchy_regular_user_user_profilev2', {'userId': message.sender.id})}}">
+                            <span class="image-container big-avatar bordered"><img src="{{ message.sender.regularuser.avatar(false) }}"/></span>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+                
+            <div class="message_right">    
+                <div class="message_header">
+                    <h2>
+                        {% if message.system %}
+                            Fenchy
+                        {% else %}
+                            {% if message.sender.id %}
+                                <a href="{{path('fenchy_regular_user_user_profilev2', {'userId': message.sender.id})}}">
+                                    {{ message.sender.userregular.firstname }}
+                                </a>
+                            {% else %}
+                                {{ message.sender.userregular.firstname }}
+                            {% endif %}
+                        {% endif %}
+                        <span class="date">| {{ message.createdAt|relative }}</span></h2>
+                    <h3>{{ message.title }}</h3>
+                </div>
+
+                <div class="message_content">
+                    <p>
+                        {{ message.content|nl2br }}
+                    </p>
+                </div>    
+            </div>                      
+        </div>
+        {% endfor %}
+            
+        {% if messages.first.replyable %}
+
+            <div class="new-reply-message-box reply-box">
+                <form action="{{ path('fenchy_regular_user_messages_send', {'prev_id':messages.last.id}) }}" method="post" {{ form_enctype(form) }}>
+                    {{ form_widget(form) }}
+                    {{ form_rest(form) }}
+
+                    <footer class="clearfix">
+                        <div class="button grey-button pull-left" id="buttons">
+                            <a id="back" class="wrapper" href="{{path('fenchy_regular_user_messages_index')}}">
+                                <strong>{{ 'btn.back'|trans }}</strong>
+                            </a>                            
+                        </div>
+                        <div class="button submit pull-right">
+                            <div>
+                                <input type="submit" id="continue" value="{{ 'btn.send'|trans }}"/>                                
+                            </div>
+                        </div>
+                    </footer> 
+                </form>
+            </div>
+        {% endif %}
+
+{% endblock %}
+    

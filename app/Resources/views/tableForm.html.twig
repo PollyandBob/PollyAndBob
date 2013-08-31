@@ -1,0 +1,87 @@
+{% extends '::fieldsForm.html.twig'%}
+
+{% block form_row %}
+{% spaceless %}
+    {% if form.children|length == 0 %}
+    <tr>
+        <td>
+            {{ form_label(form) }}
+        </td>
+        <td>
+            {{ form_errors(form) }}
+            
+            {% set attrs = form.get('attr') %}
+            {% if attrs is not empty and attrs['watermark'] is not empty %}
+                {{ form_widget(form, { 'attr': {'watermark': attrs['watermark'] | trans } }) }}
+            {% else %}
+                {{ form_widget(form) }}
+            {% endif %}
+            
+            {% if form.name=="postcode"  or form.name=="street"%}
+                <span id="not_shown">{{ 'main.not_shown_publicly'|trans }}</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% else %}
+        {{ form_widget(form) }}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_row %}
+
+{% block hidden_row %}
+{% spaceless %}
+    <tr style="display: none">
+        <td colspan="2">
+            {{ form_widget(form) }}
+        </td>
+    </tr>
+{% endspaceless %}
+{% endblock hidden_row %}
+
+{% block form_widget_compound %}
+{% spaceless %}
+    {% if form.parent is empty %}
+        <table {{ block('widget_container_attributes') }} class="table-form">
+            {% if errors|length > 0 %}
+            <tr>
+                <td colspan="2">
+                    {{ form_errors(form) }}
+                </td>
+            </tr>
+            {% endif %}
+            {{ block('form_rows') }}
+            {{ form_rest(form) }}
+            {% if form.parent is empty %}
+                <tr>
+                    <td>&nbsp;</td><td><input type="submit" value="{{ 'main.save'|trans }}"/></td>
+                </tr>
+            {% endif %}
+        </table>
+    {% else %}
+        {{ block('form_rows') }}
+        {{ form_rest(form) }}
+        {% if form.parent is empty %}
+            <tr>
+                <td>&nbsp;</td><td><input type="submit" value="{{ 'main.save'|trans }}"/></td>
+            </tr>
+        {% endif %}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_widget_compound %}
+
+
+{% block choice_widget_options %}
+{% spaceless %}
+    {% for group_label, choice in options %}
+        {% if choice is iterable %}
+            <optgroup label="{{ group_label|trans({}, translation_domain) }}">
+                {% set options = choice %}
+                {{ block('choice_widget_options') }}
+            </optgroup>
+        {% else %}
+            <option value="{{ choice.value }}"{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ ('schema.' ~ choice.label)|trans({}, translation_domain) }}</option>
+        {% endif %}
+    {% endfor %}
+{% endspaceless %}
+{% endblock choice_widget_options %}
+

@@ -1,0 +1,28 @@
+{% extends '::baseV2.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('plugins/Agile-Carousel/agile_carousel.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/show.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/pretty_photo/css/prettyPhoto.css') }}" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('plugins/Agile-Carousel/agile_carousel.alpha.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/pretty_photo/js/jquery.prettyPhoto.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/show.js') }}"></script>
+{% endblock %}
+
+{% block galleryContainer %}
+    
+    <div id="gallery-show"></div>
+    <script tpe="text/javascript">
+        $(document).ready(function () {
+            gallery_show.init({{ gallery.JQCarouselData | json_encode | raw }});
+            $('.photo_link').prettyPhoto({
+                social_tools : false,
+                theme : 'facebook'
+            });
+        });
+    </script>
+{% endblock %}
