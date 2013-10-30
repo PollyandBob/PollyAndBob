@@ -99,15 +99,9 @@
 
     {{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
 
-        
-    <section id="profile_left_menu" class="sidebar pull-left">
-        <div class="wrapper">
-            {% include 'FenchyRegularUserBundle:Settings:menuV2.html.twig' %}
-        </div>    
-    </section>
-    <section class="content pull-right">
-        <div class="profile_right_content inner-content">
-            <header><h1>{{ 'regularuser.settings'|trans }}</h1></header>
+
+        <div class="mycommunitypoints">
+           <h4>{{ 'regularuser.settings'|trans }}</h4>
             <div class="form-box-wrapper">
                 <h2>{{ 'settings.socialnetworks.name'|trans }}</h2>
 
@@ -136,5 +130,5 @@
                 </div>                
             </div>
         </div>
-    </section>
+
 {% endblock %}

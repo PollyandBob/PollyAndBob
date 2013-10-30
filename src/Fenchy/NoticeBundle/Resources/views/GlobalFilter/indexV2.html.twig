@@ -9,14 +9,17 @@
     <link rel="stylesheet" href="{{ absolute(asset('css/app/custom-form.css')) }}" type="text/css" />
     <link rel="stylesheet" href="{{ absolute(asset('css/app/search-bar-v2.css')) }}" type="text/css" />
     <link rel="stylesheet" href="{{ absolute(asset('css/app/sidebar-v2.css')) }}" type="text/css" />
-    <link rel="stylesheet" href="{{ absolute(asset('css/notice/globalfilter/global-filter-v2.css')) }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ absolute(asset('css/notice/globalfilter/global-filter-v2.css')) }}" type="text/css" />
+     
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/simple-slider.js') }}"></script>
     <script type="text/javascript" src="{{ asset('plugins/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
     <script type="text/javascript" src="{{ asset('plugins/moment-js/moment.min.js') }}"> </script>
+    
     {% include '::gmapsApiAsset.html.twig' %}
     <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-slider.js') }}"></script>
@@ -93,33 +96,124 @@
                     _default_location = '{{default_location}}';     
                 {% endif %}
                     
-                $('input#location').val(_default_location);            
+                $('input#location').val(_default_location);     
+
+                $('#search').val('{{ keyword }}');
+                {% if keyword %}
+               	 $('#search').attr('name','keyword');
+                {% endif %}
+
+                $('#Groups').click(function () {
+                    if ($(this).is(':checked')) {
+                        $('#offergroups').attr('checked', true);
+                    } else {
+                        $('#offergroups').attr('checked', false);
+                    }
+                });
+
+                $('#Events').click(function () {
+                    if ($(this).is(':checked')) {
+                        $('#offerevents').attr('checked', true);
+                    } else {
+                        $('#offerevents').attr('checked', false);
+                    }
+                });
+
+                $('#others').click(function () {
+                    if ($(this).is(':checked')) {
+                        $('#offerothers').attr('checked', true);
+                    } else {
+                        $('#offerothers').attr('checked', false);
+                    }
+                });
+                
+				// Ajax call for distance event
+                $(document).on({
+            	    "mouseup touchend": function () {
+    					selectedOptions(this);
+    				}
+            	}, "#filter-distance-slider .ui-slider-handle");
+
+             	// Ajax call for Date event
+                $(document).on({
+            	    "mouseup touchend": function () {
+						selectedOptions(this);
+    				}
+            	}, "#slider-range .ui-slider-handle");
+            	
+                //Start added for new dateslider 
+                var startDate = '{{ slider_startDate }}'*1000;
+				var endDate = '{{ slider_endDate }}'*1000;
+               
+                
+                $( "#slider-range" ).slider({
+                	range: true,
+                	min: startDate,
+                	max: endDate,
+                	values: [ startDate, endDate ],
+                	slide: function( event, ui ) {
+                		var startTimed = new Date(ui.values[ 0 ]);
+     	            	var smonth1 = startTimed.getMonth() + 1;
+     	            	var sday1 = startTimed.getDate();
+     	            	var syear1 = startTimed.getFullYear();
+     	            	if (smonth1 < 10) smonth1 = '0' + smonth1;
+     	            	if (sday1 < 10) sday1 = '0' + sday1;
+     	            	
+     	            	var endTimed = new Date(ui.values[ 1 ]);
+     	            	var emonth2 = endTimed.getMonth() + 1;
+     	            	var eday2 = endTimed.getDate();
+     	            	var eyear2 = endTimed.getFullYear();
+     	            	if (emonth2 < 10) emonth2 = '0' + emonth2;
+     	            	if (eday2 < 10) eday2 = '0' + eday2;
+     	            	$("#slider-range > a.ui-slider-handle:first" ).attr('id',ui.values[ 0 ]);
+     	            	$("#slider-range > a.ui-slider-handle:last" ).attr('id',ui.values[ 1 ]);
+     	            	$("#slider-range > a.ui-slider-handle:first" ).html( "<span class='inner-tooltip'><strong class='tooltip-value'>"+sday1 + "." + smonth1 + "." + syear1+"</strong></span>" );
+                    	$("#slider-range > a.ui-slider-handle:last" ).html( "<span class='inner-tooltip'><strong class='tooltip-value'>"+eday2 + "." + emonth2 + "." + eyear2+"</strong></span>" );
+             	    
+                	}
+                	});
+	                var startTime = new Date($( "#slider-range" ).slider( "values", 0 ));
+	            	var month1 = startTime.getMonth() + 1;
+	            	var day1 = startTime.getDate();
+	            	var year1 = startTime.getFullYear();
+	            	if (month1 < 10) month1 = '0' + month1;
+	            	if (day1 < 10) day1 = '0' + day1;
+
+	            	var endTime = new Date($( "#slider-range" ).slider( "values", 1 ));
+	            	var month2 = endTime.getMonth() + 1;
+	            	var day2 = endTime.getDate();
+	            	var year2 = endTime.getFullYear();
+	            	if (month2 < 10) month2 = '0' + month2;
+	            	if (day2 < 10) day2 = '0' + day2;
+
+	            	$("#slider-range > a.ui-slider-handle:first" ).attr('id',$( "#slider-range" ).slider( "values", 0 ));
+ 	            	$("#slider-range > a.ui-slider-handle:last" ).attr('id',$( "#slider-range" ).slider( "values", 1 ));
+                	$("#slider-range > a.ui-slider-handle:first" ).html( "<span class='inner-tooltip'><strong class='tooltip-value'>"+day1 + "." + month1 + "." + year1+"</strong></span>" );
+                	$("#slider-range > a.ui-slider-handle:last" ).html( "<span class='inner-tooltip'><strong class='tooltip-value'>"+day2 + "." + month2 + "." + year2+"</strong></span>" );
+     
+                // End added for new dateslider 
             
         });
-        // apply binding here
+
+        
+		// apply binding here
     </script>
     {# any view specific JS scripts for this view #}
 {% endblock %}
 
 {% block content %}
     {# put view specific content here #}
-<section class="main content-rtl" data-role="main">
-    <div id="globalFilter" class="wrapper-inner-content"> 
-        <div class="clearfix">
-
-            {% include 'FenchyNoticeBundle:PartialsV2:leftFilterMenuV2.html.twig' %}
-
-            <section class="content pull-right">
-                {% include '::searchBarV2.html.twig' %}
-
-                {% include 'FenchyNoticeBundle:PartialsV2:rightFilterResultsListV2.html.twig' %}
-            </section>
+			
+			<div class="leftpart">
+            	{% include 'FenchyNoticeBundle:PartialsV2:leftFilterMenuV2.html.twig' %}
+			</div>
+            <div class="rightpart">
+					{% include 'FenchyNoticeBundle:PartialsV2:rightListV2.html.twig' %}
+            </div>
 
             {# set notice_id while displaying notice#}
             {# render "FenchyNoticeBundle:Widgets:userListings" with {'notice_id' : 2} #}
             {# render "FenchyNoticeBundle:Widgets:similarListings" with {'notice_id' : 2} #}
 
-        </div>
-    </div>
-</section>    
+         
 {% endblock %}

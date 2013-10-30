@@ -1,0 +1,474 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+    $(document).ready(function(){
+
+    	$("div[id^='showInformationForm']").hide();
+    	$("div[id^='collapseminus']").hide();
+    	$("div[id^='PaymentForm']").hide();
+    	var noticeType = '{{ noticeType }}';
+    	if(noticeType !="")
+    	{
+        	$('#Active').addClass('selected');
+    	}
+    	//$('#debitcard1').val('');
+	    //$('#debitcard2').val('');
+	    //$('#debitcard3').val('');
+	    //$('#paypal1').val('');
+	    //$('#creditcard2').val('');
+	    //$('#creditcard3').val('');
+    });
+    	    
+    function showInformationForm(id)
+	{
+    	var i=0;
+    	for(i=1; i<=3; i++)
+    	{
+        	if(i!=id)        	
+        		$('#showInformationForm'+i).hide();
+    	}    	
+    	$('#collapseminus1').hide();
+    	$('#collapseminus2').hide();
+    	$('#collapseminus3').hide();
+    	
+    	$('#collapseplus1').show();
+    	$('#collapseplus2').show();
+    	$('#collapseplus3').show();
+    	
+		var a = $('#showInformationForm'+id).css('display');
+		if(a == 'block')
+		{			
+			$('#showInformationForm'+id).hide();
+			$('#collapseminus'+id).hide();
+			$('#collapseplus'+id).show();
+		}			
+		else
+		{	
+			$('#showInformationForm'+id).show();
+			$('#collapseminus'+id).show();
+			$('#collapseplus'+id).hide();
+		}
+	}  
+    function showPaymentForm(id)
+	{
+		var a = $('#PaymentForm'+id).css('display');
+		if(a == 'block')
+		{	
+			$("div[id^='PaymentForm']").hide();
+			$('#SetSetting p').show();
+			$('#PaymentForm'+id).hide();
+		}
+		else
+		{
+			$("div[id^='PaymentForm']").hide();
+			$('#SetSetting p').hide();
+			$('#PaymentForm'+id).show();
+		}
+	}
+
+    function savePaymentSetting(id,action)
+	{
+    	var account_holder = $('#debitcard1').val();
+    	var account_no = $('#debitcard2').val();
+    	var bank_code = $('#debitcard3').val();
+    	var paypal_email = $('#paypal1').val();
+    	var card_type = $("#creditcard1 option:selected").val();
+    	var card_no = $('#creditcard2').val();
+    	var card_holder = $('#creditcard3').val();
+    	var end_month = $("#creditcard4 option:selected").val();
+    	var end_year = $("#creditcard5 option:selected").val();
+    	var noticeType = '{{ noticeType }}';
+		var type="";
+    	alert(account_holder+"  "+account_no+"    "+bank_code+"   "+paypal_email+"   "+card_type+"   "+card_no+"   "+card_holder+"  "+end_month+"   "+end_year);
+    	var flag = true;
+    	if(id == 1)
+    	{
+        	type = "debit";
+	    	if(!$("#debitcardcheck").is(':checked'))
+	    	{
+	        	alert('ACEEPT TERMS & CONDITION');
+	        	flag = false;
+	    	}
+	    	if(account_holder =="" || account_no == "" || bank_code =="")
+	    	{
+	        	alert('ALL FILED ARE REQUIRED');
+	    	    flag = false;
+	    	}
+	    	$('#paypal1').val('');
+		    $('#creditcard2').val('');
+		    $('#creditcard3').val('');
+		    card_type = "";
+		    end_month ="";
+		    end_year = "";
+    	}
+    	if(id == 2)
+    	{
+        	type="paypal";
+	    	if(!$("#paypalcheck").is(':checked'))
+	    	{
+	        	alert('ACEEPT TERMS & CONDITION');
+	        	flag = false;
+	    	}
+	    	if(paypal_email =="")
+	    	{
+	        	alert('ALL FILED ARE REQUIRED');
+	    	    flag = false;
+	    	}
+	    	$('#debitcard1').val('');
+		    $('#debitcard2').val('');
+		    $('#debitcard3').val('');
+		    $('#creditcard2').val('');
+		    $('#creditcard3').val('');
+		    card_type ="";
+		    end_month ="";
+		    end_year = "";
+		    $('#paypal1').val('');
+    	}
+    	if(id == 3)
+    	{
+        	type="credit";
+	    	if(!$("#creditcardcheck").is(':checked'))
+	    	{
+	        	alert('ACEEPT TERMS & CONDITION');
+	        	flag = false;
+	    	}
+	    	if(paypal_email =="")
+	    	{
+	        	alert('ALL FILED ARE REQUIRED');
+	    	    flag = false;
+	    	}
+	    	$('#debitcard1').val('');
+		    $('#debitcard2').val('');
+		    $('#debitcard3').val('');
+		    
+    	}
+    	if(flag)
+    	{
+			var url = "{{path('fenchy_regular_user_settings_paymentsave')}}";
+			$.ajax({
+				url : url,
+				type : "post",
+				data : {
+					'id': id,
+					'account_holder': account_holder,
+					'account_no': account_no,
+					'bank_code': bank_code,
+					'paypal_email': paypal_email,
+					'card_type': card_type,
+					'card_no': card_no,
+					'card_holder': card_holder,
+					'end_month': end_month,
+					'end_year': end_year,
+					'type': type,					
+					},
+				beforeSend : function() {
+					
+				},
+				success : function(response) {					
+					$('#SetSetting').html(response);
+					$('#PaymentForm'+id).hide();
+					if( action =='return' && noticeType)
+					{					
+						$('#Return')[0].click();
+					}
+					else
+					{	
+						$('#SaveSettingMsg').click();
+					}
+				},
+				error : function() {
+					alert('Something went wrong!');
+				},
+				complete : function() {	
+					if(id==1)
+					{
+						$('#paypal1').val('');
+						$('#creditcard2').val('');
+				    	$('#creditcard3').val('');
+					}
+					if(id==2)
+					{
+						$('#debitcard1').val('');
+				    	$('#debitcard2').val('');
+				    	$('#debitcard3').val('');
+				    	$('#creditcard2').val('');
+				    	$('#creditcard3').val('');
+					}
+					if(id==3)
+					{
+						$('#debitcard1').val('');
+				    	$('#debitcard2').val('');
+				    	$('#debitcard3').val('');
+				    	$('#paypal1').val('');
+					}
+					$('#SetSetting').html($('#SetSetting1').html());
+				}
+			});
+    	}
+	}
+    function deletePaymentSetting(id)
+	{
+    	var url = "{{path('fenchy_regular_user_settings_paymentdelete')}}";
+		$.ajax({
+			url : url,
+			type : "post",
+			data : {
+				'id':id,			
+				},
+			beforeSend : function() {
+				
+			},
+			success : function(response) {	
+				$('#SetSetting').html(response);
+				$('#PaymentForm'+id).hide();			
+				$('#DeleteSettingMsg').click();
+			},
+			error : function() {
+				alert('Something went wrong!');
+			},
+			complete : function() {				
+				$('#debitcard1').val('');
+			   	$('#debitcard2').val('');
+			   	$('#debitcard3').val('');
+				$('#paypal1').val('');
+				$('#creditcard2').val('');
+			   	$('#creditcard3').val('');
+			}
+		});
+	}
+    </script>
+{% endblock %}
+
+{% block content %}
+	{% render 'FenchyRegularUserBundle:Myprofile:myAvatar' %}
+    {% include 'FenchyRegularUserBundle:Settings:menuV2.html.twig' %}
+	<div class="payment">
+		<h2 style="margin-left: 0px !important;">{{ 'payment.default_payment'|trans|upper }}</h2>
+		<div class="form-box">
+			{% if payment %}
+			<div id="SetSetting">
+				{% set typeindex = 1 %}
+				{% if payment.type == 'debit' %}
+					<h3>{{ 'payment.direct_debit'|trans }} / {{ 'payment.sepa'|trans }}</h3>
+						{% set typeindex = 1 %}					
+				{% elseif payment.type == 'paypal' %}
+					<h3>{{ 'payment.paypal'|trans }}</h3>
+					{% set typeindex = 2 %}					
+				{% elseif payment.type == 'credit' %}
+					<h3>{{ 'payment.credit_card'|trans }}</h3>
+						{% set typeindex = 3 %}
+				{% endif %}
+							
+				<div class="paymentdetails">
+					<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm('{{ typeindex }}')">{{ 'payment.change'|trans|upper }}</a>
+					<a class="payment-button" href="javascript:void(0);" onclick="deletePaymentSetting('{{ payment.id }}')">{{ 'payment.delete'|trans|upper }}</a>
+				</div>
+			</div>
+			{% else %}
+				<div id="SetSetting">
+					<p style="margin-bottom: 20px;">{{ 'payment.no_default'|trans|upper }}
+					{{ 'payment.choose_default'|trans|upper }}</p>
+					<div class="paymentdetails">
+						<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm('1')">{{ 'payment.direct_debit'|trans|upper }}</a>
+						<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm('2')">{{ 'payment.paypal'|trans|upper }}</a>
+						<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm('3')">{{ 'payment.credit_card'|trans|upper }}</a>
+					</div>
+				</div>
+			{% endif %}
+			<div class="forminfo" id="PaymentForm1">
+			<h3>{{ 'payment.direct_debit'|trans }} / {{ 'payment.sepa'|trans }}</h3>
+				<ul>
+					<li>
+						<label>{{ 'payment.account_holder'|trans|upper }}</label>
+						<label  style="margin-left:-48px">{{ 'payment.account'|trans|upper }}</label>
+						<label>{{ 'payment.bank_code'|trans|upper }}</label>
+					</li>
+					<li style="margin-bottom: 10px;">
+						<input type="text" id="debitcard1" value="{% if payment %}{{payment.accountHolder}}{% endif %}"/>
+						<hr style="margin-top: 0px;">
+							<input type="text" id="debitcard2" value="{% if payment %}{{payment.accountNo}}{% endif %}"/>
+						<hr style="margin-top: 0px; margin-left: 200px">
+							<input type="text" id="debitcard3" value="{% if payment %}{{payment.bankCode}}{% endif %}"/>
+						<hr style="margin-top:0px; margin-left:390px">
+					</li>
+					<li style="margin-bottom: 10px;">
+						{% if payment %}
+							<input type="checkbox" id="debitcardcheck" checked="checked"/>
+						{% else %}
+							<input type="checkbox" id="debitcardcheck"/>
+						{% endif %}
+						<label style="margin-left: -52px !important">{{ 'payment.term_condition'|trans|upper }}</label>
+					</li>
+					<li	style="margin-bottom: 10px;">
+						<div class="paymentdetails">
+							<a class="payment-button" href="javascript:void(0);" style="margin-bottom: 10px; width: 15%;" onclick="savePaymentSetting(1,'stay')">{{ 'payment.save'|trans|upper }}</a>
+							{% if noticeType !="" %}
+								<a class="payment-button" href="javascript:void(0);" style="width: 48%;" onclick="savePaymentSetting(1,'return')">{{ 'payment.save2'|trans|upper }}</a>
+							{% endif %}
+						</div>
+					</li>
+				</ul>				
+			</div>
+			
+			<div class="forminfo" id="PaymentForm2">
+			<h3>{{ 'payment.paypal'|trans }}</h3>
+				<ul>
+					<li>
+						<label>{{ 'payment.email_to_paypal'|trans|upper }}</label>						
+					</li>
+					<li style="margin-bottom: 10px;">
+						<input type="text" id="paypal1" value="{% if payment %}{{payment.paypalEmail}}{% endif %}"/>
+					</li>
+					<li style="margin-bottom: 10px;">
+						<hr>
+						{% if payment %}
+							<input type="checkbox" id="paypalcheck" checked="checked"/>
+						{% else %}
+							<input type="checkbox" id="paypalcheck"/>
+						{% endif %}
+						<label style="margin-left: -52px !important">{{ 'payment.term_condition'|trans|upper }}</label>
+					</li>
+					<li style="margin-bottom: 10px;">
+						<div class="paymentdetails">
+							<a class="payment-button" href="javascript:void(0);" style="margin-bottom: 10px; width: 15%;" onclick="savePaymentSetting(2,'stay')">{{ 'payment.save'|trans|upper }}</a>
+							{% if noticeType !="" %}
+								<a class="payment-button" href="javascript:void(0);" style="width: 48%;" onclick="savePaymentSetting(2,'return')">{{ 'payment.save2'|trans|upper }}</a>
+							{% endif %}
+						</div>
+					</li>
+				</ul>				
+			</div>	
+			<div class="forminfo" id="PaymentForm3">
+			<h3>{{ 'payment.credit_card'|trans }}</h3>
+				<ul>
+					<li>
+						<label style="margin: 0px 22px 0px 2px;">{{ 'payment.type_of_card'|trans|upper }}</label>
+						<label style="margin: 0 10px 0 10px;">{{ 'payment.card'|trans|upper }}</label>
+						<label style="margin: 0px 108px;">{{ 'payment.card_holder'|trans|upper }}</label>
+						<label style="margin: 0px -53px;">{{ 'payment.valid_till'|trans|upper }}</label>
+					</li>
+					<li style="margin-bottom: 10px;">
+						<select id="creditcard1">
+							<option>{{ 'payment.visa'|trans|upper }}</option>
+							<option>{{ 'payment.master_card'|trans|upper }}</option>
+						</select>
+						<hr style="margin-left: 13px; width: 100px; margin-top: -2px;">
+						<input type="text" id="creditcard2" style="margin: 0px 30px;" value="{% if payment %}{{payment.cardNo}}{% endif %}"/>
+						<hr style="margin-top: 0px; margin-left: 148px">
+						<input type="text" id="creditcard3" style="margin: 0 10px 0 10px;" value="{% if payment %}{{payment.cardHolder}}{% endif %}"/>
+						<hr style="margin-top: 0px; margin-left: 323px">
+						<select id="creditcard4">
+							<option>01</option><option>02</option><option>03</option>
+							<option>04</option><option>05</option><option>06</option>
+							<option>07</option><option>08</option><option>09</option>
+							<option>10</option><option>11</option><option>12</option>
+						</select></hr>
+						<hr style="margin-left: 482px; width: 33px; margin-top: -2px;">
+						<select id="creditcard5">
+							{% for i in 0..75 %}							
+								<option>{{ "now"|date("Y")+i }}</option>
+							{% endfor %}
+						</select>
+						<hr style="margin-left: 535px; width: 48px; margin-top: -2px;">
+					</li>
+					<li style="margin-bottom: 10px;">
+						{% if payment %}
+							<input type="checkbox" id="creditcardcheck" checked="checked"/>
+						{% else %}
+							<input type="checkbox" id="creditcardcheck"/>
+						{% endif %}
+						<label style="margin-left: -52px !important">{{ 'payment.term_condition'|trans|upper }}</label>
+					</li>
+					<li	style="margin-bottom: 10px;">
+						<div class="paymentdetails">
+							<a class="payment-button" href="javascript:void(0);" style="margin-bottom: 10px; width: 15%;" onclick="savePaymentSetting(3,'stay')">{{ 'payment.save'|trans|upper }}</a>
+							{% if noticeType !="" %}
+								<a class="payment-button" href="javascript:void(0);" style="width: 48%;" onclick="savePaymentSetting(3,'return')">{{ 'payment.save2'|trans|upper }}</a>
+							{% endif %}
+						</div>
+					</li>
+				</ul>				
+			</div>
+		</div>
+			
+		<div class="collapseplus" id="collapseplus1" onclick="showInformationForm('1')"><img alt="" src="{{ absolute(asset('images/collapseplus.png')) }}"></div>
+		<div class="collapseplus" id="collapseminus1" onclick="showInformationForm('1')"><img alt="" src="{{ absolute(asset('images/collapseminus.png')) }}"></div>
+		<h2>{{ 'payment.why_payment_setting'|trans|upper }}</h2>
+		
+		<div class="forminformation" id="showInformationForm1">
+			<p>{{ 'payment.why_payment_setting1'|trans|upper }}</p>
+			<p>{{ 'payment.why_payment_setting2'|trans|upper }}<br>
+			{{ 'payment.why_payment_setting3'|trans|upper }}</p>
+			<p>{{ 'payment.why_payment_setting4'|trans|upper }} {{ 'payment.why_payment_setting5'|trans|upper }}</p>
+			<p>{{ 'payment.why_payment_setting6'|trans|upper }}</p>
+			<p>{{ 'payment.why_payment_setting7'|trans|upper }}</p>
+		</div>
+		
+		<div class="collapseplus" id="collapseplus2" onclick="showInformationForm('2')"><img alt="" src="{{ absolute(asset('images/collapseplus.png')) }}"></div>
+		<div class="collapseplus" id="collapseminus2" onclick="showInformationForm('2')"><img alt="" src="{{ absolute(asset('images/collapseminus.png')) }}"></div>
+		<h2>{{ 'payment.how_decide_term'|trans|upper }}</h2>
+		
+		<div class="forminformation" id="showInformationForm2">
+			<p>{{ 'payment.become_member'|trans|upper }} {{ 'payment.place'|trans|upper }}</p>
+			<div class="paymentdetails">
+				<a class="payment-button" href="javascript:void(0);" style="width: 25%;">{{ 'payment.board_neighbour'|trans|upper }}</a>
+			</div>
+		</div>
+		
+		<div class="collapseplus" id="collapseplus3" onclick="showInformationForm('3')"><img alt="" src="{{ absolute(asset('images/collapseplus.png')) }}"></div>
+		<div class="collapseplus" id="collapseminus3" onclick="showInformationForm('3')"><img alt="" src="{{ absolute(asset('images/collapseminus.png')) }}"></div>
+		<h2>{{ 'payment.how_support'|trans|upper }}</h2>
+		
+		<div id="showInformationForm3">
+		
+			<div class="forminfobox">
+				<p>{{ 'payment.you_can_msg'|trans|upper }}</p>
+				<div class="paymentdetails">
+					<a class="payment-button" href="javascript:void(0);">{{ 'payment.offer_good'|trans|upper }}</a><br>
+					<a class="payment-button" href="javascript:void(0);">{{ 'payment.offer_service'|trans|upper }}</a><br>
+					<a class="payment-button" href="javascript:void(0);">{{ 'payment.offer_event'|trans|upper }}</a>
+				</div>
+			</div>
+			<div class="forminfobox">			
+				<p>{{ 'payment.you_can_invest'|trans|upper }}</p>
+				<div class="paymentdetails">
+					<a class="payment-button" href="javascript:void(0);">{{ 'payment.invest'|trans|upper }}</a>
+				</div>
+			</div>
+			<div class="forminfobox">
+				<p>{{ 'payment.donate'|trans|upper }}</p>
+				<div class="paymentdetails">
+					<a class="payment-button" href="javascript:void(0);">{{ 'payment.donation'|trans|upper }}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<a id="Return" href="{{ path('fenchy_regular_user_notice_create2', {'typename': noticeType}) }}"></a>
+	
+	<a id="SaveSettingMsg" href="#dialog47" name="modal" id="vzoom_1944" class="zoomthis blue-button"></a>
+	<section id="boxes2">		
+		<div id="dialog47" class="window">
+			<div class="big_popup">
+		   		<div class="big_popupclose"><a href="" class="close"></a></div>
+		  		<p>{{ 'payment.savemsg'|trans|upper }}</p>
+			</div>    
+		</div>		    
+		<div id="mask"></div>
+	</section>
+	<a id="DeleteSettingMsg" href="#dialog48" name="modal" id="vzoom_1944" class="zoomthis blue-button"></a>
+	<section id="boxes2">		
+		<div id="dialog48" class="window">
+			<div class="big_popup">
+			   	<div class="big_popupclose"><a href="" class="close"></a></div>
+		  		<p>{{'payment.deletemsg'|trans|upper }}</p>
+			</div>    
+		</div>
+		<div id="mask"></div>
+	</section>
+{% endblock %}

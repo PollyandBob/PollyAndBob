@@ -373,10 +373,25 @@
 #filter-distance-slider {
     border-radius: 0;
     border: 0;
-    margin: 12px 11px 9px 0;
-    height: 6px;
+    margin: 25px 11px 9px 0;
+    height: 3px;
     font-size: 1em;
+    width: 184px;
+    background: #000000;
 }
+
+.myneighbours #filter-distance-slider {
+    border-radius: 0;
+    border: 0;
+    margin: 20px 11px 9px 0;
+    height: 3px;
+    font-size: 1em;
+    width: 251px;
+    background: #000000;
+    display: inline-block !important;
+}
+
+
 #filter-distance-slider .ui-widget-content {
     position: relative;
     background-color: #e4f6f3;
@@ -392,7 +407,7 @@
 }
 #filter-distance-slider .ui-widget-header {
     position: relative;
-    background-color: rgba(49, 164, 164, 0.6);    
+    background-color: #000000;    
     background-image: -moz-linear-gradient(top, rgba(1,1,1,0.12) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */        
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(100%,rgba(1,1,1,0.12)), color-stop(0%,rgba(255,255,255,0))); /* Chrome,Safari4+ */        
     background-image: -webkit-linear-gradient(top, rgba(1,1,1,0.12) 0%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */        
@@ -407,19 +422,60 @@
     background-color: #83c8c8;
 }
 #filter-distance-slider .ui-slider-handle {
+    background: url(/images/icon_slider.png) no-repeat;
     top: -10px;
-    text-align: center;    
-    border: 1px solid rgba(117,187,182, 0.7);
+    text-align: center;
     cursor: pointer;
-    background: #ffffff;
     width: 21px;
     height: 22px;
+    border: none;
 }
+.when_date #slider-range a.ui-slider-handle
+{
+    background: url("/images/icon_slider2.png") no-repeat scroll 0 0 transparent;
+    border: medium none;
+    cursor: pointer;
+    height: 22px;
+    text-align: center;
+    top: -7px;
+    width: 21px;
+}
+
+.when_date #slider-range a:last-child
+{
+    background: url("/images/icon_slider1.png") no-repeat scroll 0 0 transparent;
+    border: medium none;
+    cursor: pointer;
+    height: 22px;
+    text-align: center;
+    top: -7px;
+    width: 21px;
+}
+
+.when_date #slider-range
+{
+    background: none repeat scroll 0 0 #000000;
+    border: 0 none;
+    border-radius: 0 0 0 0;
+    display: inline-block !important;
+    font-size: 1em;
+    height: 3px;
+    margin: 20px 11px 9px 0;
+    width: 251px;
+}
+
+.when_date .ui-widget-header {
+    background-color: #000000;
+    background-image: linear-gradient(to top, rgba(255, 255, 255, 0) 0%, rgba(1, 1, 1, 0.12) 100%);
+    position: relative;
+    height: 3px !important;
+}
+
 .ie8 #filter-distance-slider .ui-slider-handle {    
-    border: 1px solid #98cdc8;    
+    
 }
 #filter-distance-slider .ui-slider-handle:hover {
-    background: #e8f5f2;
+   
 }
 #filter-distance-slider .ui-slider-handle i {
     -webkit-transform: rotate(-90deg);
@@ -436,10 +492,34 @@
 }
 .slider-value  {
     margin-right: 11px;
+    font-family: code_boldregular;
+    letter-spacing: 1px;
+    font-size: 12px; 
 }
 .slider-value strong {
-    color: #6a9894;
-    font-size: 0.923em;
+    color: #000;
+}
+
+.myneighbours .inner-tooltip
+{
+    background: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    margin-bottom: 1px;
+    opacity: 1 !important;
+    padding: 0 5px !important;
+}
+.myneighbours .inner-tooltip .tooltip-value
+{
+    color: #E14F45 !important;
+    font-family: code_boldregular;
+    letter-spacing: 1px;
+    font-size: 11px !important;
+}
+.when_date
+{
+    margin-top: 10%;
 }
 .inner-tooltip {
     opacity: 0;
@@ -474,7 +554,7 @@
 }
 .inner-tooltip .tooltip-value {
     color: #ffffff;
-    font-size: 0.923em;   
+
 }
 .tooltip-arrow {
     display: block;

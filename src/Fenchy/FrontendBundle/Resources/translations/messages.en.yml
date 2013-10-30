@@ -107,6 +107,8 @@ frontend:
   terms:
     title: Terms
 
+  wrong: Email or password may be wrong! 
+  
   logo_alt: Fenchy
 
   my_profile: My profile
@@ -116,6 +118,14 @@ frontend:
   settings: Settings
 
   log_out: Logout
+      
+  myprofile: My Profile
+  
+  mysettings: Account Settings
+  
+  create_group: Create Group
+  
+  newsfeeds: Newsfeeds
 
   admin: Admin Panel
 
@@ -165,7 +175,7 @@ frontend:
 
   sign_in_twitter: Sign in with Twitter
 
-  placeholder_what: Search
+  placeholder_what: What are you looking for in your neighborhood?
   
   placeholder_where: Where
   

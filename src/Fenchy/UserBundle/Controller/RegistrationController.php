@@ -13,10 +13,9 @@ class RegistrationController extends Base
 {
     public function registerAction()
     {
-        if ($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')){
-            return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
-        }
-        
+    	if ($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')){
+    		return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
+    	}
         //$form = $this->container->get('form.factory')->create(new RegistrationFormType());
         $form = $this->container->get('fos_user.registration.form');
 
@@ -66,7 +65,11 @@ class RegistrationController extends Base
                 $this->authenticateUser($user, $response);
             }
 
-            return $response;
+            //return $response;
+            
+            if ($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')){
+            	return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
+            }
         }
 
         return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:registerV2.html.'.$this->getEngine(), array(

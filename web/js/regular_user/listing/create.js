@@ -11,13 +11,25 @@ var createListing = {
         init: function () {
             var $end = $('#fenchy_noticebundle_noticetype_end_date');
             var $start = $('#fenchy_noticebundle_noticetype_start_date');
+            var $start_time = $('#fenchy_noticebundle_noticetype_start_time');
+            var $end_time = $('#fenchy_noticebundle_noticetype_end_time');
             var $dd = $('#review-type-selector');
-            $end.datetimepicker({
+            $end.datepicker({
                 dateFormat: 'dd.mm.yy', 
                 stepMinute: 5, 
                 minuteMax: 55
             });
-            $start.datetimepicker({
+            $start_time.timepicker({
+                //dateFormat: 'dd.mm.yy', 
+                stepMinute: 5, 
+                minuteMax: 55
+            });
+            $end_time.timepicker({
+                //dateFormat: 'dd.mm.yy', 
+                stepMinute: 5, 
+                minuteMax: 55
+            });
+            $start.datepicker({
                 dateFormat: 'dd.mm.yy', 
                 stepMinute: 5, 
                 minuteMax: 55,

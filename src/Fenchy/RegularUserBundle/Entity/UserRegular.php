@@ -219,6 +219,7 @@ class UserRegular
         return $this->firstname;
     }
     
+    
     public function setFirstname($name) 
     {
         $this->firstname = $name;    
@@ -350,7 +351,7 @@ class UserRegular
     {
         $this->gallery = $gallery->setRegularUser($this);
     }
-	
+    
     /**
      * Set facebook_publish
      *

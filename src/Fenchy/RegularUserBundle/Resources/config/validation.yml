@@ -1,0 +1,11 @@
+parameters:
+#    fenchy_regular_user.example.class: Fenchy\RegularUserBundle\Example
+# src/Fenchy/RegularUserBundle/Resources/config/validation.yml
+Fenchy\RegularUserBundle\Entity\Document:
+    properties:
+        file:
+            - File:
+                maxSize: 6000000
+        file2:
+            - File:
+                maxSize: 6000000                

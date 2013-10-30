@@ -1,60 +1,121 @@
 {# empty Twig template #}
-
-<section class="sidebar pull-left">
-    <div class="wrapper">
-        <section id="sidebar-filters" class="group clearfix">
-            <header>
-                <h3>{{ 'notice.filter.filters'|trans }}</h3>
-                <strong class="clear-all" data-bind="click: xBoxAll">{{ 'notice.filter.clear'|trans }}</strong>
-            </header>
-            <div class="wrapper">
-
-                <!-- ko if: boxUserId -->
-                <div class="tag-button">
-                    <stron>{{ 'notice.filter.user'|trans }}</stron>
-                    <i class="icon-remove" data-bind="click: xBoxUserId"></i>
-                </div>
-                <!-- /ko -->
-                
-                <!-- ko if: boxCategory -->           
-                <div class="tag-button">
-                    <strong>{{ 'notice.filter.categories'|trans }}</strong>
-                    <i class="icon-remove" data-bind="click: xBoxCategory"></i>
-                </div>
-                <!-- /ko -->
-
-                <!-- ko if: boxDistance -->
-                <div class="tag-button">
-                    <strong>{{ 'notice.filter.distance'|trans }}</strong>
-                    <i class="icon-remove" data-bind="click: xBoxDistance"></i>
-                </div>
-                <!-- /ko -->
-
-                <!-- ko if: boxPostDate -->
-                <div class="tag-button">
-                    <strong>{{ 'notice.filter.post_date'|trans }}</strong>
-                    <i class="icon-remove" data-bind="click: xBoxPostDate"></i>
-                </div>
-                <!-- /ko -->
-
-                <!-- ko if: boxWhere -->
-                <div class="tag-button">
-                    <strong>{{ 'notice.filter.location'|trans }}</strong>
-                    <i class="icon-remove" data-bind="click: xBoxWhere"></i>
-                </div>
-                <!-- /ko -->
-
-                <!-- ko if: boxWhat -->
-                <div class="tag-button">
-                    <strong>{{ 'notice.filter.phrase'|trans }}</strong>
-                    <i class="icon-remove" data-bind="click: xBoxWhat"></i>
-                </div>
-                <!-- /ko -->
-
-
+		
+		
+		<!-- Your Selected options -->
+        <div class="options">
+            	<h4>{{ 'notice.filter.filters'|trans }}</h4>
+            	<div class="right">
+                <a href="javascript:void(0);" onclick="clearOptions();">{{ 'notice.filter.clear'|trans }}</a>
+            	</div>
+            	
+            <div class="optionsdetail">
+				<!-- selected options -->
+			</div>
+		   <div class="clearfix"></div>
+		   <div class="selectoptions" style="float: right; width:auto;">
+           		   <div class="selectoptions" id="reviews">{{ 'notice.filter.select_options'|trans }}</div>
+                   <div class="reviewdetial" id="reviewdetail" style="display: none;">
+                   		<div class="selectoptionsopen">{{ 'notice.filter.select_options'|trans }}</div>                                    		
+							<p>I search neighbours who</p>
+								{% for type in types %}
+								 {% if ( type.name=="help" or type.name=="offerhelp" or type.name=="service" or type.name=="offerservice" or type.name=="goods" or type.name=="offergoods" ) %}
+                        			<input type="checkbox" name="selectoptions" id="{{ type.alttext|trans }}" value="{{ type.id }}" /><span>{{ type.alttext|trans }}</span><br>
+                        		 {% endif %}	
+		                        {% endfor %}
+		                    <br>
+		                    <br>    
+                        	<p>I search for</p>
+                        		{% for type in types %}
+								 {% if ( type.name=="neighbours" or type.name=="groups" or type.name=="events" or type.name=="others" ) %}
+								 	{% if type.name=="groups" %}
+                       				<!-- <input type="checkbox" name="selectoptions" id="Community Managers" value="30" /><span>Community Managers</span><br> -->
+                       				{% endif %}
+								 	<input type="checkbox" name="selectoptions" id="{{ type.alttext|trans }}" value="{{ type.id }}" /><span>{{ type.alttext|trans }}</span><br>
+                        		 {% endif %}
+                        		 <div style="display: none;">
+                        		 {% if type.name=="offergroups" %}
+								 	<input type="checkbox" name="selectoptions" id="offergroups" value="{{ type.id }}" />
+								 {% endif %}
+								 {% if type.name=="offerevents" %}
+								 	<input type="checkbox" name="selectoptions" id="offerevents" value="{{ type.id }}" />
+								 {% endif %}
+								 {% if type.name=="offerothers" %}
+								 	<input type="checkbox" name="selectoptions" id="offerothers" value="{{ type.id }}" />
+								 {% endif %}		
+		                        </div>
+		                        
+								{% endfor %}
+		                        
+		                        <a href="javascript:void(0)" id="option_button" onclick="selectedOptions(this);" class="blue_button">Select</a>
+				   </div>
+			
+			</div>
+           
+           
+        </div>
+        <div class="bgbottom"><img src="{{ asset('images/bgbottom_leftpart.png') }}" alt="" /></div>
+        
+        <!-- Around You -->
+        <div class="myneighbours">
+          	<div class="arround_you">
+	          	<h4>{{ 'notice.filter.around_you'|trans }}</h4>
+	            <div class="neighboursdetils">
+	                <div class="" style="text-align: center">
+		                <div id="filter-distance-slider" 
+		                data-bind="jqSlider: {
+		                    value: {{ filterDistanceSliderDefault }}, 
+		                    min: {{ filterDistanceSliderMin }}, 
+		                    max: {{ filterDistanceSliderMax }}, 
+		                    step: {{ filterDistanceSliderSnap }}
+		                },
+		                jqSliderValue: fcDistance" class="bord ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all jq-slider">
+		                    <a href="#" class="ui-slider-handle ui-state-default ui-corner-all ui-state-hover">
+		                        <i class="icon-align-justify"></i>
+		                        <span class="inner-tooltip">
+		                            <strong class="tooltip-value" data-bind="text: fcDistanceText"></strong>
+		                        </span>                                            
+		                    </a>
+		                </div>
+		                <div class="slider-value">
+		                    <strong class="pull-left">&lt; 100m</strong>
+		                    <strong class="pull-right">&gt; 30km</strong>
+		                </div>                                            
+		            </div>
+	            </div>
             </div>
-        </section>
-        <section class="group clearfix">
+            <div class="clearfix"></div>
+            <!-- When -->
+           
+            <div class="when_date">
+	            <h4>{{ 'notice.filter.when'|trans }}</h4>
+	            <div class="right">
+		        	{% set now = "now"|date("Y-m-d H:i:s") %}
+	            	<a onclick="selectedOptions(this);" id="{{ now }}" class="nowtime"  href="javascript:void(0);">NOW</a>
+	            </div>
+	            <div class="neighboursdetils">
+						<div id="slider-range"></div>
+	            </div>
+            </div>
+            
+            
+        </div>
+        <div class="bgbottom"><img src="{{ asset('images/bgbottom_leftpart.png') }}" alt="" /></div>
+        
+        <!-- My Neighbours -->
+        <div class="myneighbours">
+                	<h4>My neighbours</h4>
+                	
+                    <div class="neighboursdetils">
+                    	{% render "FenchyNoticeBundle:GlobalFilter:myNeighborsCode" with { 'userId': displayUser.id } %}
+                    </div>
+        </div>
+        <div class="bgbottom"><img src="{{ asset('images/bgbottom_leftpart.png') }}" alt="" /></div>
+
+        
+        
+        
+        
+        <section class="group clearfix" style="display: none;">
             <header><h3>{{ 'notice.filter.categories'|trans }}</h3>
                 <div class="pull-right with-arrow">
                     <i class="icon-caret-down"></i>
@@ -71,7 +132,7 @@
         </section>
             
             
-        <section class="group clearfix">
+        <section class="group clearfix" style="display: none;">
             <header><h3>{{ 'notice.filter.post_date'|trans }}</h3>
                 <div class="pull-right with-arrow">
                     <i class="icon-caret-down"></i>
@@ -84,7 +145,7 @@
         </section>            
             
             
-        <section class="group clearfix">
+        <section class="group clearfix" style="display: none;">
             <header><h3>{{ 'notice.filter.post_date'|trans }}</h3>
                 <div class="pull-right with-arrow">
                     <i class="icon-caret-down"></i>
@@ -103,39 +164,8 @@
             </div>                                
         </section>
 
-        <section class="group clearfix">
-            <header><h3>{{ 'notice.filter.distance'|trans }}</h3>
-                <div class="with-arrow pull-right">
-                    <i class="icon-caret-down"></i>
-                    <i class="icon-caret-up"></i>  
-                </div>
-            </header>
-            <div class="wrapper" style="text-align: center">
-                <div id="filter-distance-slider" 
-                data-bind="jqSlider: {
-                    value: {{ filterDistanceSliderDefault }}, 
-                    min: {{ filterDistanceSliderMin }}, 
-                    max: {{ filterDistanceSliderMax }}, 
-                    step: {{ filterDistanceSliderSnap }}
-                },
-                jqSliderValue: fcDistance" class="bord ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all jq-slider">
-                    <a href="#" class="ui-slider-handle ui-state-default ui-corner-all">
-                        <i class="icon-align-justify"></i>
-                        <span class="inner-tooltip">
-                            <strong class="tooltip-value" data-bind="text: fcDistanceText"></strong>
-                            <span class="tooltip-arrow">
-                            </span>
-                        </span>                                            
-                    </a>
-                </div>
-                <div class="slider-value">
-                    <strong class="pull-left">&lt; 2km</strong>
-                    <strong class="pull-right">&gt; 5km</strong>
-                </div>                                            
-            </div>
-        </section>
-    </div>
-</section>
+       
+
 
 
 <script type="text/html" id="categories-template">

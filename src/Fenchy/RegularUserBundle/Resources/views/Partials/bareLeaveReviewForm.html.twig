@@ -9,7 +9,7 @@
         {% endif %}
         <div class="content">{{ form_row(form.text) }}</div>
         <div>
-            <div id="review-type-selector" class="toolbar-item button select-button grey-button pull-right">
+            <div style="display: none;" id="review-type-selector" class="toolbar-item button select-button grey-button pull-right">
                 <strong class="selector-title"></strong>
                 <span class="replacement">
                     <strong class="select-value"></strong>
@@ -29,14 +29,14 @@
         {{ form_rest(form) }}
     </div>
     <div class="action-buttons pull-right">
-        <div class="button green-button button-margin">
-            <a class="wrapper leave-review-submit" href="/app_dev.php/user/contact/invite/1">
-                <strong>{{ 'btn.save' | trans }}</strong>
+        <div class="optionsdetail">
+            <a class="blue_button leave-review-submit" href="/app_dev.php/user/contact/invite/1">
+                {{ 'btn.save' | trans }}
             </a>
         </div>
-        <div class="button green-button button-margin">
-            <a class="wrapper leave-review-cancel" href="/app_dev.php/user/contact/invite/1">
-                <strong>{{ 'btn.cancel' | trans }}</strong>
+        <div class="optionsdetail">
+            <a class="blue_button leave-review-cancel" href="/app_dev.php/user/contact/invite/1">
+                {{ 'btn.cancel' | trans }}
             </a>
         </div>
     </div>

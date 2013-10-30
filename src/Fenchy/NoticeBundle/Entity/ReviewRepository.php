@@ -100,7 +100,7 @@ class ReviewRepository extends EntityRepository
             
             $author = $oneReview->getAuthor();
             $authorProfileUrl = $router->generate(
-                'fenchy_regular_user_user_profilev2',
+                'fenchy_regular_user_user_otherprofile_aboutotherchoice',
                 array('userId' => $author->getId()) );
             
             $aboutUser = $oneReview->getAboutUser();
@@ -109,15 +109,16 @@ class ReviewRepository extends EntityRepository
                 array('userId' => $aboutUser->getId()) );
             
             $aboutNotice = $oneReview->getAboutNotice();
+            //echo "<pre>"; print_r($aboutNotice);exit;
             
             $hasNotice = ( $aboutNotice && $aboutNotice->getId() );
             if ( $hasNotice ) {
                 $aboutNoticeUrl = $router
                     ->generate('fenchy_notice_show_slug', array(
                         'slug' => $aboutNotice->getSlug(),
-                        'year' => $aboutNotice->getStartDate()->format('Y'),
-                        'month' => $aboutNotice->getStartDate()->format('m'),
-                        'day' => $aboutNotice->getStartDate()->format('d') ));
+                        'year' => $aboutNotice->getCreatedAt()->format('Y'),
+                        'month' => $aboutNotice->getCreatedAt()->format('m'),
+                        'day' => $aboutNotice->getCreatedAt()->format('d') ));
             }
             
             $reviewsJSON[] = array(

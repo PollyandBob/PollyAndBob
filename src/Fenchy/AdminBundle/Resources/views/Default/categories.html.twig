@@ -1,0 +1,29 @@
+{% extends 'FenchyAdminBundle::layout.html.twig' %}
+ {% form_theme filter '::filterForm.html.twig' %}
+{% block admincontent %}
+     <form action="{{ path('fenchy_admin_categories') }}" method="post" {{ form_enctype(filter) }} style="width: 70%; float:left;">
+         {{ form_widget(filter) }}
+        <br/>
+        <input type="submit" value="Search"/>
+    </form>
+    <a href="{{ url('fenchy_admin_category_new') }}" style="color:black;float: right;padding-top: 20px;width: 30%;">Add New</a>
+    <table class="admin-table">
+        <thead>
+            <tr><th>ID</th><th>Name</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>#{{ category.id }}</td>
+                    <td>{{ category.name }}</td>
+                    <td>
+                    	<a href="{{ url('fenchy_admin_category', {id: category.id}) }}" style="color:black">Edit</a>
+                    	|
+                    	<a href="{{ url('fenchy_admin_category_delete', {id : category.id}) }}" onclick="return confirm('Are you sure you want to delete this Category?');" style="color:black">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+    

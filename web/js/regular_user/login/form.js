@@ -13,7 +13,7 @@ $(document).ready(function() {
     });
 
     $("#user-account-login-login > a").click(function(event) {
-
+    	
         if ($('#login-wrapper').css('display') == 'none') {
             $('#login-wrapper').show().position({
                 my: "right top",

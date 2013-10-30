@@ -18,18 +18,17 @@
             {{ form_rest(form) }}
         </div>
 
-        <footer class="clearfix">
-            <div class="button grey-button pull-left" id="buttons">
-                <a id="back" class="wrapper" href="{{path('fenchy_regular_user_user_profilev2', {'userId': user.id})}}">
-                    <strong>{{ 'btn.cancel'|trans }}</strong>
+        <div class="optionsdetail">
+            
+                <a id="back" class="blue-button" href="{{path('fenchy_regular_user_user_profilev2', {'userId': user.id})}}">
+                    {{ 'btn.cancel'|trans }}
                 </a>                            
-            </div>
+            
             <div class="button submit pull-right">
-                <div>
-                    <input type="submit" id="continue" value="{{ 'btn.send'|trans }}"/>                                
-                </div>
+                <input class="blue-button" type="submit" id="continue" value="{{ 'btn.send'|trans }}"/>                                
+                
             </div>
-        </footer> 
+        </div> 
     </form>                                
         </div>
 {% endblock %}

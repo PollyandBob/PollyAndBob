@@ -1,46 +1,36 @@
-<header>
-    <h2>{{ 'register.title'|trans }}</h2>
-</header>
-<div class="register-layer">
-    <a href=# class="sign-btn fb_btn clearfix">
-        <span><i>f</i></span>
-        <span><strong>{{ 'register.with_fb'|trans }}</strong></span>
-    </a>
-    <a href=# class="sign-btn tt_btn clearfix">
-        <span><i>t</i></span>
-        <span><strong>{{ 'register.with_twitter'|trans }}</strong></span>
-    </a>
-    <p><strong>{{ 'or'|trans }}</strong></p>
-    <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="post" autocomplete="off" class="register-form">
+<div class="big_popup">
+     <div class="big_popupclose"><a href="" class="close"></a></div>
+     <!-- Your custom code here -->
+     <div class="title">{{ 'register.title'|trans }}</div>
+     <div class="clearfix"></div>
+                    
+     <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="post" autocomplete="off" class="register-form">
         
-        <div class="form-error">
-            {{form_errors(form) }}
+		<div class="form-error" style="padding-left: 14px;">
+		    {{form_errors(form) }}
             {{form_errors(form.user_regular.firstname)}}
             {{form_errors(form.email)}}
             {{form_errors(form.plainPassword.first)}}
             {{form_errors(form.plainPassword.second)}}
-        </div>        
-        
-        <fieldset>
-            <div class="fieldInput">
+        </div> 
+        <div class="ajax_loader_info" style="display: none;">
+						<img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
+		</div>       
                 {{ form_widget(form.user_regular.firstname) }}
-            </div>
-            <div class="fieldInput">
+            
                 {{ form_widget(form.email) }}
-            </div>
-            <div class="fieldInput">
+            
                 {{ form_widget(form.plainPassword.first) }}
-            </div>
-            <div class="fieldInput">
+            
                 {{ form_widget(form.plainPassword.second) }}
-            </div>                        
+                                   
                 {{ form_rest(form) }}
-            <p>{{ 'register.footer_message.1'|trans }} <a href="#terms">{{ 'register.footer_message.2'|trans }}</a> {{ 'register.footer_message.3'|trans }} <a href="#privacy">{{ 'register.footer_message.4'|trans }}</a></p>
-            <div class="submit">
-                <div>                                                        
-                    <button type="button" class="submit-form">{{ 'register.save_button'|trans }}</button>
-                </div>                                        
-            </div>
-        </fieldset>
+           
+          <!-- <p>{{ 'register.footer_message.1'|trans }} <a href="#terms">{{ 'register.footer_message.2'|trans }}</a> {{ 'register.footer_message.3'|trans }} <a href="#privacy">{{ 'register.footer_message.4'|trans }}</a></p> -->
+                                                                   
+            <input type="button" class="blue_button" id="register-form" value="{{ 'register.save_button'|trans }}" onclick="registerFormsubmit(this);" />
+           
+       
     </form>
-</div> 
+                    <!-- Your custom code end -->
+</div>

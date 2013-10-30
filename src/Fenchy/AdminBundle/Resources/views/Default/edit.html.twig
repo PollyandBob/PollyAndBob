@@ -2,7 +2,7 @@
 {% block admincontent %}
     <form action="{{ path('fenchy_admin_'~type, {id: entity.id}) }}" method="post" {{ form_enctype(form) }} class="student-form">
         {{ form_widget(form) }}
-        Remove all stickers: <input type="checkbox" checked="checked" value="1" name="removeStickers"/><br/>
+        <br/>
         <input type="submit" value="Update"/>
     </form>
 {% endblock %}

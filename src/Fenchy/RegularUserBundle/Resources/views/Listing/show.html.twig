@@ -5,15 +5,11 @@
     {# any view specific stylesheets for this view #}    
     <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />        
     <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/jquery.tagit.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/tagit.ui-zendesk.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ absolute(asset('css/app/sidebar-v2.css')) }}" type="text/css" />
-    <link rel="stylesheet" href="{{ absolute(asset('css/app/search-bar-v2.css')) }}" type="text/css" />
-    <link rel="stylesheet" href="{{ absolute(asset('css/app/inner-content-v2.css')) }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/tagit.ui-zendesk.css') }}" type="text/css" />       
     <link rel="stylesheet" href="{{ absolute(asset('css/app/article-box-v2.css')) }}" type="text/css" />    
-    <link rel="stylesheet" href="{{ absolute(asset('css/app/tabs-v2.css')) }}" type="text/css" />    
-    <link rel="stylesheet" href="{{ absolute(asset('css/app/listing-view-v2.css')) }}" type="text/css" /> 
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/tabs-v2.css')) }}" type="text/css" />  
     <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ absolute(asset('css/app/custom-form.css')) }}" type="text/css" /> 
+     
 {% endblock %}
 
 {% block javascripts %}
@@ -90,98 +86,143 @@
             tabsJQ = $('.container .inner-content #reviews-tabs', document);
             tabsJQ.tabs();
             
-            
-            
-            
+           	$('.reviewdata').hide();
+           	$('.writereviewdata').hide();
+           	$('#desc').css('background', '#E14F45');
         });
+        function toggeleDiv(element1,element2)
+        {
+            $('#tabs').children().hide();
+            $("."+element2).show();
+            $("#tab").children().css('background', '#51B9D4');
+            $("#"+element1).css('background', '#E14F45');        	
+        }
         
     </script>
+     <script type="text/javascript">
+		
+		function postComment(){
+			var noticeId = {{ notice.id }};
+			var text = $('#commenttext').val();
+		    $.post('{{path('fenchy_notice_post_comment')}}',
+		                {noticeId: noticeId, text: text}, 
+		            function(response){
+		                $('.commentdata').html(response.success);
+
+		    }, "json");    
+		}
+	</script>
     {# any view specific JS scripts for this view #}
 {% endblock %}
 
 {% block content %}
-
-    {{ facebook_initialize({'frictionlessRequests': true }) }}
-    <section class="main content-ltr" data-role="main">
-        <div class="wrapper-inner-content">
-            <div class="clearfix">
-                <section class="sidebar pull-right large-padding-top">
-                    {% include 'FenchyRegularUserBundle:Partials:listingSidebar.html.twig' %}
-                </section>                
-                
-                <section class="content pull-left listing-view">
-                    {% include '::searchBarV2.html.twig' %}                        
-                        <div id="post" class="inner-content">                                                               
-                            <article class="main">
-                                <header>
-                                    <div class="activity">
-                                        <a href="#"><i class="{{notice.icon}}"></i></a>
-                                    </div>  
-                                    <hgroup>
-                                        <h1>
-                                            {{ notice.title }}
-                                            {% if app.user.id is defined and app.user.id != notice.user.id %}
-                                            <a style="float: right;" href="{{ url('fenchy_create_notice_sticker', {id: notice.id}) }}" class="add-sticker icon-flag-alt"></a>
-                                            {% endif %}
-                                        </h1>
-                                        <h2>{{ notice.location }}<span class="pending-time">{{ notice.startDate|date('M d H:m')}} to {{ notice.endDate|date('M d H:m')}}</span></h2>
-                                    </hgroup>                                        
-                                </header>
-                                <div class="post-content">
-
-                                    {% if notice.gallery.hasImages %}
-                                        <figure>
-                                        {% set gallery = notice.gallery %}
-                                        {{ block('galleryContainer') }}
-                                        </figure>
-                                    {% else %}
-                                        <div class="listing-spacer"></div>
-                                    {% endif %}
-
-
-                                    <div class="post-meta clearfix">
-                                        <div class="tags">
-                                            <strong>{{'listing.show.tags'|trans}}:</strong>
-                                            <input type="text" id="tags" value="{{ notice.tags }}"/>
-                                        </div>
-
-                                        <div class="social">
-                                            <!-- AddThis Button BEGIN -->
-                                            <div class="addthis_toolbox addthis_default_style ">
-                                            <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-                                            <a class="addthis_button_tweet"></a>
-                                            <a class="addthis_button_pinterest_pinit"></a>
-                                            <a class="addthis_counter addthis_pill_style"></a>
-                                            </div>
-                                            <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-519a2041126afff1"></script>
-                                            <!-- AddThis Button END -->                                                
-                                        </div>                                    
-
-                                    </div>
-                                    <div class="post-description">
-                                        <h3>{{'listing.show.description'|trans}}</h3>
-                                        <div id="description-area" class="scrollable">
-                                            <div class="scrollbar">
-                                                <div class="track">
-                                                    <div class="thumb">
-                                                        <div class="end"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="viewport">
-                                                <div class="overview">
-                                                    <p>{{ notice.content }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>
-                            {% include 'FenchyRegularUserBundle:Partials:listingReviews.html.twig' %} 
-                        </div> 
-                </section>                
-            </div>
-        </div>
+	<style>
+	#gallery-show .agile_carousel {
+	 	height: 315px !important;
+	 	width: 964px !important;
+	}
+	#gallery-show .agile_carousel .slide_inner .photo.landscape {
+	    height: 315px !important;
+	    width: 134%;
+	}
+	#gallery-show .content_button img {
+	    height: 91px;	    
+	}
+	</style>
+	<section id="contentinner" style="margin-top: 12px;">
+	<div class="wrapper">  
+	<div class="notice-title">
+		{{ notice.title }}
+	</div>
+	{% if app.user.id is defined and app.user.id != notice.user.id %}
+      	<a class="blue-button add-sticker" style="float: right; margin: 20px; position: relative; z-index: 100;" href="{{ url('fenchy_create_notice_sticker', {id: notice.id}) }}">{{ 'notice.flag'|trans  }}</a>
+    {% endif %}  
+      	    
+   	<div class="post-content">
+    	{% if notice.gallery.hasImages %}
+        	<figure>
+			   	{% set gallery = notice.gallery %}
+				{{ block('galleryContainer') }}
+		    </figure>
+		{% else %}
+		   	<div class="image-spacer">NOT AVAILABLE</div>
+		{% endif %}
+	</div>
+	<div id="post watch-notice">
+		<div class="leftparts">
+			<div class="noticedata">
+				<div class="findmedata">
+					<div class="tagdata">
+		             	<div class="title">{{'listing.show.tags'|trans}}</div>
+		                <div class="likedata" style="margin-left: 50px;">
+		                	<ul>          	
+		                      	<div class="about_show">
+			                    	{% set varStack = notice.tags | split(',') %}
+										{% for value in varStack %}
+											{% if value %}
+										 		<li style="margin-top: -8px;"><a href="javascript:void(0);">{{ value }}</a></li>
+										    {% endif %}
+										{% endfor %}
+			                  	</div>
+		                    </ul>	                	
+		           		</div>
+		            </div>
+		            <div class="optionsdetail" id="tab">
+			        	<a id="desc" style="border-radius: 0 15px 0 0; margin: 0;" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('desc','descdata')">{{ 'listing.show.description'|trans }}</a>
+			        	<a id="review" style="border-radius: 0 15px 0 0; margin: 0;" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('review','reviewdata')">{{ 'listing.show.reviews'|trans }}</a>
+			        	<!--<a id="writereview" style="border-radius: 0 15px 0 0; margin: 0;" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('writereview','writereviewdata')">{{ 'listing.show.reviews'|trans }}</a>-->
+			        	
+			        </div>
+			        <div id="tabs">
+			            <div class="descdata">		            	
+			             	{{ notice.content }}
+			            </div>
+			            <div class="reviewdata">		            	
+							{% for initialReview in initialReviews %}
+				                {% if initialReview %}
+				               		<div class="data">                                      	 
+					              		<a href="{{ initialReview['author']['profileUrl'] }}">
+					               			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialReview['author']['id'] } %}
+					               		</a>
+					               		<p>{{ initialReview['text'] }}</p>
+					               	</div>
+				               	{% endif %}
+			                {% endfor %}
+			            </div>
+			                 {% include 'FenchyRegularUserBundle:Partials:listingReviews.html.twig' %}
+ 						{% if not usersOwnListing and app.security.token.user.id is defined and app.security.token.user.id != NULL %}
+ 						{% endif %}			            
+			        </div>
+		            <h4>{{ 'listing.show.comment'|trans }}</h4>
+		            <div class="commentdata">
+ 						{% if app.user.id is defined %}
+			            	<a href="javascript:void(0);" style="margin-top: 15px; position: absolute;">
+					        	{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': userLoggedIn.id } %}
+					        </a>	
+			            	<div class="descdata" style="margin-left: 34px; width: 89% !important;">
+					         	<p><input id="commenttext" style="width: 80%" type="textarea" placeholder="{{ 'regularuser.post_comment'|trans }}"/></p>
+					        </div>
+					        <input style="float: right; margin-left: 16px; margin-top: -42px; position: relative; cursor: pointer;" class="blue_button" type="button" value="POST" onclick="postComment();"/>
+					        
+					    {% endif %}
+						{% for initialComment in initialComments %}
+			                {% if initialComment %}
+			               		<div class="data">                                      	 
+				              		<a href="{{ initialComment['author']['profileUrl'] }}">
+				               			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialComment['author']['id'] } %}
+				               		</a>
+				               		<p>{{ initialComment['text'] }}</p>
+				               	</div>
+			               	{% endif %}
+		                {% endfor %}
+		            </div>
+				</div>
+				<div class="bgbottom-big"><img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}"></div>				
+			</div>			
+    	</div>
+    	{% include 'FenchyRegularUserBundle:Partials:listingSidebar.html.twig' %}
+   	</div>
+    <div class="clearfix"></div>
+    </div>
     </section>
-
 {% endblock %}

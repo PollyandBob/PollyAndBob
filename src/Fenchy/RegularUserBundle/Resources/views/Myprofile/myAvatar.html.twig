@@ -21,37 +21,223 @@
     <script type="text/javascript" src="{{ asset('plugins/tapmodo-Jcrop-1902fbc/js/jquery.Jcrop.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/gallery/punkave/editSmall.js') }}"></script>
     <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
+    <script type="text/javascript">
+		function verifyYourIdentity()
+		{
+			var url = "{{ path('fenchy_regular_user_user_myprofile_identityVerification') }}";
+			$.ajax({
+				url : url,
+				type : "post",
+				data : {
+					},
+				beforeSend : function() {
+					$(".ajax_loader_info").show();
+				},
+				success : function(response) {
+					$(".ajax_loader_info").hide();
+					alert('Your Request is sent.');
+				},
+				error : function() {
+					alert('Something went wrong!');
+				},
+				complete : function() {						
+					setTimeout(function(){ location.reload(); }, 500); 			
+				}
+			});
+		}
+
+		$(function(){
+		    Test = {
+		        UpdatePreview: function(obj){
+		          // if IE < 10 doesn't support FileReader
+		          if(!window.FileReader){
+		             // don't know how to proceed to assign src to image tag
+		          } else {
+		             var reader = new FileReader();
+		             var target = null;
+		             
+		             reader.onload = function(e) {
+		              target =  e.target || e.srcElement;
+		               $("img.form_file").prop("src", target.result);
+		             };
+		              reader.readAsDataURL(obj.files[0]);
+		          }
+		        }
+		    };
+
+		    Test2 = {
+			        UpdatePreview: function(obj){
+			          // if IE < 10 doesn't support FileReader
+			          if(!window.FileReader){
+			             // don't know how to proceed to assign src to image tag
+			          } else {
+			             var reader = new FileReader();
+			             var target = null;
+			             
+			             reader.onload = function(e) {
+			              target =  e.target || e.srcElement;
+			               $("img.form_file2").prop("src", target.result);
+			             };
+			              reader.readAsDataURL(obj.files[0]);
+			          }
+			        }
+			    };
+		    
+		    $('#form_file').change(function(){ 
+		    	Test.UpdatePreview(this);
+		    });
+		    $('#form_file2').change(function(){ 
+		    	Test2.UpdatePreview(this);
+		    });
+
+		    
+		    
+		});		
+	</script>
 {% endblock %}
 
 {% block content %}
 	<div class="profile">
+				<div class="profile_bak" >
+				{%  if coverpath %}
+					<img alt="" width="970" height="262" src="{{ absolute(asset(coverpath)) }}">
+				{% else %}
+						<img alt="" src="{{ absolute(asset('images/bg_profileheader.png')) }}">
+				{% endif %}
+				</div>
                 <div class="left">
                     <div class="persen">
-                    	<img alt="" src="{{ displayUser.regularuser.avatar(false) }}">
+                    {%  if profilepath %}
+					<img alt="" src="{{ absolute(asset(profilepath)) }}">
+					{% else %}
+					<img alt="" src="{{ absolute(asset('images/default_profile_picture.png')) }}">
+					{% endif %}
+                    	
                         <div class="persenname">
                         	<p>{{ displayUser.name }}</p>
-                            <a href="{{ path('fenchy_regular_user_settings_basic') }}">Edit</a>
+                            <a href="#dialog27" name="modal" id="vzoom_1944" class="zoomthis">Edit</a>
 						</div>
-                        <div class="neighbor orange">
-                        	<p>N</p>
-                            <span>168</span>
+                        <div class="neighbor {{ classColor }}">
+                        	<p>{{ managertype_alpha }}</p>
+                            <span>{{ displayUser.activity }}</span>
 						</div>		                            
                     </div>
                     <div class="clearfix"></div>
-                    <details>
-                    	<span>Community Manager</span><br>
+                    <div class="about-details">
+                    	{% if managertype %}
+                    	<span>{{ managertype }}</span>
+                    	{% endif %}<br>
                         <span>
-                        	{{ displayUser.location }}
+                        {% set varStack = displayUser.location | split(',') %}
+                    	{{ varStack[0] }}
                         </span>
-                    </details>
+                    </div>
                     <div class="clearfix"></div>
                 </div>
-                <div class="right">
-                	<a href="#" class="location">Location</a>
-                    <a href="#" class="identity">Identity</a>
+                <div class="right">                	
+                	{% if verified %}
+                		<a href="#dialog8" name="modal" id="vzoom_1944" class="zoomthis location">Location</a>	
+                	{% else %}
+						<a href="#dialog8" name="modal" id="vzoom_1944" class="zoomthis notlocation">Location</a>
+                	{% endif %}
+                	{% if identity %}
+                		<a href="#dialog2" name="modal" id="vzoom_1944" class="zoomthis identity">Identity</a>
+                	{% else %}
+                		{% if verifyIdentity %}                			            		
+                   			<a href="#dialog2" name="modal" id="vzoom_1944" class="zoomthis notidentity">Identity</a>							
+						{% else %}
+							<a href="#dialog2" name="modal" id="vzoom_1944" class="zoomthis notidentity">Identity</a>
+						{% endif %}
+                    {% endif %}
                 </div>
      </div>
      <div class="clearfix"></div>
+     
+     <section id="boxes2">
+    	<div id="dialog2" class="window"> 
+        	<div class="big_popup">
+	           	<div class="big_popupclose"><a href="" class="close"></a></div>            
+            		{% if identity %}
+            			<p>{{ 'regularuser.verified_identity_message'|trans|upper }}</p>
+    	        	{% else %}
+    	        		{% if verifyIdentity %}
+    		        		<p>{{ 'regularuser.verify_identity_message'|trans|upper }}</p>
+							<button onclick="verifyYourIdentity()">{{ 'regularuser.ok'|trans|upper }}</button>
+						{% else %}
+							<p>{{ 'regularuser.verifing_identity_message'|trans|upper }}</p>
+						{% endif %}
+    	        	{% endif %}
+    	        	<div class="ajax_loader_info" style="display: none; padding: 0 0 0 217px;;">
+     					<img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
+					</div>   
+        		</div>    
+    		</div>    
+    	<div id="mask"></div>
+    </section>
+    <section id="boxes2">
+    <div id="dialog8" class="window"> 
+        <div class="big_popup">
+            <div class="big_popupclose"><a href="" class="close"></a></div>
+            
+				{% if verified %}
+            		<p>{{ 'regularuser.verified_location_message'|trans|upper }}</p>            								   	        		
+    	        {% else %}
+					<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>			
+            		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
+						<button>{{ 'regularuser.ok'|trans|upper }}</button>
+    	        	</form>
+    	        {% endif %}
+        </div>    
+    </div>    
+    <div id="mask"></div>
+    </section>
+     <section id="boxes2">
+            <div id="dialog27" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close"></a></div>
+                    <!-- Your custom code here -->
+                    
+					{# {% render "FenchyRegularUserBundle:settings:basic" %} #}
+					
+					<h4>Profile Image</h4>
+					<br>
+					<br>
+		
+						<form action="{{ path('fenchy_regular_user_settings_image') }}" method="post" {{ form_enctype(form3) }}>
+						 <div class="row profile_picture">   
+						    
+   							 {{ form_row(form3.file) }}
+   							<img src="{{ asset(profilepath) }}" class="form_file" alt="" width="128" height="128" />
+   							 {{ form_row(form3.user_id) }}
+						 </div>  
+						 <div style="display:none;">{{ form_rest(form3) }}</div>
+						<div class="clearfix">
+						    <input type="submit" class="blue_button" style="float: right;margin-right: 17px;" value="Save" />
+						</div>
+						</form>
+				<br>
+				<h4>Cover Image</h4>
+					<br>
+					<br>		
+						<form action="{{ path('fenchy_regular_user_settings_image') }}" method="post" {{ form_enctype(form4) }}>
+						 <div class="row profile_picture">  
+						  
+						     {{ form_row(form4.file2) }}
+   							 <img src="{{ asset(coverpath) }}" class="form_file2" alt="" width="128" height="128" />
+   							 {{ form_row(form4.user_id) }}
+						 </div>  
+						 <div style="display:none;">{{ form_rest(form4) }}</div>
+						<div class="clearfix">
+						    <input type="submit" class="blue_button" style="float: right;margin-right: 17px;" value="Save" />
+						</div>
+						</form>
+					
+					
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>  
 	<!-- 
 	<section class="user-profile-group">
         <figure class="avatar">
@@ -62,4 +248,5 @@
         </figure>
     </section>
      -->
+          
 {% endblock %}

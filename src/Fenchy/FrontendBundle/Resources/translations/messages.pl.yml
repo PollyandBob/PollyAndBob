@@ -116,6 +116,12 @@ frontend:
   settings: Ustawienia
 
   log_out: Wyloguj się
+     
+  myprofile: My Profile
+  
+  create_group: Create Group
+  
+  newsfeeds: Newsfeeds
 
   admin: Panel Admina
 
@@ -165,7 +171,7 @@ frontend:
 
   sign_in_twitter: Twitter - Zaloguj się
 
-  placeholder_what: Search
+  placeholder_what: What are you looking for in your neighborhood?
   
   placeholder_where: Where
   

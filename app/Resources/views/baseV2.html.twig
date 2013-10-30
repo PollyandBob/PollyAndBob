@@ -30,6 +30,7 @@
             {% block javascripts %}
                 {# any view specific JS scripts for this view #}                
                 <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/ajax-calls.js') }}"></script>
                 <!--[if lt IE 9]>
                     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
                     <script type="text/javascript" src="{{ absolute(asset('js/respond.min.js')) }}"></script>	
@@ -191,6 +192,24 @@
 					            //$('a', this).addClass('selected');
 					        
 					    });
+					    $('#save_msg_id').hide();
+					    $("#save_loc_id").click(function() {
+					    	 $('#save_msg_id').show();
+						});
+
+					    $('.login').click(function(event) {
+							  event.preventDefault();
+							  $('.loginwindow').slideToggle('fast', function() {
+							  });
+						});
+
+					    $('.myprofilelink').click(function(event) {
+							  event.preventDefault();
+							  $('.loginwindow2').css('right','213px');
+							  $('.loginwindow2').css('top','40px');
+							  $('.loginwindow2').slideToggle('fast', function() {
+							  });
+						  });
 					});
 					</script>
 					
@@ -209,6 +228,10 @@
                  <a class="homebanner2" href="#"></a>
                  <a class="homebanner3" href="#"></a>
 	        </div>
+	    </div>
+		<div class="sidemenu">
+	    	<a href="#dialog4" name="modal" id="vzoom_1944" class="zoomthis aboutpnb">{{ 'main.about_pb'|trans }}</a><br>
+	    	<a href="#dialog5" name="modal" id="vzoom_1944" class="zoomthis whatcan">{{ 'main.what_can_i_do'|trans }}</a>
 	    </div>
         <div class="wrapper">            
                 {% block header %}
@@ -298,9 +321,9 @@
 			<div class="big_popup">
                 <div class="big_popupclose"><a href="" class="close"></a></div>
                 <!-- Your custom code here -->
-                <div class="title">Interested?</div>
+                <div class="title">{{ 'main.interested'|trans }}</div>
                 <div class="clearfix"></div>
-                <p>Join your new neighborhood and stay updated!</p>
+                <p>{{ 'main.join_interest'|trans }}</p>
                 <div id="mc_embed_signup">
                 <form action="http://pollyandbob.us7.list-manage1.com/subscribe/post?u=43c83103fae20f39b4d0d5878&amp;id=cfd1046153" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
                 	<input type="email" value="Your E-mail" name="EMAIL" onFocus="myFocus(this);" onBlur="myBlur(this);" id="mce-EMAIL">
@@ -312,6 +335,220 @@
         </div>
         <div id="mask"></div>
     	</section>
+    	
+    	<section id="boxes2">
+            <div id="dialog4" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close"></a></div>
+                    <!-- Your custom code here -->
+                    <a href="#" class="aboutpnb">{{ 'main.about_pb'|trans }}</a>
+                    <div class="clearfix"></div>
+                    <p>{{ 'main.first_blue_popup_desc'|trans }}<br><br>{{ 'main.take_time_enrich'|trans }}</p>
+                    <a href="#dialog5" name="modal" id="vzoom_1944" class="zoomthis whatcan">{{ 'main.first_popup_link'|trans }}</a>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+        <section id="boxes2">
+            <div id="dialog5" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close"></a></div>
+                    <!-- Your custom code here -->
+                    <a href="#" class="whatcan">{{ 'main.you_can_do'|trans }}</a>
+                    <div class="clearfix"></div>
+                    <div class="candolot">
+                        <div class="left">
+                            <h4>{{ 'main.find_something'|trans }}<br><span>{{ 'main.in_neighborhood'|trans }}</span></h4>
+                            <div class="clearfix"></div>
+                            <a href="#dialog6" name="modal" id="vzoom_1944" class="zoomthis">Neighbors</a>
+                            <a href="#dialog11" name="modal" id="vzoom_1944" class="zoomthis">Groups</a>
+                            <a href="#dialog12" name="modal" id="vzoom_1944" class="zoomthis">Help</a>
+                            <a href="#dialog13" name="modal" id="vzoom_1944" class="zoomthis">Goods</a>
+                            <a href="#dialog14" name="modal" id="vzoom_1944" class="zoomthis">Service</a>
+                            <a href="#dialog15" name="modal" id="vzoom_1944" class="zoomthis">Events</a>
+                            <a href="#dialog16" name="modal" id="vzoom_1944" class="zoomthis">Something Else</a>
+                        </div>                        
+                        <div class="right">
+                            <h4>{{ 'main.offer_some'|trans }}<br><span>{{ 'main.to_neighborhood'|trans }}</span></h4>
+                            <div class="clearfix"></div>
+                            <a href="#">Groups</a>
+                            <a href="#">Yourself</a>
+                            <a href="#">Goods</a>
+                            <a href="#">Help</a>
+                            <a href="#">Events</a>
+                            <a href="#">Service</a>
+                            <a href="#">Something Else</a>
+                        </div>                        
+                    </div>
+                    <div class="clearfix"></div>
+                    <p class="left">{{ 'main.connect_neighbors'|trans }}</p>
+                    <p class="right">{{ 'main.take_time_enrich'|trans }}</p>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+        <section id="boxes2">
+            <div id="dialog6" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close1"></a></div>
+                    <!-- Your custom code here -->
+                    <div class="innerpopups">
+	                    <h4>{{ 'main.find_neighbors'|trans }}</h4>
+	                    <div class="clearfix"></div>
+	                    <p class="text1">{{ 'main.you_need_chess'|trans }}</p>
+	                    <div class="clearfix"></div>
+	                    <p class="text2">{{ 'main.you_need_like'|trans }}</p>
+	                    <div class="clearfix"></div>
+	                    <p class="text3">{{ 'main.you_need_people_xy'|trans }}</p>
+	                    <div class="clearfix"></div>
+	                    <a href="#dialog7" name="modal" id="vzoom_1944" class="zoomthis whatcan">Make a Listing</a>
+	                    <div class="clearfix"></div>
+	                    <span>Polly &amp; Bob connects you to your neighborhood</span>
+                    </div>    
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+    	
+    	 <section id="boxes2">
+            <div id="dialog11" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close1"></a></div>
+                    <!-- Your custom code here -->
+                    <div class="innerpopups">
+                        <h4>Find Groups!</h4>
+                        <div class="clearfix"></div>
+                        <p class="">You need a running group?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You want to meet people regularly to a certain topic?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You want to discuss local political stuff with neighbors?</p>
+                        <div class="clearfix"></div>
+                        <a href="#dialog7" name="modal" id="vzoom_1944" class="zoomthis whatcan">Make a Listing</a>
+                        <div class="clearfix"></div>
+                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                    </div>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+        <section id="boxes2">
+            <div id="dialog12" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close1"></a></div>
+                    <!-- Your custom code here -->
+                    <div class="innerpopups">
+                        <h4>Find Help!</h4>
+                        <div class="clearfix"></div>
+                        <p class="">You need a help to solve your computer problem?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You want to point your corrider and need a helping hand?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You someone to sit your dog?</p>
+                        <div class="clearfix"></div>
+                        <a href="#dialog7" name="modal" id="vzoom_1944" class="zoomthis whatcan">Make a Listing</a>
+                        <div class="clearfix"></div>
+                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                    </div>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+        <section id="boxes2">
+            <div id="dialog13" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close1"></a></div>
+                    <!-- Your custom code here -->
+                    <div class="innerpopups">
+                        <h4>Find Goods!</h4>
+                        <div class="clearfix"></div>
+                        <p class="">You need a certain CD?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You need a car for the weekend?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You need a certain tool?</p>
+                        <div class="clearfix"></div>
+                        <a href="#dialog7" name="modal" id="vzoom_1944" class="zoomthis whatcan">Make a Listing</a>
+                        <div class="clearfix"></div>
+                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                    </div>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+        <section id="boxes2">
+            <div id="dialog14" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close1"></a></div>
+                    <!-- Your custom code here -->
+                    <div class="innerpopups">
+                        <h4>Find Services!</h4>
+                        <div class="clearfix"></div>
+                        <p class="">You need a reliable babysitter for tonight?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You need some guys for your move for small money?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You need any service and want something reliable person from the neighborhood?</p>
+                        <div class="clearfix"></div>
+                        <a href="#dialog7" name="modal" id="vzoom_1944" class="zoomthis whatcan">Make a Listing</a>
+                        <div class="clearfix"></div>
+                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                    </div>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+    	
+        <section id="boxes2">
+            <div id="dialog7" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close2"></a></div>
+                    <!-- Your custom code here -->
+                    <p>{{ 'main.we_need_your_location'|trans }}</p>
+                    <div class="clearfix"></div>
+                    <form name="">
+                    	<input type="text" />
+                    	<input type="text" />
+                        <input type="button" id="save_loc_id" class="aboutpnb" value="Save" />
+                    </form>
+                    <br>
+                    <br>
+                    <br>
+                    <p style="color: #51B9D4;" id="save_msg_id">{{ 'main.save_location_form_msg'|trans }}</p>
+                    <div class="clearfix"></div>
+                    <div class="map">
+		    			<div id="map_canvas"></div>
+		    		</div>
+                    <div class="clearfix"></div>
+                    <a href="#" class="btn_black">{{ 'main.back'|trans }}</a>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+    	
+    	<section id="boxes2">
+            <div id="dialog10" class="window"> 
+			{% if not app.user %}
+                {% render 'UserBundle:Registration:register' %}
+            {% endif %}
+            </div>
+            <div id="mask"></div>
+    	</section>
+    	
+    	
+    	
+    	
+    	
+    	
+    	
 <!-- 
 <div id="mc_embed_signup">
 <form action="http://pollyandbob.us7.list-manage1.com/subscribe/post?u=43c83103fae20f39b4d0d5878&amp;id=cfd1046153" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>

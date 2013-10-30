@@ -9,6 +9,7 @@ use Fenchy\RegularUserBundle\Form\PopupLocationType;
 use Fenchy\UserBundle\Form\ProfileFormType as UserType;
 use Fenchy\UserBundle\Form\UserNotificationsType;
 use Fenchy\RegularUserBundle\Entity\UserRegular;
+use Fenchy\RegularUserBundle\Entity\Document;
 use Fenchy\UserBundle\Entity\User;
 use Fenchy\UserBundle\Entity\EmailChangeRequest;
 use Symfony\Component\Form\FormError;
@@ -20,6 +21,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\UserBundle\Model\UserInterface;
 use Fenchy\RegularUserBundle\Form\UserBasicSettingsType;
 use Fenchy\UserBundle\Form\UserEmailType;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use FOS\UserBundle\Controller\ChangePasswordController;
+use Fenchy\UserBundle\Form\PaymentDeleteType;
+use Fenchy\NoticeBundle\Form\NoticeListingType;
 
 class SettingsController extends Controller {
 
@@ -414,7 +419,59 @@ class SettingsController extends Controller {
 
         return $this->render('FenchyRegularUserBundle:Settings:basic.html.twig', $data);
     }
-
+    
+    public function imageAction()
+    {
+    	$user = $this->get('security.context')->getToken()->getUser();
+    	
+    	if (!($user instanceof User)) {
+    		return $this->redirect($this->generateUrl('fos_user_security_login'));
+    	}
+    	$request = $this->getRequest();
+    	
+    	$user_regular = $user->getRegularUser();
+    	
+    	$em = $this->getDoctrine()->getManager();
+    	$document = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
+    	
+    	if (!$document) {
+    		$document = new Document();
+    	}
+    	
+    	$form3 = $this->createFormBuilder($document)
+    	->add('user_id','hidden', array(
+    			'data' => $user->getId(),))
+    			->add('file',null,array('label' => 'settings.general.profile_photo'))
+    			->getForm();
+    	
+    	$form4 = $this->createFormBuilder($document)
+    	->add('user_id','hidden', array(
+    			'data' => $user->getId(),))
+    			->add('file2',null,array('label' => 'settings.general.cover_photo'))
+    			->getForm();
+    	    	
+    	if ($this->getRequest()->isMethod('POST')) {
+    		$form3->bindRequest($this->getRequest());
+    		$form4->bindRequest($this->getRequest());
+    		$user_id= $this->getRequest()->get('user_id');
+    		$file = $this->getRequest()->get('file');
+    		$file2 = $this->getRequest()->get('file2');
+    		 
+    		 
+    		if ($form3->isValid() or $form4->isValid()) {
+    	
+    			$document->upload();
+    			$document->uploadcover();
+    	
+    			$em->persist($document);
+    			$em->flush();
+    	
+    			return $this->redirect($this->generateUrl('fenchy_regular_user_user_myprofile_aboutmychoice'));
+    		}
+    	}
+    	return $this->redirect($this->generateUrl('fenchy_regular_user_user_myprofile_aboutmychoice'));
+    	
+    }
     /**
      * 
      * Account section in user's settings
@@ -429,11 +486,53 @@ class SettingsController extends Controller {
         if (!($user instanceof User)) {
             return $this->redirect($this->generateUrl('fos_user_security_login'));
         }
+        $request = $this->getRequest();
+        
+        $user_regular = $user->getRegularUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        $document = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
+        
+        if (!$document) {
+        	  $document = new Document();
+        }
+        
+        $form3 = $this->createFormBuilder($document)
+        ->add('user_id','hidden', array(
+    		  'data' => $user->getId(),))
+        ->add('file',null,array('label' => 'settings.general.profile_photo'))
+        ->getForm();
+        
+        $form4 = $this->createFormBuilder($document)
+        ->add('user_id','hidden', array(
+        		'data' => $user->getId(),))
+        		->add('file2',null,array('label' => 'settings.general.cover_photo'))
+        		->getForm();
+        
+//         if ($this->getRequest()->isMethod('POST')) {
+//         	$form3->bindRequest($this->getRequest());
+//         	$form4->bindRequest($this->getRequest());
+//         	$user_id= $this->getRequest()->get('user_id');
+//         	$file = $this->getRequest()->get('file');
+//         	$file2 = $this->getRequest()->get('file2');
+        	
+        	
+//         	if ($form3->isValid() or $form4->isValid()) {
 
+//         			$document->upload();
+//         			$document->uploadcover();
+        		
+//         			$em->persist($document);
+//         			$em->flush();
+
+//         		return $this->redirect($this->generateUrl('fenchy_regular_user_settings_account'));
+//         	}
+        	
+//         }
+        
         $form = $this->createForm(new UserEmailType(), $user);
 
-        $request = $this->getRequest();
-
+        $data = array();
         if ($request->getMethod() == 'POST') {
 
             $presentEmail = $user->getEmail();
@@ -504,17 +603,58 @@ class SettingsController extends Controller {
                 $em->persist($user);
                 $em->flush();
 
-
-
                 return $this->redirect($this->generateUrl('fenchy_regular_user_settings_account'));
             }
         }
 
-        return $this->render('FenchyRegularUserBundle:Settings:account.html.twig', array(
-                    'form' => $form->createView()
-        ));
+        if (!is_object($user) || !$user instanceof UserInterface) {
+        	throw new AccessDeniedException('This user does not have access to this section.');
+        }
+        
+        $form1 = $this->container->get('fos_user.change_password.form');      
+       
+        
+        $verified = $this->getDoctrine()
+        			->getRepository('UserBundle:LocationVerification')->getStatus($user);
+        $identity = $this->getDoctrine()
+        			->getRepository('UserBundle:IdentityVerification')->getIdentityStatus($user);
+        $verify_identity = $this->getDoctrine()
+        			->getRepository('UserBundle:IdentityVerification')->getVerifyIdentity($user);
+        
+        $form2 = $this->createForm(new UserNotificationsType(), $user);
+        
+       
+        $data['form'] = $form->createView();
+        $data['form1'] = $form1->createView();
+        $data['form2'] = $form2->createView();
+        $data['form3'] = $form3->createView();
+        $data['form4'] = $form4->createView();
+        $data['verified'] =  $verified;
+        $data['identity'] =  $identity;
+        $data['verifyIdentity'] =  $verify_identity;
+        
+                        
+        return $this->render('FenchyRegularUserBundle:Settings:account.html.twig', $data);
     }
     
+    
+    public function changePasswordAction()
+    {
+    	$user = $this->container->get('security.context')->getToken()->getUser();
+    	if (!is_object($user) || !$user instanceof UserInterface) {
+    		throw new AccessDeniedException('This user does not have access to this section.');
+    	}
+//     	$form = $this->createForm(new UserEmailType(), $user);
+//     	$form1 = $this->container->get('fos_user.change_password.form');
+    	$formHandler = $this->container->get('fos_user.change_password.form.handler');
+    	
+    	$process = $formHandler->process($user);
+    	if ($process) {
+    		$this->get('session')->setFlash('positive', 'change_password.flash.success');
+    	}
+    	
+    	return $this->redirect($this->generateUrl('fenchy_regular_user_settings_account'));
+    }
     /**
      * Delete account action in settings section
      * @author Mateusz Krowiak <mkrowiak@pgs-soft.com>
@@ -545,7 +685,7 @@ class SettingsController extends Controller {
 
                 $this->get('session')->set('gallery', array(1 => '', 2 => '', 3 => ''));
                 
-                return $this->redirect($this->generateUrl('fenchy_regular_user_settings_basic'));
+                return $this->redirect($this->generateUrl('fenchy_regular_user_settings_account'));
             }
 
             $this->get('session')->setFlash(
@@ -557,8 +697,8 @@ class SettingsController extends Controller {
         }
         
         return $this->render("FenchyRegularUserBundle:Settings:deleteAccount.html.twig", array(
-            'form' => $form->createView(),
-            'entity'      => $user,            
+            'form' 	=> $form->createView(),
+            'entity'=> $user,            
         ));
         
     }
@@ -604,7 +744,7 @@ class SettingsController extends Controller {
 
                 $em->persist($regular_user);
                 $em->flush();
-                return $this->redirect($this->generateUrl('fenchy_regular_user_settings_notifications'));
+                return $this->redirect($this->generateUrl('fenchy_regular_user_settings_account'));
             }
         } else {
 
@@ -668,11 +808,10 @@ class SettingsController extends Controller {
                 $response->headers->set('Content-Type', 'application/json');
                 
                 return $response;
-            } else {
-
+            } 
+            else {
             }
-        }        
-        
+        }
         
         return $this->render('FenchyRegularUserBundle:Settings:fillLocationPopup.html.twig', array(
             'form' => $form->createView()
@@ -680,5 +819,149 @@ class SettingsController extends Controller {
         
     }
     
+    public function paymentAction($noticeType)
+    {
+    	$user = $this->get('security.context')->getToken()->getUser();
+    	
+    	if (!($user instanceof User)) {
+    		return $this->redirect($this->generateUrl('fos_user_security_login'));
+    	}
+    	 
+    	$repository = $this->getDoctrine()
+    			->getRepository('UserBundle:Payment');
+    	
+    	$query = $repository->createQueryBuilder('p')
+			    	->where('p.user = :user')
+			    	->setParameter('user', $user->getId())
+			    	->getQuery();
+			    	
+    	$payment = $query->getOneOrNullResult();
+    	$isPayment = false;
+    	if($payment) 
+    		$isPayment = true;
+    	
+    	return $this->render('FenchyRegularUserBundle:Settings:payment.html.twig',array(
+    			'user' => $user,
+    			'payment' => $payment,
+    			'noticeType'=> $noticeType
+    	));
+    }
+    
+    public function savePaymentSettingAction()
+    {
+    	$user = $this->get('security.context')->getToken()->getUser();
+    	 
+    	if (!($user instanceof User)) {
+    		return $this->redirect($this->generateUrl('fos_user_security_login'));
+    	}
+    	$request = $this->getRequest();
+    	$account_holder = $request->get('account_holder')?$request->get('account_holder'):null;
+    	$account_no = $request->get('account_no')?$request->get('account_no'):null;
+    	$bank_code = $request->get('bank_code')?$request->get('bank_code'):null;
+    	$paypal_email = $request->get('paypal_email')?$request->get('paypal_email'):null;
+    	$card_type = $request->get('card_type')?$request->get('card_type'):null;
+    	$card_no = $request->get('card_no')?$request->get('card_no'):null;
+    	$card_holder = $request->get('card_holder')?$request->get('card_holder'):null;
+    	$end_month = $request->get('end_month')? $request->get('end_month'):null;
+    	$end_year = $request->get('end_year')?$request->get('end_year'):null;
+    	$type= $request->get('type')?$request->get('type'):null;
+    	$action= $request->get('action');
+    	
+    	$em = $this->getDoctrine()->getEntityManager();
+    	
+    	$repository = $this->getDoctrine()
+    				->getRepository('UserBundle:Payment');
+    	
+    	$query = $repository->createQueryBuilder('p')
+			    	->where('p.user = :user')
+			    	->setParameter('user', $user->getId())
+			    	->getQuery();
+			    	
+    	$payment = $query->getOneOrNullResult();
+    	if(!$payment)
+    	{
+    		$payment = new \Fenchy\UserBundle\Entity\Payment();
+    	}    	
+    	$payment->setUser($user);
+    	$payment->setAccountHolder($account_holder);
+    	$payment->setAccountNo($account_no);
+    	$payment->setBankCode($bank_code);
+    	$payment->setPaypalEmail($paypal_email);
+    	$payment->setCardType($card_type);
+    	$payment->setCardNo($card_no);
+    	$payment->setCardHolder($card_holder);
+    	$payment->setEndMonth($end_month);
+    	$payment->setEndYear($end_year);
+    	$payment->setType($type);
+    	$payment->setAgreed(true);
+    	$em->persist($payment);
+    	$em->flush();
+    	
+	    	$typeindex = 1;
+	    	if($payment->getType() == 'debit')
+	    		$typeindex = 1;
+	    	if($payment->getType() == 'paypal')
+	    		$typeindex = 2;
+	    	if($payment->getType() == 'paypal')
+	    		$typeindex = 3;
+	    		
+	    	$str ='<div class="paymentdetails">';
+	    	$str.= '<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm('.$typeindex.')">';
+	    	$str .=	$this->get('translator')->trans('payment.change').'</a>';
+	    	$str .= '<a class="payment-button" href="javascript:void(0);" onclick="deletePaymentSetting('.$payment->getId().')">';
+	    	$str .=	$this->get('translator')->trans('payment.delete').'</a></div>';
+	
+	    	echo $str;
+	    	exit;
 
+    }
+    public function deletePaymentSettingAction()
+    {
+    	$user = $this->get('security.context')->getToken()->getUser();
+    	
+    	if (!($user instanceof User)) {
+    		return $this->redirect($this->generateUrl('fos_user_security_login'));
+    	}
+    	
+    	$form = $this->createForm(new PaymentDeleteType());
+    	
+    	$request = $this->getRequest();
+    	$id = $request->get('id');
+    	if ('POST' == $request->getMethod()) 
+    	{
+    		$form->bindRequest($request);
+    		$regularUser = $this->get('security.context')->getToken()->getUser()->getRegularUser();
+    		$em = $this->getDoctrine()->getManager();
+    		
+    		$payment = $em->getRepository('UserBundle:Payment')->find($id);
+    		
+    		if (null === $payment) {
+    			throw new NotFoundHttpException('Not installed payment!');
+    		}
+    		
+    		if ($payment->getUser()->getId() !== $this->get('security.context')->getToken()->getUser()->getId()) {
+    			throw new \Exception('You have not permission to delete this installation.');
+    		}   		
+    		
+    		
+    		$em->remove($payment);    		
+    		$em->flush();
+    	}    	
+    	$str = '<p style="margin-bottom: 20px;">';
+    	$str .= $this->get('translator')->trans('payment.no_default');
+		$str .= $this->get('translator')->trans('payment.choose_default');
+		$str .='</p><div class="paymentdetails">';
+		$str .='<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm(\'1\')">';
+		$str .= $this->get('translator')->trans('payment.direct_debit');
+		$str .= '</a>';
+		$str .= '<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm(\'2\')">';
+		$str .= $this->get('translator')->trans('payment.paypal');
+		$str .= '</a>';
+		$str .= '<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm(\'3\')">';
+		$str .= $this->get('translator')->trans('payment.credit_card');
+		$str .= '</a></div>';
+					
+		echo $str;		
+    	exit;
+    }
 }

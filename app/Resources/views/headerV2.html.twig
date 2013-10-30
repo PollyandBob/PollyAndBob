@@ -6,9 +6,16 @@
             <div class="right">
                 {% if not is_granted('ROLE_USER') %}
                 <ul>
-                	<li><a href="#dialog1" name="modal" id="vzoom_1944" class="zoomthis"><img src="{{ absolute(asset('images/icon_comingsoon.png')) }}" alt="" /></a></li>
-                    <li><a href="#dialog1" name="modal" id="vzoom_1944" class="zoomthis login">{{'frontend.sign_in'|trans}}</a></li>
-                    <li><a href="#dialog1" name="modal" id="vzoom_1944" class="zoomthis signup">{{'frontend.sign_up'|trans}}</a></li>
+                	<li id="login">
+                		<a href="#" class="login">{{'frontend.sign_in'|trans}}</a>
+                		{% if not is_granted('ROLE_USER') %}
+		                <div class="loginwindow">
+		                    <img class="iconarrow" src="{{ asset('images/icon_arrow.png') }}" alt="" />
+		                    {% render "UserBundle:Security:login" %}
+		                </div>                    
+            			{% endif %} 
+                	</li>
+                    <li><a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis signup">{{'frontend.sign_up'|trans}}</a></li>
                 </ul>
 {#                 <ul id="user-account-login">                    #}
 {#                     <li id="user-account-login-login">#}
@@ -41,20 +48,7 @@
             </div>
                     
                     
-            {% if not is_granted('ROLE_USER') %}
-                <div id="login-wrapper" class="loginform">
-                     <a href="#" class="sign-btn fb_btn clearfix login-with-facebook">
-                        <span><i>facebook</i></span>
-                        <span><strong>{{'frontend.sign_in_facebook'|trans}}</strong></span>
-                    </a>
-                    <a href="{{ path ('connect_twitter')}}" class="sign-btn tt_btn clearfix login-with-twitter">
-                        <span><i>twitter</i></span>
-                        <span><strong>{{'frontend.sign_in_twitter'|trans}}</strong></span>
-                    </a>
-                    <p><strong>or</strong></p>
-                    {% render "UserBundle:Security:login" %}
-                </div>                    
-            {% endif %}      
+                
         
         <!--[if IE 8]>
             <div class="after"></div>

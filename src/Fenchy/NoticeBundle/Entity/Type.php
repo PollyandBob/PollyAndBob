@@ -30,6 +30,20 @@ class Type {
     private $name;
     
     /**
+     * @var string alttext
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $altText;
+    
+    /**
+     * @var integer orderby
+     *
+     * @ORM\Column(type="integer", length=1, nullable=true)
+     */
+    private $orderby;
+    
+    /**
      * @var integer
      * 
      * @ORM\Column(type="integer", nullable=false)
@@ -42,6 +56,34 @@ class Type {
      * @ORM\Column(name="location_change_available", type="boolean", nullable=false)
      */
     private $locationChangeAvailable;
+    
+    /**
+     * Determinates if price is connected with notice.
+     * @var bool
+     * @ORM\Column(name="price_available", type="boolean", nullable=true)
+     */
+    private $priceAvailable;
+    
+    /**
+     * Determinates if Date is need with notice.
+     * @var bool
+     * @ORM\Column(name="date_available", type="boolean", nullable=true)
+     */
+    private $dateAvailable;
+    
+    /**
+     * Determinates if spot is connected with notice.
+     * @var bool
+     * @ORM\Column(name="spot_available", type="boolean", nullable=true)
+     */
+    private $spotAvailable;
+    
+    /**
+     * Determinates if goods are then i's pieces are there.
+     * @var bool
+     * @ORM\Column(name="piece_available", type="boolean", nullable=true)
+     */
+    private $pieceAvailable;
     
     /**
      * @var Type
@@ -117,6 +159,38 @@ class Type {
         $this->name = $name;
         
         return $this;
+    }
+    
+    public function getOrderby() {
+    
+    	return $this->orderby;
+    }
+    
+    /**
+     * @param integer $name
+     * @return Type
+     */
+    public function setOrderby($name) {
+    
+    	$this->orderby = $name;
+    
+    	return $this;
+    }
+    
+    public function getAltText() {
+    
+    	return $this->altText;
+    }
+    
+    /**
+     * @param string alttext
+     * @return Type
+     */
+    public function setAltText($name) {
+    
+    	$this->altText = $name;
+    
+    	return $this;
     }
     
     /**
@@ -263,6 +337,26 @@ class Type {
     public function isLocationChangeAvailable() {
         
         return $this->locationChangeAvailable;
+    }
+    
+    public function isPriceAvailable() {
+    
+    	return $this->priceAvailable;
+    }
+    
+    public function isSpotAvailable() {
+    
+    	return $this->spotAvailable;
+    }
+    
+    public function isPieceAvailable() {
+    
+    	return $this->pieceAvailable;
+    }
+    
+    public function isDateAvailable() {
+    
+    	return $this->dateAvailable;
     }
     
     public function getRoot() {
@@ -477,5 +571,97 @@ class Type {
                 return $property->getId();
             
         return FALSE;
+    }
+
+    /**
+     * Set priceAvailable
+     *
+     * @param boolean $priceAvailable
+     * @return Type
+     */
+    public function setPriceAvailable($priceAvailable)
+    {
+        $this->priceAvailable = $priceAvailable;
+    
+        return $this;
+    }
+
+    /**
+     * Get priceAvailable
+     *
+     * @return boolean 
+     */
+    public function getPriceAvailable()
+    {
+        return $this->priceAvailable;
+    }
+
+    /**
+     * Set spotAvailable
+     *
+     * @param boolean $spotAvailable
+     * @return Type
+     */
+    public function setSpotAvailable($spotAvailable)
+    {
+        $this->spotAvailable = $spotAvailable;
+    
+        return $this;
+    }
+
+    /**
+     * Get spotAvailable
+     *
+     * @return boolean 
+     */
+    public function getSpotAvailable()
+    {
+        return $this->spotAvailable;
+    }
+
+    /**
+     * Set pieceAvailable
+     *
+     * @param boolean $pieceAvailable
+     * @return Type
+     */
+    public function setPieceAvailable($pieceAvailable)
+    {
+        $this->pieceAvailable = $pieceAvailable;
+    
+        return $this;
+    }
+
+    /**
+     * Get pieceAvailable
+     *
+     * @return boolean 
+     */
+    public function getPieceAvailable()
+    {
+        return $this->pieceAvailable;
+    }
+
+    /**
+     * Set dateAvailable
+     *
+     * @param boolean $dateAvailable
+     * @return Type
+     */
+    public function setDateAvailable($dateAvailable)
+    {
+        $this->dateAvailable = $dateAvailable;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateAvailable
+     *
+     * @return boolean 
+     */
+    public function getDateAvailable()
+    {
+        return $this->dateAvailable;
     }
 }

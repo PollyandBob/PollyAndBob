@@ -1,29 +1,16 @@
+<div class="writereviewdata">
+{% if not usersOwnListing and app.security.token.user.id is defined and app.security.token.user.id != NULL %}
+	<div id="leave-review-button" class="edit-btn" data-bind="click: loadLeaveReviewFrom">
+    	<a href="javascript:void(0);" style="margin-bottom: 10px" class="blue_button" data-bind="click: anchorNoOp">
+        	{{ 'regularuser.leave_a_review' | trans }}
+        </a>
+    </div>
+{% endif %}                          
 
-
-
-
-<div id="reviews-tabs">
-    <header class="clearfix">
-        <ul>
-            <li><a href="#tabs-1"><strong class="count">(<span data-bind="text: reviewsPCount"></span>)</strong>
-                <strong>{{ 'regularuser.positives' | trans }}</strong></a></li>
-            <li><a href="#tabs-2"><strong class="count">(<span data-bind="text: reviewsNCount"></span>)</strong>
-                <strong>{{ 'regularuser.negatives' | trans }}</strong></a></li>
-        </ul>
-        {% if not usersOwnListing and app.security.token.user.id is defined and app.security.token.user.id != NULL %}
-        <div id="leave-review-button" class="button grey-button pull-right edit-btn" data-bind="click: loadLeaveReviewFrom">
-            <a href="#" class="wrapper" data-bind="click: anchorNoOp">
-                <i class="icon-pencil"></i>
-                <strong>{{ 'regularuser.leave_a_review' | trans }}</strong>
-            </a>
-        </div>
-        {% endif %}
-    </header>                                    
-    <div id="tabs-1" class="tabs-reviews">
-        <!-- ko template: {name: 'review-list-template', foreach: reviewsP} -->
-        <!-- /ko -->
-        
-        <!-- ko if: reviewsPLoadMore -->
+<div id="tabs-1" class="tabs-reviews">
+  	<!-- ko template: {name: 'review-list-template', foreach: reviewsP} -->
+    <!-- /ko -->
+    <!-- ko if: reviewsPLoadMore -->
         <div class="load-more-button has-more-items stream-loading grey-button button"
              data-bind="click: loadMorePReviews">
             <a href="#" class="wrapper" data-bind="click: anchorNoOp">
@@ -31,55 +18,21 @@
                 <strong>{{ 'regularuser.load_more' | trans }}</strong>
             </a>
         </div>
-        <!-- /ko -->  
-    </div>
-        
-    <div id="tabs-2" class="tabs-reviews">
-        <!-- ko template: {name: 'review-list-template', foreach: reviewsN} -->
-        <!-- /ko -->
-        
-        <!-- ko if: reviewsNLoadMore -->
-        <div class="load-more-button has-more-items stream-loading grey-button button"
-             data-bind="click: loadMoreNReviews">
-            <a href="#" class="wrapper" data-bind="click:  anchorNoOp">
-                <i class="icon-spinner icon-spin"></i>
-                <strong>{{ 'regularuser.load_more' | trans }}</strong>
-            </a>
-        </div>
-        <!-- /ko -->
-    </div>                                 
-</div> 
-
-
-
+    <!-- /ko -->  
+</div>
+   
 <script type="text/html" id="review-list-template">
     <article class="clearfix">
-        <div class="pull-left img">
-            <span class="image-container medium-avatar bordered">
-                <img data-bind="attr: { src: author.image, alt: author.name }" />
-            </span>
-            <strong class="name info-by-line">
-                <a data-bind="attr: { href: author.profileUrl,}, text: author.name"></a>
-            </strong>
-        </div>
+        <div class="data">           
+           <a data-bind="attr: { href: author.profileUrl,}"> <img width="23" height="23" data-bind="attr: { src: author.image, alt: author.name }" /></a>
+        
         <div class="pull-left post">
             <p data-bind="text: text"></p>
         </div>        
-        <footer>
             <!-- ko if: author.id==$parent.loggedInUserId -->
-                <a href="#" data-bind="click: function(data,event) { $parent.loadEditReview(data, event, $parent) }">{{ 'regularuser.edit_review' | trans }}</a>
+                <a style="float: right; margin-left: 16px; margin-top: -18px;" class="blue_button" href="#" data-bind="click: function(data,event) { $parent.loadEditReview(data, event, $parent) }">{{ 'regularuser.edit_review' | trans }}</a>
             <!-- /ko -->
-            <a href="#">
-                
-                <!-- ko if: type==1 -->
-                    <i class="summary-icon positive-icon"></i><strong>{{ 'regularuser.positive' | trans }}</strong>
-                <!-- /ko -->
-                
-                <!-- ko if: type==0 -->
-                    <i class="summary-icon negative-icon"></i><strong>{{ 'regularuser.negative' | trans }}</strong>
-                <!-- /ko -->
-            </a>
-        </footer>
+		</div>
     </article>
 </script>
-
+</div>

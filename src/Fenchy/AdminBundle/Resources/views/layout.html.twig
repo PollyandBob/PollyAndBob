@@ -20,10 +20,12 @@
     <div class="container admin">
         <div class="clearfix">
             <ul id="admin-menu">
+	            <li>{{ getlink('Categories', 'fenchy_admin_categories', {}, {'class': 'dark'})|raw }}</li>
                 <li>{{ getlink('Notices', 'fenchy_admin_notices', {}, {'class': 'dark'})|raw }}</li>
                 <li>{{ getlink('Reviews', 'fenchy_admin_reviews', {}, {'class': 'dark'})|raw }}</li>
                 <li>{{ getlink('Search', 'fenchy_admin_search', {}, {'class': 'dark'})|raw }}</li>
                 <li>{{ getlink('Users', 'fenchy_admin_users', {}, {'class': 'dark'})|raw }}</li>
+                <li>{{ getlink('Identity', 'fenchy_admin_identity', {}, {'class': 'dark'})|raw }}</li>
             </ul>
             <div id="admin-content">
                 {% block admincontent %}{% endblock %}

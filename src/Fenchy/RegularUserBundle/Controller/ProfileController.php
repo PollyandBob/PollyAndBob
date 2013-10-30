@@ -251,9 +251,9 @@ class ProfileController extends Controller
             $listingAssoc['url'] = $this->container->get('router')
                 ->generate('fenchy_notice_show_slug', array(
                     'slug' => $listingObj->getSlug(),
-                    'year' => $listingObj->getStartDate()->format('Y'),
-                    'month' => $listingObj->getStartDate()->format('m'),
-                    'day' => $listingObj->getStartDate()->format('d')
+                    'year' => $listingObj->getCreatedAt()->format('Y'),
+                    'month' => $listingObj->getCreatedAt()->format('m'),
+                    'day' => $listingObj->getCreatedAt()->format('d')
                 ));
             $listingAssoc['ownerUrl'] = $this->container->get('router')
                 ->generate('fenchy_regular_user_user_profilev2', array(

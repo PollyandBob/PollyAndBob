@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Fenchy\MessageBundle\Entity\Message;
 use Fenchy\UserBundle\Entity\User;
+use Fenchy\RegularUserBundle\Entity\Document;
 
 use Fenchy\UserBundle\Entity\NotificationGroupInterval;
 use Fenchy\UserBundle\Entity\NotificationQueue;
@@ -18,6 +19,10 @@ class MessageController extends Controller
      */
     public function indexAction($type)
     {
+    	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+    	
+    	$request = $this->getRequest();
+    	
         if($this->getRequest()->get('_format') == 'json') {
             $messages = $this->get('fenchy.messenger')->findReceivedMessages($type, $this->getRequest()->get('ids'));
             $m = array();
@@ -36,10 +41,111 @@ class MessageController extends Controller
         } else {
             $messages = $this->get('fenchy.messenger')->findReceivedMessages($type);
         }
+      
+        
+        $messagesToNeighbors = $this->messagesToNeighbors($userLoggedIn->getId());
+        
         return array(
             'messages' => $messages,
-            'type' => null === $type ? 'all' : $type
+            'type' => null === $type ? 'all' : $type,
+        	'displayUser' => $userLoggedIn,
+        	'messagesToNeighbors'=>$messagesToNeighbors
         );
+    }
+    
+    public function messagesToNeighbors($userId)
+    {
+    	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+    
+    	if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
+    		return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+    
+    	$displayUser = $userLoggedIn;
+    	$filterService = $this->get('listfilter');
+    	$emptyFilter = $returnFilter = $filterService->getFilter();
+    	//Get Users info
+    	$users = $this->getDoctrine()
+    	->getEntityManager()
+    	->getRepository('UserBundle:User')
+    	->findAllWithStickers($emptyFilter);
+    
+    	$origin = str_replace(" ", "", $displayUser->getLocation());
+    	$currentuid = $displayUser->getId();
+    	$request = $this->getRequest();
+    
+    	$filterdata = "";
+    	$users2 = array();
+    	foreach ($users as $user) {
+    
+    		//$avatar = $user->getRegularUser()->getAvatar(false);
+    		$em = $this->getDoctrine()->getEntityManager();
+    		$neighbor = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findById($currentuid,$user->getId());
+    		if(!$neighbor)
+    		{
+    			$neighbor = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findById($user->getId(),$currentuid);
+    		}
+    		$neighbors = '';
+    		if($neighbor)
+    		{
+    			$neighbors = $neighbor->getId();
+    		}
+    		if($neighbors)
+    		{
+    			$document = new Document();
+    			$em = $this->getDoctrine()->getEntityManager();
+    			$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
+    
+    			if($result)
+    			{
+    				$avatar = $result->getWebPath();
+    
+    			}
+    			else
+    			{
+    				$avatar = 'images/default_profile_picture.png';
+    			}
+    			 
+    			$firstname= $user->getRegularUser()->getFirstname();
+    			$destination = str_replace(" ", "", $user->getLocation());
+    			$userid= $user->getId();
+    
+    
+    			if($user->getLocation()!="" && $userid!=$currentuid)
+    			{
+    				
+    							if($user->getActivity() >= 400 && $user->getActivity() < 1000)
+    							{
+    								$managertype = "Community Manager";
+    								$managertype_alpha = "C";
+    								$classColor = "green";
+    							}
+    							elseif($user->getActivity() >= 1000)
+    							{
+    								$managertype = "Neighborhood Manager";
+    								$managertype_alpha = "N";
+    								$classColor = "orange";
+    							}
+    							elseif($user->getManagerType()==1)
+    							{
+    								$managertype = "House Manager";
+    								$managertype_alpha = "H";
+    								$classColor = "blue";
+    							}
+    							else
+    							{
+    								$managertype = "";
+    								$managertype_alpha = " ";
+    								$classColor = "red";
+    							}
+    							// Added By jignesh for Manager type
+    							$user->setTwitterUsername($avatar);
+    							$users2[] = $user;
+    						
+    			}
+    		}
+    	}
+    
+    	return $users2;
     }
     
     public function readAction()
@@ -55,8 +161,33 @@ class MessageController extends Controller
      */
     public function viewAction($id, $read = true)
     {
+    	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+    	
         $messenger = $this->get('fenchy.messenger');
         $last_message = $messenger->findLastById($id, $read);
+        $type = null;
+        if($this->getRequest()->get('_format') == 'json') {
+        	$messagesLeft = $this->get('fenchy.messenger')->findReceivedMessages($type, $this->getRequest()->get('ids'));
+        	$m = array();
+        	foreach($messagesLeft as $msg) {
+        		$m[] = array(
+        				'id'    => $msg->getId(),
+        				'sender' => $msg->getSystem() ? 'Fenchy' : $msg->getSender()->getUserRegular()->getFirstname(),
+        				'url'   => $this->generateUrl('fenchy_regular_user_messages_view', array('id' => $msg->getId())),
+        				'red'   => $msg->isUnread() && $msg->getReceiver()->getId() == $this->get('security.context')->getToken()->getUser()->getId() ? 'unread' : '',
+        				'title' => $msg->getTitle(),
+        				'date'  => $this->getTimeFrom($msg->getCreatedAt()),
+        				'avatar'=> $msg->getSender()->getRegularUser()->getAvatar().''
+        		);
+        	}
+        	$messagesLeft = $m;
+        } else {
+        	$messagesLeft = $this->get('fenchy.messenger')->findReceivedMessages($type);
+        }
+        
+        
+        $messagesToNeighbors = $this->messagesToNeighbors($userLoggedIn->getId());
+        
         $messages = $messenger->findThreadMessages();
         
         $form = null;
@@ -66,6 +197,7 @@ class MessageController extends Controller
 
         return array(
             'messages' => $messages,
+        	'messagesLeft' => $messagesLeft,	
             'form' => $form
         );
     }
@@ -124,6 +256,133 @@ class MessageController extends Controller
                                                                             'id' => $prev_id,
                                                                             'read' => false
                                                                         ));
+    }
+    
+    public function sendMessageAction($prev_id)
+    {
+    	$messenger = $this->get('fenchy.messenger');
+    
+    	if (null !== $prev_id) {
+    		$messenger->findLastById($prev_id, false);
+    	}
+    
+    	$user = $this->get('security.context')->getToken()->getUser();
+    
+    	$form = $messenger->createForm();
+    
+    	if ($form->isValid()) {
+    		$message = $messenger->send();
+    		if ( $this->container->getParameter('notifications_enabled'))
+    			$this->messageNotification($message, $user);
+    		//$this->get('session')->setFlash('positive', 'regularuser.message.sent');
+    		if (null === $prev_id) {
+    			return $this->redirect($this->generateUrl('fenchy_regular_user_listing_manage'));
+    		}
+    		return $this->redirect($this->generateUrl('fenchy_regular_user_listing_manage'));
+    	}
+    
+    	if (null === $prev_id) {
+    		return $this->forward('FenchyRegularUserBundle:Listing:manage');
+    	}
+    	return $this->forward('FenchyRegularUserBundle:Listing:manage');
+    }
+    
+    public function sendMessageToAction($prev_id)
+    {
+    	$messenger = $this->get('fenchy.messenger');
+    
+    	if (null !== $prev_id) {
+    		$messenger->findLastById($prev_id, false);
+    	}
+    
+    	$user = $this->get('security.context')->getToken()->getUser();
+    
+    	$form = $messenger->createForm();
+    
+    	if ($form->isValid()) {
+    		$message = $messenger->send();
+    		if ( $this->container->getParameter('notifications_enabled'))
+    			$this->messageNotification($message, $user);
+    		//$this->get('session')->setFlash('positive', 'regularuser.message.sent');
+    		if (null === $prev_id) {
+    			return $this->redirect($this->generateUrl('fenchy_regular_user_listing_requests'));
+    		}
+    		return $this->redirect($this->generateUrl('fenchy_regular_user_listing_requests'));
+    	}
+    
+    	if (null === $prev_id) {
+    		return $this->forward('FenchyRegularUserBundle:Listing:myRequests');
+    	}
+    	return $this->forward('FenchyRegularUserBundle:Listing:myRequests');
+    }
+    
+    public function sendMsgFormAction()
+    {
+    	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+    	$em = $this->getDoctrine()->getEntityManager();
+    	
+    	if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
+    		return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+    	
+    	$displayUser = $userLoggedIn;
+    	
+    	$request = $this->getRequest();
+    	$messenger = $this->get('fenchy.messenger');
+		$messageNew = new Message();
+		$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($request->get('receiverId'));
+		if (null === $receiver || $receiver === $this->getUser()) {
+			throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+		}
+		$messenger->setReceiver($receiver);
+		$title = $request->get('title');
+		$content = $request->get('content');
+		
+		$messageNew->setTitle($title);
+		$messageNew->setContent($content);
+		$messageNew->setSender($displayUser);
+		$messageNew->setReceiver($receiver);
+		$message = $messenger->send($messageNew);
+						
+		if ( $this->container->getParameter('notifications_enabled'))
+			$this->messageNotification($message, $displayUser);
+
+		return new Response();
+    }
+    
+    public function sendMsgToGroupFormAction()
+    {
+    	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+    	$em = $this->getDoctrine()->getEntityManager();
+    	 
+    	if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
+    		return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+    	 
+    	$displayUser = $userLoggedIn;
+    	 
+    	$request = $this->getRequest();
+    	$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($request->get('groupId'));
+    	 
+    	$messenger = $this->get('fenchy.messenger');
+    	$messageNew = new Message();
+    	$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($request->get('receiverId'));
+    	if (null === $receiver || $receiver === $this->getUser()) {
+    		throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+    	}
+    	$messenger->setReceiver($receiver);
+    	$title = $request->get('title');
+    	$content = $request->get('content');
+    
+    	$messageNew->setTitle($title);
+    	$messageNew->setContent($content);
+    	$messageNew->setSender($displayUser);
+    	$messageNew->setUsergroup($usergroup);
+    	$messageNew->setReceiver($receiver);
+    	$message = $messenger->send($messageNew);
+    
+    	if ( $this->container->getParameter('notifications_enabled'))
+    		$this->messageNotification($message, $displayUser);
+    
+    	exit;
     }
     
     /**

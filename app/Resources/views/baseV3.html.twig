@@ -15,7 +15,8 @@
                 <link rel="stylesheet" href="{{ asset('css/app/header-v2.css') }}" type="text/css" />
                 <link rel="stylesheet" href="{{ asset('css/app/foot-v2.css') }}" type="text/css" />
                 <link rel="stylesheet" href="{{ asset('js/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" /> 
-                {% if not app.user %}
+                <link rel="stylesheet" href="{{ absolute(asset('css/notice/globalfilter/global-filter-v2.css')) }}" type="text/css" />
+            	{% if not app.user %}
                 <link rel="stylesheet" href="{{ asset('css/regular_user/registration/login-v2.css') }}" type="text/css" />
                 {% else %}
                 <link rel="stylesheet" href="{{ asset('css/regular_user/profile/userprofile-v2.css') }}" type="text/css" />
@@ -30,7 +31,14 @@
             {% endblock %}
             {% block javascripts %}
                 {# any view specific JS scripts for this view #}                
+               	 <!-- Add js by Jigs -->
+		   		<script type="text/javascript" src="{{ asset('js/jquery-popup.js') }}"></script>
+				<script type="text/javascript" src="{{ asset('js/popup.js') }}"></script>
+				<script type="text/javascript" src="{{ asset('js/ajax-calls.js') }}"></script>
+				<!-- Add js by Jigs -->
                 <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/jquery.nicescroll.js') }}"></script>
+                
                 <!--[if lt IE 9]>
                     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
                     <script type="text/javascript" src="{{ absolute(asset('js/respond.min.js')) }}"></script>	
@@ -90,6 +98,7 @@
                 {% endif %}
                 
                 <script type="text/javascript">
+                	var nice = false;
                     $(document).ready(function(){
                     {% if app.user and not app.user.location.location %}
                         $("input#location").fancybox({
@@ -103,13 +112,36 @@
                             }
                         });                        
                         
-                    {% endif %}
+                    {% endif %}                 
+					
+                      nice = $(".comments-scroll").niceScroll();
+
+                      $('.myprofilelink').click(function(event) {
+						  event.preventDefault();
+						  $('.loginwindow2').slideToggle('fast', function() {
+						  });
+					  });
+
+                      $('.sortby').click(function(event) {
+						  event.preventDefault();
+						  $('.loginwindow3').slideToggle('fast', function() {
+						  });
+					  });
+				    
 	                });
                     </script>
+                   
+                   	<script>
+						$(function() {
+							 $('.login').click(function(event) {
+								  event.preventDefault();
+								  $('.loginwindow').slideToggle('fast', function() {
+								  });
+							});
+						});
+					</script>
                     <!-- Add Js -->
 		   			<!-- 
-		   			<script type="text/javascript" src="{{ asset('js/jquery-popup.js') }}"></script>
-				    <script type="text/javascript" src="{{ asset('js/popup.js') }}"></script>
 				    <script type="text/javascript" src="{{ asset('js/jquery-latest.js') }}"></script>
 				    <script type="text/javascript" src="{{ asset('js/jquery.nivo.slider.js') }}"></script>
 				    <script type="text/javascript" src="{{ asset('js/jquery.jcarousel.js') }}"></script>
@@ -140,7 +172,7 @@
     <body>
            
                 {% block header %}
-                    {% include '::headerV3.html.twig' %}
+                    {% include '::headerV3list.html.twig' %}
                 {% endblock %}
                 {% block body %}
                     {% block tagline_content %}
@@ -150,6 +182,25 @@
         		<div class="wrapper"> 
         		    
         		    <a href="{{path('fenchy_regular_user_notice_create1')}}" class="createlinks">{{'frontend.create_listing'|trans}}</a>
+					{% if app.request.get('_route') == 'fenchy_notice_indexv2' %}
+        		    <a href="#" class="sortby">{{ 'notice.sort_by' | trans }}</a>
+        		    <div class="loginwindow3" style="display: none;">
+		                    <img alt="" src="{{ asset('images/icon_arrow.png') }}" class="iconarrow">
+		                    <ul>
+		                    	<li>
+		                    		<a href="javascript:void(0)" id="distance" onclick="selectedOptions(this);" >{{ 'notice.filter.sort.dist' | trans }}</a>
+		                    	</li>
+		                    	<li>
+		                    		<a href="javascript:void(0)" id="date" onclick="selectedOptions(this);">{{ 'notice.filter.sort.time' | trans }}</a>
+		                    	</li>
+		                    	<li><a href="javascript:void(0)" id="relevance" onclick="selectedOptions(this);">
+       								{{ 'notice.filter.sort.rel' | trans }}</a>
+       							</li>
+       						</ul>
+		                </div>
+        		    
+		        	<p class="around">{{ noticeCount }} {{ 'notice.options_around_you' | trans }}</p>
+        		    {% endif %}
             		<div class="clearfix"></div>	
         			
                    {% block positive_msg %}
@@ -195,9 +246,83 @@
                        {% endblock %}
 
                    {% endblock %}
-                   <div class="footer-push"></div>
+                   
                </div>
             </section>
+            <section id="boxes2">
+		        <div class="window" id="dialog30" style="top: 213.5px; left: 395px; display: none;"> 
+		            <div class="big_popup">
+		                <div class="big_popupclose"><a class="close" href=""></a></div>
+		                <!-- Your custom code here -->
+		                <div class="published">
+		                    <div class="title">{{ 'regularuser.added_neighbor_success'|trans }}</div>	
+		                </div>
+		                <!-- Your custom code end -->
+		            </div>
+		            <img alt="" src="{{ asset('images/popup_bottom.png') }}" class="popup_bottom">
+		        </div>
+		        <div id="mask"></div>
+		    </section>
+		    <a href="#dialog30" class="zoomthis neighbor_success" id="vzoom_1944" name="modal">Pop-up</a>
+      		
+      		<section id="boxes2">
+		        <div class="window" id="dialog31" style="top: 213.5px; left: 395px; display: none;"> 
+		            <div class="big_popup">
+		                <div class="big_popupclose"><a class="close" href=""></a></div>
+		                <!-- Your custom code here -->
+		                <div class="published">
+		                    <div class="title">{{ 'regularuser.joined_group_success'|trans }}</div>	
+		                </div>
+		                <!-- Your custom code end -->
+		            </div>
+		            <img alt="" src="{{ asset('images/popup_bottom.png') }}" class="popup_bottom">
+		        </div>
+		        <div id="mask"></div>
+		    </section>
+		    <a href="#dialog31" class="zoomthis neighbor_success1" id="vzoom_1944" name="modal">Pop-up</a>
+		    
+		    <section id="boxes2">
+		        <div class="window" id="dialog32" style="top: 213.5px; left: 395px; display: none;"> 
+		            <div class="big_popup">
+		                <div class="big_popupclose"><a class="close" href=""></a></div>
+		                <!-- Your custom code here -->
+		                <div class="published">
+		                    <div class="title">{{ 'regularuser.left_group_success'|trans }}</div>	
+		                </div>
+		                <!-- Your custom code end -->
+		            </div>
+		            <img alt="" src="{{ asset('images/popup_bottom.png') }}" class="popup_bottom">
+		        </div>
+		        <div id="mask"></div>
+		    </section>
+		    <a href="#dialog32" class="zoomthis neighbor_success2" id="vzoom_1944" name="modal">Pop-up</a>
+      		
+      		
+      		<section id="boxes2">
+		        <div class="window" id="dialog33" style="top: 213.5px; left: 395px; display: none;"> 
+		            <div class="big_popup">
+		                <div class="big_popupclose"><a class="close" href=""></a></div>
+		                <!-- Your custom code here -->
+		                <div class="published">
+		                    <div class="title">{{ 'regularuser.members_removed_success'|trans }}</div>	
+		                </div>
+		                <!-- Your custom code end -->
+		            </div>
+		            <img alt="" src="{{ asset('images/popup_bottom.png') }}" class="popup_bottom">
+		        </div>
+		        <div id="mask"></div>
+		    </section>
+		    <a href="#dialog33" class="zoomthis memeber_removed_success" id="vzoom_1944" name="modal">Pop-up</a>
+      	
+	      	<section id="boxes2">
+	            <div id="dialog10" class="window"> 
+				{% if not app.user %}
+	                {% render 'UserBundle:Registration:register' %}
+	            {% endif %}
+	            </div>
+	            <div id="mask"></div>
+	    	</section>
+    		
             <div class="clearfix"></div>    
             {% block foot %}
                 {% include '::footV2.html.twig' %}

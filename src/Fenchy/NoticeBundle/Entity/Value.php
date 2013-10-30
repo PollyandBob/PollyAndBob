@@ -108,15 +108,15 @@ class Value {
      */
     public function getValue($raw = TRUE) {
 
-        if(!$raw || $this->property->getElement() == PropertyType::ELEMENT_TEXT || $this->property->getElement() == PropertyType::ELEMENT_STRING) {
-            try {
-                return unserialize($this->value);
-            } catch (\Exception $exc) {
-                return $this->value;
-            }
-        }
-        
-        return $this->value;
+//         if(!$raw || $this->property->getElement() == PropertyType::ELEMENT_TEXT || $this->property->getElement() == PropertyType::ELEMENT_STRING) {
+//             try {
+//                 return unserialize($this->value);
+//             } catch (\Exception $exc) {
+//                 return $this->value;
+//             }
+//         }
+        return explode(',',$this->value);
+        //return $this->value;
     }
     
     /**
@@ -129,11 +129,16 @@ class Value {
             
             $this->value = $value;
             
-        } else {
+        } else if(is_array($value)){
             
-            $this->value = serialize($value);
+            $this->value = implode(',', $value);
+            
+        } else {
+        	
+        	$this->value = $value;
         }
         
+        //echo "<pre>";print_r($value); //exit;
         return $this;
     }
     
@@ -152,9 +157,20 @@ class Value {
     public function getValueAsString() {
         
         if (!is_numeric($this->value)) {
-            
+        	        	
+        	if(strlen($this->value)>1)
+        	{
+        		$str="";
+        		$option = explode(',',$this->value);        		
+        		for($i=0; $i<sizeof($option) ; $i++)
+        		{
+        			$str .= "^".$this->property->getOptionName($option[$i]);
+        		}        		
+        		return $str;
+        	}
             return $this->value;
-        }
+            
+        }        
         return $this->property->getOptionName($this->value);
     }
     

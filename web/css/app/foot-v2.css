@@ -55,7 +55,7 @@ footer.main .social-lang {
     float: right;
     margin-right: 1px;
 }
-footer.main .social-lang > ul > li {
+.social-lang > ul > li {
     margin-left: 6px;
 }
 footer.main .social-lang .soc_btn a {
@@ -80,21 +80,14 @@ footer.main .social-lang ul li.tt a:hover {
     background-position: -45px -44px;
 }
 #lang-menu {
+	float: none;
+    margin: 0 0 0 879px;
+    position: absolute;
     width: 160px !important;
 }
 #lang-menu-chosen {
-    background-color: #0e7777;
-    background-image: url(/images/site/globe_icon.png);
-    background-repeat: no-repeat;
-    background-position: 13px 6px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    cursor: pointer;  
-    position: relative;
-    width: 100%;
-    line-height: 38px;
-    z-index: 1;
+    cursor: pointer;    
+    height: 50px;
     behavior: url(/plugins/pie.php);
 }
 #lang-menu-chosen > a {
@@ -104,22 +97,25 @@ footer.main .social-lang ul li.tt a:hover {
     transition: none;
 }
 li.active #lang-menu-chosen {
-    background-color: #cdf0ee;
-    background-image: url(/images/site/globe_icon.png);
+    background-color: #E14F45;
+    /*background-image: url(/images/site/globe_icon.png);
     background-repeat: no-repeat;
-    background-position: 13px 6px;    
+    background-position: 13px 6px;*/    
     -webkit-border-radius: 0 0 3px 3px;
     -moz-border-radius: 0 0 3px 3px;
     border-radius: 0 0 3px 3px;
-    position: relative;  
+   	position: relative;    
+    width: 82px;
+   
 }
 .ie8 li #lang-menu-chosen {
-    background-color: rgba(14,119,119,0);
-    -pie-background-color: rgba(14,119,119,0);
+    /*background-color: rgba(14,119,119,0);
+    -pie-background-color: rgba(14,119,119,0);*/
     behavior: url(/plugins/pie.php);
 }
 #lang-menu-chosen a strong {
-    margin-left: 45px;
+	color: #51B9D4;
+    margin-left: 25px;
 }
 #lang-menu-chosen i {
     font-size: 18px;
@@ -134,52 +130,54 @@ li.active #lang-menu-chosen {
     box-shadow:         0px 0px 3px rgba(2, 2, 2, 0.4);
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
+    background: none repeat scroll 0 0 #E14F45;
     border-radius: 3px;
-    position: absolute;
-    padding: 8px 10px 44px;
-    width: 140px;
     display: none;
-    background: #cdf0ee;  
+    position: absolute;
+    width: 80px;
+    padding: 0px 18px 0 15px;
+    margin-left: 879px;
+    margin-top: -45px;
     behavior: url(/plugins/pie.php);
 }
 div.social-lang li.active a:hover,
 div.social-lang li.active, 
 div.social-lang li.active a,
 div.social-lang li.active i{
-    color: #117070 !important;
+    color: #FFFFFF !important;
 }
-#lang-menu-wrapper li a {
-    color: #117070;
-}
+
 #lang-menu-wrapper li {
     display: block;
     width: 100%;
 }
 
 #lang-menu-wrapper li.pl-flag {
-    background: url('/images/flags/pl-flag.png') 2px 4px no-repeat;
+    /*background: url('/images/flags/pl-flag.png') 2px 4px no-repeat;*/
 }
 
 #lang-menu-wrapper li.en-flag {
-    background: url('/images/flags/en-flag.png') 2px 4px no-repeat;
+    /*background: url('/images/flags/en-flag.png') 2px 4px no-repeat;*/
 }
 
 #lang-menu-wrapper li.de-flag {
-    background: url('/images/flags/de-flag.png') 2px 4px no-repeat;
+    /*background: url('/images/flags/de-flag.png') 2px 4px no-repeat;*/
 }
 
 #lang-menu-wrapper li a {
-    display: block;
-    padding: 7px 0px;
-    padding-left: 33px;    
-    -webkit-border-radius: 3px 0 3px 3px;
-    -moz-border-radius: 3px 0 3px 3px;
-    border-radius: 3px 0 3px 3px;  
+    -webkit-border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px 3px 3px 3px;    
     behavior: url(/plugins/pie.php);
+    border-radius: 3px 3px 3px 3px;
+    color: #FFFFFF;
+    display: block;
+    padding: 7px 5px 10px 25px;
+    width: 81px;
+    margin-left: -14px;
 }
 
 #lang-menu-wrapper li a:hover {
-    background: rgba(255, 255, 255, 0.5);
-    -pie-background: rgba(255, 255, 255, 0.5);
+    background: #51B9D4;
+    -pie-background: #51B9D4;
     behavior: url(/plugins/pie.php);
 }

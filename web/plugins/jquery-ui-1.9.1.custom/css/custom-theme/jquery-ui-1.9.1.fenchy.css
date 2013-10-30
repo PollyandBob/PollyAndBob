@@ -522,7 +522,7 @@ div div.ui-datepicker {
     font-size: 1em;
 }
 div div.ui-widget-content {
-    background: rgba(255, 255, 255, 0.6);
+    background:#000000;
     border: 0;
 }
 .ie8 .ui-widget-content {

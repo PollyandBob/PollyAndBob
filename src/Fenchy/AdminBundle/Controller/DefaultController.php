@@ -2,6 +2,13 @@
 
 namespace Fenchy\AdminBundle\Controller;
 
+
+
+
+use Fenchy\AdminBundle\FenchyAdminBundle;
+
+use Fenchy\NoticeBundle\Form\TypeType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Fenchy\AdminBundle\Entity\UsersFilter,
     Fenchy\AdminBundle\Form\UsersFilterType,
@@ -10,13 +17,214 @@ use Fenchy\AdminBundle\Entity\UsersFilter,
     Fenchy\AdminBundle\Entity\NoticesFilter,
     Fenchy\AdminBundle\Form\NoticesFilterType,
     Fenchy\AdminBundle\Entity\ReviewsFilter,
-    Fenchy\AdminBundle\Form\ReviewsFilterType;
+    Fenchy\AdminBundle\Entity\CategoriesFilter,
+    Fenchy\AdminBundle\Form\CategoriesFilterType,
+	Fenchy\NoticeBundle\Entity\Type,
+    Fenchy\AdminBundle\Form\ReviewsFilterType,
+    Fenchy\AdminBundle\Form\IdentityVerificationFilter,
+	Fenchy\AdminBundle\Form\IdentityVerificationFilterType,
+	Fenchy\NoticeBundle\Form\CategoryType,
+	Fenchy\AdminBundle\Form\CategoryNewType;
+use	Fenchy\UserBundle\Entity\IdentityVerification;
+
+
 
 class DefaultController extends Controller
 {
+
+	
     public function indexAction($name)
     {
         return $this->render('FenchyAdminBundle:Default:index.html.twig', array('name' => $name));
+    }
+    
+    public function categoriesAction() {
+    
+    	$filter = new CategoriesFilter();
+        
+        $form = $this->createForm(new CategoriesFilterType(), $filter);
+        
+        $request = $this->getRequest();
+        
+        if($request->isMethod('POST')) {
+            
+            $form->bindRequest($request);
+
+            if ($form->isValid()) {
+                
+                $categories = $this->getDoctrine()
+                ->getEntityManager()
+                ->getRepository('FenchyNoticeBundle:Type')
+                ->getFullDetailedList($filter);
+                
+                return $this->render(
+                        'FenchyAdminBundle:Default:categories.html.twig',
+	    			array(
+	    					'categories'=> $categories,
+	    					'filter' => $form->createView()
+	    					
+	    			)
+                );
+            }
+        }
+        
+       $categories = $this->getDoctrine()
+                ->getEntityManager()
+                ->getRepository('FenchyNoticeBundle:Type')
+                ->getFullDetailedList();
+        
+    	return $this->render(
+    			'FenchyAdminBundle:Default:categories.html.twig',
+    			array(
+    					'categories'=> $categories,
+    					'filter' => $form->createView()
+    					
+    			)
+    	);
+    }
+    
+    public function categoryAction($id)
+    {
+    	$em = $this->getDoctrine()
+                    ->getEntityManager();
+        
+        $category = $em
+                ->getRepository('FenchyNoticeBundle:Type')
+                ->find($id);
+        
+        if(!$category) {
+            $this->createNotFoundException();
+        }
+        
+        $form = $this->createForm(new \Fenchy\AdminBundle\Form\CategoriesAdminType(), $category);
+        
+        $request = $this->getRequest();
+        
+        if($request->isMethod('POST')) {
+            
+            $form->bindRequest($request);
+
+            if ($form->isValid()) {
+
+                $em->persist($category);
+                $em->flush();
+                
+                $this->get('session')->setFlash(
+                        'positive', 
+                        'User data updated.'
+                        );
+                
+                return $this->render('FenchyAdminBundle:Default:edit.html.twig',
+    			array(
+    					'entity' => $category,
+    					'form' => $form->createView(),
+    					'type' => 'category'
+    			)
+              );
+            }
+
+        }
+        
+    	return $this->render(
+    			'FenchyAdminBundle:Default:edit.html.twig',
+    			array(
+    					'entity' => $category,
+    					'form' => $form->createView(),
+    					'type' => 'category'
+    			)
+    	);
+    	 
+    }
+    
+    public function categoryDeleteAction ($id) {
+    
+    	$category = $this->getDoctrine()->getRepository('FenchyNoticeBundle:Type')->find($id);
+    	if(NULL === $category) {
+    		$this->get('session')->setFlash(
+    				'negative',
+    				'Category not found'
+    		);
+    	}
+    	else {
+    		$this->getDoctrine()->getManager()->remove($category);
+    		$this->getDoctrine()->getManager()->flush();
+    		$this->get('session')->setFlash(
+    				'positive',
+    				'Notice deleted.'
+    		);
+    	}
+    
+    	return $this->redirect($this->generateUrl('fenchy_admin_categories'));
+    }
+    
+    public function categoryNewAction ()
+    {
+    	$em = $this->getDoctrine()
+    	->getEntityManager();
+    	
+    	
+    	$category = new CategoryNewType();
+    	$form = $this->createForm($category);
+    	
+    	$request = $this->getRequest();
+    	
+    	if($request->isMethod('POST')) {
+    		
+    		$form->bindRequest($request);
+    	
+    		if ($form->isValid()) {
+    	
+    			$category = $form->getData();
+    			$em->persist($category);
+    			$em->flush();
+    			$this->get('session')->setFlash(
+    					'positive',
+    					'User data updated.'
+    			);
+    	
+    			return $this->redirect($this->generateUrl('fenchy_admin_categories'));
+    		}
+    	
+    	}
+    	
+    	
+    	return $this->render(
+    			'FenchyAdminBundle:Default:add.html.twig',
+    			array(
+    					'entity' => $category,
+    					'form' => $form->createView()
+    			)
+    	);
+    	
+    }
+    
+    public function categoryCreateAction()
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+        
+        $category = $em->getRepository('FenchyNoticeBundle:Type');
+        
+    	$request = $this->getRequest();
+    	
+    	$form = $this->createForm(new CategoryNewType(), $category);
+    	
+    	if($request->isMethod('POST')) {
+	    	$form->bindRequest($request);
+	    
+	    	if ($form->isValid()) {
+	    		$em = $this->getDoctrine()->getEntityManager();
+	    		$em->persist($category);
+	    		$em->flush();
+	    
+	    		return $this->redirect($this->generateUrl('fenchy_admin_categories'));
+	    
+	    	}
+    	}	
+    
+    	return array(
+    			'entity' => $category,
+    			'form' => $form->createView()
+    	);
     }
     
     public function usersAction() {
@@ -394,6 +602,8 @@ class DefaultController extends Controller
             );
     }
     
+    
+    
     public function reviewAction($id) {
         
         $em = $this->getDoctrine()
@@ -476,5 +686,83 @@ class DefaultController extends Controller
         }
         
         return $this->redirect($this->generateUrl('fenchy_admin_notices'));
+    }
+    
+    public function identityAction () {
+    
+    	$em = $this->getDoctrine()->getManager();
+    
+    	$filter = new \Fenchy\AdminBundle\Entity\IdentityVerificationFilter();
+    
+    	$form = $this->createForm(new \Fenchy\AdminBundle\Form\IdentityVerificationFilterType(), $filter);
+    
+    	$request = $this->getRequest();
+    
+    	if($request->isMethod('POST')) 
+    	{
+    		$form->bindRequest($request);
+    
+    		if ($form->isValid()) 
+    		{
+    			$identities = $em
+    					->getRepository('UserBundle:IdentityVerification')
+    					->getFullDetailedList($filter);   		
+    			
+    			return $this->render(
+    					'FenchyAdminBundle:Default:identity.html.twig',
+    					array(
+    							'identities'	=> $identities,    							
+    							'filter'    => $form->createView()
+    					));
+    		}
+    	}
+    
+		$identities = $em
+    		->getRepository('UserBundle:IdentityVerification')
+    		->getFullDetailedList($filter);
+
+    	return $this->render(
+    			'FenchyAdminBundle:Default:identity.html.twig',
+    			array(  
+    					'identities'	=> $identities,
+    					'filter'       => $form->createView()
+    			)
+    	);
+    }
+    
+    public function identitySwitchAction() {
+    
+    	$id = $this->getRequest()->get('id');
+    	$status = $this->getRequest()->get('status');
+    
+    	if(!$id) {
+    		$this->createNotFoundException();
+    	}
+    
+    	if(!$status) {
+    		$this->createNotFoundException();
+    	}
+    
+    	$em = $this->getDoctrine()->getManager();
+    	$identity = $em->getRepository('UserBundle:IdentityVerification')->find($id);
+    
+    	if(!$identity) {
+    		$this->createNotFoundException();
+    	}   
+    	  
+    	if(strcasecmp($identity->getStatus(),'Verified')==0) {
+    		$identity->setStatus('Requested');
+    	}
+    	else {
+    		$identity->setStatus('Verified');
+    	}
+    	$em->persist($identity);
+    	$em->flush();
+    
+    	echo json_encode(array(
+    			'status' => $identity->getStatus(),
+    			'id'        => $identity->getId()
+    	));
+    	exit;
     }
 }

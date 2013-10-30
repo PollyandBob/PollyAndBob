@@ -1,0 +1,59 @@
+<?php
+
+namespace Fenchy\UserBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Fenchy\UserBundle\Entity\User;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+* @ORM\Table(name="identity__verification")
+* @ORM\Entity(repositoryClass="Fenchy\UserBundle\Entity\IdentityVerificationRepository")
+*  
+*/
+class IdentityVerification
+{	
+	/**
+	 * @var integer $id
+	 *
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="IDENTITY")
+	 */
+	protected $id;
+	
+	/**
+	 * @var User $user;
+	 * @ORM\OneToOne(targetEntity="Fenchy\UserBundle\Entity\User", inversedBy="identity")
+	 */
+	private $user;
+	
+	/**
+	 * @var string $username
+	 *
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 *
+	 */	
+	private $username;
+	
+	/**
+	 * @var string $status
+	 *
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 *
+	 */
+	private $status;
+	
+	/**
+	 * @var DateTime
+	 *
+	 * @ORM\Column(type="datetime", nullable=true)
+	 */
+	private $created_at;
+
+	public function __construct()
+	{			
+		$this->created_at = new \DateTime();
+	}
+	
+}

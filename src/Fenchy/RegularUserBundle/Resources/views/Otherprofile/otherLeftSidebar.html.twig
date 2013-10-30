@@ -1,0 +1,159 @@
+<script type="text/javascript">
+
+function sendMsg()
+		{
+			var flag = true;
+			var title = $('#MsgTitle').val();
+			var content = $('#MsgContent').val();
+			//alert(title + content);
+			
+			if(title == "" || content == "")
+			{
+				flag = false;
+				$('#MsgTitle').attr('placeholder', 'required*');
+				$('#MsgContent').attr('placeholder', 'required*');
+			}
+			var receiver = "{{ userId }}";
+			if(flag)
+			{
+				var url = "{{path('fenchy_regular_user_sendmsgform')}}";
+				$.ajax({
+					url : url,
+					type : "post",
+					data : {
+						'receiverId': receiver,				
+						'title': title,
+						'content': content,										
+						},
+					beforeSend : function() {
+						
+					},
+					success : function(response) {
+						$('#dialog44').hide();
+						$('#successDialog').click();
+					},
+					error : function() {
+						alert('Something went wrong!');
+					},
+					complete : function() {
+						$('#MsgTitle').val('');
+						$('#MsgContent').val('');					
+					}
+				}); 
+			}		
+		}
+</script>
+<div class="rightside">
+                 <div class="right" >
+                    <div class="options">
+                        <h4>YOUR OPTIONS</h4>
+                        <div class="optionsdetail">
+                        <a href="#dialog44" class="zoomthis blue_button" name="modal" id="vzoom_1944">{{ 'regularuser.send_new_message'|trans }}</a>
+                            <a href="javascript:void(0);"  {% if check %}style="display: block;" {% else %}style="display: none;" {% endif %}  class="blue_button remove_n" id="{{ 'regularuser.remove_neighbor_success'|trans }}" onclick="removeNeighbor({{ userId }},this);">{{ 'regularuser.remove_neighbor'|trans }}</a>
+                            {% if (distanceBetween <  30000 ) %} 
+                            <a href="javascript:void(0);"  {% if check %}style="display: none;" {% else %} style="display: block;" {% endif %} class="blue_button added_n" id="{{ 'regularuser.added_neighbor_success'|trans }}" onclick="addNeighbor({{ userId }},this);">{{ 'regularuser.add_neighbor'|trans }}</a>                
+                            {% endif %}
+                            <a href="#" class="blue_button">{{ 'regularuser.block'|trans }}</a>               
+                            <a href="#" class="blue_button">{{ 'regularuser.flag'|trans }}</a>                
+                        </div>
+		            </div>
+		        </div>
+		            <div class="neighbour-comments">
+                    	<div class="title">
+                        	<div class="left">Laura</div>
+                            <div class="right">Online</div>
+                        </div>
+                        <div class="commentsdetail">
+                            <div class="comments-scroll">
+                                <div class="data">
+                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
+                                    <div class="rightdetail">
+                                        <div class="name">Frank</div>
+                                        <div class="date">26.08.2013</div>
+                                        <div class="time">14:30</div>
+                                        <div class="clearfix"></div>
+                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
+                                    </div>
+                                </div>
+                                <div class="data">
+                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
+                                    <div class="rightdetail">
+                                        <div class="name">Frank</div>
+                                        <div class="date">26.08.2013</div>
+                                        <div class="time">14:30</div>
+                                        <div class="clearfix"></div>
+                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
+                                    </div>
+                                </div>
+                                <div class="data">
+                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
+                                    <div class="rightdetail">
+                                        <div class="name">Frank</div>
+                                        <div class="date">26.08.2013</div>
+                                        <div class="time">14:30</div>
+                                        <div class="clearfix"></div>
+                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
+                                    </div>
+                                </div>
+                                <div class="data">
+                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
+                                    <div class="rightdetail">
+                                        <div class="name">Frank</div>
+                                        <div class="date">26.08.2013</div>
+                                        <div class="time">14:30</div>
+                                        <div class="clearfix"></div>
+                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
+                                    </div>
+                                </div>
+                                <div class="data">
+                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
+                                    <div class="rightdetail">
+                                        <div class="name">Frank</div>
+                                        <div class="date">26.08.2013</div>
+                                        <div class="time">14:30</div>
+                                        <div class="clearfix"></div>
+                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
+                                    </div>
+                                </div>
+                                <div class="data">
+                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
+                                    <div class="rightdetail">
+                                        <div class="name">Frank</div>
+                                        <div class="date">26.08.2013</div>
+                                        <div class="time">14:30</div>
+                                        <div class="clearfix"></div>
+                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
+                                    </div>
+                                </div>
+                            </div>	                            
+						</div>                            
+                    </div>
+		         
+</div>
+<a id="successDialog" href="#dialog45" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+<section id="boxes2">
+	<div id="dialog44" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+				<p>{{ 'regularuser.write_msg_to'|trans }} {{ displayUser. name}}</p>
+					<input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}"/>
+					<textarea id="MsgContent" placeholder="{{ 'message.content'|trans }}"></textarea>
+				<input class="blue_button" style="margin-bottom: 10px; margin-left: -71px; margin-top: 130px;" type="button" id="continue" value="{{ 'btn.send'|trans }}" onclick="sendMsg();"/>
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+	</div>
+	<div id="mask"></div>
+</section>
+
+<section id="boxes2">
+	<div id="dialog45" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+			<div id="messageForm">
+				<p>{{ 'regularuser.msg_send'|trans }}</p>
+			</div>
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+	</div>
+	<div id="mask"></div>
+</section>

@@ -12,7 +12,8 @@ class UserAdminType extends AbstractType
     {
         $builder
             ->add('locked', NULL, array('required' => FALSE))
-            ->add('email');
+            ->add('email')
+       		->add('managertype', 'checkbox', array('required' => FALSE));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

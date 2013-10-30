@@ -1,0 +1,9 @@
+{% extends 'FenchyAdminBundle::layout.html.twig' %}
+{% block admincontent %}
+    <form action="{{ path('fenchy_admin_category_new') }}" method="post" {{ form_enctype(form) }} class="student-form">
+        {{ form_widget(form) }}
+        <br/>
+        <button type="submit">Create</button>
+    </form>
+{% endblock %}
+    

@@ -40,9 +40,9 @@ class NoticeRepository extends EntityRepository
      * 
      * @uses AdminBundle
      */
-    public function getFullDetailedList($filter = NULL) {
+    public function getFullDetailedList($filter = NULL,$types,$sortby, $aroundyou,$when, $now, $keyword) {
 
-        if(!($filter instanceof \Fenchy\AdminBundle\Entity\NoticesFilter)) {
+        if(!($filter instanceof \Fenchy\AdminBundle\Entity\NoticesFilter) and empty($types) and (!$sortby) and (!$aroundyou)  and (!$when) and (!$now) and (!$keyword) ) {
             
             return $this->createQueryBuilder('n')
                     ->select("n, p, v, t, u, l, s, su")
@@ -53,6 +53,7 @@ class NoticeRepository extends EntityRepository
                     ->leftJoin('n.type', 't')
                     ->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
                     ->leftJoin('s.reported_by', 'su')
+                    ->where('n.draft = false')
                     ->getQuery()
                     ->getResult();
         } 
@@ -63,47 +64,168 @@ class NoticeRepository extends EntityRepository
                     );
         
         $query = $this->createQueryBuilder('n')
-                    ->select("n, p, v, t, u, l, s, su, (".$sub->getDQL().") as HIDDEN stickersQ")
+                    ->select("n, p, v, t, u, l, (".$sub->getDQL().") as HIDDEN stickersQ")
                     ->leftJoin('n.values', 'v')
                     ->leftJoin('v.property', 'p')
                     ->join('n.user', 'u')
                     ->join('n.location', 'l')
-                    ->leftJoin('n.type', 't');
+                    ->leftJoin('n.type', 't')
+        			->where('n.draft = false');
+        // here in above query removed s,su from select part
+       
+        if($keyword)
+        {
+        	$query->andWhere('LOWER(n.title) like :title')
+        	->setParameter('title','%'.$keyword.'%');
         
-        if($filter->reported_only) {
-            $query->join('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
-                ->leftJoin('s.reported_by', 'su');
-        } else {
-            $query->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
-                ->leftJoin('s.reported_by', 'su');
+        	$query->orWhere('LOWER(n.content) like :content')
+        	->setParameter('content','%'.$keyword.'%');
+        
+        	$query->orWhere('LOWER(t.name) like :name')
+        	->setParameter('name','%'.$keyword.'%');
+        
+        	$query->orWhere('LOWER(t.altText) like :altText')
+        	->setParameter('altText','%'.$keyword.'%');
+        
+        	$query->orWhere('LOWER(l.location) like :location')
+        	->setParameter('location','%'.$keyword.'%');
         }
         
-        if($filter->title) {
-            $query->where('n.title like :title')
-                    ->setParameter('title', '%'.$filter->title.'%');
+        if($types) {
+        	$query->andWhere('n.type in (:type)')
+        	->setParameter('type', $types);
+        	
+        }
+       
+        
+        if($when or $now)
+        {
+        	$date = explode('to',$when);
+        	$startdate = date('Y-m-d H:i:s',$date[0]);
+        	$enddate = date('Y-m-d H:i:s',$date[1]);
+        	
+        	if($now)
+        	{
+        		$dateStart = new \DateTime();
+        		$dateStart->setTime(0, 0, 1);
+        		$startdate = $dateStart;
+        		$dateEnd = new \DateTime();
+        		$dateEnd->setTime(23, 59, 59);
+        		$enddate = $dateEnd;
+        		 
+        	}
+	        
+	        if($types)
+	        {	
+	        	if(in_array(6, $types))
+	        	{
+		        	$query->andWhere('n.start_date >= :start AND n.start_date <= :end')
+		        	->setParameter('start', $startdate)
+		        	->setParameter('end', $enddate);
+	        	}
+	        	elseif(in_array(12, $types))
+	        	{
+	        		$query->andWhere('n.start_date >= :start AND n.start_date <= :end')
+	        		->setParameter('start', $startdate)
+	        		->setParameter('end', $enddate);
+	        	}
+	        	else
+	        	{
+	        		$query->andWhere('n.created_at >= :start AND n.created_at <= :end')
+	        		->setParameter('start', $startdate)
+	        		->setParameter('end', $enddate);
+	        	}
+	        }
+	        else
+	        {
+	        	$query->andWhere('n.created_at >= :start AND n.created_at <= :end')
+	        	->setParameter('start', $startdate)
+	        	->setParameter('end', $enddate);
+	        }
+        
         }
         
-        if($filter->created_after) {
-            $query->andWhere('n.created_at > :after')
-                    ->setParameter('after', $filter->created_after);
+        
+        if($sortby=="date")
+        {
+        	$sortby = 'created_at';
+        	$query->orderBy('n.'.$sortby , "DESC");
+        }
+        elseif($sortby=="distance")
+        {
+        	
+        }
+        elseif($sortby=="relevance")
+        {
+        	$sortby="title";
+        	$query->orderBy('n.'.$sortby , "DESC");
         }
         
-        if($filter->created_before) {
-            $query->andWhere('n.created_at < :before')
-                    ->setParameter('before', $filter->created_before);
-        }
+		//         if($filter->reported_only) {
+		//             $query->join('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
+		//                 ->leftJoin('s.reported_by', 'su');
+		//         } else {
+		//             $query->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
+		//                 ->leftJoin('s.reported_by', 'su');
+		//         }
+		        
+		//         if($filter->title) {
+		//             $query->where('n.title like :title')
+		//                     ->setParameter('title', '%'.$filter->title.'%');
+		//         }
+		        
+		//         if($filter->created_after) {
+		//             $query->andWhere('n.created_at > :after')
+		//                     ->setParameter('after', $filter->created_after);
+		//         }
+		        
+		//         if($filter->created_before) {
+		//             $query->andWhere('n.created_at < :before')
+		//                     ->setParameter('before', $filter->created_before);
+		//         }
+		        
+		//         if($filter->sort === 'stickersQ') {
+		//            // return $query
+		//                     ->orderBy($filter->sort, $filter->order)
+		//                     ->getQuery()
+		//                     ->getResult();
+		//         }
+        //echo $query->getQuery()->getSQL();
         
-        if($filter->sort === 'stickersQ') {
-            return $query
-                    ->orderBy($filter->sort, $filter->order)
-                    ->getQuery()
+        return $query->getQuery()
                     ->getResult();
-        }
-        
-        return $query
-                    ->orderBy('n.'.$filter->sort, $filter->order)
-                    ->getQuery()
-                    ->getResult();
+    }
+    
+    public function getFirstRecord() {
+    	
+    	return $this->createQueryBuilder('n')
+    	->select("n, p, v, t, u, l, s, su")
+    	->leftJoin('n.values', 'v')
+    	->leftJoin('v.property', 'p')
+    	->join('n.user', 'u')
+    	->join('n.location', 'l')
+    	->leftJoin('n.type', 't')
+    	->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
+    	->leftJoin('s.reported_by', 'su')
+    	->orderBy('n.created_at', "ASC")
+    	->getQuery()
+    	->getResult();
+    }
+    
+    public function getLastRecord() {
+    	 
+    	return $this->createQueryBuilder('n')
+    	->select("n, p, v, t, u, l, s, su")
+    	->leftJoin('n.values', 'v')
+    	->leftJoin('v.property', 'p')
+    	->join('n.user', 'u')
+    	->join('n.location', 'l')
+    	->leftJoin('n.type', 't')
+    	->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
+    	->leftJoin('s.reported_by', 'su')
+    	->orderBy('n.created_at', "DESC")
+    	->getQuery()
+    	->getResult();
     }
     
     /**
@@ -522,12 +644,14 @@ class NoticeRepository extends EntityRepository
         return $this->createQueryBuilder('n')
                 ->select('n, g, i, l, v, t')
                 ->where('n.user = :user')
+                ->andWhere('n.draft = :draft')
                 ->join('n.gallery', 'g')
                 ->join('n.location', 'l')
                 ->join('n.type', 't')
                 ->leftJoin('n.values', 'v')
                 ->leftJoin('g.images', 'i')
                 ->setParameter('user', $user)
+                ->setParameter('draft', 'FALSE')
                 ->orderBy('n.created_at', 'DESC')
                 ->getQuery()
                 ->getResult();

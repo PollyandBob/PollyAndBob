@@ -1,0 +1,193 @@
+{# empty Twig template #}
+
+<div class="ajax_loader_info" style="display: none; padding: 108px 278px 0px 0px;">
+						<img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
+</div>
+<div class="feedsdetail">
+
+				{% for notice in notices %}
+                    
+                    {% if notice.type != "groups" %}
+                    <div class="newsfeeds feeds1">
+                        <span class="votes" style="display:none;"> {% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceClassCode" with { 'noticeLoc': notice.location } %}</span>
+                        <div class="leftimg">
+                        	<a href="{{path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')  })}}">
+                        		<img width="200" height="135" alt="" src="{{ asset(notice.mainimagelanding) }}"  onerror="imgError(this)">
+                        	</a>
+                        </div>
+                        <div class="rightimg"><img alt="" src="{{ asset('images/bgright_rightpart.png') }}"></div>
+                        <div class="right">
+                            <h3>{{notice.title}}</h3>
+                            <div class="clearfix"></div>
+                            <div class="otherdetail">
+                                <div class="left" style="letter-spacing: 1px;">
+                                	{% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceCode" with { 'noticeLoc': notice.location } %}
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <p>{{ notice.content|truncate(130)|replace({'...': ". . ."})|raw }}</p>
+                            <div class="persen">
+                                
+								{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': notice.user.id } %}
+
+								{% if(notice.user.activity >= 400 and notice.user.activity < 1000 ) %}
+			                    	{% set managertype_alpha="C" %}
+			                    	{% set classColor="green" %}
+			                    {% elseif(notice.user.activity >= 1000 ) %}
+			                    	{% set managertype_alpha="N" %}
+			                    	{% set classColor="orange" %}
+			                    {% elseif(notice.user.managertype == 1) %}
+			                    	{% set managertype_alpha="H" %}
+			                    	{% set classColor="blue" %}
+			                    {% else %}
+			                    	{% set managertype_alpha="" %}
+			                    	{% set classColor="red" %}
+			                    {% endif %}
+                                <div class="neighbor {{ classColor }}">
+                                    <p>{{ managertype_alpha }}</p>
+                                    <span>{{ notice.user.activity }}</span>
+                                </div>		                            
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% elseif notice.type == "groups" %}
+                    
+                    <div class="newsfeeds feeds2">
+					<span class="votes" style="display:none;"> {% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceClassCode" with { 'noticeLoc': notice.location } %}</span>
+                    <div class="leftimg">
+                        	
+                            	{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': notice.user.id } %}
+                            
+                            	{% if(notice.user.activity >= 400 and notice.user.activity < 1000 ) %}
+			                    	{% set managertype_alpha="C" %}
+			                    	{% set managertype="Community Manager" %}
+			                    	{% set classColor="green" %}
+			                    {% elseif(notice.user.activity >= 1000 ) %}
+			                    	{% set managertype_alpha="N" %}
+			                    	{% set classColor="orange" %}
+			                    	{% set managertype="Neighbouthood Manager" %}
+			                    {% elseif(notice.user.managertype == 1) %}
+			                    	{% set managertype_alpha="H" %}
+			                    	{% set classColor="blue" %}
+			                    	{% set managertype="House Manager" %}
+			                    {% else %}
+			                    	{% set managertype_alpha="" %}
+			                    	{% set classColor="red" %}
+			                    	{% set managertype="" %}
+			                    {% endif %}
+			                    
+                            <div class="neighbor {{ classColor }}">
+                                <p>{{ managertype_alpha }}</p>
+                                <span>{{ notice.user.activity }}</span>
+                            </div>		                            
+                            <div class="otherdetail">
+                                <p  style="letter-spacing: 1px;">
+                                {% if notice.location %}
+                                	{% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceCode" with { 'noticeLoc': notice.location } %}
+                                {% endif %}	
+                                </p>
+                                <span>300<br><b>Members</b></span>
+                            </div>
+                        </div>
+                        <div class="rightimg"><img alt="" src="{{ asset('images/bgright_rightpart.png') }}"></div>
+                        <div class="right">
+                            <div class="redtitle">{{ managertype }}</div>
+                            <h3>{{notice.title}}</h3>
+                            <div class="clearfix"></div>
+                            <div class="clearfix"></div>
+                            <p>{{ notice.content|truncate(130)|replace({'...': ". . ."})|raw }}</p>
+                                
+                        </div>
+                    </div> 
+                    
+                    {% endif %}
+                    
+                    {% endfor %}
+                    <script>
+		  			 function imgError(url)
+		  			 {
+		  			   var img = new Image();
+		  			   img.src = url;
+		  			   var newsrc = $(url).attr('src');
+		  			   newsrc=newsrc.replace('square_l','medium');
+					   $(url).attr('src',newsrc);	   
+		  			 }
+		  			</script>
+</div>
+
+<script type="text/html" id="list-template">
+    <div class="article-list-wrapper clearfix">
+    <!-- ko foreach: notices -->
+        <article data-bind="attr: { 'class': 'box smallbox'+' '+owner.business }">
+            <div class="clearfix">
+                <figure class="pull-left" data-bind="click: function(data,event) { $parent.loadListing(url) }">
+                    <div class="pull-left img"><img data-bind="attr: { src: image }" alt=""/></div>
+                    <figcaption class="pull-left">
+                        <div>
+                            <h3><a href="#" data-bind="{text: title, attr: {href: url}}" class="listing-details"></a></h3>
+                            {#<strong data-bind="text: location"></strong>#}
+                            <p  data-bind="text: content"></p>
+                        </div>                                        
+                    </figcaption>
+                </figure>
+                <div class="pull-left event-master clearfix listing-user-details" data-bind="click: function(data,event) { $parent.loadProfile(owner.url) }">
+                    <div class="img"><span class="image-container small-avatar  bordered"><img data-bind="attr: { src: owner.image, alt: owner.title}"/><span></div>
+                    <div class="event-master-info">
+                        <strong class="info-by-line"><a href="#" class="name" data-bind="{text: owner.title, attr: {href: owner.url}}"></a></strong>                                                    
+                        <strong class="info-by-line"><a href="#" class="location"><i class="icon-map-marker"></i><span data-bind="text: owner.location"></span></a></strong>                                                    
+                    </div>
+                </div>
+                <div class="activity">
+                    <a href="#" class="event"><i class="icon-calendar" data-bind="attr: { 'class': icon }"></i></a>
+                </div>
+            </div>
+        </article>
+    <!-- /ko -->
+    <!-- ko if: noticesLoadMore -->
+    <div class="load-more-button has-more-items stream-loading grey-button button"
+         data-bind="click: loadMoreNotices">
+        <a href="#" class="wrapper" data-bind="click: anchorNoOp">
+            <i class="icon-spinner icon-spin"></i>
+            <strong>{{ 'regularuser.load_more' | trans }}</strong></a>
+    </div>
+    <!-- /ko -->
+    </div>
+</script>
+
+
+<script type="text/html" id="tiles-template">
+    <div class="article-list-wrapper clearfix">
+    <!-- ko foreach: notices -->
+        <article class="box mediumbox">
+            <figure>
+                <img data-bind="attr: { src: image }" alt=""/>
+                <figcaption>
+                    <div>
+                        <h3><a href="#" data-bind="{text: title, attr: {href: url}}"></a></h3>
+                        {#<strong data-bind="text: location">Kreuzberg, Berlin</strong>#}
+                    </div>                                        
+                </figcaption>
+            </figure>
+            <div class="event-master">
+                <div class="img"><span class="image-container small-avatar"><img data-bind="attr: { src: owner.image, alt: owner.title}"/><span></div>
+                <div class="event-master-info">
+                    <strong class="info-by-line"><a href="#" class="name" data-bind="{text: owner.title, attr: {href: owner.url}}"></a></strong>                                                    
+                    <strong class="info-by-line"><a href="#" class="location"><i class="icon-map-marker"></i><span data-bind="text: owner.location"></span></a></strong>                                                    
+                </div>
+            </div>
+            <div class="activity">
+                <a href="#" class="event"><i class="icon-calendar" data-bind="attr: { 'class': icon }"></i></a>
+            </div>
+        </article>
+    <!-- /ko -->
+    <!-- ko if: noticesLoadMore -->
+    <div class="load-more-button has-more-items stream-loading grey-button button"
+         data-bind="click: loadMoreNotices">
+        <a href="#" class="wrapper" data-bind="click: anchorNoOp">
+            <i class="icon-spinner icon-spin"></i>
+            <strong>{{ 'regularuser.load_more' | trans }}</strong></a>
+    </div>
+    <!-- /ko -->    
+    </div>
+</script>

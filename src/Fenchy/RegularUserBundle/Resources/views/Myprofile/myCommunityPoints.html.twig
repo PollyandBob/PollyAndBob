@@ -1,6 +1,11 @@
 {% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
 
-
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}
 {% block content %}
 	{% render 'FenchyRegularUserBundle:Myprofile:myAvatar' %}
 	{% include 'FenchyRegularUserBundle:Myprofile:menu.html.twig' %}
@@ -15,7 +20,8 @@
                         <td width="40%">{{ 'regularuser.profile_completion'|trans }}</td>
                         <td width="10%">{{ reputationPoints.profilePercent }}</td>
                         <td width="10%">{{ displayUser.activity }}</td>
-                        <td width="40%"><a href="{{ path('fenchy_regular_user_user_myprofile_main') }}" class="categorylink">{{ 'regularuser.fill_my_profile_now'|trans }}</a></td>
+                        {# {{ path('fenchy_regular_user_user_myprofile_main') }} #}
+						<td width="40%"><a href="{{ path('fenchy_regular_user_user_myprofile_aboutmychoice') }}" class="categorylink">{{ 'regularuser.fill_my_profile_now'|trans }}</a></td>
                       </tr>
                       <tr>
                         <td width="40%">{{ 'regularuser.my_neighbors'|trans }}</td>
@@ -27,13 +33,13 @@
                         <td width="40%">{{ 'regularuser.listings_posted'|trans }}</td>
                         <td width="10%">{{ repBreakdown.listingCount }}</td>
                         <td width="10%">{{ reputationPoints.notice }}</td>
-                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.create_listing'|trans }}</a></td>
+                        <td width="40%"><a href="{{path('fenchy_regular_user_notice_create1')}}" class="categorylink">{{ 'regularuser.create_listing'|trans }}</a></td>
                       </tr>
                       <tr>
                         <td width="40%">{{ 'regularuser.neighbors_served'|trans }}</td>
                         <td width="10%">25</td>
                         <td width="10%">5</td>
-                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.uptodate_your_listings_now'|trans }}</a></td>
+                        <td width="40%"><a href="fenchy_regular_user_listing_manage" class="categorylink">{{ 'regularuser.uptodate_your_listings_now'|trans }}</a></td>
                       </tr>
                       <tr>
                         <td width="40%">{{ 'regularuser.reviews_received'|trans }}</td>
@@ -77,14 +83,14 @@
                         <td width="40%">{{ 'regularuser.location_verified'|trans }}</td>
                         <td width="10%">{{ repBreakdown.positiveRevCount }}</td>
                         <td width="10%">{{ reputationPoints.reviews }}</td>
-                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.verify_your_location_now'|trans }}</a></td>
+                        <td width="40%"><a href="#dialog8" name="modal" id="vzoom_1944" class="zoomthis categorylink">{{ 'regularuser.verify_your_location_now'|trans }}</a></td>
                       </tr>
                       
                       <tr>
                         <td width="40%">{{ 'regularuser.passport_verified'|trans }}</td>
                         <td width="10%">{{ repBreakdown.positiveRevCount }}</td>
                         <td width="10%">{{ reputationPoints.reviews }}</td>
-                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.verify_your_passport_now'|trans }}</a></td>
+                        <td width="40%"><a href="#dialog2" name="modal" id="vzoom_1944" class="zoomthis categorylink">{{ 'regularuser.verify_your_passport_now'|trans }}</a></td>
                       </tr>
                       
                     </table>
@@ -95,6 +101,42 @@
             	<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
             </div>
 	
+	<section id="boxes2">
+    <div id="dialog8" class="window"> 
+        <div class="big_popup">
+            <div class="big_popupclose"><a href="" class="close"></a></div>
+            
+				{% if verified %}
+            		<p>{{ 'regularuser.verified_location_message'|trans|upper }}</p>            								   	        		
+    	        {% else %}
+					<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>			
+            		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
+						<button>{{ 'regularuser.ok'|trans|upper }}</button>
+    	        	</form>
+    	        {% endif %}
+        </div>    
+    </div>    
+    <div id="mask"></div>
+    </section>
+    
+    <section id="boxes2">
+    	<div id="dialog2" class="window"> 
+        	<div class="big_popup">
+	           	<div class="big_popupclose"><a href="" class="close"></a></div>            
+            		{% if identity %}
+            			<p>{{ 'regularuser.verified_identity_message'|trans|upper }}</p>
+    	        	{% else %}
+    	        		{% if verifyIdentity %}
+    		        		<p>{{ 'regularuser.verify_identity_message'|trans|upper }}</p>
+							<button onclick="verifyYourIdentity()">{{ 'regularuser.ok'|trans|upper }}</button>
+						{% else %}
+							<p>{{ 'regularuser.verifing_identity_message'|trans|upper }}</p>
+						{% endif %}
+    	        	{% endif %}
+        		</div>    
+    		</div>    
+    	<div id="mask"></div>
+    </section>
 	<!-- 
 	 <div>
 	 	{{ 'regularuser.profile_completion'|trans }}

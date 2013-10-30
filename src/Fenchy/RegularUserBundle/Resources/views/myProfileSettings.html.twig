@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="{{ asset('css/app/sidebar-v2.css') }}" type="text/css" />
 {% endblock %}
 
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}
 {% block content %}
 <section class="main content-rtl">
     <div id="main-container" class="wrapper-inner-content">

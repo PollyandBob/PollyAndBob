@@ -11,42 +11,17 @@
 {% endblock %}
 
 {% block content %}
-<section class="main content-rtl" data-role="main">
-    <div class="wrapper-inner-content">
-        <div class="clearfix">
 
-
-            <section class="sidebar pull-left large-padding-top">
-                    {% include 'FenchyRegularUserBundle:Partials:userProfileLeftMenuV2.html.twig' %}
-                </section>
-
-
-                <section class="content pull-right">                
-                    {% include '::searchBarV2.html.twig' %}
-
-                        <div class="inner-content">
-                            <div class="article-list-wrapper clearfix">
-                                <form action="{{path('fenchy_regular_user_listing_delete_confirm', {'id': notice.id})}}" method="post">
-                                    <h2 class="delete-msg">{{'listing.delete.msg'|trans({'%notice%': '<span>'~notice.title~'</span>' })|raw}}</h2>
-                                    <div style="display: none">{{form_rest(form)}}</div>
-                                <footer class="clearfix">
-                                    <div class="button grey-button pull-left" id="buttons">
-                                        <a id="back" class="wrapper" href="{{path('fenchy_regular_user_listing_manage')}}">
-                                            <strong>{{ 'btn.no'|trans }}</strong>
-                                        </a>                            
-                                    </div>
-                                    <div class="button submit pull-right">
-                                        <div>
-                                            <input type="submit" id="continue" value="{{ 'btn.yes'|trans }}"/>                                
-                                        </div>
-                                    </div>
-                                </footer>                                
-                                </form>
-                            </div>
-                        </div>
-                    </section>
-                </div>
+<div id="watch-notice">
+   		<form action="{{path('fenchy_regular_user_listing_delete_confirm', {'id': notice.id})}}" method="post">
+           	<h2>{{'listing.delete.msg'|trans({'%notice%': '<span>'~notice.title~'</span>' })|raw}}</h2>
+            <div style="display: none">{{form_rest(form)}}</div>
+            <a class="blue-button" href="{{path('fenchy_regular_user_listing_manage')}}">
+            	{{ 'btn.no'|trans }}
+           	</a>                            
+           	<div>
+            	<input class="blue-button" type="submit" id="continue" value="{{ 'btn.yes'|trans }}"/>                                
             </div>
-        </section>
-
+     	</form>
+  	</div>
 {% endblock %}

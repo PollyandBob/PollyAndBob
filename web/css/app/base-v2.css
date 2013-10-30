@@ -555,11 +555,19 @@ div.loginform-ext .sign-btn + p strong {
 #account-resume .icon-info-sign {
     margin-right: 18px;
 }
-
+.tagit-label:not(a)
+{
+    margin-left: 0px !important;
+}
+.persen img 
+{
+    height: 162px;
+    width:164px;
+}
 div.flash-message {
-    padding-top: 70px;
+    padding-top: 7px;
     margin-bottom: -129px;
-    min-height: 59px;
+    min-height: 36px;
 }
 div.flash-message-inner p {
     line-height: 140%;

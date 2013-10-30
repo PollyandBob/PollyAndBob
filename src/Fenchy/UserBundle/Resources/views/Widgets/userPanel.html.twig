@@ -1,11 +1,41 @@
-<div class="right">
+<style>
+.loginwindow2 {
+    background: none repeat scroll 0 0 #FFFFFF;
+    display: none;
+    right: 0;
+    padding: 7px 10px;
+    position: absolute;
+    top: 30px;
+    width: 130px;
+    z-index: 999;
+}
+.loginwindow2 .iconarrow {
+	position:absolute;
+	top:-9px;
+	right:2px;
+}
+.loginwindow2 ul {
+	margin-left:0 !important;
+	margin-top:0 !important;	
+	
+}
+.loginwindow2 li {
+	margin-left:0 !important;
+}
+.loginwindow2 li a {
+    color: #000000 !important;
+    font-family: code_boldregular;
+    font-size: 12px !important;
+    letter-spacing: 1px;
+}
+</style>
                 <ul>
                     <li>
-	                    <a href="{{ path('fenchy_regular_user_user_profilev2') }}">
+	                    <a href="{{ path('fenchy_regular_user_listing_manage') }}">
 	                    	<img alt="" src="{{ absolute(asset('images/icon_home.png')) }}">
 				            {% set countInv = countInvitations() %}
-				            {% if rev_unread_count or countInv %}
-				                <span class="badge">{{rev_unread_count+countInv}}</span>
+				            {% if req_unread_count or countInv or my_req_count%}
+				                <div class="requestcount">{{req_unread_count+countInv+my_req_count}}</div>
 				            {% endif %}
 	                    </a>
  					</li>
@@ -13,27 +43,53 @@
 				        <a href="#" class="wrapper-badge">
 				            {% set count = countUnread() %}
 				            {% if count > 0 %}
-				                <span class="badge">{{count}}</span>
+				                <div class="mailcount">{{count}}</div>
 				            {% endif %}
 				        </a>
-                    	<a href="{{ path('fenchy_regular_user_messages_index') }}">
+				        <a href="{{ path('fenchy_regular_user_messages_index') }}">
                     		<img alt="" src="{{ absolute(asset('images/icon_message.png')) }}">
                     	</a>
                     </li>
                     <li>
-                    	<a href="{{ path('fenchy_regular_user_user_myprofile_main') }}">
+                    	<a class="myprofilelink" href="javascript:void(0)">
                     		<img alt="" src="{{ absolute(asset('images/icon_login.png')) }}">
                     	</a>
+                    	<div class="loginwindow2">
+		                    <img class="iconarrow" src="{{ asset('images/icon_arrow.png') }}" alt="" />
+		                    <ul>
+		                    
+		                    	<li>
+		                    		<a href="{{ path('fenchy_notice_indexv2') }}">{{ 'frontend.newsfeeds'|trans }}</a>
+		                    	</li>
+		                    	<li>
+		                    		<a href="{{ path('fenchy_regular_user_user_myprofile_aboutmychoice') }}">{{ 'frontend.myprofile'|trans }}</a>
+		                    	</li>
+		                    	<li>
+		                    		<a href="{{ path('fenchy_regular_user_settings_account') }}">{{ 'frontend.mysettings'|trans }}</a>
+		                    	</li>
+		                    	
+		                    	<br>
+		                    	{% if alertmsg %}
+       							<li><a {% if app.request.get('_route') == 'fenchy_regular_user_user_groupprofile_creategroup' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_notice_create2',{'typename' : 'offergroups'}) }}" >
+       								{{ 'frontend.create_group'|trans }}</a>
+       							</li>
+       							{% endif %}
+       						    {% render "FenchyNoticeBundle:GlobalFilter:myGroupsCode" with { 'userId': app.user.id } %}
+       							
+       							<li><a {% if app.request.get('_route') == 'fos_user_security_logout' %} class="selected" {% endif %} href="{{ path('fos_user_security_logout') }}" >
+       								{{ 'frontend.log_out'|trans }}</a>
+       							</li>
+		                </div>
                     </li>
                 </ul>
-</div>
+
 <!-- 
 <ul id="user-account-item" class="pull-right">
     <li class="top-icons home">
         <a href="{{ path('fenchy_regular_user_user_profilev2') }}">
             {% set countInv = countInvitations() %}
-            {% if rev_unread_count or countInv %}
-                <span class="badge">{{rev_unread_count+countInv}}</span>
+            {% if req_unread_count or countInv %}
+                <span class="badge">{{req_unread_count+countInv}}</span>
             {% endif %}
             <i class="icon-home"></i>                                        
         </a>

@@ -193,15 +193,47 @@
     margin-left: -0.445%;
 }
 #form-fields .row {
-    float: left;
+    float: none;
     margin-left: 0.445%; /*3px;*/
     margin-top: 11px;
 }
+#form-fields .rowleft {
+    float: left;
+    margin-top: 27px;
+}
+#form-fields .rowright {
+    float: left;
+    margin-left: 230px;
+    margin-top: -32px;
+}
+
+#form-fields .rowlast {
+    float: left;
+    margin-left: 230px;
+    margin-top: -32px;
+}
+
+#form-fields .rowlast input {
+    float: left;
+    margin-right: 12px;
+}
+
+#form-fields .rowlast label{
+   display: block;
+}
+
+#form-fields .rowright label{
+   float: right;
+   margin-left: 6px;
+}
 #form-fields .row > ul:first-child > li {
-   position: absolute;
-   right: 2.01%;
+   /*position: absolute;
+   right: 2.01%;  
+   line-height: 33px;*/
    color: red;
-   line-height: 33px;
+   margin-top: 33px;
+   width: 225px;
+   display: -moz-box;
 }
 #form-fields .row.with_icon.grid_2 > i+ul > li {   
    position: absolute;
@@ -238,8 +270,11 @@
 }
 #form-fields .grid_2.with_icon > div,
 #form-fields .grid_2.with_icon > input {
-    padding: 0 5% 0 20%; /* 0 30px 0 7px */
+    padding: 0 10%; /* 0 30px 0 7px */
     width: 75%;
+    left: 5px;
+    position: absolute;
+    top: 1px;
 }
 #form-fields .grid_6.tags-container ul.tagit {
    padding-left: 7%;   
@@ -270,11 +305,22 @@
 #form-fields .grid_6 {
     width: 60.38%; /* 496px */
 }
+#form-fields .grid_3 {
+    margin-left: 488px;
+    margin-top: 20px;
+    width: 9.14%;
+}
 #form-fields .grid_4 {
-    width: 38.14%;
+    height: 230px;
+    margin-left: 506px;
+    margin-top: 7px;
+    position: absolute;
+    width: 30.14%;
 }
 #form-fields .grid_2 {
     width: 18.64%;
+    margin-left: 63px;
+    margin-top: 20px;
 }
 #form-fields .grid_10 {
     width: 99.311%; /* 674px */

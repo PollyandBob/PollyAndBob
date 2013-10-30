@@ -13,11 +13,23 @@ fenchy_admin_search:
 fenchy_admin_dictionary_switch:
     pattern: /dictionary/switch
     defaults: { _controller: FenchyAdminBundle:Default:dictionarySwitch }
-    
+
 fenchy_admin_notices:
     pattern: /notices/
     defaults: { _controller: FenchyAdminBundle:Default:notices }
-    
+
+fenchy_admin_location:
+    pattern: /location/
+    defaults: { _controller: FenchyAdminBundle:Default:location }
+
+fenchy_admin_identity:
+    pattern: /identity/
+    defaults: { _controller: FenchyAdminBundle:Default:identity }
+
+fenchy_admin_identity_switch:
+    pattern: /identity/switch
+    defaults: { _controller: FenchyAdminBundle:Default:identitySwitch }
+
 fenchy_admin_notice_add_to_dashboard:
     pattern: /notices/add-to-dashboard/{id}
     defaults: { _controller: FenchyAdminBundle:Default:addToDashboard }
@@ -41,5 +53,24 @@ fenchy_admin_review:
 fenchy_admin_notice_delete:
     pattern: /notice/delete/{id}
     defaults: { _controller: FenchyAdminBundle:Default:noticeDelete }
+    requirements:
+        id: \d+
+        
+fenchy_admin_categories:
+    pattern: /categories/
+    defaults: { _controller: FenchyAdminBundle:Default:categories }
+    
+fenchy_admin_category:
+    pattern: /category/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:category }
+
+fenchy_admin_category_new:
+    pattern: /categories/new
+    defaults: { _controller: FenchyAdminBundle:Default:categoryNew }
+
+    
+fenchy_admin_category_delete:
+    pattern: /category/delete/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:categoryDelete }
     requirements:
         id: \d+

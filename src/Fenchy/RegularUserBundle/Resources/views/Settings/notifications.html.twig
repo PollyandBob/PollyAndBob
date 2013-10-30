@@ -27,14 +27,10 @@
 
 
 {% block settings_content %}
-    <section id="profile_left_menu" class="sidebar pull-left">
-        <div class="wrapper">
-            {% include 'FenchyRegularUserBundle:Settings:menuV2.html.twig' %}
-        </div>        
-    </section>
-    <section class="content pull-right">
-        <div class="profile_right_content inner-content">
-            <header><h1>{{ 'regularuser.settings'|trans }}</h1></header>
+
+    
+        <div class="mycommunitypoints">
+            <h4>{{ 'regularuser.settings'|trans }}</h4>
             <form action="{{ path('fenchy_regular_user_settings_notifications') }}" method="post" {{ form_enctype(form) }} class="course-form">
                 <div class="form-box-wrapper">
                     <h2>{{ 'settings.emailnotifications.name'|trans }}</h2>
@@ -67,21 +63,20 @@
                                 </ul>
             {{ form_widget(form) }}
                     
-                    <footer class="clearfix">
-                        <div class="button grey-button pull-left" id="buttons">
-                            <a id="back" class="wrapper" href="{{path('fenchy_frontend_indexv2')}}">
-                                <strong>{{ 'btn.cancel'|trans }}</strong>
-                            </a>                            
-                        </div>
-                        <div class="button submit pull-right">
-                            <div>
-                                <input type="submit" id="continue" value="{{ 'btn.save'|trans }}"/>                                
-                            </div>
-                        </div>
-                    </footer>
+                    <div class="clearfix">
+                                <div class="button grey-button pull-left" style="float: right;" id="buttons">
+                                    <a id="back"  class="blue_button" href="{{path('fenchy_frontend_indexv2')}}">
+                                        <strong>{{ 'btn.cancel'|trans }}</strong>
+                                    </a>                            
+                                </div>
+                                
+                                 <input type="submit" class="blue_button" style="float: right;margin-right: 17px;" id="continue" value="{{ 'btn.save'|trans }}"/>                                
+                                 
+                    </div>
+                            
                             </div>                                     
                         </form>
                     </div>
-                </section>
+
 
 {% endblock %}

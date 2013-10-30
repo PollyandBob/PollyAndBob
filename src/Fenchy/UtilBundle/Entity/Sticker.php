@@ -7,7 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Fenchy\UserBundle\Entity\User,
     Fenchy\NoticeBundle\Entity\Notice,
-    Fenchy\NoticeBundle\Entity\Review;
+    Fenchy\NoticeBundle\Entity\Review,
+ 	Fenchy\NoticeBundle\Entity\Comment;
 
 /**
  * @ORM\Table(name="stickers")
@@ -73,6 +74,14 @@ class Sticker {
      * @ORM\JoinColumn(name="review_id", referencedColumnName="id", nullable=true)
      */
     private $review;
+    
+    /**
+     * @var Comment
+     *
+     * @ORM\ManyToOne(targetEntity="Fenchy\NoticeBundle\Entity\Comment", inversedBy="stickers")
+     * @ORM\JoinColumn(name="comment_id", referencedColumnName="id", nullable=true)
+     */
+    private $comment;
     
     /**
      * @var DateTime
@@ -199,6 +208,18 @@ class Sticker {
     }
     
     /**
+     * Set Comment
+     * @param Comment $comment
+     * @return Sticker
+     */
+    public function setComment(Comment $comment) {
+    
+    	$this->comment = $comment;
+    
+    	return $this;
+    }
+    
+    /**
      * Get Review
      * @return Review 
      */
@@ -207,6 +228,15 @@ class Sticker {
         return $this->review;
     }
 
+    /**
+     * Get Comment
+     * @return Comment
+     */
+    public function getComment() {
+    
+    	return $this->comment;
+    }
+    
     public function getCreatedAt() {
         
         return $this->created_at;
@@ -296,6 +326,7 @@ class Sticker {
         if($this->user) return $this->user->getId();
         if($this->notice) return $this->notice->getId();
         if($this->review) return $this->review->getId();
+        if($this->comment) return $this->comment->getId();
         
         return NULL;
     }
@@ -305,6 +336,7 @@ class Sticker {
         if($this->user) return 'user';
         if($this->notice) return 'notice';
         if($this->review) return 'review';
+        if($this->comment) return 'comment';
         return '';
     }
     
@@ -313,5 +345,3 @@ class Sticker {
         $this->discarded_at = new \DateTime();
     }
 }
-
-?>

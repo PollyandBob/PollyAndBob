@@ -65,7 +65,7 @@ class UserAboutSettingsType extends AbstractType
 
     public function getName()
     {
-        return 'fenchy_regularuserbundle_userbasicsettingstype';
+        return 'fenchy_regularuserbundle_useraboutsettingstype';
     }
     
     public function getParent ()

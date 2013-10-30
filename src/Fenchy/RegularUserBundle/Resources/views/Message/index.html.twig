@@ -6,64 +6,183 @@
     <script type="text/javascript" src="{{ asset('js/underscore-min.js') }}"></script>
     <script type="text/javascript" src="{{asset('js/regular_user/messages/loader.js')}}"></script>
 {% endblock %}
-    
+ 
 {% block message_content %}
+<script type="text/javascript">
 
-                        <div class="highlight-toolbar clearfix">
-                            <div class="msg-links">                                                                
-                                <a href="#" id="messages-delete" style="text-decoration: underline; color:#000;" title="{{'regularuser.message.delete_selected'|trans}}"><span>{{ 'regularuser.delete'|trans }}</span></a>
-                            </div>
-                            <div class="toolbar-item button select-button grey-button pull-right">
-                                <strong>{{ 'regularuser.message.show_dd'|trans }}:</strong>
-                                <div class="select-wrapper">
-                                    <span class="replacement">
-                                        <strong class="select-value">{{('regularuser.'~type)|trans}}</strong>
-                                        <i id="sortby-dropdown-icon" class="icon-caret-down" ></i>
-                                        <div class="drop-down">
-                                            <div>                                                                
-                                                <i class="icon-ok"></i>                                                                
-                                                <span>1</span>
-                                            </div>
-                                            <div>                                                                
-                                                <i class="icon-ok"></i>                                                                
-                                                <span>2</span>
-                                            </div>
-                                        </div>
-                                    </span>
-                                    <select class="custom-form message_type" id="messageType">
-                                        <option value="all">{{ 'regularuser.all'|trans }}</option>
-                                        <option value="unread">{{ 'regularuser.unread'|trans }}</option>
-                                        <option value="unreplied">{{ 'regularuser.unreplied'|trans }}</option>
-                                        <option value="sent">{{ 'regularuser.sent'|trans }}</option>
-                                    </select>
-                                </div>                                
-                            </div>                                                            
-                        </div>
-                        <div class="message-center-content clearfix">
-                            <form action="{{path('fenchy_regular_user_messages_delete_selected')}}" method="POST" id="messages-list-form">
-                                <table id="messages-list">
-                                    <tbody>
-                                        {% if messages %}
-                                            {% for message in messages %}
-                                                <tr {% if not message.read %}class="new"{% endif %}>
-                                                    <td><input class='message-check' rel='{{message.id}}' type="checkbox" name="message[{{message.id}}]"/></td>
-                                                    <td><a href="#"><i class=""></i></a></td>
-                                                    <td><span class="image-container vsmall-avatar"><img src="{{ asset(message.sender.regularuser.avatar) }}" /></span></td>
-                                                    <td class="table-sender">{{ message.system ? 'Fenchy' : message.sender.userregular.firstname }}</td>
-                                                    <td class="table-subject"><a href="{{ path('fenchy_regular_user_messages_view', {'id': message.id}) }}"{% if message.unread and message.receiver == app.user %} class="unread"{% endif %}>{{ message.title }}</a></td>
-                                                    <td><i class=""></i></td>
-                                                    <td>{{ message.createdAt|relative }}</td>
-                                                </tr>                                            
-                                            {% endfor %}
-                                        {% else %}
-                                        <tr id="no-messages">
-                                            <td colspan="6">{{'regularuser.message.no_messages'|trans}}</td>
-                                        </tr>
-                                        {% endif %}
-                                    </tbody>
-                                </table>
-                            </form>                           
-                        </div>
+function sendMsg()
+		{
+			var flag = true;
+			var title = $('#MsgTitle').val();
+			var content = $('#MsgContent').val();
+			//alert(title + content);
+			
+			if(title == "" || content == "")
+			{
+				flag = false;
+				$('#MsgTitle').attr('placeholder', 'required*');
+				$('#MsgContent').attr('placeholder', 'required*');
+			}
+			var receiver = $('#select_receiver').val();
+			
+			if(flag)
+			{	
+				var url = "{{path('fenchy_regular_user_sendmsgform')}}";
+				$.ajax({
+					url : url,
+					type : "post",
+					data : {
+						'receiverId': receiver,				
+						'title': title,
+						'content': content,										
+						},
+					beforeSend : function() {
+						
+					},
+					success : function(response) {
+						$('#successDialog2').click();
+					},
+					error : function() {
+						alert('Something went wrong!');
+					},
+					complete : function() {
+						$('#MsgTitle').val('');
+						$('#MsgContent').val('');					
+					}
+				}); 
+			}		
+		}
+</script>   
+			<div class="message">
+				<div class="left">
+                	<a href="#" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>
+                    <div class="clearfix"></div>
+                    <div class="messagedetail">
+                    	{% if messages %}
+                          {% for message in messages %}
+	                    	<a href="{{ path('fenchy_regular_user_messages_view', {'id': message.id}) }}" {% if not message.read %} {% if message.receiver != app.user %} class="message-read" {% else %} class="message-unread" {% endif %} {% endif %}>
+	                    	<div {% if message.read %}class="message-read"{% endif %}>
+	                            <div class="profilei">
+                          			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
+                          		</div>
+	                            {% if message.receiver != app.user %}
+	                            <img class="read_arrow" src="{{ asset('images/message-arrow1.png') }}" alt="" />
+	                            {% elseif message.receiver == app.user %}
+	                            <img class="read_arrow" src="{{ asset('images/message-arrow2.png') }}" alt="" />
+	                            {% endif %}
+	                            <p>{{ message.sender.userregular.firstname }}</p>
+	                            <p>{{ message.title }}</p>
+	                        </div>
+	                        </a>
+	                    	
+                    	 {% endfor %}
+                      {% else %}
+                         	{{'regularuser.message.no_messages'|trans}}</td>
+                      {% endif %}
+                    </div>
+                <div class="bgbottom"><img alt="" src="{{ asset('images/bgbottom_leftpart.png') }}"></div>
+                </div>
+                
+                <div class="right">
+{#                     <img class="personimage" src="{{ asset('images/person.png') }}" alt="" />#}
+{#                     <p class="name">gregory</p>#}
+{#                     <div class="clearfix"></div>#}
+{#                     <p class="message-all">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>#}
+                    
+			     	<p>{{ 'regularuser.write_msg_to'|trans }} 
+			     	
+			     	<select name="select_receiver" id="select_receiver">
+			     	{% if messagesToNeighbors %}
+			     		{% for messagesToNeighbor in messagesToNeighbors %}
+			     			<option value="{{ messagesToNeighbor.id }}">{{ messagesToNeighbor.regularuser.firstname }} {{ messagesToNeighbor.regularuser.lastname }}</option>
+			     		{% endfor %}
+			     	{% else %}
+			     	<option>No neighbors</option>
+			     	{% endif %}
+			     	</select>
+			     	</p>
+			     	
+			     	<br>
+			     	<br>
+					<input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}"/>
+					<br>
+					<textarea id="MsgContent" style="padding: 5px;" placeholder="{{ 'message.content'|trans }}"></textarea>
+					
+					<input class="blue_button" type="button" id="continue" value="{{ 'btn.send'|trans }}" onclick="sendMsg();"/>
+                    
+                    <div class="bgbottom_right"><img src="images/bgbottom_contantinner.png" alt="" /></div>
+                </div>
+            </div>
+            
+     <a id="successDialog2" href="#dialog35" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+            
+            <section id="boxes2">
+				<div id="dialog35" class="window">
+				   	<div class="big_popup">
+				      	<div class="big_popupclose"><a href="" class="close"></a></div>
+						<div id="messageForm">
+							<p>{{ 'regularuser.msg_send'|trans }}</p>
+						</div>
+					</div>
+				</div>
+				<div id="mask"></div>
+			</section>
+
+{#                         <div class="highlight-toolbar clearfix">#}
+{#                             <div class="msg-links">                                                                #}
+{#                                 <a href="#" id="messages-delete" style="text-decoration: underline; color:#000;" title="{{'regularuser.message.delete_selected'|trans}}"><span>{{ 'regularuser.delete'|trans }}</span></a>#}
+{#                             </div>#}
+{#                             <div class="toolbar-item button select-button grey-button pull-right">#}
+{#                                 <strong>{{ 'regularuser.message.show_dd'|trans }}:</strong>#}
+{#                                 <div class="select-wrapper">#}
+{#                                     <span class="replacement">#}
+{#                                         <strong class="select-value">{{('regularuser.'~type)|trans}}</strong>#}
+{#                                         <i id="sortby-dropdown-icon" class="icon-caret-down" ></i>#}
+{#                                         <div class="drop-down">#}
+{#                                             <div>                                                                #}
+{#                                                 <i class="icon-ok"></i>                                                                #}
+{#                                                 <span>1</span>#}
+{#                                             </div>#}
+{#                                             <div>                                                                #}
+{#                                                 <i class="icon-ok"></i>                                                                #}
+{#                                                 <span>2</span>#}
+{#                                             </div>#}
+{#                                         </div>#}
+{#                                     </span>#}
+{#                                     <select class="custom-form message_type" id="messageType">#}
+{#                                         <option value="all">{{ 'regularuser.all'|trans }}</option>#}
+{#                                         <option value="unread">{{ 'regularuser.unread'|trans }}</option>#}
+{#                                         <option value="unreplied">{{ 'regularuser.unreplied'|trans }}</option>#}
+{#                                         <option value="sent">{{ 'regularuser.sent'|trans }}</option>#}
+{#                                     </select>#}
+{#                                 </div>                                #}
+{#                             </div>                                                            #}
+{#                         </div>#}
+{#                         <div class="message-center-content clearfix">#}
+{#                             <form action="{{path('fenchy_regular_user_messages_delete_selected')}}" method="POST" id="messages-list-form">#}
+{#                                 <table id="messages-list">#}
+{#                                     <tbody>#}
+{#                                         {% if messages %}#}
+{#                                             {% for message in messages %}#}
+{#                                                 <tr {% if not message.read %}class="new"{% endif %}>#}
+{#                                                     <td><input class='message-check' rel='{{message.id}}' type="checkbox" name="message[{{message.id}}]"/></td>#}
+{#                                                     <td><a href="#"><i class=""></i></a></td>#}
+{#                                                     <td><span class="image-container vsmall-avatar"><img src="{{ asset(message.sender.regularuser.avatar) }}" /></span></td>#}
+{#                                                     <td class="table-sender">{{ message.system ? 'Fenchy' : message.sender.userregular.firstname }}</td>#}
+{#                                                     <td class="table-subject"><a href="{{ path('fenchy_regular_user_messages_view', {'id': message.id}) }}"{% if message.unread and message.receiver == app.user %} class="unread"{% endif %}>{{ message.title }}</a></td>#}
+{#                                                     <td><i class=""></i></td>#}
+{#                                                     <td>{{ message.createdAt|relative }}</td>#}
+{#                                                 </tr>                                            #}
+{#                                             {% endfor %}#}
+{#                                         {% else %}#}
+{#                                         <tr id="no-messages">#}
+{#                                             <td colspan="6">{{'regularuser.message.no_messages'|trans}}</td>#}
+{#                                         </tr>#}
+{#                                         {% endif %}#}
+{#                                     </tbody>#}
+{#                                 </table>#}
+{#                             </form>                           #}
+{#                         </div>#}
                     
 
 <script id="msg-row" type="text/template">

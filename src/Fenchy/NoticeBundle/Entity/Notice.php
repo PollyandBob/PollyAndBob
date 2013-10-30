@@ -13,6 +13,8 @@ use Fenchy\UserBundle\Entity\User,
 use Gedmo\Mapping\Annotation as Gedmo; // gedmo annotations
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Time;
+use JMS\SecurityExtraBundle\Security\Util\String;
 
 /**
  * @ORM\Table(name="notice__notices")
@@ -133,17 +135,112 @@ class Notice
      * @var DateTime
      * 
      * @ORM\Column(type="datetime", nullable=true)
-     * @Assert\NotBlank
+     * 
      */
-    private $start_date;    
+    private $start_date;   
+
+     /**
+     * @var Time
+     *
+     * @ORM\Column(type="time", nullable=true)
+     * 
+     */
+    private $start_time;
     
     /**
      * @var DateTime
      * 
      * @ORM\Column(type="datetime", nullable=true)
-     * @Assert\NotBlank
+     * 
      */
     private $end_date;     
+    
+    /**
+     * @var Time
+     *
+     * @ORM\Column(type="time", nullable=true)
+     * 
+     */
+    private $end_time;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $date_arrange = false;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $end_date_arrange = false;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $start_time_arrange = false;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $end_time_arrange = false;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $location_arrange = false;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $pieces;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $one_piece = false;
+    
+    /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $currency;
+    
+    /**
+     * @var decimal
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
+     */
+    private $price;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $free = false;
+    
+    /**
+     * @var spot
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $spot;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $unlimited = false;    
+
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $default_setting = false;
     
     /**
      * @ORM\OneToMany(targetEntity="FacebookFeed", mappedBy="notice", cascade={"remove"})
@@ -179,6 +276,22 @@ class Notice
     private $reviews;
     
     /**
+     * @var ArrayCollection $request
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Request", mappedBy="aboutNotice")
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $requests;
+    
+    /**
+     * @var ArrayCollection $comments
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Comment", mappedBy="aboutNotice")
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $comments;
+    
+    /**
      * @var boolean
      * @ORM\Column(type="boolean", nullable=true)
      */
@@ -208,6 +321,8 @@ class Notice
         //$this->end_date     = new \DateTime();
         $this->stickers     = new ArrayCollection();
         $this->reviews      = new ArrayCollection();
+        $this->requests      = new ArrayCollection();
+        $this->comments      = new ArrayCollection();
         $this->gallery      = new Gallery();
         $this->gallery->setNotice($this);
         $this->dictionaries = new ArrayCollection();
@@ -306,15 +421,7 @@ class Notice
     public function getStartDateDate() {
         return '???';
         return $this->start_at ? $this->start_at->format('d.m.y') : '';
-    }
-    
-    /**
-     * @return string
-     */
-    public function getStartTime() {
-        return '???';
-        return $this->start_at ? $this->start_at->format('H:i') : '';
-    }
+    }  
     
     /**
      * @return Type
@@ -771,11 +878,49 @@ class Notice
         return $this;
     }
     
+    /**
+     * Set Requests
+     * @param \Doctrine\Common\Collections\ArrayCollection $request
+     * @return \Fenchy\NoticeBundle\Entity\Notice
+     */
+    public function setRequests(ArrayCollection $requests) {
+    
+    	$this->requests = $requests;
+    
+    	return $this;
+    }
+    
+    /**
+     * Set Comment
+     * @param \Doctrine\Common\Collections\ArrayCollection $comments
+     * @return \Fenchy\NoticeBundle\Entity\Notice
+     */
+    public function setComments(ArrayCollection $comments) {
+    
+    	$this->comments = $comments;
+    
+    	return $this;
+    }
+    
     public function addReview(Review $review) {
         
         $this->reviews->add($review);
         
         return $this;
+    }
+    
+    public function addRequest(Request $request) {
+    
+    	$this->requests->add($request);
+    
+    	return $this;
+    }
+    
+    public function addComment(Comment $comment) {
+    
+    	$this->comments->add($comment);
+    
+    	return $this;
     }
     
     public function removeReview(Review $review) {
@@ -785,9 +930,33 @@ class Notice
         return $this;
     }
     
+    public function removeRequest(Request $request) {
+    
+    	$this->requests->removeElement($request);
+    
+    	return $this;
+    }
+    
+    public function removeComment(Comment $comment) {
+    
+    	$this->comments->removeElement($comment);
+    
+    	return $this;
+    }
+    
     public function getReviews() {
 
         return $this->reviews;
+    }
+    
+    public function getRequests() {
+    
+    	return $this->requests;
+    }
+    
+    public function getComments() {
+    
+    	return $this->comments;
     }
     
     public function toJsonArray() {
@@ -919,5 +1088,387 @@ class Notice
         foreach($this->reviews as $review) $review->unsetAboutNotice();
         
         return $this;
+    }
+    
+    public function releaseRequests() {
+    
+    	foreach($this->requests as $request) $request->unsetAboutNotice();
+    
+    	return $this;
+    }
+    
+    public function releaseComments() {
+    
+    	foreach($this->comments as $comment) $comment->unsetAboutNotice();
+    
+    	return $this;
+    }
+
+    /**
+     * Set date_arrange
+     *
+     * @param boolean $dateArrange
+     * @return Notice
+     */
+    public function setDateArrange($dateArrange)
+    {
+        $this->date_arrange = $dateArrange;
+    
+        return $this;
+    }
+
+    /**
+     * Get date_arrange
+     *
+     * @return boolean 
+     */
+    public function getDateArrange()
+    {
+        return $this->date_arrange;
+    }
+
+    /**
+     * Set start_time_arrange
+     *
+     * @param boolean $startTimeArrange
+     * @return Notice
+     */
+    public function setStartTimeArrange($startTimeArrange)
+    {
+        $this->start_time_arrange = $startTimeArrange;
+    
+        return $this;
+    }
+
+    /**
+     * Get start_time_arrange
+     *
+     * @return boolean 
+     */
+    public function getStartTimeArrange()
+    {
+        return $this->start_time_arrange;
+    }
+
+    /**
+     * Set location_arrange
+     *
+     * @param boolean $locationArrange
+     * @return Notice
+     */
+    public function setLocationArrange($locationArrange)
+    {
+        $this->location_arrange = $locationArrange;
+    
+        return $this;
+    }
+
+    /**
+     * Get location_arrange
+     *
+     * @return boolean 
+     */
+    public function getLocationArrange()
+    {
+        return $this->location_arrange;
+    }
+
+    /**
+     * Set end_time_arrange
+     *
+     * @param boolean $endTimeArrange
+     * @return Notice
+     */
+    public function setEndTimeArrange($endTimeArrange)
+    {
+        $this->end_time_arrange = $endTimeArrange;
+    
+        return $this;
+    }
+
+    /**
+     * Get end_time_arrange
+     *
+     * @return boolean 
+     */
+    public function getEndTimeArrange()
+    {
+        return $this->end_time_arrange;
+    }
+
+    /**
+     * Add dictionaries
+     *
+     * @param Fenchy\NoticeBundle\Entity\Dictionary $dictionaries
+     * @return Notice
+     */
+    public function addDictionarie(\Fenchy\NoticeBundle\Entity\Dictionary $dictionaries)
+    {
+        $this->dictionaries[] = $dictionaries;
+    
+        return $this;
+    }
+
+    /**
+     * Remove dictionaries
+     *
+     * @param Fenchy\NoticeBundle\Entity\Dictionary $dictionaries
+     */
+    public function removeDictionarie(\Fenchy\NoticeBundle\Entity\Dictionary $dictionaries)
+    {
+        $this->dictionaries->removeElement($dictionaries);
+    }
+
+    /**
+     * Set start_time
+     *
+     * @param \DateTime $startTime
+     * @return Notice
+     */
+    public function setStartTime($startTime)
+    {
+        $this->start_time = $startTime;
+    
+        return $this;
+    }
+
+    /**
+     * Get start_time
+     *
+     * @return \DateTime 
+     */
+    public function getStartTime()
+    {
+        return $this->start_time;
+    }
+
+    /**
+     * Set end_time
+     *
+     * @param \DateTime $endTime
+     * @return Notice
+     */
+    public function setEndTime($endTime)
+    {
+        $this->end_time = $endTime;
+    
+        return $this;
+    }
+
+    /**
+     * Get end_time
+     *
+     * @return \DateTime 
+     */
+    public function getEndTime()
+    {
+        return $this->end_time;
+    }
+
+    /**
+     * Set pieces
+     *
+     * @param integer $pieces
+     * @return Notice
+     */
+    public function setPieces($pieces)
+    {
+        $this->pieces = $pieces;
+    
+        return $this;
+    }
+
+    /**
+     * Get pieces
+     *
+     * @return integer 
+     */
+    public function getPieces()
+    {
+        return $this->pieces;
+    }
+
+    /**
+     * Set one_piece
+     *
+     * @param boolean $onePiece
+     * @return Notice
+     */
+    public function setOnePiece($onePiece)
+    {
+        $this->one_piece = $onePiece;
+    
+        return $this;
+    }
+
+    /**
+     * Get one_piece
+     *
+     * @return boolean 
+     */
+    public function getOnePiece()
+    {
+        return $this->one_piece;
+    }
+
+    /**
+     * Set currency
+     *
+     * @param string $currency
+     * @return Notice
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+    
+        return $this;
+    }
+
+    /**
+     * Get currency
+     *
+     * @return string 
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * Set price
+     *
+     * @param float $price
+     * @return Notice
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    
+        return $this;
+    }
+
+    /**
+     * Get price
+     *
+     * @return float 
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * Set free
+     *
+     * @param boolean $free
+     * @return Notice
+     */
+    public function setFree($free)
+    {
+        $this->free = $free;
+    
+        return $this;
+    }
+
+    /**
+     * Get free
+     *
+     * @return boolean 
+     */
+    public function getFree()
+    {
+        return $this->free;
+    }   
+
+    /**
+     * Set unlimited
+     *
+     * @param boolean $unlimited
+     * @return Notice
+     */
+    public function setUnlimited($unlimited)
+    {
+        $this->unlimited = $unlimited;
+    
+        return $this;
+    }
+
+    /**
+     * Get unlimited
+     *
+     * @return boolean 
+     */
+    public function getUnlimited()
+    {
+        return $this->unlimited;
+    }
+
+    /**
+     * Set spot
+     *
+     * @param integer $spot
+     * @return Notice
+     */
+    public function setSpot($spot)
+    {
+        $this->spot = $spot;
+    
+        return $this;
+    }
+
+    /**
+     * Get spot
+     *
+     * @return integer 
+     */
+    public function getSpot()
+    {
+        return $this->spot;
+    }
+
+    /**
+     * Set end_date_arrange
+     *
+     * @param boolean $endDateArrange
+     * @return Notice
+     */
+    public function setEndDateArrange($endDateArrange)
+    {
+        $this->end_date_arrange = $endDateArrange;
+    
+        return $this;
+    }
+
+    /**
+     * Get end_date_arrange
+     *
+     * @return boolean 
+     */
+    public function getEndDateArrange()
+    {
+        return $this->end_date_arrange;
+    }
+
+    /**
+     * Set default_setting
+     *
+     * @param boolean $defaultSetting
+     * @return Notice
+     */
+    public function setDefaultSetting($defaultSetting)
+    {
+        $this->default_setting = $defaultSetting;
+    
+        return $this;
+    }
+
+    /**
+     * Get default_setting
+     *
+     * @return boolean 
+     */
+    public function getDefaultSetting()
+    {
+        return $this->default_setting;
     }
 }

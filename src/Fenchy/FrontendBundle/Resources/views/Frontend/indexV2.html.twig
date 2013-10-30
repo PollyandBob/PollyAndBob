@@ -19,9 +19,10 @@
     <script type="text/javascript" src="{{ asset('js/mvvm/landing-page-view-model.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
     
-    
+   
     <script type="text/javascript">
 
+    
         var landingPageViewModel;
 
         $(document).ready(function() {
@@ -73,6 +74,16 @@
 	<section id="content">
 			<div id="eventslisting">
 			<a class="zoomthis" id="vzoom_1944" name="modal" href="#dialog1"></a>
+			{% if flag %}
+				<script type="text/javascript">   		
+		    	  var flag = '{{ flag }}';		    	  
+		          	if ( flag == 'login' )
+		          	{		          	
+		          		$('.loginwindow').show();
+		          		$('#WrongPass').show();
+					}	    
+				</script>
+			{% endif %}
 			{% if notices %}
                 {% for notice in notices %}
 			<div class="event">
@@ -97,7 +108,7 @@
 		  			   img.src = url;
 		  			   var newsrc = $(url).attr('src');
 		  			   newsrc=newsrc.replace('square_l','medium');
-					   $(url).attr('src',newsrc);	   
+					   $(url).attr('src',newsrc);   
 		  			 }
 		  		</script>
           {% endif %}
@@ -194,8 +205,38 @@
             <a id="slide10" class="ten" href="#"><b>10</b>{{ 'frontend.slider.access.name'|trans }}</a>       		
         </section>
     <!-- main -->
-    
-
+    <a id="LocationPopup" href="#dialog50" name="modal" id="vzoom_1944" class="zoomthis whatcan" style="display: none;"></a>
+		<section id="boxes2">
+            <div id="dialog50" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close2"></a></div>
+                    <!-- Your custom code here -->
+                    <p>{{ 'main.we_need_your_location'|trans }}</p>
+                    <div class="clearfix"></div>                 
+                   
+                    
+                     
+	   				
+                    <form name="">
+                    	<input type="text" />
+                    	<input type="text" />
+                        <input type="button" id="save_loc_id" class="aboutpnb" value="Save" />
+                    </form>
+                    <br>
+                    <br>
+                    <br>
+                    <p style="color: #51B9D4;" id="save_msg_id">{{ 'main.save_location_form_msg'|trans }}</p>
+                    <div class="clearfix"></div>
+                    <div class="map">
+		    			<div id="map_canvas"></div>
+		    		</div>
+                    <div class="clearfix"></div>
+                    <a href="#" class="btn_black">{{ 'main.back'|trans }}</a>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
     
 {% endblock %}
 

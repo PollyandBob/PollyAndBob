@@ -23,8 +23,5 @@ monolog:
 assetic:
     use_controller: true
 
-swiftmailer:
-    delivery_address: Fenchy@pgs-soft.com
-
 twig:
     debug: true

@@ -1,19 +1,14 @@
-{% extends '::baseV2.html.twig' %}
+{% extends '::baseV3.html.twig' %}
 {% form_theme form '::labelForm.html.twig' %}
 
 {% block stylesheets %}
     {{ parent() }}    
     <link rel="stylesheet" href="{{ asset('css/app/sidebar-v2.css') }}" type="text/css" />
 {% endblock %}
-
 {% block content %}
-<section class="main content-rtl">
-    <div id="main-container" class="wrapper-inner-content">
-        <div class="clearfix">            
+    		{% render 'FenchyRegularUserBundle:Myprofile:myAvatar' %}
+    		{% include 'FenchyRegularUserBundle:Settings:menuV2.html.twig' %}
             {% block settings_content %}{% endblock %}            
-        </div>
-    </div>    
-</section>
         
 {% endblock %}
 

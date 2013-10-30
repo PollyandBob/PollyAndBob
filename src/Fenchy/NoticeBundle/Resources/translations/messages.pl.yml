@@ -2,6 +2,10 @@ notice:
   title: Tytuł
 
   content: Zawartość
+  
+  add_cover: Add Cover Picture
+  
+  add_profile: Add Picture
 
   no_limit: bez limitu
 
@@ -15,19 +19,33 @@ notice:
     events: Wydarzenia
 
     others: Inne
+    
+    contact_me: Contact Me!
+    
+    propose_time_price: Propose a time and price
+    
+    reserve_spot: Reserve s spot (if free)
+    
+    take_part: Come and take part!
+    
+    buy: Buy
+    
+    buy_a_spot: Buy a spot
 
   subcategory:
     offer: Oferuję
 
     need: Potrzebuję
-
+    
+    to_sell: Sell it to you
+    
     to_swap: Na wymianę
 
     to_lend: Wypożyczenie
 
     to_use: Do użytku
 
-    to_give_away: Do oddania
+    to_give: Do oddania
 
     sports: Sportowe
 
@@ -38,9 +56,31 @@ notice:
     music: Muzyka
 
     other: Inne
+    
+    contact_me: Contact Me!
+    
+    propose_time_price: Propose a time and price
+    
+    reserve_spot: Reserve s spot (if free)
+    
+    take_part: Come and take part!
+    
+    buy: Buy
+    
+    buy_a_spot: Buy a spot
+    
+    propose_price: Propose a price
+    
+    borrow_bring: Borrow and bring back
+    
+    use_it: Use at my place
+    
+    swap_it: Make an offer to swap
+
+    take_free: Take it for free
 
   filter:
-    filters: Filtry
+    filters: YOUR SELECTED OPTIONS
 
     user: Użytkownik
 
@@ -71,11 +111,17 @@ notice:
 
       dist: Odległość
 
-      time: Czas
+      time: Czas  
+      
+    around_you: Around You
+    
+    when: When      
 
   x_listings: wpisów
 
   sort_by: Sortuj po
+
+  options_around_you: options around you
 
   similar_title: Podobne wpisy
 

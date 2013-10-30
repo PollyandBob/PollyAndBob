@@ -14,10 +14,22 @@
                 <link rel="stylesheet" href="{{ asset('css/app/header-v2.css') }}" type="text/css" />
                 <link rel="stylesheet" href="{{ asset('css/app/foot-v2.css') }}" type="text/css" />
                 <link rel="stylesheet" href="{{ asset('js/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" />
+                <!-- Add CSS -->
+			    <link rel="stylesheet" href="{{ absolute(asset('css/frontend/frontend/style.css')) }}" type="text/css" />
+			    <link rel="stylesheet" href="{{ absolute(asset('css/frontend/frontend/skin.css')) }}" type="text/css" />
+			    <link rel="stylesheet" href="{{ absolute(asset('css/frontend/frontend/popup.css')) }}" type="text/css" />
+			    <link rel="stylesheet" href="{{ absolute(asset('css/frontend/frontend/nivo-slider.css')) }}" type="text/css" />
+			    <!-- Add CSS -->
             {% endblock %}
             {% block javascripts %}
                 {# any view specific JS scripts for this view #}                
+                <!-- Add js by Jigs -->
+		   		<script type="text/javascript" src="{{ asset('js/jquery-popup.js') }}"></script>
+				<script type="text/javascript" src="{{ asset('js/popup.js') }}"></script>
+				<!-- Add js by Jigs -->
                 <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/jquery.nicescroll.js') }}"></script>
+                
                 <!--[if lt IE 9]>
                     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
                     <script type="text/javascript" src="{{ absolute(asset('js/respond.min.js')) }}"></script>		
@@ -56,7 +68,7 @@
     <body>
         <div id="page">            
                 {% block header %}
-                    {% include '::headerV2.html.twig' %}
+                    {% include '::headerV3.html.twig' %}
                 {% endblock %}
                 <div id="page-spacer"></div>
                 {% block body %}

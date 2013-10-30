@@ -20,16 +20,22 @@ class FrontendController extends Controller
     /* Temporary action for James to work on frontend marksup
      * in templates.
      */
-    public function indexV2Action()
+    public function indexV2Action($flag = NULL)
     {
-        
+        $request = $this->getRequest();
+        $get = $request->get('time');
         $noticeRepo = $this->getDoctrine()->getEntityManager()->getRepository('FenchyNoticeBundle:Notice');
         $notices = $noticeRepo->getDashboardNotices();
 
+        
+        
         return $this->render('FenchyFrontendBundle:Frontend:indexV2.html.twig',
             array(
                 'locale'=>$this->getRequest()->getLocale(),
-                'notices' => $notices
+                'notices' => $notices,
+            	'flag' => $flag,
+//             	'get' => $get,
+//             	'location' => false
                 )
         );
     }

@@ -1,0 +1,18 @@
+{# empty Twig template #}
+<style>
+.neighboursdetils img
+{
+	border-radius:50%;
+	-moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    -khtml-border-radius:50%;
+}
+</style>
+
+{% if usergroup %}
+	{% for user in usergroup %}
+		<li>
+			<a href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', { 'groupId' : user.id } ) }}" >{{ user.groupname }}</a>
+		</li>
+	{% endfor %}
+{% endif %}

@@ -8,6 +8,26 @@ main:
   privacy: Privacy
   imprint: Imprint
   languages: Languages
+  interested: Interested?
+  join_interest: Join your new neighborhood and stay updated!
+  about_pb: About Polly & Bob
+  what_can_i_do: What can i do on Polly & Bob?
+  first_blue_popup_desc: Polly & Bob is a neighborhood network on the internet. We want to change the way live together in the neighborhood. More together. More for each other. More offline.
+  take_time_enrich: Take the time. Enrich your life.
+  first_popup_link: Find out what Polly & Bob can do for you.
+  you_can_do: You can do a lot on Polly & Bob
+  find_something: Find Something
+  offer_some: Offer Something
+  in_neighborhood: in the neighborhood
+  to_neighborhood: to the neighborhood
+  find_neighbors: Find Neighbors!
+  connect_neighbors: Polly & Bob connects you to your neigborhood
+  you_need_chess: You need a chess player?
+  you_need_like: You need people like you?
+  you_need_people_xy: You want to meet people for xy?
+  we_need_your_location: We need your location to know where we should search.
+  save_location_form_msg: PollyAndBob comming soon.  Please sign up with our newsletter for latest updates and launch date
+  back: Back
 schema:
 # related to "db schema"  
   events: Events

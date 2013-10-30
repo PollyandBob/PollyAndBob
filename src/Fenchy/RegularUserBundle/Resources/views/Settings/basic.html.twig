@@ -46,24 +46,20 @@
                 'onImgClick' : gallery_edit.crop.takeImageToCrop
             })
         });
-        
+
+               
         $('#fenchy_regularuserbundle_userbasicsettingstype_languages').tagit({
             availableTags: {{ languages|json_encode|raw }},
             allowSpaces: true
         });
 
+        
+        
     });
     </script>
-    <section id="profile_left_menu" class="sidebar pull-left">
-        <div class="wrapper">
-            {% include 'FenchyRegularUserBundle:Settings:menuV2.html.twig' %}
-        </div>        
-    </section>
-    <section class="content pull-right">
-        <div class="profile_right_content inner-content">
-            <header><h1>{{ 'regularuser.settings'|trans }}</h1></header>
-            <form action="{{ path('fenchy_regular_user_settings_basic') }}" method="post" {{ form_enctype(form) }} class="form-settings general">
-
+    
+			<form action="{{ path('fenchy_regular_user_settings_basic') }}" method="post" {{ form_enctype(form) }} class="form-settings general">
+				<input type="hidden" value="1" name="profileimage">
                 <div class="form-box-wrapper">
                     <h2>{{ 'settings.general.name'|trans }}</h2>
 
@@ -94,29 +90,40 @@
                     </div>
                     <div class="row profile_picture">
                         <label>{{ 'settings.general.profile_photo'|trans }}</label>
-                        {{ block('galleryContainer') }}
+						    {% block galleryContainer %}
+						    <div id="gallery-edit-container" class="file-uploader"></div>
+						    
+						    <div style="display:none">
+						        <div id="crop-area">
+						            <img src="" id="target" alt="" />
+						            <table class="buttons-panel">
+						                <tbody>
+						                    <tr>
+						                        <td><button id="crop-cancel" class="button gray">{{ 'btn.cancel'|trans }}</button></td>
+						                        <td><button id="crop-submit" class="button green">{{ 'btn.ok'|trans }}</button></td>
+						                    </tr>
+						                </tbody>
+						            </table>
+						        </div>
+						    </div>
+						    
+						{% endblock %}
                     </div>
+                    
+                    
                     <div class="row input-wrapper textarea_content">
                         <div class="input-element">
                             {{ form_widget(form.aboutMe) }}
                         </div>
                     </div>                
-                    <div style="display:none;">{{ form_rest(form) }}</div>
-                    <footer class="clearfix">
-                        <div class="button grey-button pull-left" id="buttons">
-                            <a id="back" class="wrapper" href="{{path('fenchy_frontend_indexv2')}}">
-                                <strong>{{ 'btn.cancel'|trans }}</strong>
-                            </a>                            
+                    	<div style="display:none;">{{ form_rest(form) }}</div>
+                    
+                        <div class="clearfix">
+                                <input type="submit" id="continue" class="blue_button" style="float: right;margin-right: 17px;" value="{{ 'btn.save'|trans }}"/>                                
                         </div>
-                        <div class="button submit pull-right">
-                            <div>
-                                <input type="submit" id="continue" value="{{ 'btn.save'|trans }}"/>                                
-                            </div>
-                        </div>
-                    </footer>
+                    
                 </div>                                
             </form>
-        </div>
-    </section>
+    
     
 {% endblock %}

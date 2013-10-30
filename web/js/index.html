@@ -1,0 +1,792 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, maximum-scale=1.0,initial-scale=1.0">
+<title>Polly &amp; Bob</title>
+<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="css/popup.css" />
+<link rel="stylesheet" href="css/nivo-slider.css" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/skin.css" />
+
+<script type="text/javascript" src="js/jquery-popup.js"></script>
+<script type="text/javascript" src="js/popup.js"></script>
+<script type="text/javascript" src="js/jquery-latest.js"></script>
+<script type="text/javascript" src="js/jquery.nivo.slider.js"></script>
+<script type="text/javascript" src="js/jquery.jcarousel.js"></script>
+<script src="js/jquery.nicescroll.js"></script>
+<script src="js/default.js"></script>
+
+<script type="text/javascript">
+        $(window).load(function() {
+         $("#mycarousel").hide();
+      $('#slider1').nivoSlider();
+     });
+        var nice = false;
+        $(document).ready(function() {
+          nice = $(".eventcontent p").niceScroll();
+          nice = $("#mycarousel .carouselcontent p").niceScroll();
+        });
+        var obj = window;//$(window);
+     </script>
+     
+     <script type="text/javascript">
+     /**
+      * We use the initCallback callback
+      * to assign functionality to the controls
+      */
+     function mycarousel_initCallback(carousel) {
+         $('.jcarousel-control a').bind('click', function() {
+             carousel.scroll($.jcarousel.intval($(this).text()));
+             return false;
+         });
+     
+         $('.jcarousel-scroll select').bind('change', function() {
+             carousel.options.scroll = $.jcarousel.intval(this.options[this.selectedIndex].value);
+             return false;
+         });
+     
+         $('#mycarousel-next').bind('click', function() {
+             carousel.next();
+             currslid = carousel.last;
+             $('#bottomlink a').removeClass('selected');
+                $('#bottomlink a#slide'+currslid).addClass('selected');
+             return false;
+         });
+     
+         $('#mycarousel-prev').bind('click', function() {
+             carousel.prev();
+             currslid = carousel.last;
+             $('#bottomlink a').removeClass('selected');
+                $('#bottomlink a#slide'+currslid).addClass('selected');
+             return false;
+         });
+     };
+     
+     // Ride the carousel...
+     
+     $(document).ready(function() {
+      $("#mycarousel").jcarousel({
+             scroll: 1,
+             initCallback: mycarousel_initCallback,
+             // This tells jCarousel NOT to autobuild prev/next buttons
+             buttonNextHTML: null,
+             buttonPrevHTML: null
+         });
+     });
+     </script>
+     <script>
+     $(function() {
+         $('#bottomlink a').click(function() {
+              $('#eventslisting').hide();
+              $('#ascrail2000').hide();
+              $('#ascrail2000-hr').hide();
+              $('#ascrail2001').hide();
+              $('#ascrail2001-hr').hide();
+              $('#ascrail2002').hide();
+              $('#ascrail2002-hr').hide();
+              $('#ascrail2003').hide();
+              $('#ascrail2003-hr').hide();
+              
+              $("#mycarousel").show();
+                 $('#bottomlink a').removeClass('selected');
+                 $(this).addClass('selected');
+                 //$('a', this).addClass('selected');
+             
+               
+         });
+         
+         $('#save_msg_id').hide();
+		 $("#save_loc_id").click(function() {
+		    	 $('#save_msg_id').show();
+		 });
+     });
+     </script>
+
+</head>
+<body>
+    <div class="slider-wrapper theme-default">
+        <div id="slider1" class="nivoSlider">
+            <a class="homebanner1" href="#"></a>
+            <a class="homebanner2" href="#"></a>
+            <a class="homebanner3" href="#"></a>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div id="toplinks">
+			<div class="left">
+            	<a href="index.html"><img src="images/logo.png" width="61" alt="" /></a>
+            </div>
+            <div class="right">
+            	<ul>
+                	<li><a href="#dialog1" name="modal" id="vzoom_1944" class="zoomthis"><img src="images/icon_comingsoon.png" alt="" /></a></li>
+                    <li><a href="#dialog1" name="modal" id="vzoom_1944" class="zoomthis login">Login</a></li>
+                    <li><a href="#dialog1" name="modal" id="vzoom_1944" class="zoomthis signup">Signup</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="sidemenu">
+	    	<a class="zoomthis aboutpnb" id="vzoom_1944" name="modal" href="#dialog4">About Polly &amp; Bob</a><br>
+	    	<a class="zoomthis whatcan" id="vzoom_1944" name="modal" href="#dialog5">What can i do on Polly &amp; Bob?</a>
+	    </div>
+        <div class="clearfix"></div>
+        <section id="slidercontent">
+            <div class="text1">Take the time</div>
+            <a href="index.html"><img src="images/logo.png" alt="" /></a>
+            <div class="text2">Enrich your life!</div>
+            <div class="clearfix"></div>
+            <h2>Welcome to the new Neighborhood!</h2>
+            <div class="clearfix"></div>
+            <form name="">
+                <input name="" type="text" value="Search" onFocus="myFocus(this);" onBlur="myBlur(this);">
+                <input name="" type="text" value="Where" onFocus="myFocus(this);" onBlur="myBlur(this);" style="width:120px;">
+                <a href="#dialog1" name="modal" id="vzoom_1944" class="zoomthis"><button></button></a>
+            </form>
+        </section>
+        <div class="clearfix"></div>
+        <section id="content">
+            <div id="eventslisting">
+	            <div class="event">
+	                <a href="#"><img src="images/event1.png" alt="" /></a>
+	                <div class="eventcontent">
+	                    <h3>Book Swap Tea Party</h3>
+	                    <div class="clearfix"></div>
+	                    <div class="otherdetail">
+	                        <div class="left">100M</div>
+	                        <div class="right">08.09.2013</div>
+	                    </div>
+	                    <div class="clearfix"></div>
+	                    <p>We have a tea, everybody bring 2 books. We discuss and exchange, meet nice people, enjoy a laid back Sunday afternoon in changing places serving excellent teas. Go home with a new book.</p>
+	                </div>
+	            </div>
+	            <div class="event">
+	                <a href="#"><img src="images/event2.png" alt="" /></a>
+	                <div class="eventcontent">
+	                    <h3>New in town</h3>
+	                    <div class="clearfix"></div>
+	                    <div class="otherdetail">
+	                        <div class="left">300M</div>
+	                        <div class="right">23.08.2013</div>
+	                    </div>
+	                    <div class="clearfix"></div>
+	                    <p>New in Berlin? Join us to explore the city. Restaurants, clubs, streets, places. Hang out, walk around, have fun.</p>
+	                </div>
+	            </div>
+	            <div class="event">
+	                <a href="#"><img src="images/event3.png" alt="" /></a>
+	                <div class="eventcontent">
+	                    <h3>Monday Mothers Meetup</h3>
+	                    <div class="clearfix"></div>
+	                    <div class="otherdetail">
+	                        <div class="left">100M</div>
+	                        <div class="right"></div>
+	                    </div>
+	                    <div class="clearfix"></div>
+	                    <p>We are young mothers from Friedrichshain. We meet every Monday evening. Sometimes we organize babysitting and kids stuff. But generally we just like to hang out with other women from the hood, without men. </p>
+	                </div>
+	            </div>
+	        <div class="event nomargin">
+                <a href="#"><img src="images/event4.png" alt="" /></a>
+                <div class="eventcontent">
+                    <h3>Buy my old bike.</h3>
+                    <div class="clearfix"></div>
+                    <div class="otherdetail">
+                        <div class="left">100M</div>
+                        <div class="right">23.08.2013</div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <p>Always gave me a good ride. Have it for 200 €!</p>
+                </div>
+            </div>
+            </div>
+            <div id="mycarousel" class="jcarousel-skin-tango">
+                <ul>
+                  <li>
+                  	<div class="left"><img src="images/discover.png" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>Discover your Neighborhood.</h4>
+                        <p>Your neighborhood waits to be discovered. So many interesting people around you, that you don‘t know. So many fun things we could do together, if we would know. Easy help, so many goods and useful items we could use together, if we could do. Discover the opportunities.<br/><br/>Log on Polly &amp; Bob!</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="images/trust.png" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>Whom can we trust today? </h4>
+                        <p>What’s wrong with the world these days? So much fake, make up, stalking, fishing, spam, hidden traps and unwanted add ups to the bills. To make collaborative consumption happen, we have to rely on: „oh, don’t worry. I bring your car back tomorrow!“ On Polly &amp; Bob we want to establish a culture of trust. We count contribution to the community in community points and we exclude trolls and abusers (the few that disturb the system).<br/><br/>Once we trust each other we can let go easier.</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="images/sharing.png" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>Sharing on Polly &amp; Bob.</h4>
+                        <p>Use what others have. Share what you have. „Who lends me his car for small money?“ „Who needs a babysitter tonight?“ „Who finishes the food I can’t eat before holydays?“ Swap, sell, share, give, hire, rent, take, use stuff around you. Hire or offer talents and services in the neighborhood.<br/><br/>Polly &amp; Bob brings good people together.</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="images/new-neighborhood.png" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>Welcome to the New Neighborhood.</h4>
+                        <p>The new neighborhood we want to form is bringing people together in real life. The new neighborhood is open minded, sharing and connected by individual initiatives. It is slow. The new neighborhood is changing the world without going on the barricades. The new neighborhood is a place where trust can grow. This will take same time and affords. Let us start it today.<br/><br/>A new neighborhood is a place where I can belong to.</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="images/our-neighborhood.png" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>Polly &amp; Bob is a shared platform.</h4>
+                        <p>Take part and take your part. The users create the value of the platform. The profits shall be shared between us also. Budgets shall be redirected to our neighborhoods, the place where profits appear. Everybody can buy his share of the company and take part in the decision making. Polly &amp; Bob is the first social network which is owned by its users.<br/><br/>Buy your share of 50 € and contact volker@pollyandbob.com now!</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="images/smalldata.png" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>Small data is not watching you.</h4>
+                        <p>Big Data is centralized data. Centralized information that can be abused to control and spam everybody with centralized information, and advertisement. Polly &amp; Bob aims to be small data as much as possible. Data should be on local servers. You own your data. We don‘t encourage to post private pictures which are meant only to friends. Small data is stored locally not accessible centrally.<br/><br/>Our data belongs to us.</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="images/community.png" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>Create your own community.</h4>
+                        <p>Polly &amp; Bob is a new way of living together with the people around you. It is not the muggy and airless neighborhood we know. The New Neighborhood community doesn’t have bureaucracy and fixed structures. It is fresh air and individualized. Everybody can start something, everybody can join. Everybody creates his own crowd and community around him. Polly &amp; Bob communities are not bound to political districts. Individual communities overlap and form a new connectiveness in the local area. It is individual but not individualized. Nobody stays separate.<br/><br/>Start by adding neighbors to you MyNeighbors list. </p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="images/reallife.png" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>What is the human being about?</h4>
+                        <p>Eyes can only meet in real life. On Polly &amp; Bob we do clickclickclick and touch-screentouch. But we do it in order to get together offline. We say: ‘Take the time. Enrich your life', because we believe the human condition is about to meet and spend time with other people. We know it is easier to sit on a couch and watch. But we know also that it is much more rewarding to meet in Real life.<br/><br/>Real life is what life really is about.</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="images/fun.png" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>What‘s up around me?</h4>
+                        <p>Where is something going on now? Who is free for having a coffee? Who joins in for the football match tonight? Who wants to explore the city together? Who organizes exciting stuff on the weekend? Who is having dinner with me today?<br/><br/>Fun, around me, any time. Find it on Polly &amp; Bob.</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="images/access.png" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>So much stuff unused.</h4>
+                        <p>Millions of cars are standing in the streets. So much stuff collects dust in the junk room, self storages and even living rooms of our world. Why not use it? Why do we have to own it? Everything we need is access. The 21st century will see a dramatic change in the way we consume. The economy will turn from a possession economy to an access economy. We can organize this on Polly &amp; Bob.<br/><br/>Own less, have more. It’s access stupid!</p>
+                    </div>
+                  </li>
+                </ul>
+            <a href="#" id="mycarousel-prev"><img src="images/icon_arrowleft.png" alt="" /></a>
+            <a href="#" id="mycarousel-next"><img src="images/icon_arrowright.png" alt="" /></a>
+             </div>
+        </section>
+        <section class="jcarousel-control" id="bottomlink">
+            <a href="#" class="first" id="slide1"><b>1</b>Discovery</a>
+            <a href="#" class="second" id="slide2"><b>2</b>Trust</a>         
+            <a href="#" class="third" id="slide3"><b>3</b>Sharing</a>
+            <a href="#" class="four" id="slide4"><b>4</b>New Neighborhood</a>         
+            <a href="#" class="five" id="slide5"><b>5</b>Our Neighborhood</a>
+            <a href="#" class="six" id="slide6"><b>6</b>Small Data</a>         
+            <a href="#" class="seven" id="slide7"><b>7</b>Community</a>
+            <a href="#" class="eight" id="slide8"><b>8</b>Real Life</a>         
+            <a href="#" class="nine" id="slide9"><b>9</b>Fun</a>
+            <a href="#" class="ten" id="slide10"><b>10</b>Access</a>         
+        </section>
+        <div class="clearfix"></div>
+	</div>
+    <footer>
+    	<div class="wrapper">
+            <ul>
+                <li><a target="_blank" href="http://www.blog.pollyandbob.com">Blog</a></li>            
+                <li><a target="_blank" href="http://blog.pollyandbob.com/story/">The Story of Polly &amp; Bob</a></li>
+                <li><a target="_blank" href="http://blog.pollyandbob.com/what-we-want/">What we want</a></li>
+                <li><a target="_blank" href="http://blog.pollyandbob.com//get-shares/">Get shares of Polly &amp; Bob</a></li>
+                <li><a target="_blank" href="http://blog.pollyandbob.com/first-crowd/">First Crowd</a></li>
+                <li><a target="_blank" href="http://blog.pollyandbob.com/about/">About</a></li>
+                <li><a target="_blank" href="http://blog.pollyandbob.com/imprint/">Imprint</a></li>
+                <li><a target="_blank" class="nomargin" href="https://www.facebook.com/pages/PollyBob/180213475475729?fref=ts"><img src="images/btn_fblike.png" alt="" /></a></li>
+            </ul>
+       </div>
+    </footer>
+    	<!-- Begin MailChimp Signup Form -->
+        <style>
+        
+		#mce-error-response {
+		    color: red;
+		    font-family: code_boldregular;
+		    font-size: 13px;
+		    letter-spacing: 1px;
+		    padding-bottom: 0;
+		}
+        
+		#mce-success-response {
+		    color: #51B9D4;
+		    font-family: code_boldregular;
+		    font-size: 13px;
+		    letter-spacing: 1px;
+		}
+        </style>
+        <section id="boxes2">
+        <div id="dialog1" class="window"> 
+			<div class="big_popup">
+                <div class="big_popupclose"><a href="" class="close"></a></div>
+                <!-- Your custom code here -->
+                <div class="title">Interested?</div>
+                <div class="clearfix"></div>
+                <p>Join your new neighborhood and stay updated!</p>
+                <div id="mc_embed_signup">
+                <div class="response" id="mce-error-response" style="display:none;"></div>
+        		<div class="response" id="mce-success-response" style="display:none;"></div>
+                <form action="http://pollyandbob.us7.list-manage1.com/subscribe/post?u=43c83103fae20f39b4d0d5878&amp;id=cfd1046153" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                	<input type="email" value="Your E-mail" name="EMAIL" onFocus="myFocus(this);" onBlur="myBlur(this);" id="mce-EMAIL">
+                	<input type="submit" value="" name="subscribe" id="mc-embedded-subscribe" class="">
+                </form>
+                </div>
+                <!-- Your custom code end -->
+			</div>
+        </div>
+        <div id="mask"></div>
+    	</section>
+        
+        
+        <section id="boxes2">
+            <div id="dialog4" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close"></a></div>
+                    <!-- Your custom code here -->
+                    <a href="#" class="aboutpnb">About Polly &amp; Bob</a>
+                    <div class="clearfix"></div>
+                    <p>Polly &amp; Bob is a neighborhood network on the internet. We want to change the way live together in the neighborhood. More together. More for each other. More offline.<br><br>Take the time. Enrich your life.</p>
+                    <a href="#dialog5" name="modal" id="vzoom_1944" class="zoomthis whatcan">Find out what Polly &amp; Bob can do for you.</a>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+                <section id="boxes2">
+            <div id="dialog5" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close"></a></div>
+                    <!-- Your custom code here -->
+                    <a href="#" class="whatcan">You can do a lot on Polly &amp; Bob</a>
+                    <div class="clearfix"></div>
+                    <div class="candolot">
+                        <div class="left">
+                            <h4>Find Something<br><span>in the neighborhood</span></h4>
+                            <div class="clearfix"></div>
+                            <a href="#dialog6" name="modal" id="vzoom_1944" class="zoomthis">Neighbors</a>
+                            <a href="#dialog11" name="modal" id="vzoom_1944" class="zoomthis">Groups</a>
+                            <a href="#dialog12" name="modal" id="vzoom_1944" class="zoomthis">Help</a>
+                            <a href="#dialog13" name="modal" id="vzoom_1944" class="zoomthis">Goods</a>
+                            <a href="#dialog14" name="modal" id="vzoom_1944" class="zoomthis">Service</a>
+                            <a href="#dialog15" name="modal" id="vzoom_1944" class="zoomthis">Events</a>
+                            <a href="#dialog16" name="modal" id="vzoom_1944" class="zoomthis">Something Else</a>
+                        </div>                        
+                        <div class="right">
+                            <h4>Offer Something<br><span>to the neighborhood</span></h4>
+                            <div class="clearfix"></div>
+                            <a href="#">Groups</a>
+                            <a href="#">Yourself</a>
+                            <a href="#">Goods</a>
+                            <a href="#">Help</a>
+                            <a href="#">Events</a>
+                            <a href="#">Service</a>
+                            <a href="#">Something Else</a>
+                        </div>                        
+                    </div>
+                    <div class="clearfix"></div>
+                    <p class="left">Polly &amp; Bob connects you to your neigborhood</p>
+                    <p class="right">Take the time. Enrich your life.</p>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+        <section id="boxes2">
+            <div id="dialog6" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close1"></a></div>
+                    <!-- Your custom code here -->
+                    <div class="innerpopups">
+                        <h4>Find Neighbors!</h4>
+                        <div class="clearfix"></div>
+                        <p class="">You need a chess player?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You need people like you?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You want to meet people for xy?</p>
+                        <div class="clearfix"></div>
+                        <a href="#dialog7" name="modal" id="vzoom_1944" class="zoomthis whatcan">Make a Listing</a>
+                        <div class="clearfix"></div>
+                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                    </div>
+<!--                    
+                    <form name="">
+                    	<input type="text" />
+                        <a href="#dialog7" name="modal" id="vzoom_1944" class="zoomthis"><input type="submit" value="" /></a>
+                    </form>
+                    
+-->                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+        <section id="boxes2">
+            <div id="dialog11" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close1"></a></div>
+                    <!-- Your custom code here -->
+                    <div class="innerpopups">
+                        <h4>Find Groups!</h4>
+                        <div class="clearfix"></div>
+                        <p class="">You need a running group?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You want to meet people regularly to a certain topic?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You want to discuss local political stuff with neighbors?</p>
+                        <div class="clearfix"></div>
+                        <a href="#dialog7" name="modal" id="vzoom_1944" class="zoomthis whatcan">Make a Listing</a>
+                        <div class="clearfix"></div>
+                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                    </div>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+        <section id="boxes2">
+            <div id="dialog12" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close1"></a></div>
+                    <!-- Your custom code here -->
+                    <div class="innerpopups">
+                        <h4>Find Help!</h4>
+                        <div class="clearfix"></div>
+                        <p class="">You need a help to solve your computer problem?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You want to point your corrider and need a helping hand?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You someone to sit your dog?</p>
+                        <div class="clearfix"></div>
+                        <a href="#dialog7" name="modal" id="vzoom_1944" class="zoomthis whatcan">Make a Listing</a>
+                        <div class="clearfix"></div>
+                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                    </div>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+        <section id="boxes2">
+            <div id="dialog13" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close1"></a></div>
+                    <!-- Your custom code here -->
+                    <div class="innerpopups">
+                        <h4>Find Goods!</h4>
+                        <div class="clearfix"></div>
+                        <p class="">You need a certain CD?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You need a car for the weekend?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You need a certain tool?</p>
+                        <div class="clearfix"></div>
+                        <a href="#dialog7" name="modal" id="vzoom_1944" class="zoomthis whatcan">Make a Listing</a>
+                        <div class="clearfix"></div>
+                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                    </div>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+        <section id="boxes2">
+            <div id="dialog14" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close1"></a></div>
+                    <!-- Your custom code here -->
+                    <div class="innerpopups">
+                        <h4>Find Services!</h4>
+                        <div class="clearfix"></div>
+                        <p class="">You need a reliable babysitter for tonight?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You need some guys for your move for small money?</p>
+                        <div class="clearfix"></div>
+                        <p class="">You need any service and want something reliable person from the neighborhood?</p>
+                        <div class="clearfix"></div>
+                        <a href="#dialog7" name="modal" id="vzoom_1944" class="zoomthis whatcan">Make a Listing</a>
+                        <div class="clearfix"></div>
+                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                    </div>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+        <section id="boxes2">
+            <div id="dialog7" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close2"></a></div>
+                    <!-- Your custom code here -->
+                    <p>We need your location to know where we should search.</p>
+                    <div class="clearfix"></div>
+                    <form name="">
+                    	<input type="text" />
+                    	<input type="text" />
+                        <input type="button" id="save_loc_id" class="aboutpnb" value="Save" />
+                    </form>
+                    <br>
+                    <br>
+                    <br>
+                    
+                    <p id="save_msg_id" style="color: rgb(81, 185, 212); display: none;">PollyAndBob comming soon.  Please sign up with our newsletter for latest updates and launch date</p>
+                    <div class="clearfix"></div>
+                    <div class="map">
+                    	<img src="images/map.png" width="800" alt="" />
+                    </div>
+                    <div class="clearfix"></div>
+                    <a href="#" class="btn_black">Back</a>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+        <section id="boxes2">
+            <div id="dialog10" class="window"> 
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close"></a></div>
+                    <!-- Your custom code here -->
+                    <div class="title">Sign Up</div>
+                    <div class="clearfix"></div>
+                    <form name="">
+                    	<input type="text" value="First Name" onBlur="myBlur(this);" onFocus="myFocus(this);" />
+                    	<input type="text" value="Email" onBlur="myBlur(this);" onFocus="myFocus(this);" />
+                    	<input type="text" value="Password" onBlur="myBlur(this);" onFocus="myFocus(this);" />
+                    	<input type="text" value="Repeat Password" onBlur="myBlur(this);" onFocus="myFocus(this);" />
+                        <input type="submit" class="blue_button" value="Sign Up" />
+                    </form>
+                    <!-- Your custom code end -->
+                </div>
+            </div>
+            <div id="mask"></div>
+    	</section>
+        
+<!-- 
+<div id="mc_embed_signup">
+<form action="http://pollyandbob.us7.list-manage1.com/subscribe/post?u=43c83103fae20f39b4d0d5878&amp;id=cfd1046153" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+
+<div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+<div class="mc-field-group">
+    <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+</label>
+    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+</div>
+<a href="#" id="mc_embed_close" class="mc_embed_close">Close</a>    <div id="mce-responses" class="clear">
+        <div class="response" id="mce-error-response" style="display:none"></div>
+        <div class="response" id="mce-success-response" style="display:none"></div>
+    </div>    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</form>
+</div>
+ -->
+<script type="text/javascript">
+var fnames = new Array();var ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';
+try {
+    var jqueryLoaded=jQuery;
+    jqueryLoaded=true;
+} catch(err) {
+    var jqueryLoaded=false;
+}
+var head= document.getElementsByTagName('head')[0];
+if (!jqueryLoaded) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js';
+    head.appendChild(script);
+    if (script.readyState && script.onload!==null){
+        script.onreadystatechange= function () {
+              if (this.readyState == 'complete') mce_preload_check();
+        }
+    }
+}
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
+head.appendChild(script);
+var err_style = '';
+try{
+    err_style = mc_custom_error_style;
+} catch(e){
+    err_style = '#mc_embed_signup input.mce_inline_error{border-color:#6B0505;} #mc_embed_signup div.mce_inline_error{margin: 0 0 1em 0; padding: 5px 10px; background-color:#6B0505; font-weight: bold; z-index: 1; color:#fff;}';
+}
+var head= document.getElementsByTagName('head')[0];
+var style= document.createElement('style');
+style.type= 'text/css';
+if (style.styleSheet) {
+  style.styleSheet.cssText = err_style;
+} else {
+  style.appendChild(document.createTextNode(err_style));
+}
+head.appendChild(style);
+setTimeout('mce_preload_check();', 250);
+
+var mce_preload_checks = 0;
+function mce_preload_check(){
+    if (mce_preload_checks>40) return;
+    mce_preload_checks++;
+    try {
+        var jqueryLoaded=jQuery;
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    try {
+        var validatorLoaded=jQuery("#fake-form").validate({});
+    } catch(err) {
+        setTimeout('mce_preload_check();', 250);
+        return;
+    }
+    mce_init_form();
+}
+function mce_init_form(){
+    jQuery(document).ready( function($) {
+      var options = { errorClass: 'mce_inline_error', errorElement: 'div', onkeyup: function(){}, onfocusout:function(){}, onblur:function(){}  };
+      var mce_validator = $("#mc-embedded-subscribe-form").validate(options);
+      $("#mc-embedded-subscribe-form").unbind('submit');//remove the validator so we can get into beforeSubmit on the ajaxform, which then calls the validator
+      options = { url: 'http://pollyandbob.us7.list-manage.com/subscribe/post-json?u=43c83103fae20f39b4d0d5878&id=cfd1046153&c=?', type: 'GET', dataType: 'json', contentType: "application/json; charset=utf-8",
+                    beforeSubmit: function(){
+                        $('#mce_tmp_error_msg').remove();
+                        $('.datefield','#mc_embed_signup').each(
+                            function(){
+                                var txt = 'filled';
+                                var fields = new Array();
+                                var i = 0;
+                                $(':text', this).each(
+                                    function(){
+                                        fields[i] = this;
+                                        i++;
+                                    });
+                                $(':hidden', this).each(
+                                    function(){
+                                        var bday = false;
+                                        if (fields.length == 2){
+                                            bday = true;
+                                            fields[2] = {'value':1970};//trick birthdays into having years
+                                        }
+                                        if ( fields[0].value=='MM' && fields[1].value=='DD' && (fields[2].value=='YYYY' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else if ( fields[0].value=='' && fields[1].value=='' && (fields[2].value=='' || (bday && fields[2].value==1970) ) ){
+                                            this.value = '';
+                                        } else {
+                                            if (/\[day\]/.test(fields[0].name)){
+                                                this.value = fields[1].value+'/'+fields[0].value+'/'+fields[2].value;
+                                            } else {
+                                                this.value = fields[0].value+'/'+fields[1].value+'/'+fields[2].value;
+                                            }
+                                        }
+                                    });
+                            });
+                        return mce_validator.form();
+                    },
+                    success: mce_success_cb
+                };
+      $('#mc-embedded-subscribe-form').ajaxForm(options);
+
+              $('#mc_embed_signup').hide();
+        cks = document.cookie.split( ';' );
+        var show=true;
+        for(i=0;i<cks.length;i++){
+            parts = cks[i].split('=');
+            if( parts[0].indexOf('MCEvilPopupClosed')!= -1 ) show = false;
+        }
+        if (show){
+            $('#mc_embed_signup a.mc_embed_close').show();
+            setTimeout( function(){ $('#mc_embed_signup').fadeIn();} , 2000);
+            $('#mc_embed_signup a.mc_embed_close').click(function(){ mcEvilPopupClose();});
+        }
+
+        $(document).keydown(function(e){
+            if (e == null) {
+              keycode = event.keyCode;
+            } else {
+              keycode = e.which;
+            }
+            if(keycode == 27){
+                mcEvilPopupClose();
+            }
+        });
+
+        function mcEvilPopupClose(){
+            $('#mc_embed_signup').hide();
+            var now = new Date();
+            var expires_date = new Date( now.getTime() + 31536000000 );
+            document.cookie = 'MCEvilPopupClosed=yes;expires=' + expires_date.toGMTString()+';path=/';
+        }
+
+    });
+}
+function mce_success_cb(resp){
+    $('#mce-success-response').hide();
+    $('#mce-error-response').hide();
+    if (resp.result=="success"){
+        $('#mce-'+resp.result+'-response').show();
+        $('#mce-'+resp.result+'-response').html(resp.msg);
+        $('#mc-embedded-subscribe-form').each(function(){
+            this.reset();
+        });
+    } else {
+        var index = -1;
+        var msg;
+        try {
+            var parts = resp.msg.split(' - ',2);
+            if (parts[1]==undefined){
+                msg = resp.msg;
+            } else {
+                i = parseInt(parts[0]);
+                if (i.toString() == parts[0]){
+                    index = parts[0];
+                    msg = parts[1];
+                } else {
+                    index = -1;
+                    msg = resp.msg;
+                }
+            }
+        } catch(e){
+            index = -1;
+            msg = resp.msg;
+        }
+        try{
+            if (index== -1){
+                $('#mce-'+resp.result+'-response').show();
+$('#mce-'+resp.result+'-response').html(msg);
+            } else {
+                err_id = 'mce_tmp_error_msg';
+                html = '<div id="'+err_id+'" style="'+err_style+'"> '+msg+'</div>';
+
+                var input_id = '#mc_embed_signup';
+                var f = $(input_id);
+                if (ftypes[index]=='address'){
+                    input_id = '#mce-'+fnames[index]+'-addr1';
+                    f = $(input_id).parent().parent().get(0);
+                } else if (ftypes[index]=='date'){
+                    input_id = '#mce-'+fnames[index]+'-month';
+                    f = $(input_id).parent().parent().get(0);
+                } else {
+                    input_id = '#mce-'+fnames[index];
+                    f = $().parent(input_id).get(0);
+                }
+                if (f){
+                    $(f).append(html);
+                    $(input_id).focus();
+                } else {
+                    $('#mce-'+resp.result+'-response').show();
+                    $('#mce-'+resp.result+'-response').html(msg);
+                }
+            }
+        } catch(e){
+            $('#mce-'+resp.result+'-response').show();
+            $('#mce-'+resp.result+'-response').html(msg);
+        }
+    }
+}
+
+</script>
+<!--End mc_embed_signup--> 
+</body>
+</html>

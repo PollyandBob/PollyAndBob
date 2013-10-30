@@ -24,22 +24,31 @@ class WidgetsController extends Controller {
         //user's full name
         $name = $user_regular->getFirstName() . " " . $user_regular->getLastName();
        
-        //count reviews
-        $rev_repo = $this->getDoctrine()->getEntityManager()->getRepository("FenchyNoticeBundle:Review");
+        //count requests
+        $req_repo = $this->getDoctrine()->getEntityManager()->getRepository("FenchyNoticeBundle:Request");
         
         if($user instanceof \Fenchy\UserBundle\Entity\User) {
-            $rev_count = $rev_repo->countUnreadUsersReviews($user);
+            $req_count = $req_repo->countUnreadUsersRequests($user);
+            $my_req_count = $req_repo->countUnreadUsersStatusRequests($user);
         } else {
-            $rev_count = 0;
+            $req_count = 0;
         }
         
-        $rev_count = $rev_count>99?99:$rev_count;
+        $req_count = $req_count>99?99:$req_count;
         
+        $alertmsg =  true;
+        
+        if($user->getActivity() < 400 )
+        {
+        	$alertmsg =  false;
+        }
         
         return $this->render("UserBundle:Widgets:userPanel.html.twig", array(
             'name' => $name,
             'thumb' => $user_regular->getAvatar(),
-            'rev_unread_count' => $rev_count
+            'req_unread_count' => $req_count,
+        	'my_req_count' =>$my_req_count,
+        	'alertmsg' =>  $alertmsg,
         ));
     }
     

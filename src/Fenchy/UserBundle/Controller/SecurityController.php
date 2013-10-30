@@ -60,8 +60,8 @@ class SecurityController extends Base
             'error'         => $error,
             'csrf_token' => $csrfToken,
         );   
-        
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Security:login_extended.html.twig', $data);
+        return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2', array('flag' => 'login' )));
+        //return $this->container->get('templating')->renderResponse('FOSUserBundle:Security:login_extended.html.twig', $data);
         
     }
     

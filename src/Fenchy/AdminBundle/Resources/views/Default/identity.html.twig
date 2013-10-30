@@ -1,0 +1,61 @@
+{% extends 'FenchyAdminBundle::layout.html.twig' %}
+{% form_theme filter '::filterForm.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $().ready(function () {
+            $('.identity-status').click(function() {
+                var id = $(this).attr('rel');
+                var status = $('td.identity-status[rel="'+id+'"]').text();               
+                $.ajax({
+                    type:     'POST',
+                    dataType: 'json',
+                    data:     { 'id' : id, 
+                        		'status': status},
+                    url: "{{ path('fenchy_admin_identity_switch') }}",
+                    success: function (result) {
+                        if (result !== false) {
+                            if (result.status === 'Verified') {
+                                $('td.identity-status[rel="'+result.id+'"]').text('Verified');
+                            } else if (result.status === 'Requested') {
+                                $('td.identity-status[rel="'+result.id+'"]').text('Requested');
+                            }
+                        } else {
+                            alert(result);
+                        }
+                    },
+                    errors: function (result) {
+                        alert(result);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block admincontent %}
+    <form action="{{ path('fenchy_admin_identity') }}" method="post" {{ form_enctype(filter) }}>
+        {{ form_widget(filter) }}
+        <br/>
+        <input type="submit" value="Search"/>
+    </form>
+    <table class="admin-table">
+        <thead>
+            <tr><th>ID</th><th>User Id</th><th>User Name</th><th>Status</th><th>Created At</th></tr>
+        </thead>
+        <tbody>
+        {% if identities %}
+           {% for identity in identities %}
+                <tr>
+                    <td>#{{ identity.id }}</td>
+                    <td>{{ identity.user.id }}</td>
+                    <td>{{ identity.username }}</td>
+                    <td class="identity-status switch" rel="{{identity.id}}" id="status">{{ identity.status }}</td>
+                    <td>{{ identity.createdAt|date('Y-m-d H:i') }}</td>
+                 </tr>
+           {% endfor %}
+         {% endif %}
+        </tbody>
+    </table>
+{% endblock %}
+    

@@ -1,4 +1,4 @@
-{% extends '::baseV2.html.twig' %}
+{% extends '::baseV3.html.twig' %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -63,7 +63,7 @@
 {% endblock %}
     
 {% block galleryContainer %}
-    <div id="gallery-edit-container" class="file-uploader"></div>
+    <div class="file-uploader"></div>
     {% if galleryType == 'small' %}
     <div style="display:none">
         <div id="crop-area">

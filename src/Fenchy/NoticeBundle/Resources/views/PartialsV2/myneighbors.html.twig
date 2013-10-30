@@ -1,0 +1,18 @@
+{# empty Twig template #}
+<style>
+.neighboursdetils img
+{
+	border-radius:50%;
+	-moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    -khtml-border-radius:50%;
+}
+</style>
+
+{% if users2 %}
+	{% for user in users2 %}
+		<a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice') }}/{{ user.id }}"><img width="50" height="50" src="/{{ user.twitterusername }}" alt="{{ user.email }}" /></a>
+	{% endfor %}
+{% else %}
+	    <div id="no_neighbours_onload" ><h4>{{ 'regularuser.message.no_neighbors'|trans }}</h4></div>
+{% endif %}

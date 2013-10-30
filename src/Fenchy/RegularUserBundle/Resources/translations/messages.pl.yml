@@ -12,6 +12,14 @@ regularuser:
   positive: Pozytywny
 
   negative: Negatywny
+      
+  open: Open
+  
+  closed: Closed
+  
+  you_are_member: YOU ARE A MEMBER
+
+  you_are_admin: YOU ARE ADMINISTRATOR
 
   all_trust_points: Zdobyte punkty zaufania:
 
@@ -20,6 +28,10 @@ regularuser:
   disable_connect: Wyłącz możliwość łaczenia się z podstron
 
   no_contacts: Nie masz żadnych kontaktów. Połącz się z Facebookiem lub Twitterem, aby zaprosić swoich znajomych.
+  
+  only_community_Neighborhood_manager: Only Community Manager or Neighborhood Manager Create this group
+  
+  added_neighbor_success: This Neighbor Successfully added to My Neighbors
 
   references: Referencje
 
@@ -89,7 +101,7 @@ regularuser:
     show_dd: 
 
     message_center: 
-
+    
   save: Zapisz
 
   cancel: Anuluj
@@ -102,6 +114,8 @@ regularuser:
 
   show: Pokaż
 
+  change: hasło
+  
   about_me: O mnie
   
   my_community_ponts: MY COMMUNITY POINTS
@@ -159,7 +173,18 @@ regularuser:
   become_shareholder_now: BECOME SHAREHOLDER NOW!
   verify_your_location_now: VERIFY YOUR LOCATION NOW!
   verify_your_passport_now: VERYFY YOUR PASSPORT NOW!
-  
+  verify_this_location: VERIFY THIS LOCATION!
+  back: back
+  ok: ok
+  continue: publish
+  verify_location_message: A poscard has been sent to your address. Please follow the instructions in order to verify your location.
+  verified_location_message: Your location is already verified.
+  verify_identity_message: Press Ok and submit your identity verification request. Admin will verify this and update your status as soon as possible.
+  verified_identity_message: Your identity verified.
+  verifing_identity_message: Your identity verification request is submitted. Please wait until admin verify it.
+  enter_password: ENTER PASSWORD
+  location_verification: LOCATION VERIFICATION
+  change_email: CHANGE EMAIL
   neighbours: Sąsiedzi
 
   disconnect_twitter: Odłącz od Twittera
@@ -419,17 +444,42 @@ emailchange:
     11: Zespół Fenchy
 
     5: Aby anulować zmianę adresu e-mail prosimy klinąć poniższy link:
-help: Usługi / Pomoc
-goods: Towary
-events: Wydarzenia
-others: Inne
+help: Help
+need_help: Need Help
+goods: Goods
+events: Event
+_events: Events
+others: Something Else
+_others: others
+neighbours: Neighbours
+service: Service
+demand_service: Demand Service
+groups: Groups
+offerhelp: Help
+offer_help: Offer Help
+offergoods: Goods
+need_goods: Need Goods
+offer_goods: Offer Goods
+offerevents: Event
+offerothers: Something Else
+offer_others: others
+offerservice: Service
+offer_service: Offer Service
+offergroups: Groups
 help_prefix: ''
 goods_prefix: ''
 events_prefix: ''
 others_prefix: ''
-offer: Oferuję
-need: Potrzebuję
+offer: Offer
+need: Needed
+find_help: Find help in the Neighbour
+find: Find
+ask_for: Ask for
+
 listing:
+  my_listing: MY LISTINGS
+  my_request: MY REQUESTS
+  request: REQUESTS
   create:
     title: Utwórz swój wpis
 
@@ -442,16 +492,52 @@ listing:
       subtitle: Wybierz kategorię
 
       description: Wybierz kategorię która najlepiej określa Twój wpis
+      
+      find_something : Find something
+      in_neighbourhood: in the Neighbourhood
+      
+      offer_something : Offer something
+      to_neighbourhood: to the Neighbourhood
+      
+      event_to_neighbour: Event to the Neighbourhood
+      
+      something_else: I want to do something else
 
     2:
       subtitle: Na temat
 
       description: Powiedz nam więcej na temat Twojego wpisu
 
-    start_date: 
+    date_arrange: Date has to arranged
+    
+    start_date: Start Date
 
-    end_date: 
+    end_date: End Date
+    
+    end_time: End Time
 
+    start_time_arrange: Time has to be arranged
+    
+    end_time_arrange: Time has to be arranged
+    
+    location_arrange: Location to be arranged 
+
+    pieces: Pieces
+    
+    one_piece: Only 1 piece
+    
+    price_piece: Price/piece
+    
+    price_hour: Price/hour
+    
+    price_spot: Price/spot
+    
+    spots: Spots free
+    
+    unlimeted: Unlimeted 
+    
+    currency: Currency
+    
   show:
     tags: tagi
 

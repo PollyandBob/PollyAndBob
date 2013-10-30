@@ -7,11 +7,17 @@ $(document).ready(function() {
     }
 
     $('form.listing-form').submit(function() {
-
+    	
         var res = false;
-
+               
+        if ($('#fenchy_noticebundle_noticetype_location_arrange').is(':checked'))
+        {
+        	submitForm();
+            return;
+        }        
+        else {
         if ($('#location_gapi').is('input')) {
-
+        	
             if (!landingPageViewModel.fcGLat() || !landingPageViewModel.fcGLng() || !landingPageViewModel.fcGFormattedAddress()) {
 
                 var ajaxgif = $('<span />').attr('class', 'ajaxgif').append($('<img />').attr('src', '/images/ajaxgif.gif').attr('alt', '')).appendTo($('#location_gapi').parent());
@@ -27,13 +33,14 @@ $(document).ready(function() {
                         $(ajaxgif).remove();
                         submitForm();
                         return;
+                        res = true;
 
                     } else {
                         $('#location_gapi').val('');
                         res = false;
 
                         //TODO: display error location etc.
-                        alert('Location is invalid !');
+                        alert('Location is invalid ! Either select checkbox or enter right location.');
 
                         $(ajaxgif).remove();
                         $(submitBtn).removeAttr('disabled');
@@ -52,7 +59,8 @@ $(document).ready(function() {
         } else {
             res = true;
         }
-
+        }
+        
         return res;
 
     });

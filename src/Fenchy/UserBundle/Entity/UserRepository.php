@@ -86,7 +86,7 @@ class UserRepository extends EntityRepository
                 ->leftJoin('s.reported_by', 'su');
         }
         
-        return $query
+        return $query->orderBy('u.id','DESC')
                 ->getQuery()
                 ->getResult();
     }

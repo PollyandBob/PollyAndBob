@@ -332,7 +332,7 @@ fenchy_regular_user_notice_edit:
 fenchy_regular_user_settings_basic:
     pattern: /settings
     defaults: { _controller: FenchyRegularUserBundle:Settings:basic }
-    
+   
 fenchy_regular_user_settings_location:
     pattern: /settings/location
     defaults: { _controller: FenchyRegularUserBundle:Settings:location }
@@ -340,6 +340,14 @@ fenchy_regular_user_settings_location:
 fenchy_regular_user_settings_account:
     pattern: /settings/account
     defaults: { _controller: FenchyRegularUserBundle:Settings:account }
+    
+fenchy_regular_user_settings_image:
+    pattern: /settings/image
+    defaults: { _controller: FenchyRegularUserBundle:Settings:image }
+    
+fenchy_regular_user_settings_payment:
+    pattern: /settings/payment/{noticeType}
+    defaults: { _controller: FenchyRegularUserBundle:Settings:payment, noticeType: null }
     
 fenchy_regular_user_settings_deleteaccount:
     pattern: /settings/account/delete-account
@@ -377,13 +385,13 @@ fenchy_regular_user_listing_delete:
         id: \d+
 
 fenchy_regular_user_listing_delete_confirm:
-    pattern:  /listing/delete-confirm/{id}
+    pattern:  /listing/delete-confirm
     defaults: { _controller: FenchyRegularUserBundle:Listing:deleteConfirm }
-    requirements:
-        id: \d+
+    requirements:        
         _method: POST
 
 # version 2.1
+# For Myprofile
 
 fenchy_regular_user_user_myprofile_main:
     pattern: /myprofile/{userId}
@@ -404,3 +412,144 @@ fenchy_regular_user_user_myprofile_mycommunitypoints:
 fenchy_regular_user_user_myprofile_myneighbors:
     pattern: /myneighbors
     defaults: { _controller: FenchyRegularUserBundle:Myprofile:myNeighbors }
+
+fenchy_regular_user_user_myprofile_myneighborsdst:
+    pattern: /myneighbors/dst={id}
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:myNeighborsDst, id: null }
+
+fenchy_regular_user_user_myprofile_myneighborsdstdst:
+    pattern: /myneighbors/dst/dst={id}
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:myNeighborsDstDst, id: null }
+
+fenchy_regular_user_user_myprofile_verifylocation:
+    pattern: /verifylocation
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:verifyLocation }
+
+fenchy_regular_user_user_myprofile_locationverification:
+    pattern: /locationverification
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:locationVerification }
+
+fenchy_regular_user_user_myprofile_identityVerification:
+    pattern: /identityverification
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:identityVerification }
+
+fenchy_regular_user_user_myprofile_filterusers:
+    pattern: /filterusers
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:filterusers }
+
+# For Other profile
+
+fenchy_regular_user_user_otherprofile_aboutotherchoice:
+    pattern: /aboutotherchoice/{userId}
+    defaults: { _controller: FenchyRegularUserBundle:Otherprofile:aboutOtherChoice, userId: null }
+
+fenchy_regular_user_user_otherprofile_otherlistingsreviews:
+    pattern: /otherlistingsreviews/{userId}
+    defaults: { _controller: FenchyRegularUserBundle:Otherprofile:otherListingsReviews, userId: null }
+
+fenchy_regular_user_user_otherprofile_othercommunitypoints:
+    pattern: /othercommunitypoints/{userId}
+    defaults: { _controller: FenchyRegularUserBundle:Otherprofile:otherCommunityPoints, userId: null }
+
+fenchy_regular_user_user_otherprofile_otherneighbors:
+    pattern: /otherneighbors/{userId}
+    defaults: { _controller: FenchyRegularUserBundle:Otherprofile:otherNeighbors, userId: null }
+ 
+fenchy_regular_user_user_otherprofile_otherfilterusers:
+    pattern: /otherfilterusers/{userId}
+    defaults: { _controller: FenchyRegularUserBundle:Otherprofile:otherFilterUsers, userId: null }
+    
+fenchy_regular_user_user_otherprofile_addneighbors:
+    pattern: /addneighbors
+    defaults: { _controller: FenchyRegularUserBundle:Otherprofile:addNeighbors }    
+
+# For Group profile    
+    
+fenchy_regular_user_user_groupprofile_groupsettings:
+    pattern: /groupsettings/{groupId}
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupSettings, groupId: null }
+    
+fenchy_regular_user_user_groupprofile_creategroup:
+    pattern: /creategroup
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:createGroup }
+    
+fenchy_regular_user_user_groupprofile_groupinfo:
+    pattern: /groupinfo/{groupId}/
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupInfo, groupId: null}
+    
+fenchy_regular_user_user_groupprofile_groupmembers:
+    pattern: /groupmembers/{groupId}/
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupMembers, groupId: null}
+        
+fenchy_regular_user_user_groupprofile_groupmessages:
+    pattern: /groupmessages/{groupId}/
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupMessages, groupId: null}          
+
+
+#fenchy_regular_user_user_groupprofile_groupleftsidebar:
+#    pattern: /groupleftsidebar/{groupId}
+#    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupLeftSidebar, groupId: null}
+
+fenchy_regular_user_user_groupprofile_joingroup:
+    pattern: /joingroup/{groupId}/{msg}
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:joinGroup, groupId: null}
+    
+fenchy_regular_user_user_groupprofile_leavegroup:
+    pattern: /leavegroup/{groupId}/{msg}
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:leaveGroup, groupId: null}    
+    
+fenchy_regular_user_user_groupprofile_deletegroup:
+    pattern: /deletegroup/{groupId}
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:deleteGroup, groupId: null}
+    
+# Comment & Request & Reviews
+    
+fenchy_notice_post_comment:
+    pattern: /postcomment
+    defaults: { _controller: FenchyRegularUserBundle:Listing:postComment }
+
+fenchy_notice_write_review:
+    pattern: /writereview
+    defaults: { _controller: FenchyRegularUserBundle:Listing:writeReview }
+    
+fenchy_notice_send_reueqst:
+    pattern: /sendrequest
+    defaults: { _controller: FenchyRegularUserBundle:Listing:sendRequest }
+
+fenchy_regular_user_sendmsgform:
+    pattern: /sendmsgform
+    defaults: { _controller: FenchyRegularUserBundle:Message:sendMsgForm }
+    
+fenchy_regular_user_sendmsgtogroupform:
+    pattern: /sendmsgtogroupform
+    defaults: { _controller: FenchyRegularUserBundle:Message:sendMsgToGroupForm }    
+
+fenchy_regular_user_sendmessages:
+    pattern: /sendmessages/{prev_id}
+    defaults: { _controller: FenchyRegularUserBundle:Message:sendMessage, prev_id: null }
+    
+fenchy_regular_user_sendmessage_to:
+    pattern: /sendmessageto/{prev_id}
+    defaults: { _controller: FenchyRegularUserBundle:Message:sendMessageTo, prev_id: null }
+
+fenchy_regular_user_listing_requests:
+    pattern: /listing/requests
+    defaults: { _controller: FenchyRegularUserBundle:Listing:myRequests }
+
+fenchy_regular_user_listing_change_status:
+    pattern: /listing/changestatus
+    defaults: { _controller: FenchyRegularUserBundle:Listing:changeStatus }
+
+fenchy_regular_user_listing_markread:
+    pattern: /listing/read
+    defaults: { _controller: FenchyRegularUserBundle:Listing:markAsRead }
+    
+#payment settings
+
+fenchy_regular_user_settings_paymentsave:
+    pattern: /settings/paymentsave
+    defaults: { _controller: FenchyRegularUserBundle:Settings:savePaymentSetting }
+
+fenchy_regular_user_settings_paymentdelete:
+    pattern: /settings/paymentdelete
+    defaults: { _controller: FenchyRegularUserBundle:Settings:deletePaymentSetting }

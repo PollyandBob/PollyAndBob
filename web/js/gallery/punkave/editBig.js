@@ -27,7 +27,7 @@ var gallery_show = {
         
         var result = [];
         
-        for(var index = 0; index < $data.length; index++) {
+        for(var index = 0; index < $data.length; index++) {alert($data[index].big_source);
             $element = {};
             $element.content = '<div class="slide_inner">'+
                         '<a class="photo_link" href="#">'+

@@ -88,6 +88,14 @@ class Message
     private $sender;
     
     /**
+     * @var UserGroup
+     *
+     * @ORM\ManyToOne(targetEntity="Fenchy\RegularUserBundle\Entity\UserGroup", inversedBy="messages")
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
+     */
+    private $usergroup;
+    
+    /**
      * @var User
      * 
      * @ORM\ManyToOne(targetEntity="Fenchy\UserBundle\Entity\User")
@@ -312,6 +320,29 @@ class Message
     public function getSender()
     {
         return $this->sender;
+    }
+    
+    /**
+     * Set usergroup
+     *
+     * @param Fenchy\RegularUserBundle\Entity\UserGroup $usergroup
+     * @return Message
+     */
+    public function setUsergroup(\Fenchy\RegularUserBundle\Entity\UserGroup $usergroup)
+    {
+    	$this->usergroup = $usergroup;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get usergroup
+     *
+     * @return Fenchy\RegularUserBundle\Entity\UserGroup
+     */
+    public function getUsergroup()
+    {
+    	return $this->usergroup;
     }
 
     /**

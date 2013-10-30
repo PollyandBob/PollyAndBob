@@ -11,11 +11,58 @@
 	                <li><a href="http://blog.pollyandbob.com/first-crowd/" target="_blank">{{ 'frontend.footer.firstcrowd.title'|trans }}</a></li>
 	                <li><a href="http://blog.pollyandbob.com/about/" target="_blank">{{ 'frontend.footer.about.title'|trans }}</a></li>
 	                <li><a href="http://blog.pollyandbob.com/imprint/" target="_blank">{{ 'main.imprint'|trans }}</a></li>
-	            	<li><a target="_blank" class="nomargin" href="https://www.facebook.com/pages/PollyBob/180213475475729?fref=ts">
-	            	<img src="{{ asset ('images/btn_fblike.png') }}" alt=""></a></li>
-	            </ul>
+	            	<!--<li><a target="_blank" class="nomargin" href="https://www.facebook.com/pages/PollyBob/180213475475729?fref=ts">
+	            	<img src="{{ asset ('images/btn_fblike.png') }}" alt=""></a></li>-->
+	        	</ul>
+	        	
+	        	<div class="social-lang">
+                <ul>                                                    
+                    <li id="lang-menu" class="lang">                
+                        <ul class="clearfix">
+                            <li id="lang-menu-chosen">
+                                <a href="#" id="choose-lang">
+	                                <strong>
+	                                 	{% if app.request.locale == 'pl' %}
+	                                    	{{ 'frontend.polski'|trans}}
+	                                   	{% elseif app.request.locale == 'en' %}
+	                                    	{{ 'frontend.english'|trans}}
+	                                   	{% elseif app.request.locale == 'de' %}
+	                                    	{{ 'frontend.deutsch'|trans}}
+	                                   	{% endif %}                                               
+	                                </strong>                                        
+                              	</a>                                   
+                            </li>
+                        </ul>
+                    </li>                                    
+                </ul>
+                    
+                <div id="lang-menu-wrapper">
+                    <ul>
+                        {% if app.request.locale != 'en' %}
+                            <li class="en-flag">
+                                <a href="{{ path('fenchy_regular_user_chooselang', {'locale': 'en'}) }}"><strong>{{ 'frontend.english'|trans}}</strong></a>
+                            </li>
+                        {% endif %}
+                            
+                        {% if app.request.locale != 'de' %}                            
+                        <li class="de-flag">
+                            <a href="{{ path('fenchy_regular_user_chooselang', {'locale': 'de'}) }}"><strong>{{ 'frontend.deutsch'|trans}}</strong></a>
+                        </li>
+                        {% endif %}
+                        
+                        {% if app.request.locale != 'pl' %}                        
+                        <li class="pl-flag">
+                            <a href="{{ path('fenchy_regular_user_chooselang', {'locale': 'pl'}) }}"><strong>{{ 'frontend.polski'|trans}}</strong></a>
+                        </li>
+                        {% endif %}                        
+                        
+                    </ul>
+                </div>                    
+                    
+            </div>
 	        </div>
-           
+            
+       		      
 {#         <div class="container clearfix">#}
 {#             <nav class="main clearfix">#}
 {#                 <ul>#}
@@ -85,7 +132,7 @@
     {% if not app.user %}
     <div id="signup-wrapper" class="loginform">
         
-        {% render 'UserBundle:Registration:register' %}
+        
         
     </div>
     {% endif %}

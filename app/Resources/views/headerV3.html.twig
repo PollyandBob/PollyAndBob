@@ -4,33 +4,20 @@
             <div class="left">
                 <a href="{{path('fenchy_frontend_indexv2')}}"><img width="44" alt="Polly&Bob" src="{{ absolute(asset('images/logo.png')) }}"></a>
             </div>
-            
+            <div class="right">
             {% block tagline_content %}
       			{% include '::searchBarV3.html.twig' %}                          
 			{% endblock %}
             
             {% if not is_granted('ROLE_USER') %}
-                <ul id="user-account-login">                    
-                    <li id="user-account-login-login">
-                        <a href="#">
-                            <span>{{'frontend.sign_in'|trans}}
-                                <i class="icon-caret-down"></i>
-                                <i class="icon-caret-up"></i>
-                            </span>
-                            <!--[if IE 8]>
-                                <div class="before"></div>
-                                <div class="after"></div>
-                            <![endif]-->
-                        </a>                        
-                    </li>
-                    <li id="user-account-login-signup">
-                        <a href="#"><span>{{'frontend.sign_up'|trans}}</span></a>
-                    </li>
+                <ul class="normal_user">
+                	<li><a href="#dialog1" name="modal" id="vzoom_1944" class="zoomthis login">{{'frontend.sign_in'|trans}}</a></li>
+                    <li><a href="#dialog1" name="modal" id="vzoom_1944" class="zoomthis signup">{{'frontend.sign_up'|trans}}</a></li>
                 </ul>
                 {% else %}
                     {% render 'UserBundle:Widgets:userPanel' %}
                 {% endif %}
-            
+            </div>
             
         </section>
     </header>

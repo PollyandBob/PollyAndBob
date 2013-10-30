@@ -1,18 +1,25 @@
+<nav>
 <ul>
+	<!-- 
     <li {% if app.request.requestUri == path('fenchy_regular_user_settings_basic') %}class="active"{% endif %} >
-        <a href="{{ path('fenchy_regular_user_settings_basic') }}">{{ 'settings.general.name'|trans }}</a>
+        <a {% if app.request.requestUri == path('fenchy_regular_user_settings_basic') %}class="selected"{% endif %}  href="{{ path('fenchy_regular_user_settings_basic') }}">{{ 'settings.general.name'|trans }}</a>
     </li>
     <li {% if app.request.requestUri == path('fenchy_regular_user_settings_location') %}class="active"{% endif %} >
-        <a href="{{ path('fenchy_regular_user_settings_location') }}">{{ 'settings.location.name'|trans }}</a>
+        <a {% if app.request.requestUri == path('fenchy_regular_user_settings_location') %}class="selected"{% endif %}  href="{{ path('fenchy_regular_user_settings_location') }}">{{ 'settings.location.name'|trans }}</a>
     </li>    
     
     <li {% if app.request.requestUri == path('fenchy_regular_user_settings_notifications') %}class="active"{% endif %} >
-        <a href="{{ path('fenchy_regular_user_settings_notifications') }}">{{ 'settings.emailnotifications.name'|trans }}</a>
+        <a {% if app.request.requestUri == path('fenchy_regular_user_settings_notifications') %}class="paddingset selected"{% else %}class="paddingset"{% endif %} href="{{ path('fenchy_regular_user_settings_notifications') }}">{{ 'settings.emailnotifications.name'|trans }}</a>
     </li>     
     <li {% if app.request.requestUri == path('fenchy_regular_user_settings_socialnetworks') %}class="active"{% endif %} >
-        <a href="{{ path('fenchy_regular_user_settings_socialnetworks') }}">{{ 'settings.socialnetworks.name'|trans }}</a>
-    </li>     
+        <a {% if app.request.requestUri == path('fenchy_regular_user_settings_socialnetworks') %}class="selected"{% endif %}  href="{{ path('fenchy_regular_user_settings_socialnetworks') }}">{{ 'settings.socialnetworks.name'|trans }}</a>
+    </li> -->    
     <li {% if app.request.requestUri == path('fenchy_regular_user_settings_account') %}class="active"{% endif %} >
-        <a href="{{ path('fenchy_regular_user_settings_account') }}">{{ 'settings.account.name'|trans }}</a>
+        <a {% if app.request.requestUri == path('fenchy_regular_user_settings_account') %}class="selected"{% endif %}  href="{{ path('fenchy_regular_user_settings_account') }}">{{ 'settings.account.name'|trans }}</a>
+    </li>
+    
+    <li>
+        <a {% if app.request.requestUri == path('fenchy_regular_user_settings_payment') %}class="selected"{% endif %}  href="{{ path('fenchy_regular_user_settings_payment') }}" id="Active">{{ 'settings.account.payment'|trans }}</a>
     </li>      
 </ul>
+</nav>

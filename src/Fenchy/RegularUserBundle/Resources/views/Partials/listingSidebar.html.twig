@@ -1,37 +1,400 @@
+ <script type="text/javascript"> 
+	 $(document).ready(function() {	
+	     $("#offerprice").keydown(function(event) {
+	         if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+	            	return;
+	         } else {
+	             if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+	                 event.preventDefault();
+	             }
+	         }
+	     });
+	     $("#pieces").keydown(function(event) {
+	         if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+	            	return;
+	         } else {
+	             if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+	                 event.preventDefault();
+	             }
+	         }
+	     });
+	 }); 
+	 
+		function sendRequest()
+		{
+			var id = {{ notice.id }};
+			var request_text = $('#requestdata').val();
+			var item = $('#pieces').val();			
+			var price = $('#price').val();
+			var total = $('#total').val();
+			var currency = $('#cur option:selected').text();
+			var free = $('#freebox').is(':checked');
+			var offerprice = $('#offerprice').val();
+			var noticetype = '{{ notice.type }}';
+			//alert(request_text);
+			
+			var display = $('#proposeprice').css('display');
+			
+			var flag = true;
+			if(display == 'block')
+			{
+				if($('#freebox').is(':checked') && $('#offerprice').val()!="" )
+				{
+					alert('Give price or select the free.');
+					flag = false;
+				}
+				if(!$('#freebox').is(':checked') && $('#offerprice').val() =="" )
+				{
+					alert('Give price or select the free.');
+					flag = false;
+				}
+				if(!$('#freebox').is(':checked') && $('#offerprice').val() !="" )
+				{
+					if(currency == 'CURRENCY')
+					{
+						alert('Select currency');
+						flag = false;
+					}
+				}
+				if(noticetype !=  'service')
+				{
+					if(!$('#default_settings').is(':checked'))
+					{
+						alert('Check default payment settings');
+						flag = false;
+					}
+				}
+			}
+			if($('#requestdata').val() == "" || $('#requestdata').val() == '*REQUIRED')
+			{
+				$('#requestdata').val('*REQUIRED');
+				flag = false;
+			}
+			if(flag)
+			{
+				var url = "{{path('fenchy_notice_send_reueqst')}}";
+				$.ajax({
+					url : url,
+					type : "post",
+					data : {
+						'noticeId': {{ notice.id }},					
+						'request_text': request_text,
+						'item': item,
+						'price': price,
+						'total': total,
+						'currency': currency,
+						'free': free,
+						'offerprice': offerprice,										
+						},
+					beforeSend : function() {
+						
+					},
+					success : function(response) {
+						alert('Your request send');
+						$('#requestDiv').html("<p>{{ 'request.msg1'|trans }}</p><br><br>");
+					},
+					error : function() {
+						alert('Something went wrong!');
+					},
+					complete : function() {
+						$('#requestdata').val('');
+						$('#pieces').val('');			
+						$('#price').val('');
+						$('#total').val('');
+						$('#cur option:selected').text('');
+						$('#freebox').prop('checked', false);
+						//$('#freebox').attr('checked' : false);
+						$('#default_settings').prop('checked' , false);
+						$('#offerprice').val('');
+						//setTimeout(function(){ location.reload(); }, 100);
+					}
+				}); 
+			}				
+		}
+		$(function(){
+			  $('.zoomthis').click(function(){
+			    
+			    $('#proposeprice').hide();
+			    var text = $(this).text();
+			    if(text== 'Propose a price' || text== 'Propose a time and price')
+			    {
+				    $('#proposeprice').show();
+			    }
+			  });
+			});
+		$(function(){
+			  $('#pieces').blur(function(){
+				var item = $('#pieces').val();
+				var price = $('#price').val();
+				var ava_item = $('#hiddentext').val();
+				if(item > ava_item)
+				{
+					$('#pieces').val('');
+					alert("ONLY " + ava_item + " AVAILABLE");
+				}
+				else
+					$('#total').val(item*price);								   
+			  });
+			});
+		$(function(){
+			  $('#offerprice').blur(function(){
+				var price = $('#offerprice').val();
+				$('#price').val(price);												   
+			  });
+			});
+		function sendMsg()
+		{
+			var flag = true;
+			var title = $('#MsgTitle').val();
+			var content = $('#MsgContent').val();			
+			
+			if(title == "" || content == "")
+			{
+				flag = false;
+				$('#MsgTitle').attr('placeholder', 'required*');
+				$('#MsgContent').attr('placeholder', 'required*');
+			}
+			var receiver = "{{ notice.user.id }}";
+			if(flag)
+			{
+				var url = "{{path('fenchy_regular_user_sendmsgform')}}";
+				$.ajax({
+					url : url,
+					type : "post",
+					data : {
+						'receiverId': receiver,				
+						'title': title,
+						'content': content,										
+						},
+					beforeSend : function() {
+						
+					},
+					success : function(response) {
+						$('#dialog44').hide();
+						$('#successDialog').click();
+					},
+					error : function() {
+						alert('Something went wrong!');
+					},
+					complete : function() {
+						$('#MsgTitle').val('');
+						$('#MsgContent').val('');					
+					}
+				}); 
+			}		
+		}
+</script>
 {# empty Twig template #}
-<div class="wrapper">
-    {% set price = notice.get('price') %}
-    {% if (price|length) > 0 %}
-    <p id="listing-price">
-        <span>{{ price }}</span> {{ 'notice.per_person' | trans }}
-    </p>
-    {% endif %}
-    <div id="static-calendar">
-    </div>
-    <section class="user-profile-group">
-        <figure class="avatar">
-            <span class="image-container large-avatar bordered"><img src="{{ displayUser.regularuser.avatar(false) }}" alt=""/></span>
-            <div class="ranking-flag status-flag">
-                <strong>{{ displayUser.activity }}</strong>
+<style>
+.rightparts .profile .person img {
+    height: 152px;
+    width: 152px;
+}
+</style>
+<div class="rightparts">
+	<div class="right" >
+  	  	<div class="options">
+  	  	{% if notice.type != "neighbours" and notice.type != "groups" and notice.type != "offergroups" %}
+	    	{% set price = notice.price %}
+	    	{% if (price|length) > 0 %}
+	    		{% if notice.type == 'offerevents' %}
+    				<h4>{{ price }} {{ notice.currency |trans }} {{ 'notice.perspot' | trans }}</h4>
+    			{% elseif notice.type == 'offerservice' %}
+    				<h4>{{ price }} {{ notice.currency |trans }} {{ 'notice.perhour' | trans }}</h4>
+    			{% elseif notice.type == 'offergoods' %}
+    				<h4>{{ price }} {{ notice.currency |trans }} {{ 'notice.perpiece' | trans }}</h4>
+    			{% endif %}
+    		{% elseif notice.type.priceAvailable %}
+    			<h4> Free </h4>    			
+    		{% endif %}
+    	{% endif %}
+    		<div class="optionsdetail">
+                {% for value in notice.values %}
+                	{% set options = value.valueAsString | split('^') %}
+                	{% for option in options %}
+						{% if option %}	
+							{% if app.user.id is defined and app.user.id != displayUser.id and (option != "need" and option != "offer")%}
+    							<a href="#dialog42" name="modal" id="vzoom_1944" class="zoomthis blue-button">{{ option|trans }}</a>
+                			{% elseif (option != "need" and option != "offer")%}
+    							<a href="#dialog43" name="modal" id="vzoom_1944" class="zoomthis blue-button">{{ option|trans }}</a>
+    						{% endif %}
+    					{% endif %}
+    				{% endfor %}
+    			{% endfor %}
             </div>
-            <figcaption class="profile-master">
-                <strong class="info-by-line"><a href="{{  path('fenchy_regular_user_user_profilev2', {'userId': displayUser.id})  }}" class="name">{{ displayUser.name }}</a></strong>
-                {% if displayUser.location %}<strong class="info-by-line"><span class="location"><i class="icon-map-marker"></i>{{ displayUser.location }}</span></strong>{% endif %}
-                <p>{{displayUser.regularuser.aboutMe|truncate(200)}}</p>
-            </figcaption>
-        </figure>
-        {% if app.user.id is defined and app.user.id != displayUser.id %}
-        <div class="button green-button">
-            <a href="{{path('fenchy_regular_user_messages_new', {'id': displayUser.id})}}" class="wrapper">                                            
-                <i class="icon-envelope-alt"></i>
-                <strong>{{ 'btn.send_message' | trans }}</strong>
-            </a>
-        </div>
-        {% endif %}            
-    </section>
-    {% render "FenchyNoticeBundle:Widgets:userListings" with {'notice_id' : notice.id} %}
-    {% render "FenchyNoticeBundle:Widgets:similarListings" with {'notice_id' : notice.id} %}
+            <div class="clearfix"></div>
+            {% if notice.type != "neighbours" and notice.type != "groups" and notice.type != "offergroups" %}
+    		<h2>
+	    		{% if notice.startDate %}
+	    			From {{ notice.startDate|date('d.m.Y')}}
+	    				{% if notice.startTime %}
+	    					{{ notice.startTime|date('H:m') }}
+	    				{% endif %}
+	    		{% endif %}
+	    		{% if notice.endDate %}
+	    			to {{ notice.endDate|date('d.m.Y')}}
+	    			{% if notice.endTime %}
+	    					{{ notice.endTime|date('H:m') }}
+	    				{% endif %}
+	    		{% endif %}
+	    	</h2>
+	    	<h2>
+	    		{% if not notice.startDate %}
+	    			{{ 'listing.create.date_arrange'|trans }}
+	    		{% endif %}
+	    	</h2>
+	    	
+	    	<h2>
+	    		{% if not notice.startTime %}
+	    			{{ 'listing.create.start_time_arrange'|trans }}
+	    		{% endif %}
+	    	</h2>
+    		{% if notice.locationArrange %}
+    			<h2>{{ 'listing.create.location_arrange'|trans }}</h2>
+    		{% else %}
+    			<h2>{{ notice.location }}</h2>
+    		{% endif %}
+    	{% endif %}	
+    	</div>
+    	<div class="options">
+    		<h4>{{ displayUser.name }}</h4>
+    		<div class="profile">        	
+        		<div class="person">
+            		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': displayUser.id } %}
+            			<div class="neighbor red">
+							<p> </p>
+							<span>{{ displayUser.activity }}</span>
+						</div>               
+            	</div>
+            </div>
+            <h2>{{displayUser.regularuser.aboutMe|truncate(200)}}</h2>
+            {% if app.user.id is defined and app.user.id != displayUser.id %}
+              	<div class="optionsdetail">              	
+              	<a href="#dialog44" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="margin-left: 70px;">                                            
+               		{{ 'btn.send_message' | trans }}
+            	</a></div>
+        	{% endif %}            
+		</div>		
+		{% render "FenchyNoticeBundle:Widgets:userListings" with {'notice_id' : notice.id} %}
+		{% render "FenchyNoticeBundle:Widgets:similarListings" with {'notice_id' : notice.id} %}
+		
+    </div>
 </div>
+<section id="boxes2">
+	<div id="dialog42" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+	      	
+		    <form action="" method="post">
+		    <div id="requestDiv">
+		    	<h3>{{ 'request.msg1'|trans }}</h3>
+		    	<h2>{{ 'request.msg2'|trans }} {{ displayUser.name }}</h2>	    	
+    			
+    			{% if notice.pieces >1 or notice.spot >1 %}
+    			<p>     				
+	    			{% if notice.type == "offerservice" %}
+	    				<input type="text" id="pieces" placeholder="{{ 'listing.create.hour'|trans|upper }}"></input>  X
+    				{% elseif notice.type == "offergoods" %}
+    					{{ notice.pieces }} {{ 'listing.create.pieces'|trans|upper }} {{ 'request.left'|trans|upper }} {{ 'request.how_many'|trans|upper }}<br><br>
+    					<input type="hidden" id="hiddentext" value="{{ notice.pieces }}"/>
+    					<input type="text" id="pieces" placeholder="{{ 'listing.create.pieces'|trans|upper }}"></input>  X
+    				{% elseif notice.type == "offerevents" %}
+    					{{ notice.spot }} {{ 'listing.create.spot'|trans|upper }} {{ 'request.left'|trans|upper }} {{ 'request.how_many'|trans|upper }}<br><br>
+    					<input type="hidden" id="hiddentext" value="{{ notice.spot }}"/>
+						<input type="text" id="pieces" placeholder="{{ 'listing.create.spot'|trans|upper }}"></input>  X
+    				{% endif %}    				
+    				<input type="text" id="price" value="{{ notice.price }}" readonly="readonly"></input> =
+    				<input type="text" id="total" placeholder="{{ 'listing.create.total'|trans|upper }}" readonly="true"></input>    				
+    			</p>
+    			{% endif %}
+    			
+    			<div id="proposeprice">
+    			<p>
+    				{{ 'request.price_propose'|trans }}
+    				<br><br>    				
+    				{% if notice.type == "offerservice" or notice.type == "service" %}
+    					<input id="offerprice" type="text" placeholder="{{ 'listing.create.price_hour'|trans|upper }}"/>
+    				{% elseif notice.type == "offergoods" %}
+    					<input id="offerprice" type="text" placeholder="{{ 'listing.create.price_piece'|trans|upper }}"/>
+    				{% elseif notice.type == "offerevents" %}
+    					<input id="offerprice" type="text" placeholder="{{ 'listing.create.price_spot'|trans|upper }}"/>
+    				{% endif %}
+    				
+    				<select id="cur">
+    					<option>CURRENCY</option>
+    					<option>DOLLAR</option>
+    					<option>EURO</option>
+    				</select>
+    				<input type="checkbox" value="free" id="freebox"> FREE
+    				<br><br>
+    				{% if notice.type == "service" %}
+    				<input type="checkbox" value="payment_settings" id="default_settings">&nbsp;USE DEFAULT PAYMENT SETTINGS
+    				<br><br>
+    				<a href="{{ path('fenchy_regular_user_settings_payment') }}" class="blue_button">{{ 'listing.create.learn_more'|trans }} </a>
+    				<br><br>
+    				{% endif %}
+    			</p>
+    			</div>
+    			
+    			<p> {{ 'request.message_to_user'|trans|upper }} {{ displayUser.name }}<br>
+    				<input type="text" id="requestdata" style="width: -moz-available" placeholder="Request Message"/>
+    			</p>
+			    <a class="blue-btn" style="padding-top: 8px; height: 21px;" href="{{path('fenchy_regular_user_notice_create1')}}">
+			    	{{ 'request.return_to_listing'|trans }}
+			  	</a>
+				<input class="blue-btn" type="button" id="continue" value="{{ 'request.send'|trans }}" onclick="sendRequest();"/>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div id="mask"></div>
+</section>
+<section id="boxes2">
+	<div id="dialog43" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+			{% if app.user.id is defined %}
+		    	<div id="requestDiv">
+		    		<p>{{ 'request.your_list'|trans }}</p>  			
+   				</div>
+   			{% else %}
+   				<div id="requestDiv">
+		    		<p>{{ 'request.login_require'|trans }}</p>  			
+   				</div>
+   			{% endif %}			
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="top: 69px; width: 100%;">
+	</div>
+	<div id="mask"></div>
+</section>
+<a id="successDialog" href="#dialog45" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+<section id="boxes2">
+	<div id="dialog44" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+				<p>{{ 'regularuser.write_msg_to'|trans }} {{ notice.user.name }} about {{ notice.title }}</p>
+					<input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}"/>
+					<textarea id="MsgContent" placeholder="{{ 'message.content'|trans }}"></textarea>
+				<input class="blue_button" style="margin-bottom: 10px; margin-left: -71px; margin-top: 130px;" type="button" id="continue" value="{{ 'btn.send'|trans }}" onclick="sendMsg();"/>
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width:100%">
+	</div>
+	<div id="mask"></div>
+</section>
+
+<section id="boxes2">
+	<div id="dialog45" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+			<div id="messageForm">
+				<p>{{ 'regularuser.msg_send'|trans }}</p>
+			</div>
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+	</div>
+	<div id="mask"></div>
+</section>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('#static-calendar').datepicker({

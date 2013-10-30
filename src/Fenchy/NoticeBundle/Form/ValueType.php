@@ -5,6 +5,7 @@ namespace Fenchy\NoticeBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\True;
 use Doctrine\ORM\EntityRepository;
 
 use Fenchy\NoticeBundle\Entity\PropertyType;
@@ -43,8 +44,11 @@ class ValueType extends AbstractType
         }
         $builder->add(
                 'value',
-                $this->property->getElementName(),
-                $opt
+                'choice',
+                array('choices'=>$choices,
+                		'multiple'=>true,
+                		'expanded'=>true
+                	)
                 )
             ->add(
                     'property',

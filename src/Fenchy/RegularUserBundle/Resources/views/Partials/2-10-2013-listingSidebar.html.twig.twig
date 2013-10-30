@@ -1,0 +1,60 @@
+{# empty Twig template #}
+<div class="wrapper">
+    {% set price = notice.get('price') %}
+    {% if (price|length) > 0 %}
+    <p id="listing-price">
+        <span>{{ price }}</span> {{ 'notice.per_person' | trans }}
+    </p>
+    {% endif %}
+    <div id="static-calendar">
+    </div>
+    <section class="user-profile-group">
+        <figure class="avatar">
+            <span class="image-container large-avatar bordered"><img src="{{ displayUser.regularuser.avatar(false) }}" alt=""/></span>
+            <div class="ranking-flag status-flag">
+                <strong>{{ displayUser.activity }}</strong>
+            </div>
+            <figcaption class="profile-master">
+                <strong class="info-by-line"><a href="{{  path('fenchy_regular_user_user_profilev2', {'userId': displayUser.id})  }}" class="name">{{ displayUser.name }}</a></strong>
+                {% if displayUser.location %}<strong class="info-by-line"><span class="location"><i class="icon-map-marker"></i>{{ displayUser.location }}</span></strong>{% endif %}
+                <p>{{displayUser.regularuser.aboutMe|truncate(200)}}</p>
+            </figcaption>
+        </figure>
+        {% if app.user.id is defined and app.user.id != displayUser.id %}
+        <div class="button green-button">
+            <a href="{{path('fenchy_regular_user_messages_new', {'id': displayUser.id})}}" class="wrapper">                                            
+                <i class="icon-envelope-alt"></i>
+                <strong>{{ 'btn.send_message' | trans }}</strong>
+            </a>
+        </div>
+        {% endif %}            
+    </section>
+    {% render "FenchyNoticeBundle:Widgets:userListings" with {'notice_id' : notice.id} %}
+    {% render "FenchyNoticeBundle:Widgets:similarListings" with {'notice_id' : notice.id} %}
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#static-calendar').datepicker({
+            beforeShowDay : function (date) {
+
+                var listingStarts = new Date('{{ notice.startDate|date('Y-m-d') }}');
+                listingStarts.setHours(0);
+                listingStarts.setMinutes(0);
+                listingStarts.setSeconds(0);
+                listingStarts.setMilliseconds(0);
+                var listingEnds = new Date('{{ notice.endDate|date('Y-m-d') }}');
+                listingEnds.setHours(23);
+                listingEnds.setMinutes(59);
+                listingEnds.setSeconds(59);
+                listingEnds.setMilliseconds(99);
+                if (date - listingStarts >= 0 && listingEnds - date > 0) {
+                    return [true, 'highlight'];
+                }
+
+                return [true, ''];
+             },
+             defaultDate : ''
+        });
+        
+    });
+</script>

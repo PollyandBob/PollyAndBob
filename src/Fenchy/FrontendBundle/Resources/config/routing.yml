@@ -5,8 +5,8 @@ fenchy_frontend_homepage:
 
 # temporary routes to new layout mockup actions
 fenchy_frontend_indexv2:
-    pattern:  /indexv2
-    defaults: { _controller: FenchyFrontendBundle:Frontend:indexV2 }
+    pattern:  /indexv2/{flag}
+    defaults: { _controller: FenchyFrontendBundle:Frontend:indexV2, flag: null }
 
 
 #Sign in/up

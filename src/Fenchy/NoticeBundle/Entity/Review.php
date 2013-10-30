@@ -48,7 +48,7 @@ class Review
     /**
      * 0 - negative; 1 - positive
      * @var integer
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="integer", nullable=false, options={"default":"1"})
      */
     private $type;
     
@@ -152,11 +152,11 @@ class Review
      * @return \Fenchy\NoticeBundle\Entity\Review
      * @throws Exception
      */
-    public function setType($type) {
+    public function setType($type = self::TYPE_POSITIVE) {
         
-        if(!array_key_exists($type, self::$typeMap)) {
-            throw new \Exception('Invalid Review type: '.$type);
-        }
+//         if(!array_key_exists($type, self::$typeMap)) {
+//             throw new \Exception('Invalid Review type: '.$type);
+//         }
         
         $this->type = $type;
         

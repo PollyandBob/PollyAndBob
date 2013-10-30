@@ -1,0 +1,201 @@
+{% extends 'FenchyFrontendBundle::layoutV2.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# any view specific stylesheets for this view #}  
+    <link rel="stylesheet" href="{{ asset('css/app/article-box-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/search-bar-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/search-bar-big-v2.css') }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ absolute(asset('css/frontend/frontend/index-v2.css')) }}" type="text/css" />
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    {% include '::gmapsApiAsset.html.twig' %} 
+    
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/landing-page-view-model.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+    
+    
+    <script type="text/javascript">
+
+        var landingPageViewModel;
+
+        $(document).ready(function() {
+            geocoder = new google.maps.Geocoder();
+            var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';            
+            
+            landingPageViewModel = new LandingPageViewModel(geocoder, baseSearchViewUri);
+            
+            ko.applyBindings( landingPageViewModel, document.getElementsByTagName('body')[0] );
+            
+            autocomplete = new GApiAutocomplete(
+                document.getElementById('location'),
+                landingPageViewModel );
+                
+                var _default_location = '';
+                
+                {% if app.user and not app.user.location.location %}
+                    _default_location = '{{default_location}}';
+                {% elseif app.user and app.user.location.location %}
+                    _default_location = '{{app.user.location.location|replace({"\n": ''})}}';
+                {% else %}
+                    _default_location = '{{default_location}}';     
+                {% endif %}
+                    
+                $('input#location').val(_default_location);
+                
+        });
+        
+        
+        
+    </script>
+    
+
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>        
+    
+    
+{% endblock %}
+
+{% block tagline_content %}
+      {% include '::searchBarV2.html.twig' %}                          
+{% endblock %}
+{% block content %}  
+	<section id="content">
+			<div id="eventslisting">
+			<a class="zoomthis" id="vzoom_1944" name="modal" href="#dialog1"></a>
+			{% if notices %}
+                {% for notice in notices %}
+			<div class="event">
+			 	<a href="{{path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')  })}}">
+			 	<img width="224px" height="144px" alt="" src="{{ asset(notice.mainimagelanding) }}" onerror="imgError(this)" ></a>
+			    	 <div class="eventcontent">
+		     			<h3>{{notice.title}}</h3>
+		                    <div class="clearfix"></div>
+		                    <div class="otherdetail">
+		                        <div class="left">100M</div>
+		                        <div class="right">{{ notice.createdAt|date('d.m.Y') }}</div>
+		                    </div>
+		                    <div class="clearfix"></div>
+		                    <p>{{ notice.content }}</p>
+		                </div>
+		  </div>
+		  		{% endfor %}
+		  		<script>
+		  			 function imgError(url)
+		  			 {
+		  			   var img = new Image();
+		  			   img.src = url;
+		  			   var newsrc = $(url).attr('src');
+		  			   newsrc=newsrc.replace('square_l','medium');
+					   $(url).attr('src',newsrc);	   
+		  			 }
+		  		</script>
+          {% endif %}
+          </div>
+		  <div id="mycarousel" class="jcarousel-skin-tango">
+                <ul>
+                  <li>
+                  	<div class="left"><img src="{{ asset('images/discover.png') }}" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>{{ 'frontend.slider.discovery.title'|trans }}</h4>
+                        <p>{{ 'frontend.slider.discovery.content'|trans }}</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="{{ asset('images/trust.png') }}" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>{{ 'frontend.slider.trust.title'|trans }}</h4>
+                        <p>{{ 'frontend.slider.trsut.content'|trans }}</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="{{ asset('images/sharing.png') }}" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>{{ 'frontend.slider.sharing.title'|trans }}</h4>
+                        <p>{{ 'frontend.slider.sharing.content'|trans }}</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="{{ asset('images/new-neighborhood.png') }}" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>{{ 'frontend.slider.new_neighborhood.title'|trans }}</h4>
+                        <p>{{ 'frontend.slider.new_neighborhood.content'|trans }}</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="{{ asset('images/our-neighborhood.png') }}" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>{{ 'frontend.slider.our_neighborhood.title'|trans }}</h4>
+                        <p>{{ 'frontend.slider.our_neighborhood.content'|trans }}</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="{{ asset('images/smalldata.png') }}" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>{{ 'frontend.slider.small_data.title'|trans }}</h4>
+                        <p>{{ 'frontend.slider.small_data.content'|trans }}</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="{{ asset('images/community.png') }}" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>{{ 'frontend.slider.community.title'|trans }}</h4>
+                        <p>{{ 'frontend.slider.community.content'|trans }}</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="{{ asset('images/reallife.png') }}" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>{{ 'frontend.slider.real_life.title'|trans }}</h4>
+                        <p>{{ 'frontend.slider.real_life.content'|trans }}</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="{{ asset('images/fun.png') }}" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>{{ 'frontend.slider.fun.title'|trans }}</h4>
+                        <p>{{ 'frontend.slider.fun.content'|trans }}</p>
+                    </div>
+                  </li>
+                  <li>
+                  	<div class="left"><img src="{{ asset('images/access.png') }}" alt="" /></div>
+                    <div class="carouselcontent">
+                    	<h4>{{ 'frontend.slider.access.title'|trans }}</h4>
+                        <p>{{ 'frontend.slider.access.content'|trans }}</p>
+                    </div>
+                  </li>
+                  
+                </ul>
+            <a href="#" id="mycarousel-prev"><img src="{{ asset('images/icon_arrowleft.png') }}" alt="" /></a>
+            <a href="#" id="mycarousel-next"><img src="{{ asset('images/icon_arrowright.png') }}" alt="" /></a>
+             </div>               		                        
+    </section>
+    <div class="clearfix"></div>
+    	<section id="bottomlink" class="jcarousel-control">
+            <a id="slide1" class="first" href="#"><b>1</b>{{ 'frontend.slider.discovery.name'|trans }}</a>
+            <a id="slide2" class="second" href="#"><b>2</b>{{ 'frontend.slider.trust.name'|trans }}</a>       		
+            <a id="slide3" class="third" href="#"><b>3</b>{{ 'frontend.slider.sharing.name'|trans }}</a>
+            <a id="slide4" class="four" href="#"><b>4</b>{{ 'frontend.slider.new_neighborhood.name'|trans }}</a>       		
+            <a id="slide5" class="five" href="#"><b>5</b>{{ 'frontend.slider.our_neighborhood.name'|trans }}</a>
+            <a id="slide6" class="six" href="#"><b>6</b>{{ 'frontend.slider.small_data.name'|trans }}</a>       		
+            <a id="slide7" class="seven" href="#"><b>7</b>{{ 'frontend.slider.community.name'|trans }}</a>
+            <a id="slide8" class="eight" href="#"><b>8</b>{{ 'frontend.slider.real_life.name'|trans }}</a>       		
+            <a id="slide9" class="nine" href="#"><b>9</b>{{ 'frontend.slider.fun.name'|trans }}</a>
+            <a id="slide10" class="ten" href="#"><b>10</b>{{ 'frontend.slider.access.name'|trans }}</a>       		
+        </section>
+    <!-- main -->
+    
+
+    
+{% endblock %}
+

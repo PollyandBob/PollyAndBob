@@ -16,6 +16,45 @@ class TypeRepository extends EntityRepository
      */
     protected $titleSearchMultiplier;
     
+    
+    
+    public function getFullDetailedList ($filter = NULL) {
+    
+    	if(!($filter instanceof \Fenchy\AdminBundle\Entity\TypeFilter)) {
+    
+    		return $this->createQueryBuilder('t')
+                ->select('t, p')
+                ->leftJoin('t.properties', 'p')
+                ->where('t.sequence > 0')
+                ->getQuery()
+                ->getResult();
+    	}
+    
+    	    
+    	$query = $this->createQueryBuilder('t')
+                ->select('t, p')
+                ->leftJoin('t.properties', 'p');
+    
+
+    
+    	if($filter->name) {
+    		$query->where('t.name like :name')
+    		->setParameter('name', '%'.$filter->name.'%');
+    	}
+    
+    	
+    	if($filter->sort === 'stickersQ') {
+    		return $query
+    		->orderBy($filter->sort, $filter->order)
+    		->getQuery()
+    		->getResult();
+    	}
+    
+    	return $query
+    	->orderBy('t.'.$filter->sort, $filter->order)
+    	->getQuery()
+    	->getResult();
+    }
     /**
      * Returns leaf types with its properties.
      * 
@@ -37,8 +76,19 @@ class TypeRepository extends EntityRepository
         return $this->createQueryBuilder('t')
                 ->select('t, p')
                 ->leftJoin('t.properties', 'p')
+                ->orderBy('t.sequence')
                 ->getQuery()
                 ->getResult();
+    }
+    
+    public function getAllWithPropertiesFirst() {
+    
+    	return $this->createQueryBuilder('t')
+    	->select('t, p')
+    	->leftJoin('t.properties', 'p')
+    	->orderBy('t.orderby')
+    	->getQuery()
+    	->getResult();
     }
     
     /**
@@ -55,5 +105,16 @@ class TypeRepository extends EntityRepository
                 ->setParameter('name', $name)
                 ->getQuery()
                 ->getOneOrNullResult();
+    }
+    
+    public function find($id) {
+    
+    	return $this->createQueryBuilder('t')
+    	->select('t, p')
+    	->leftJoin('t.properties', 'p')
+    	->where('t.id = :id')
+    	->setParameter('id', $id)
+    	->getQuery()
+    	->getOneOrNullResult();
     }
 }

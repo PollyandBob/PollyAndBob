@@ -12,6 +12,14 @@ regularuser:
   positive: Positiv
 
   negative: Negativ
+      
+  open: Open
+  
+  closed: Closed
+  
+  you_are_member: YOU ARE A MEMBER
+
+  you_are_admin: YOU ARE ADMINISTRATOR
 
   all_trust_points: Reputation:
 
@@ -20,6 +28,10 @@ regularuser:
   disable_connect: Diese Frage nicht nochmal stellen.
 
   no_contacts: Du hast noch keine Kontakte auf Fenchy. Verbinde einfach deinen Account, um Freunde aus Facebook einzuladen.
+  
+  only_community_Neighborhood_manager: Only Community Manager or Neighborhood Manager Create this group
+  
+  added_neighbor_success: This Neighbor Successfully added to My Neighbors
 
   references: Bewertungen
 
@@ -89,7 +101,7 @@ regularuser:
     show_dd: Zeige
 
     message_center: Nachrichten
-
+    
   save: Speichern
 
   cancel: Abbrechen
@@ -102,6 +114,8 @@ regularuser:
 
   show: Zeigen
 
+  change: ändern
+  
   about_me: Über mich
 
   my_community_ponts: MY COMMUNITY POINTS
@@ -159,7 +173,19 @@ regularuser:
   become_shareholder_now: BECOME SHAREHOLDER NOW!
   verify_your_location_now: VERIFY YOUR LOCATION NOW!
   verify_your_passport_now: VERYFY YOUR PASSPORT NOW!
+  verify_this_location: VERIFY THIS LOCATION!
+  verify_location_message: A poscard has been sent to your address. Please follow the instructions in order to verify your location.
+  verified_location_message: Your location is already verified.
+  verify_identity_message: Press Ok and submit your identity verification request. Admin will verify this and update your status as soon as possible.
+  verified_identity_message: Your identity verified.
+  verifing_identity_message: Your identity verification request is submitted. Please wait until admin verify it.
+  change_email: CHANGE EMAIL
   
+  back: back
+  ok: ok
+  continue: publish
+  enter_password: ENTER PASSWORD
+  location_verification: LOCATION VERIFICATION    
   neighbours: Nachbarn
 
   disconnect_twitter: Verbindung zu Twitter trennen
@@ -338,7 +364,7 @@ regularuser:
   validation:
     invalid__firstname: Dein Vorname enthält ungültige Satzzeichen.
 
-  settings_delete: 
+  settings_delete: Usu?ä konto
 
   end_of_list_msg: 
 
@@ -419,17 +445,42 @@ emailchange:
     11: Dein Fenchy-Team
 
     5: Um die Änderung deiner E-Mail-Adresse abzubrechen, folge bitte dem untenstehenden Link: 
-help: Dienste/Hilfe
-goods: Dinge
-events: Veranstaltung erstellen
-others: Sonstiges
-help_prefix: dein
-goods_prefix: dein
-events_prefix: deine
-others_prefix: dein
-offer: anbieten
-need: suchen
+help: Help
+need_help: Need Help
+goods: Goods
+events: Event
+_events: Events
+others: Something Else
+_others: others
+neighbours: Neighbours
+service: Service
+demand_service: Demand Service
+groups: Groups
+offerhelp: Help
+offer_help: Offer Help
+offergoods: Goods
+need_goods: Need Goods
+offer_goods: Offer Goods
+offerevents: Event
+offerothers: Something Else
+offer_others: others
+offerservice: Service
+offer_service: Offer Service
+offergroups: Groups
+help_prefix: ''
+goods_prefix: ''
+events_prefix: ''
+others_prefix: ''
+offer: Offer
+need: Needed
+find_help: Find help in the Neighbour
+find: Find
+ask_for: Ask for
+
 listing:
+  my_listing: MY LISTINGS
+  my_request: MY REQUESTS
+  request: REQUESTS
   create:
     title: Listing erstellen
 
@@ -442,16 +493,52 @@ listing:
       subtitle: Kategorie auswählen
 
       description: Wähle die Kategorie, die dein Listing am besten beschreibt.
+      
+      find_something : Find something
+      in_neighbourhood: in the Neighbourhood
+      
+      offer_something : Offer something
+      to_neighbourhood: to the Neighbourhood
+      
+      event_to_neighbour: Event to the Neighbourhood
+      
+      something_else: I want to do something else
 
     2:
       subtitle: Über
 
       description: Erzähle uns mehr über dein Listing.
 
-    start_date: Start
+    start_date: Start Date
+    
+    date_arrange: Date has to arranged
 
     end_date: Ende
+    
+    end_time: End Time
+    
+    start_time_arrange: Time has to be arranged
+    
+    end_time_arrange: Time has to be arranged
+    
+    location_arrange: Location to be arranged 
 
+    pieces: Pieces
+    
+    one_piece: Only 1 piece
+    
+    price_piece: Price/piece
+    
+    price_hour: Price/hour
+    
+    price_spot: Price/spot
+    
+    spots: Spots free
+    
+    unlimeted: Unlimeted 
+    
+    currency: Currency
+    
   show:
     tags: Tags
 

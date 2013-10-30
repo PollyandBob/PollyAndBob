@@ -3,9 +3,145 @@
 {% form_theme form '::labelForm.html.twig' %}
 {% endif %}
 {% block message_content %}
+<style>
+.message .right .profilei img
+{
+	border-radius: 50% 50% 50% 50%;
+    float: left;
+    height: 50px;
+    margin-right: 10px;
+    width: 50px;
+}
+.message .right form input[type="submit"] {
+    float: right;
+    padding: 1px 5px 0;
+    margin-top: 15px;
+}
+.message .right form .profilei {
+    height: 50px;
+    left: 23px;
+    position: absolute;
+    top: 31px;
+    width: 50px;
+}
+</style>
+<script type="text/javascript">
 
+function sendMsg()
+		{
+			var flag = true;
+			var title = $('#MsgTitle').val();
+			var content = $('#MsgContent').val();
+			//alert(title + content);
+			
+			if(title == "" || content == "")
+			{
+				flag = false;
+				$('#MsgTitle').attr('placeholder', 'required*');
+				$('#MsgContent').attr('placeholder', 'required*');
+			}
+			var receiver = $('#select_receiver').val();
+			
+			if(flag)
+			{	
+				var url = "{{path('fenchy_regular_user_sendmsgform')}}";
+				$.ajax({
+					url : url,
+					type : "post",
+					data : {
+						'receiverId': receiver,				
+						'title': title,
+						'content': content,										
+						},
+					beforeSend : function() {
+						
+					},
+					success : function(response) {
+						$('#successDialog2').click();
+					},
+					error : function() {
+						alert('Something went wrong!');
+					},
+					complete : function() {
+						$('#MsgTitle').val('');
+						$('#MsgContent').val('');					
+					}
+				}); 
+			}		
+		}
+</script> 
+
+		<div class="message">
+				<div class="left">
+                	<a href="#" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>
+                    <div class="clearfix"></div>
+                    <div class="messagedetail">
+                    	{% if messages %}
+                          {% for message in messagesLeft %}
+	                    	<a href="{{ path('fenchy_regular_user_messages_view', {'id': message.id}) }}" {% if not message.read %} {% if message.receiver != app.user %} class="message-read" {% else %} class="message-unread" {% endif %} {% endif %}>
+	                    	<div {% if message.read %}class="message-read"{% endif %}>
+	                            <div class="profilei">
+                          			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
+                          		</div>
+	                            {% if message.receiver != app.user %}
+	                            <img class="read_arrow" src="{{ asset('images/message-arrow1.png') }}" alt="" />
+	                            {% elseif message.receiver == app.user %}
+	                            <img class="read_arrow" src="{{ asset('images/message-arrow2.png') }}" alt="" />
+	                            {% endif %}
+	                            <p>{{ message.sender.userregular.firstname }}</p>
+	                            <p>{{ message.title }}</p>
+	                        </div>
+	                        </a>
+	                    	
+                    	 {% endfor %}
+                      {% else %}
+                         	{{'regularuser.message.no_messages'|trans}}</td>
+                      {% endif %}
+                    </div>
+                <div class="bgbottom"><img alt="" src="{{ asset('images/bgbottom_leftpart.png') }}"></div>
+                </div>
+                
+                <div class="right">
+                	{% for message in messages %}
+                				{% if message.sender.id == app.user.id%}
+                					{% set userurl = 'fenchy_regular_user_user_myprofile_aboutmychoice' %}
+								{% else %}
+									{% set userurl = 'fenchy_regular_user_user_otherprofile_aboutotherchoice' %}
+								{% endif %}
+								<a href="{{path(userurl, {'userId': message.sender.id})}}">
+					            <div class="profilei">	
+									{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
+					            </div>
+					            </a>
+					            
+					        <p class="name">{{ message.sender.userregular.firstname }}</p>
+		                    <div class="clearfix"></div>
+		                    <p class="message-all">{{ message.content|nl2br }}</p>
+                    
+                    {% endfor %}
+                    
+                    {% if messages.first.replyable %}
+                    <form action="{{ path('fenchy_regular_user_messages_send', {'prev_id':messages.last.id}) }}" method="post" {{ form_enctype(form) }}>
+                    	
+                    	{{ form_widget(form) }}
+                    	<div class="profilei">
+                    		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': messages.first.sender.userregular.id } %}
+                    	</div>
+                    	{{ form_rest(form) }}
+                    	
+                        <input type="submit" id="continue" class="blue_button" value="{{ 'btn.send'|trans }}"/>
+                    </form>
+                     {% endif %}
+                    <div class="bgbottom_right"><img alt="" src="images/bgbottom_contantinner.png"></div>
+                    
+					     
+						
+                </div>
+            </div>
+		
+		
         {% for message in messages %}
-        <div class="message clearfix">
+        <!--  <div class="message clearfix">
             <div class="message_image">
                 <div class="message_image_avatar">
                     {% if message.request %}
@@ -46,11 +182,11 @@
                     </p>
                 </div>    
             </div>                      
-        </div>
+        </div> -->
         {% endfor %}
             
         {% if messages.first.replyable %}
-
+		<!-- 
             <div class="new-reply-message-box reply-box">
                 <form action="{{ path('fenchy_regular_user_messages_send', {'prev_id':messages.last.id}) }}" method="post" {{ form_enctype(form) }}>
                     {{ form_widget(form) }}
@@ -70,6 +206,7 @@
                     </footer> 
                 </form>
             </div>
+             -->
         {% endif %}
 
 {% endblock %}

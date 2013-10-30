@@ -1,0 +1,170 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+
+{% block stylesheets %} 
+	{{ parent() }}       
+    <link rel="stylesheet" href="{{ asset('js/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/tapmodo-Jcrop-1902fbc/css/jquery.Jcrop.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/jquery.tagit.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/tagit.ui-zendesk.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/editSmall.css') }}" type="text/css" />
+{% endblock %}
+        
+{% block javascripts %}
+	{{ parent() }}    
+    <script type="text/javascript" src="{{ asset('js/underscore-min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.iframe-transport.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/FileUploaderSmall.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/fancybox/jquery.fancybox-1.3.4.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/tapmodo-Jcrop-1902fbc/js/jquery.Jcrop.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/editSmall.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+	{% render 'FenchyRegularUserBundle:Otherprofile:otherAvatar' with {'userId': userId} %}
+	
+	{% include 'FenchyRegularUserBundle:Otherprofile:othermenu.html.twig' %}
+	<div class="member">{{ 'member_since' | trans|upper }}
+   		{{ displayUser.createdAt|date("m.d.Y") }}
+   	</div>
+   	 <style>
+   	 .about_input
+   	 {
+   	 	display: none;
+   	 }
+   	 .aboutmedata .right textarea
+   	 {
+   	 	border: 1px solid #C8C8C8;
+    	border-radius: 4px 4px 4px 4px;
+    	height: 60px;
+    	padding: 3px;
+    	width: 750px;
+   	 }
+   	 .likedata .about_input ul.tagit, .ui-helper-hidden-accessible
+   	 {
+   	 	width:342px;
+   	 }
+   	 </style>	
+	 <script type="text/javascript">
+     	$(function() {
+			$('.about_edit').click( function(){
+				$('.about_input').show();
+				$('.about_show').hide();
+			});
+			
+     		$('#fenchy_regularuserbundle_useraboutsettingstype_mylike').tagit({
+            	allowSpaces: true
+        	});
+        	
+     		$('#fenchy_regularuserbundle_useraboutsettingstype_hotplaces').tagit({
+            	allowSpaces: true
+        	});
+        	
+     		$('#fenchy_regularuserbundle_useraboutsettingstype_promotedinitiatives').tagit({
+            	allowSpaces: true
+        	});
+
+            $('#fenchy_regularuserbundle_useraboutsettingstype_languages').tagit({            	
+            	allowSpaces: true
+        	});
+
+            $('#fenchy_regularuserbundle_useraboutsettingstype_notshowninfo').tagit({
+            	allowSpaces: true
+        	});
+
+    	});
+    </script>
+    
+    	<div id="other-profile">
+	         <div class="leftside">
+					<div class="persendata">
+	 					<div class="aboutmedata">
+		                    <h4>{{ 'regularuser.about_me'|trans|upper }}</h4>
+		                    <div class="about-details" style="min-height:68px;">
+		                    	<div class="name">
+		                    		{{ displayUser.regularuser.firstname }}
+		                    	</div>
+		                        <div class="right">
+		                        	<div class="about_show">
+		                        		{{ displayUser.regularuser.aboutMe }}
+		                        	</div>
+		                        	
+		                        </div>
+		                    </div>
+	                	</div>
+		            	<div class="findmedata">
+		                    <h4>{{ 'regularuser.find_me_by_what_i_like'|trans|upper }}</h4>
+		                    <div class="about-details">
+		                    	<div class="title">{{ 'regularuser.i_like'|trans|upper }}</div>
+		                        <div class="clearfix"></div>
+		                        <div class="likedata">
+									<ul>
+		                            	<!-- <li><a href="#">Saling</a></li> -->
+			                            <div class="about_show">
+			                            	{% set varStack = displayUser.regularuser.mylike | split(',') %}
+											{% for value in varStack %}
+												{% if value %}
+										       		<li><a href="#">{{ value }}</a></li>
+										        {% endif %}
+										    {% endfor %}
+			                        	</div>
+			                        	
+		                            </ul>
+		                        </div>
+		                    </div>
+		                    <div class="about-details">
+		                    	<div class="title">{{ 'regularuser.hot_places'|trans|upper }}</div>
+		                        <div class="clearfix"></div>
+		                        <div class="likedata">
+									<ul>
+		                            	<!-- <li><a href="#">boxhagener platz</a></li> -->
+		                            	<div class="about_show">
+		                            		{% set varStack = displayUser.regularuser.hotplaces | split(',') %}
+											{% for value in varStack %}
+										       {% if value %}
+										       		<li><a href="#">{{ value }}</a></li>
+										        {% endif %}
+										    {% endfor %}
+			                        	</div>
+			                        	
+											
+		                            </ul>
+		                        </div>
+		                    </div>
+		                    
+		                    <div class="about-details">
+		                    	<div class="title">{{ 'regularuser.my_languages'|trans|upper }}</div>
+		                        <div class="clearfix"></div>
+		                        <div class="likedata">
+									<ul>
+		                            	<!-- <li><a href="#">German</a></li> -->
+		                            	<div class="about_show">
+		                            		{% set varStack = displayUser.regularuser.languages | split(',') %}
+											{% for value in varStack %}
+										       {% if value %}
+										       		<li><a href="#">{{ value }}</a></li>
+										        {% endif %}
+										    {% endfor %}
+			                        	</div>
+			                        	
+		                            </ul>
+		                        </div>
+		                    </div>
+		                    
+		                </div>
+		                <div class="bgbottom-big"><img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}"></div>
+	            
+					</div>
+				</div>
+				
+				{% render 'FenchyRegularUserBundle:Otherprofile:checkNeighbor' with {'neighborId': userId} %}
+				
+		 </div>
+		<div class="clearfix"></div>
+{% endblock %}

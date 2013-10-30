@@ -14,8 +14,12 @@ use Fenchy\NoticeBundle\Entity\Notice,
     Fenchy\UserBundle\Entity\Reference,
     Fenchy\UtilBundle\Entity\Location,
     Fenchy\UtilBundle\Entity\Sticker,
-    Fenchy\NoticeBundle\Entity\Review;
+    Fenchy\NoticeBundle\Entity\Review,
+    Fenchy\RegularUserBundle\Entity\Neighbors,
+	Fenchy\NoticeBundle\Entity\Request;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Fenchy\NoticeBundle\Entity\Comment;
+
 
 /**
  * @ORM\Table(name="user__users")
@@ -51,6 +55,13 @@ class User extends BaseUser
      * @ORM\Column(name="facebookId", type="string", length=255, nullable=true)
      */
     protected $facebookId;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="managertype", type="boolean", length=255, unique=true, nullable=true)
+     */
+    protected $managertype;
 
     /** 
      * @var string
@@ -70,6 +81,35 @@ class User extends BaseUser
      * @ORM\OneToOne(targetEntity="Fenchy\RegularUserBundle\Entity\UserRegular", mappedBy="user", cascade={"persist", "remove"})
      */
     protected $user_regular;
+
+    /**
+     * @var UserGroup $user_group
+     *
+     * @ORM\OneToOne(targetEntity="Fenchy\RegularUserBundle\Entity\UserGroup", mappedBy="user", cascade={"persist", "remove"})
+     */
+    protected $user_group;
+
+    
+    /**
+     * @var LocationVerification $location_id
+     *
+     * @ORM\OneToOne(targetEntity="Fenchy\UserBundle\Entity\LocationVerification", mappedBy="user", cascade={"persist", "remove"})
+     */
+    protected $location_id;
+    
+    /**
+     * @var LocationVerification $identity
+     *
+     * @ORM\OneToOne(targetEntity="Fenchy\UserBundle\Entity\IdentityVerification", mappedBy="user", cascade={"persist", "remove"})
+     */
+    protected $identity;
+    
+    /**
+     * @var Payment $payment_id
+     *
+     * @ORM\OneToOne(targetEntity="Fenchy\UserBundle\Entity\Payment", mappedBy="user", cascade={"persist", "remove"})
+     */
+    protected $payment_id;
     
     /**
      * @var Location $location
@@ -92,6 +132,22 @@ class User extends BaseUser
      * @ORM\JoinTable(name="user__users__notifications")
      */
     private $notifications;
+    
+    /**
+     * @var ArrayCollection $user
+     *
+     * @ORM\ManyToMany(targetEntity="Fenchy\RegularUserBundle\Entity\UserGroup", mappedBy="members")
+     */
+    private $user;
+    
+    /**
+     * Logged users Neighbor
+     * @var ArrayCollection $members
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\RegularUserBundle\Entity\GroupMembers", mappedBy="neighbor", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $members;
     
     /**
      * @var ArrayCollection $notices
@@ -183,7 +239,7 @@ class User extends BaseUser
     
     /**
      * Reviews about this user
-     * @var ArrayCollection $rviews
+     * @var ArrayCollection $reviews
      * 
      * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Review", mappedBy="aboutUser", cascade={"remove"})
      * @ORM\OrderBy({"created_at"="DESC"})
@@ -191,13 +247,67 @@ class User extends BaseUser
     private $reviews;
     
     /**
+     * Requests about this user
+     * @var ArrayCollection $request
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Request", mappedBy="aboutUser", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $requests;
+    
+    /**
+     * Comment about this user
+     * @var ArrayCollection $comments
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Comment", mappedBy="aboutUser", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $comments;
+    
+    /**
      * Reviews created by this user
-     * @var ArrayCollection $ownRviews
+     * @var ArrayCollection $ownReviews
      * 
      * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Review", mappedBy="author", cascade={"remove"})
      * @ORM\OrderBy({"created_at"="DESC"})
      */
     private $ownReviews;
+    
+    /**
+     * Logged User
+     * @var ArrayCollection $logged
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\RegularUserBundle\Entity\Neighbors", mappedBy="current", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $logged;
+    
+    /**
+     * Logged users Neighbor
+     * @var ArrayCollection $myNeighbor
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\RegularUserBundle\Entity\Neighbors", mappedBy="neighbor", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $myNeighbor;
+    
+    /**
+     * Requests created by this user
+     * @var ArrayCollection $ownRequests
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Request", mappedBy="author", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $ownRequests;
+    
+    /**
+     * Comment created by this user
+     * @var ArrayCollection $ownComments
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Comment", mappedBy="author", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $ownComments;
     
     /**
      * Indicates whether user's account is business type
@@ -225,6 +335,10 @@ class User extends BaseUser
     protected $prevNoticesQuantity = FALSE;
     protected $prevOwnReviewsQuantity = FALSE;
     protected $prevReviewsQuantity = FALSE;
+    protected $prevOwnRequestsQuantity = FALSE;
+    protected $prevRequestsQuantity = FALSE;
+    protected $prevOwnCommentsQuantity = FALSE;
+    protected $prevCommentsQuantity = FALSE;
     
     public function __construct()
     {
@@ -241,7 +355,16 @@ class User extends BaseUser
         $this->ask_again                    = true;
         $this->reviews                      = new ArrayCollection();
         $this->ownReviews                   = new ArrayCollection();
+        $this->myNeighbor                   = new ArrayCollection();
+        $this->logged                   	= new ArrayCollection();
+        $this->requests                     = new ArrayCollection();
+        $this->ownRequests                  = new ArrayCollection();
+        $this->comment                      = new ArrayCollection();
+        $this->ownComments                   = new ArrayCollection();
         $this->created_at                   = new \DateTime(); 
+       	$this->user 						= new ArrayCollection();
+       	$this->members 						= new ArrayCollection();
+     
     }
     
     public function __toString() {
@@ -331,7 +454,7 @@ class User extends BaseUser
         $this->user_regular = $ru;
         $this->user_regular->setUser($this);
     }
-
+    
 
     /**
      * @return ArrayCollection
@@ -431,6 +554,26 @@ class User extends BaseUser
         return $this->facebookId;
     }
 
+    /**
+     * @param boolean $managertype
+     * @return void
+     */
+    
+//     public function setManagerType($managertype)
+//     {
+//     	$this->managertype = $managertype;
+//     }
+    
+    /**
+     * @return boolean
+     */
+//     public function getManagerType()
+//     {
+//     	return $this->managertype;
+//     }
+    
+    
+    
     public function getUserRegular() {
         
         return $this->getRegularUser();
@@ -948,6 +1091,74 @@ class User extends BaseUser
     }
     
     /**
+     * Set Logged
+     * @param \Doctrine\Common\Collections\ArrayCollection $logged
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function setLogged(ArrayCollection $logged) {
+    	 
+    	$this->logged = $logged;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get Logged
+     * @return ArrayCollection
+     */
+    public function getLogged() {
+    	 
+    	return $this->logged;
+    }
+    
+    
+    /**
+     * Set MyNeighbor
+     * @param \Doctrine\Common\Collections\ArrayCollection $myneighbor
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function setMyNeighbor(ArrayCollection $myneighbor) {
+    	
+    	$this->myneighbor = $myneighbor;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get MyNeighbor
+     * @return ArrayCollection
+     */
+    public function getMyNeighbor() {
+    	
+    	return $this->myneighbor;
+    }
+    
+    
+    /**
+     * Set Requests
+     * @param \Doctrine\Common\Collections\ArrayCollection $request
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function setRequests(ArrayCollection $request) {
+    	$this->prevRequestsQuantity = $this->requests->count();
+    	$this->requests = $request;
+    
+    	return $this;
+    }
+    
+    /**
+     * Set Comments
+     * @param \Doctrine\Common\Collections\ArrayCollection $comments
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function setComments(ArrayCollection $comments) {
+    	$this->prevCommentsQuantity = $this->comments->count();
+    	$this->comments = $comments;
+    
+    	return $this;
+    }
+    
+    /**
      * Add Review
      * @param \Fenchy\NoticeBundle\Entity\Review $review
      * @return \Fenchy\UserBundle\Entity\User
@@ -960,6 +1171,30 @@ class User extends BaseUser
     }
     
     /**
+     * Add Request
+     * @param \Fenchy\NoticeBundle\Entity\Request $request
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function addRequest(Request $request) {
+    	$this->prevRequestsQuantity = $this->requests->count();
+    	$this->requests->add($request);
+    
+    	return $this;
+    }
+    
+    /**
+     * Add Comment
+     * @param \Fenchy\NoticeBundle\Entity\Comment $comment
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function addComment(Comment $comment) {
+    	$this->prevCommentsQuantity = $this->comments->count();
+    	$this->comments->add($comment);
+    
+    	return $this;
+    }
+    
+    /**
      * Remove Review
      * @param \Fenchy\NoticeBundle\Entity\Review $review
      * @return \Fenchy\UserBundle\Entity\User
@@ -969,6 +1204,30 @@ class User extends BaseUser
         $this->reviews->removeElement($review);
         
         return $this;
+    }
+    
+    /**
+     * Remove Request
+     * @param \Fenchy\NoticeBundle\Entity\Request $request
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function removeRequest(Request $request) {
+    	$this->prevRequestsQuantity = $this->requests->count();
+    	$this->requests->removeElement($request);
+    
+    	return $this;
+    }
+    
+    /**
+     * Remove Comments
+     * @param \Fenchy\NoticeBundle\Entity\Comment $comment
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function removeComment(Comment $comment) {
+    	$this->prevCommentsQuantity = $this->comments->count();
+    	$this->comments->removeElement($comment);
+    
+    	return $this;
     }
     
     /**
@@ -999,6 +1258,91 @@ class User extends BaseUser
         }
     }
     
+    public function getRequests($status = NULL) {
+    
+    	if(NULL === $status)
+    		return $this->requests;
+    
+    	if($status == 'running') {
+    		$filtered = new ArrayCollection();
+    		foreach($this->requests as $request) {
+    			if($request->getStatus() === Request::STATUS_RUNNING) {
+    				$filtered[] = $request;
+    			}
+    		}
+    		return $filtered;
+    	} else if($status == 'accepted'){
+    		$filtered = new ArrayCollection();
+    		foreach($this->requests as $request) {
+    			if($request->getStatus() === Request::STATUS_ACCEPTED) {
+    				$filtered[] = $request;
+    			}
+    		}
+    		return $filtered;
+    	} else if($status == 'pendding'){
+    		$filtered = new ArrayCollection();
+    		foreach($this->requests as $request) {
+    			if($request->getStatus() === Request::STATUS_PENDING) {
+    				$filtered[] = $request;
+    			}
+    		}
+    		return $filtered;
+    	} else if($status == 'rejected'){
+    		$filtered = new ArrayCollection();
+    		foreach($this->requests as $request) {
+    			if($request->getStatus() === Request::STATUS_REJECTED) {
+    				$filtered[] = $request;
+    			}
+    		}
+    		return $filtered;
+    	} else if($status == 'agreed'){
+    		$filtered = new ArrayCollection();
+    		foreach($this->requests as $request) {
+    			if($request->getStatus() === Request::STATUS_AGREED) {
+    				$filtered[] = $request;
+    			}
+    		}
+    		return $filtered;
+    	} else if($status == 'done'){
+    		$filtered = new ArrayCollection();
+    		foreach($this->requests as $request) {
+    			if($request->getStatus() === Request::STATUS_DONE) {
+    				$filtered[] = $request;
+    			}
+    		}
+    		return $filtered;
+    	}
+    }
+    
+    
+    /**
+     * Get Comments
+     * @return ArrayCollection
+     */
+    public function getComments($type = NULL) {
+    
+    	if(NULL === $type)
+    		return $this->comments;
+    
+    	if($type) {
+    		$filtered = new ArrayCollection();
+    		foreach($this->comments as $comment) {
+    			if($comment->getType() === Comment::TYPE_POSITIVE) {
+    				$filtered[] = $comment;
+    			}
+    		}
+    		return $filtered;
+    	} else {
+    		$filtered = new ArrayCollection();
+    		foreach($this->comments as $comment) {
+    			if($comment->getType() === Comment::TYPE_NEGATIVE) {
+    				$filtered[] = $comment;
+    			}
+    		}
+    		return $filtered;
+    	}
+    }
+    
     /**
      * Set Own Reviews
      * @param \Doctrine\Common\Collections\ArrayCollection $reviews
@@ -1009,6 +1353,30 @@ class User extends BaseUser
         $this->ownReviews = $reviews;
         
         return $this;
+    }
+    
+    /**
+     * Set Own Requests
+     * @param \Doctrine\Common\Collections\ArrayCollection $requests
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function setOwnRequests(ArrayCollection $requests) {
+    	$this->prevOwnRequestsQuantity = $this->ownRequests->count();
+    	$this->ownRequests = $requests;
+    
+    	return $this;
+    }
+    
+    /**
+     * Set Own Comments
+     * @param \Doctrine\Common\Collections\ArrayCollection $comments
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function setOwnComments(ArrayCollection $comments) {
+    	$this->prevOwnCommentsQuantity = $this->ownComments->count();
+    	$this->ownComments = $comments;
+    
+    	return $this;
     }
     
     /**
@@ -1024,6 +1392,30 @@ class User extends BaseUser
     }
     
     /**
+     * Add Own Request
+     * @param \Fenchy\NoticeBundle\Entity\Request $request
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function addOwnRequest(Request $request) {
+    	$this->prevOwnRequestsQuantity = $this->ownRequests->count();
+    	$this->ownRequests->add($request);
+    
+    	return $this;
+    }
+    
+    /**
+     * Add Own Comment
+     * @param \Fenchy\NoticeBundle\Entity\Comment $comment
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function addOwnComment(Comment $comment) {
+    	$this->prevOwnCommentsQuantity = $this->ownComments->count();
+    	$this->ownComments->add($comment);
+    
+    	return $this;
+    }
+    
+    /**
      * Remove Own Review
      * @param \Fenchy\NoticeBundle\Entity\Review $review
      * @return \Fenchy\UserBundle\Entity\User
@@ -1036,6 +1428,30 @@ class User extends BaseUser
     }
     
     /**
+     * Remove Own Request
+     * @param \Fenchy\NoticeBundle\Entity\Request $request
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function removeOwnRequest(Request $request) {
+    	$this->prevOwnRequestsQuantity = $this->ownRequests->count();
+    	$this->ownRequests->removeElement($request);
+    
+    	return $this;
+    }
+    
+    /**
+     * Remove Own Comment
+     * @param \Fenchy\NoticeBundle\Entity\Comment $comment
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function removeOwnComment(Comment $comment) {
+    	$this->prevOwnCommentsQuantity = $this->ownComments->count();
+    	$this->ownComments->removeElement($comment);
+    
+    	return $this;
+    }
+    
+    /**
      * Get Own Reviews
      * @return Review
      */
@@ -1044,14 +1460,52 @@ class User extends BaseUser
         return $this->ownReviews;
     }
     
+    /**
+     * Get Own Requests
+     * @return Request
+     */
+    public function getOwnRequests() {
+    
+    	return $this->ownRequests;
+    }
+    
+    /**
+     * Get Own Comments
+     * @return Comment
+     */
+    public function getOwnComments() {
+    
+    	return $this->ownComments;
+    }
+    
     public function getPrevReviewsQuantity() {
         
         return $this->prevReviewsQuantity;
     }
     
+    public function getPrevRequestsQuantity() {
+    
+    	return $this->prevRequestsQuantity;
+    }
+    
+    public function getPrevCommentsQuantity() {
+    
+    	return $this->prevCommentsQuantity;
+    }
+    
     public function getPrevOwnReviewsQuantity() {
         
         return $this->prevOwnReviewsQuantity;
+    }
+    
+    public function getPrevOwnRequestsQuantity() {
+    
+    	return $this->prevOwnRequestsQuantity;
+    }
+    
+    public function getPrevOwnCommentsQuantity() {
+    
+    	return $this->prevOwnCommentsQuantity;
     }
     
     /**
@@ -1066,6 +1520,35 @@ class User extends BaseUser
         }
         
         return $result;
+    }
+    
+    /**
+     * Returns all requests assigned to this user and his notices.
+     * @return Array
+     */
+    public function getAllRequests() {
+    
+    	$result = $this->requests->toArray();
+    	foreach($this->notices as $notice) {
+    		$result = array_merge($result, $notice->getRequests()->toArray());
+    	}
+    
+    	return $result;
+    }
+    
+    
+    /**
+     * Returns all comments assigned to this user and his notices.
+     * @return Array
+     */
+    public function getAllComments() {
+    
+    	$result = $this->comments->toArray();
+    	foreach($this->notices as $notice) {
+    		$result = array_merge($result, $notice->getComments()->toArray());
+    	}
+    
+    	return $result;
     }
 
     public function toJsonArray() {
@@ -1129,5 +1612,221 @@ class User extends BaseUser
     public function getCreatedAt()
     {
         return $this->created_at;
+    }    
+
+    /**
+     * Set location_id
+     *
+     * @param Fenchy\UserBundle\Entity\LocationVerification $locationId
+     * @return User
+     */
+    public function setLocationId(\Fenchy\UserBundle\Entity\LocationVerification $locationId = null)
+    {
+        $this->location_id = $locationId;
+    
+        return $this;
+    }
+
+    /**
+     * Get location_id
+     *
+     * @return Fenchy\UserBundle\Entity\LocationVerification 
+     */
+    public function getLocationId()
+    {
+        return $this->location_id;
+    }
+
+    /**
+     * Set identity
+     *
+     * @param Fenchy\UserBundle\Entity\IdentityVerification $identity
+     * @return User
+     */
+    public function setIdentity(\Fenchy\UserBundle\Entity\IdentityVerification $identity = null)
+    {
+        $this->identity = $identity;
+    
+        return $this;
+    }
+
+    /**
+     * Get identity
+     *
+     * @return Fenchy\UserBundle\Entity\IdentityVerification 
+     */
+    public function getIdentity()
+    {
+        return $this->identity;
+    }
+    
+    /**
+     * Set payment_id
+     *
+     * @param Fenchy\UserBundle\Entity\Payment $paymentId
+     * @return User
+     */
+    public function setPaymentId(\Fenchy\UserBundle\Entity\Payment $paymentId = null)
+    {
+    	$this->payment_id = $paymentId;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get payment_id
+     *
+     * @return Fenchy\UserBundle\Entity\Payment
+     */
+    public function getPaymentId()
+    {
+    	return $this->payment_id;
+    }
+    
+    /**
+     * @return ArrayCollection
+     */
+    public function getUser()
+    {
+    	return $this->user;
+    }
+    
+    /**
+     * @param ArrayCollection $user
+     */
+    public function setUsers(ArrayCollection $user)
+    {
+    	$this->user = $user;
+    }
+    
+    /**
+     * @return ArrayCollection
+     */
+    public function getMembers()
+    {
+    	return $this->members;
+    }
+    
+    /**
+     * @param ArrayCollection $members
+     */
+    public function setMembers(ArrayCollection $members)
+    {
+    	$this->members = $members;
+    }
+
+    /**
+     * Set managertype
+     *
+     * @param boolean $managertype
+     * @return User
+     */
+    public function setManagertype($managertype)
+    {
+        $this->managertype = $managertype;
+    
+        return $this;
+    }
+
+    /**
+     * Get managertype
+     *
+     * @return boolean 
+     */
+    public function getManagertype()
+    {
+        return $this->managertype;
+    }
+
+    /**
+     * Set user_group
+     *
+     * @param Fenchy\RegularUserBundle\Entity\UserGroup $userGroup
+     * @return User
+     */
+    public function setUserGroup(\Fenchy\RegularUserBundle\Entity\UserGroup $userGroup = null)
+    {
+        $this->user_group = $userGroup;
+    
+        return $this;
+    }
+
+    /**
+     * Get user_group
+     *
+     * @return Fenchy\RegularUserBundle\Entity\UserGroup 
+     */
+    public function getUserGroup()
+    {
+        return $this->user_group;
+    }
+
+    /**
+     * Add user
+     *
+     * @param Fenchy\RegularUserBundle\Entity\UserGroup $user
+     * @return User
+     */
+    public function addUser(\Fenchy\RegularUserBundle\Entity\UserGroup $user)
+    {
+        $this->user[] = $user;
+    
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param Fenchy\RegularUserBundle\Entity\UserGroup $user
+     */
+    public function removeUser(\Fenchy\RegularUserBundle\Entity\UserGroup $user)
+    {
+        $this->user->removeElement($user);
+    }
+
+    /**
+     * Add logged
+     *
+     * @param Fenchy\RegularUserBundle\Entity\Neighbors $logged
+     * @return User
+     */
+    public function addLogged(\Fenchy\RegularUserBundle\Entity\Neighbors $logged)
+    {
+        $this->logged[] = $logged;
+    
+        return $this;
+    }
+
+    /**
+     * Remove logged
+     *
+     * @param Fenchy\RegularUserBundle\Entity\Neighbors $logged
+     */
+    public function removeLogged(\Fenchy\RegularUserBundle\Entity\Neighbors $logged)
+    {
+        $this->logged->removeElement($logged);
+    }
+
+    /**
+     * Add myNeighbor
+     *
+     * @param Fenchy\RegularUserBundle\Entity\Neighbors $myNeighbor
+     * @return User
+     */
+    public function addMyNeighbor(\Fenchy\RegularUserBundle\Entity\Neighbors $myNeighbor)
+    {
+        $this->myNeighbor[] = $myNeighbor;
+    
+        return $this;
+    }
+
+    /**
+     * Remove myNeighbor
+     *
+     * @param Fenchy\RegularUserBundle\Entity\Neighbors $myNeighbor
+     */
+    public function removeMyNeighbor(\Fenchy\RegularUserBundle\Entity\Neighbors $myNeighbor)
+    {
+        $this->myNeighbor->removeElement($myNeighbor);
     }
 }

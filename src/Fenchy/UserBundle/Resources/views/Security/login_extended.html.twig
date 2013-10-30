@@ -1,7 +1,16 @@
 {% extends '::baseV2.html.twig' %}
 
+
 {% block content %}
-<section class="main">
+<script type="text/javascript">
+	$(document).ready(function()
+	{
+		$('.loginwindow').show();
+		$('#WrongPass').show();
+		//$('#loginPopup').click();
+	});
+</script>
+<!--  <section class="main">
     <div id="login-wrapper-wide" class="loginform loginform-ext">
         <a href="#" class="sign-btn fb_btn clearfix login-with-facebook">
             <span><i>facebook</i></span>
@@ -31,5 +40,5 @@
             <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
         </form>       
     </div>
-</section>                
+</section>-->                
 {% endblock %}

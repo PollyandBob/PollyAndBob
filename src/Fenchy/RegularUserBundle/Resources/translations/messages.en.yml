@@ -12,7 +12,21 @@ regularuser:
   positive: Positive
 
   negative: Negative
+    
+  open: Open
+  
+  closed: Closed
+  
+  you_are_member: YOU ARE A MEMBER
+  
+  you_are_not_member: YOU ARE NOT A MEMBER
 
+  you_are_admin: YOU ARE ADMINISTRATOR
+  
+  make_administrator: Make Administrator
+  
+  remove: Remove
+  
   all_trust_points: Reputation:
 
   dont_ask: Don't ask this question again.
@@ -20,6 +34,12 @@ regularuser:
   disable_connect: Don't ask this question again.
 
   no_contacts: You don't have any contacts yet. Just connect your account to invite your Facebook or Twitter friends.
+  
+  only_community_Neighborhood_manager: Only Community Manager or Neighborhood Manager can Create the group
+  
+  added_neighbor_success: This Neighbor Successfully added to My Neighbors
+  
+  remove_neighbor_success: This Neighbor Successfully removed from My Neighbors
 
   references: References
 
@@ -50,11 +70,59 @@ regularuser:
   sent: Sent
 
   send_new_message: Send message
+  
+  add_neighbor: Add To My Neighbors
+  
+  remove_neighbor: Remove From My Neighbors
+  
+  block: Block
+  
+  flag: Flag
 
   change_password: Change password
 
   delete_account: Delete account
 
+  write_your_review: write your review
+  
+  write_your_message: write your message
+  
+  post_comment: post a comment
+  
+  title: title
+  
+  invite_myneighbors: Invite all my neighbors
+  
+  invite_next_50_around: invite next 50 around me (only for community and neighborhood manager)
+  
+  invite_this_neighbor: invite this neighbor
+  
+  invite_another_friends: invite another friends by email
+  
+  join_group: Join the group
+  
+  leave_group: Leave the Group
+  
+  joined_group_success: You are joined the Group successfully 
+  
+  left_group_success: You are removed from the Group successfully
+  
+  members_removed_success: Selected members removed successfully
+  
+  msg_send: Your message has been sent 
+  
+  group_messages: Messages
+  
+  there_no_members: There is no members
+  
+  delete_group: Delete the Group
+
+  write_message: Write new message
+  
+  write_msg_to: Write a message to
+  
+  payment_settings: Set your payment settings first.
+  
   message:
     sent: Your message has been sent!
 
@@ -88,7 +156,31 @@ regularuser:
 
     show_dd: Show
 
-    message_center: Messages
+    message_center: Your Messages
+    
+    no_neighbors: There is no Neighbours.
+    
+    no_location: There is no location for this user.
+    
+    group_created: Your Group is Created Successfully!!
+    
+    are_you_sure_group: Are you sure to delete this Group ???
+    
+    group_deleted: Group is Deleted Successfully
+    
+    subject: New Created Group Invitation
+    
+    subject_for_invitegroupby_mail: New Created Group Invitation by Polly & Bob
+    
+    message_part: Hello, %username%
+    
+    message_first_part: This is Group Informatiopn which is Created latest
+    
+    message_second_part: please join %groupname% Group with -
+    
+    message_last_part: From Polly & Bob Team
+    
+    dear_user: Dear User,
 
   save: Save
 
@@ -100,8 +192,24 @@ regularuser:
 
   delete: Delete
 
+  accept: Accept
+  
+  reject: Reject
+  
+  write_review: Write Review
+  
+  mark_done: Mark as Done
+  
+  write_msg: message
+  
+  view_detail: View Detail
+  
+  mark_read: Mark As Read
+  
   show: Show
 
+  change: change
+  
   about_me: About Me
 
   my_community_ponts: MY COMMUNITY POINTS
@@ -109,6 +217,16 @@ regularuser:
   my_neighbours: MY NEIGHBOURS
   
   my_location: MY LOCATION
+  
+  other_community_ponts: COMMUNITY POINTS
+  
+  other_neighbours: NEIGHBOURS
+  
+  other_listingsreviews: Listings & Reviews
+  
+  group_settings: Group Settings
+  
+  group_info: Info
   
   find_me_by_what_i_like: Find Me by what i like
 
@@ -123,6 +241,10 @@ regularuser:
   not_shown_information: Not shown information
 
   neighbours: Neighbors
+  
+  listing_reviews: Listing and Reviews
+  
+  around_you: Around you
   
   total_community_points: TOTAL COMUNITY POINTS
   
@@ -159,7 +281,20 @@ regularuser:
   become_shareholder_now: BECOME SHAREHOLDER NOW!
   verify_your_location_now: VERIFY YOUR LOCATION NOW!
   verify_your_passport_now: VERYFY YOUR PASSPORT NOW!
+  verify_this_location: VERIFY THIS LOCATION!
+  no_listing: There is no Listing 
+  verify_location_message: A poscard has been sent to your address. Please follow the instructions in order to verify your location.
+  verified_location_message: Your location is already verified.
+  verify_identity_message: Press Ok and submit your identity verification request. Admin will verify this and update your status as soon as possible.
+  verified_identity_message: Your identity verified.
+  verifing_identity_message: Your identity verification request is submitted. Please wait until admin verify it.
+  change_email: CHANGE EMAIL
   
+  back: back
+  ok: ok
+  enter_password: ENTER PASSWORD
+  location_verification: LOCATION VERIFICATION
+  continue: publish
   disconnect_twitter: Disconnect Twitter
 
   connect_to_twitter: Connect to Twitter
@@ -174,7 +309,7 @@ regularuser:
 
   only_jpg_png_maximum2m: Please use only .jpg and .png files. Maximum 5MB
 
-  put_pin: Drop pin on your location
+  put_pin: set pin on map
 
   location: Your detailed location
 
@@ -241,6 +376,16 @@ regularuser:
   age: Age:
 
   your_age: Your age
+  
+  your_groupname: Your Groupname
+  
+  your_aboutgroup: About Group
+  
+  groupname: Group Name
+  
+  aboutgroup: Description
+  
+  groupStatus: Group Is :
 
   friends:
     exists: %friend% is already your contact list.
@@ -336,7 +481,7 @@ regularuser:
   validation:
     invalid__firstname: Your first name contains invalid signs.
 
-  settings_delete: Usu?ä konto
+  settings_delete: Delete Account
 
   end_of_list_msg: 
 
@@ -355,6 +500,8 @@ regularuser:
   reviews_of_others_tab: Reviews written 
 
   about: About
+  
+  status: Group is :
 
   read_all_messages: Set all as read
 
@@ -417,17 +564,66 @@ emailchange:
     11: Your Fenchy team
 
     5: To stop your Fenchy e-mail change, please click on the following link:
-help: Services / Help
+help: Help
+need_help: Need Help
 goods: Goods
-events: Create Event
-others: Other
+events: Event
+_events: Events
+others: Something Else
+_others: others
+neighbours: Neighbours
+service: Service
+demand_service: Demand Service
+groups: Groups
+offerhelp: Help
+offer_help: Offer Help
+offergoods: Goods
+need_goods: Need Goods
+offer_goods: Offer Goods
+offerevents: Event
+offerothers: Something Else
+offer_others: others
+offerservice: Service
+offer_service: Offer Service
+
+offergroups: Groups
 help_prefix: ''
 goods_prefix: ''
 events_prefix: ''
 others_prefix: ''
-offer: Offered
+offer: Offer
 need: Needed
+find_help: Find help in the Neighbour
+find: Find
+ask_for: Ask for
+service1: If you want to demand a service for free you have to ask for help.
+service2: If you want to offer a service for free you have to offer help.
+to_sell: Sell it to you
+to_swap: Swap it
+to_lend: Lend it to you
+to_use: Let me use it
+to_give: Give it for free
+sports: Sports
+party: Party
+arts: Arts
+music: Music
+other: Others
+contact_me: Contact Me!
+propose_time_price: Propose a time and price
+reserve_spot: Reserve a spot (if free)
+take_part: Come and take part!
+buy: Buy
+buy_a_spot: Buy a spot
+propose_price: Propose a price
+borrow_bring: Borrow and bring back
+use_it: Use at my place
+swap_it: Make an offer to swap
+take_free: Take it for free
+
 listing:
+  my_listing: MY LISTINGS
+  my_request: MY REQUESTS
+  request: REQUESTS
   create:
     title: Create Your Listing
 
@@ -437,23 +633,93 @@ listing:
       2: Listing Details
 
     1:
-      subtitle: Select a Category
+      subtitle: What do you want to do? 
 
       description: Pick the category that best describe your listing
+      
+      find_something : Find something?
+      in_neighbourhood: in the Neighbourhood
+      
+      offer_something : Offer something?
+      to_neighbourhood: to the Neighbourhood
+      
+      event_to_neighbour: Event to the Neighbourhood
+      
+      something_else: I want to do something else
 
     2:
-      subtitle: About Your
-
+      subtitle_neighbours: You want to find Neighbours
+      subtitle_help: You search for Help
+      subtitle_goods: You need a Goods
+      subtitle_events: You want to find an Event
+      subtitle_others: You want to offer Something Else      
+      subtitle_service: You are looking for a Service
+      subtitle_service1: If you want to demand a service for free you have to ask for help.
+      subtitle_service2: If you want to offer a service for free you have to offer help.
+      subtitle_groups: You want to find a group.
+      subtitle_offerhelp: You want to offer Help
+      subtitle_offergoods: You want to offer a Good
+      subtitle_offerevents: You want to organize an Event
+      subtitle_offerothers: You want to offer Something Else
+      subtitle_offerservice: You want to offer a Service
+      subtitle_offergroups: You want to open a Group
+      
       description: Tell us more about your listing
 
-    start_date: Start Time
+    date_arrange: Date has to be arranged
+    
+    start_date: Date
 
-    end_date: End Time
+    end_date: Date
+
+    end_time: Time
+    
+    start_time: Time
+    
+    start_time_arrange: Time has to be arranged
+    
+    end_time_arrange: Time has to be arranged
+    
+    location_arrange: Location has to be arranged
+    
+    pieces: Pieces
+    
+    one_piece: Only 1 piece
+    
+    price_piece: Price/piece
+    
+    price_hour: Price/hour
+    
+    price_spot: Price/spot
+    
+    total: Total price
+    
+    spot: Spots
+    
+    hour: Hours
+    
+    unlimited: Unlimited 
+    
+    currency: Currency
+    
+    price: Price
+    
+    free: Free
+    
+    default_setting: Use default payment setting
+    
+    for_free: For free.
+    learn_more: learn more about payment settings
 
   show:
     tags: Tags
 
     description: Description
+    
+    reviews: Reviews
+    
+    writereviews: Write Review
+    comment: Comment
 
   edit:
     title: Edit Your Listing
@@ -465,6 +731,7 @@ listing:
   manage_listings: My listings
 
   no: You didn't add any listing yet.
+  noreq: You didn't requested on any listing yet.
 
   delete:
     msg: Do you really want to delete your listing %notice% ?
@@ -479,6 +746,8 @@ settings:
     name: Profile information
 
     profile_photo: Profile Picture
+    
+    cover_photo: Cover Picture
 
   location:
     name: Location
@@ -492,11 +761,13 @@ settings:
     name: Social networks
 
   account:
-    name: Account
+    name: Account Settings
 
     delete_confirm_action: Please confirm the deletion of your account. Once your account is deleted, it can't be restored.
 
     change_password_name: Change account password
+      
+    payment: Payment Settings
 
   flash:
     data_saved: The profile information has been changed.
@@ -522,7 +793,7 @@ reputation:
 
   contacts: Contacts
 
-  profile: Profile information
+  profile: Profile information  
 member_since: Member Since
 invitations:
   email:
@@ -536,3 +807,77 @@ invitations:
     accept: Accept
 
     reject: Reject
+    
+otherprofile:
+  members: Members
+  
+  member: Member
+  
+  community_m: Community Manager
+    
+  house_m: House Manager
+  
+  neighbor: Neighborhood Manager
+
+request:
+  msg1: Thanks for connecting to the hood.
+  msg2: Thanks for requesting to
+  send: Send
+  return_to_listing: Return to Listing
+  your_list: This is your listing!
+  price_propose: Make your price proposel:
+  login_require: Login require.
+  left: left.
+  how_many: how many do you want?
+  in_price: In price of
+  total_price: Total Price
+  proposed: Proposed
+  want: want
+  message_to_user: Message to  
+  
+payment:
+  default_payment: Default payment settings
+  no_default: No default payment settings installed.
+  choose_default: Choose your default payment method.
+  direct_debit: Direct debit
+  paypal: Paypal
+  credit_card: Credit Card
+  why_payment_setting: Why payment settings?
+  why_payment_setting1: To run a platform like Polly & Bob you need a complex server infrastructure and people who do the job.
+  why_payment_setting2: In order to keep Polly & Bob run, we take a 10% commission only on a money invited transactions.
+  why_payment_setting3: All other transactions are for free.
+  why_payment_setting4: We kindly ask you to make a contribution to Polly & Bob by selling old stuff to neighbours via Polly & Bob 
+  why_payment_setting5: rather than going to our commercial cometitors.
+  why_payment_setting6: Help Polly & Bob, support your neighbourhood by selling via Polly & Bob.
+  why_payment_setting7: Some part of the money will be redirected to users which are neighbourhood managers, to support them to contribute to the neighbourhood.   
+  how_decide_term: How can I decide on the terms?
+  board_neighbour: Board of Neighbours
+  how_support: How else can I support Polly & Bob?
+  you_can_msg: You can sell stuff on polly & bob and we take 10%.
+  become_member: Become a member of the board of neighbours. 
+  place: That is the place where you can join in to discuss topics like how we finance Polly & Bob.
+  offer_good: Offer a Goods
+  offer_service: Offer a Service
+  offer_event: Offer an Event
+  you_can_invest: You can invest in us by landing us some money.
+  invest: Invest in Polly & Bob
+  donate: You can donate!
+  donation: Donation
+  account_holder: Account Holder
+  account: Account
+  bank_code: Bank Code
+  term_condition: I authorized Polly & Bob to take 10% commission to everything I sell via Polly & Bob.
+  save: Save Settings
+  save2: Save Settings and let me go to back my listing
+  sepa: SEPA
+  email_to_paypal: Email To Paypal Account
+  type_of_card: Type of Card
+  card: Card
+  card_holder: Card Holder
+  valid_till: Valid till
+  visa: Visa
+  master_card: Master Card
+  change: change
+  delete: delete
+  deletemsg: Your payment setting uninstalled.
+  savemsg: Your payment setting installed successfully.

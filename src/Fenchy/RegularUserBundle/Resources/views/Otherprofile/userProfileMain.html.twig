@@ -1,0 +1,10 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+
+{% block javascripts %}
+	{{ parent() }}		
+{% endblock %}
+{% block content %}
+	{% render 'FenchyRegularUserBundle:Otherprofile:otherAvatar' %}
+	
+	{% include 'FenchyRegularUserBundle:Otherprofile:othermenu.html.twig' %}
+{% endblock %}
