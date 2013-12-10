@@ -4,11 +4,14 @@ namespace Fenchy\RegularUserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 use Fenchy\UserBundle\Entity\User;
 use Fenchy\RegularUserBundle\Entity\UserRegular;
 use Fenchy\GalleryBundle\Entity\Gallery;
 use Fenchy\RegularUserBundle\Entity\GroupMembers;
+use Fenchy\UtilBundle\Entity\Location;
+use Fenchy\NoticeBundle\Entity\Notice;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -70,7 +73,7 @@ class UserGroup
      * @var ArrayCollection $usergroup
      *
      * @ORM\OneToMany(targetEntity="Fenchy\RegularUserBundle\Entity\GroupMembers", mappedBy="current", cascade={"remove"})
-     * @ORM\OrderBy({"created_at"="DESC"})
+     * 
      */
     private $usergroup;
     
@@ -81,6 +84,13 @@ class UserGroup
      * @ORM\OneToMany(targetEntity="Fenchy\MessageBundle\Entity\Message", mappedBy="usergroup")
      */
     private $messages;
+    
+    /**
+     * @var Location $location
+     *
+     * @ORM\OneToOne(targetEntity="Fenchy\UtilBundle\Entity\Location", mappedBy="usergroup", cascade={"persist"})
+     */
+    protected $location;
     
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -102,14 +112,47 @@ class UserGroup
      */
     private $file2;
     
+    /**
+     * @var \DateTime $created_at
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created_at;
+    
+    /**
+     * @var integer $locSave
+     *
+     * @ORM\Column(type="integer", length=1, nullable=true)
+     */
+    private $locSave;
+    
+    /**
+     * @var ArrayCollection $comments
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Comment", mappedBy="aboutUserGroup")
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $comments;
+    
+    /**
+     * @var ArrayCollection $notices
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Notice", mappedBy="usergroup", cascade={"remove", "persist"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $notices;
+    
+    protected $prevNoticesQuantity = FALSE;
     
     public function __construct()
     {
     	
     	$this->user       = new ArrayCollection();
-    	$this->usergroup  = new ArrayCollection();
-    	$this->members    = new ArrayCollection();
+    	$this->usergroup  = new ArrayCollection();    	
     	$this->messages   = new ArrayCollection();
+    	$this->comments   = new ArrayCollection();
+    	$this->notices   = new ArrayCollection();
     }
     
     public function getId()
@@ -123,12 +166,88 @@ class UserGroup
     }
     
     /**
+     * Set Comment
+     * @param \Doctrine\Common\Collections\ArrayCollection $comments
+     * @return \Fenchy\RegularUserBundle\Entity\UserGroup
+     */
+    public function setComments(ArrayCollection $comments) {
+    
+    	$this->comments = $comments;
+    
+    	return $this;
+    }   
+
+    public function getComments() {
+    
+    	return $this->comments;
+    }
+    
+    /**
+     * Sets prevNoticesQuantity value to current notices quantity.
+     * This function should be called each time when one of user listings draft status must be changed (before it).
+     * called in Fenchy\NoticeBundle\Entity\Notice::setDraft();
+     */
+    public function countPrevNoticesQuantity() {
+    
+    	$this->prevNoticesQuantity = $this->getNonDraftNoticesCount();
+    }
+    /**
+     * Set Notices. Clones user location into Notices which has no location.
+     * @param ArrayCollection $notices
+     * @return UserGroup
+     */
+    public function setNotices(ArrayCollection $notices) {
+    
+    	$this->prevNoticesQuantity = $this->getNonDraftNoticesCount();
+    	// set notices location
+    	foreach($notices as $notice) {
+    
+    		if(!$notice->getLocation()) {
+    			$notice->setLocation(clone $this->getLocation());
+    		}
+    	}
+    
+    	$this->notices = $notices;
+    
+    	return $this;
+    }
+    
+    /**
+     * Add Notice. Clones user location into Notice if notice has no set location.
+     * @param Notice $notice
+     * @return UserGroup
+     */
+    public function addNotice(Notice $notice) {
+    
+    	if(!$notice->getLocation()) {
+    		$notice->setLocation(clone $this->getLocation());
+    	}
+    
+    	$this->prevNoticesQuantity = $this->getNonDraftNoticesCount();
+    	$this->notices->add($notice);
+    
+    	return $this;
+    }
+    
+    /**
      * @return ArrayCollection
      */
-    public function getUserGroup()
-    {
-    	return $this->usergroup;
+    public function getNotices() {
+    
+    	return $this->notices;
     }
+    
+    public function setCreatedAt($created_at)
+    {
+    	$this->created_at = $created_at;
+    
+    	return $this;
+    }
+    
+    public function getCreatedAt()
+    {
+    	return $this->created_at;
+    }  
     
     public function setUserGroup(ArrayCollection $usergroup)
     {
@@ -145,20 +264,7 @@ class UserGroup
     public function getMessages()
     {
     	return $this->messages();
-    }
-    
-    /**
-     * @return ArrayCollection
-     */
-    public function getMembers()
-    {
-    	return $this->members;
-    }
-    
-    public function setMembers(ArrayCollection $members)
-    {
-    	$this->members = $members;
-    }
+    }  
     
     public function getGroupname()
     {
@@ -192,6 +298,20 @@ class UserGroup
     public function setStatus($status)
     {
     	$this->status = $status;
+    }
+    
+    public function setLocation(Location $location) {
+    
+    	$this->location = $location->setUserGroup($this);
+    
+    	return $this;
+    }
+    
+    public function getLocation() {
+    
+    	!$this->location && $this->setLocation(new Location());
+    
+    	return $this->location;
     }
  
     public function getAbsolutePath()
@@ -352,5 +472,161 @@ class UserGroup
     	$this->user = $user;
     }
     
+    /**
+     * Set path
+     *
+     * @param string $path
+     * @return UserGroup
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    
+        return $this;
+    }
 
+    /**
+     * Get path
+     *
+     * @return string 
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * Set path2
+     *
+     * @param string $path2
+     * @return UserGroup
+     */
+    public function setPath2($path2)
+    {
+        $this->path2 = $path2;
+    
+        return $this;
+    }
+
+    /**
+     * Get path2
+     *
+     * @return string 
+     */
+    public function getPath2()
+    {
+        return $this->path2;
+    }
+
+    /**
+     * Set locSave
+     *
+     * @param integer $locSave
+     * @return UserGroup
+     */
+    public function setLocsave($locSave)
+    {
+        $this->locSave = $locSave;
+    
+        return $this;
+    }
+
+    /**
+     * Get locSave
+     *
+     * @return integer 
+     */
+    public function getLocsave()
+    {
+        return $this->locSave;
+    }
+
+    /**
+     * Add usergroup
+     *
+     * @param Fenchy\RegularUserBundle\Entity\GroupMembers $usergroup
+     * @return UserGroup
+     */
+    public function addUsergroup(\Fenchy\RegularUserBundle\Entity\GroupMembers $usergroup)
+    {
+        $this->usergroup[] = $usergroup;
+    
+        return $this;
+    }
+
+    /**
+     * Remove usergroup
+     *
+     * @param Fenchy\RegularUserBundle\Entity\GroupMembers $usergroup
+     */
+    public function removeUsergroup(\Fenchy\RegularUserBundle\Entity\GroupMembers $usergroup)
+    {
+        $this->usergroup->removeElement($usergroup);
+    }
+
+    /**
+     * Get usergroup
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getUserGroup()
+    {
+        return $this->usergroup;
+    }
+
+    /**
+     * Add messages
+     *
+     * @param Fenchy\MessageBundle\Entity\Message $messages
+     * @return UserGroup
+     */
+    public function addMessage(\Fenchy\MessageBundle\Entity\Message $messages)
+    {
+        $this->messages[] = $messages;
+    
+        return $this;
+    }
+
+    /**
+     * Remove messages
+     *
+     * @param Fenchy\MessageBundle\Entity\Message $messages
+     */
+    public function removeMessage(\Fenchy\MessageBundle\Entity\Message $messages)
+    {
+        $this->messages->removeElement($messages);
+    }
+
+    /**
+     * Add comments
+     *
+     * @param Fenchy\NoticeBundle\Entity\Comment $comments
+     * @return UserGroup
+     */
+    public function addComment(\Fenchy\NoticeBundle\Entity\Comment $comments)
+    {
+        $this->comments[] = $comments;
+    
+        return $this;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param Fenchy\NoticeBundle\Entity\Comment $comments
+     */
+    public function removeComment(\Fenchy\NoticeBundle\Entity\Comment $comments)
+    {
+        $this->comments->removeElement($comments);
+    }
+
+    /**
+     * Remove notices
+     *
+     * @param Fenchy\NoticeBundle\Entity\Notice $notices
+     */
+    public function removeNotice(\Fenchy\NoticeBundle\Entity\Notice $notices)
+    {
+        $this->notices->removeElement($notices);
+    }
 }

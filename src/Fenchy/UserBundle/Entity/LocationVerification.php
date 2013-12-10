@@ -53,6 +53,43 @@ class LocationVerification
 	private $status;
 	
 	/**
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	private $activitypoint;
+	
+	/**
+	 * @var string $lastname
+	 *
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Assert\NotBlank
+	 */
+	private $lastname;	
+	
+	/**
+	 * @var string $pincode
+	 *
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Assert\NotBlank
+	 */
+	private $pincode;
+	
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(type="text", nullable=true) 
+	 * @Assert\MaxLength(10000)
+	 */
+	private $address;
+	
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(type="text", nullable=true) 
+	 * @Assert\MaxLength(10000)
+	 */
+	private $additionalAddress;
+	
+	/**
 	 * @var DateTime
 	 *
 	 * @ORM\Column(type="datetime", nullable=true)
@@ -188,5 +225,120 @@ class LocationVerification
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set activitypoint
+     *
+     * @param integer $activitypoint
+     * @return LocationVerification
+     */
+    public function setActivitypoint($activitypoint)
+    {
+        $this->activitypoint = $activitypoint;
+    
+        return $this;
+    }
+
+    /**
+     * Get activitypoint
+     *
+     * @return integer 
+     */
+    public function getActivitypoint()
+    {
+        return $this->activitypoint;
+    }
+
+    /**
+     * Set lastname
+     *
+     * @param string $lastname
+     * @return LocationVerification
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+    
+        return $this;
+    }
+
+    /**
+     * Get lastname
+     *
+     * @return string 
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * Set pincode
+     *
+     * @param string $pincode
+     * @return LocationVerification
+     */
+    public function setPincode($pincode)
+    {
+        $this->pincode = $pincode;
+    
+        return $this;
+    }
+
+    /**
+     * Get pincode
+     *
+     * @return string 
+     */
+    public function getPincode()
+    {
+        return $this->pincode;
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     * @return LocationVerification
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string 
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set additionalAddress
+     *
+     * @param string $additionalAddress
+     * @return LocationVerification
+     */
+    public function setAdditionalAddress($additionalAddress)
+    {
+        $this->additionalAddress = $additionalAddress;
+    
+        return $this;
+    }
+
+    /**
+     * Get additionalAddress
+     *
+     * @return string 
+     */
+    public function getAdditionalAddress()
+    {
+        return $this->additionalAddress;
     }
 }

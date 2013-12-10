@@ -110,7 +110,7 @@
 		        	<input type="submit" id="continue" class="blue_button" value="{{ 'btn.save'|trans }}"/>
 		        {% endif %}
 	      	</form>
-	        <a href="#dialog8" name="modal" id="vzoom_1944" class="zoomthis button">{{ 'regularuser.verify_this_location'|trans }}</a>
+	        <a href="#dialog46" name="modal" id="vzoom_1944" class="zoomthis button">{{ 'regularuser.verify_this_location'|trans }}</a>
             <div class="clearfix"></div>
 	        <div class="map">
 		    	<div id="map_canvas"></div>
@@ -121,21 +121,31 @@
 			<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
 		</div>
 		<section id="boxes2">
-    		<div id="dialog8" class="window"> 
-    	    	<div class="big_popup">
-	            	<div class="big_popupclose"><a href="" class="close"></a></div>
-            
-            		{% if verified %}
-            			<p>{{ 'regularuser.verified_location_message'|trans|upper }}</p>            										   	        		
-    	        	{% else %}
-						<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>			
-            			<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
-							<button>{{ 'regularuser.ok'|trans|upper }}</button>
-    	        		</form>
-    	        	{% endif %}
-        		</div>    
-    		</div>    
-    		<div id="mask"></div>
-    	</section>
+	    	<div id="dialog46" class="window" style="height: auto; width: 590px; padding: 30px 0 0 28px;"> 
+	        <div class="big_popup">
+	            <div class="big_popupclose"><a href="" class="close"></a></div>
+	            
+					{% if verified %}
+	            		<p>{{ 'regularuser.verified_location_message'|trans|upper }}</p>            								   	        		
+	    	        {% else %}
+	    	        	{% if not verifyLocation %}
+	    		        		<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>			
+			            		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
+				            		<input type="text" id="firstname" name="firstname" readonly="readonly" value="{{ user.regularuser.name }}"/><br/>
+				            		<input type="text" id="lastname" name="lastname" text="{{ user.regularuser.lastname }}" placeholder="{{ 'regularuser.lastname'|trans  }}"/><br/>
+				            		<textarea id="address" name="address" readonly="readonly">{{ user.location.location }}</textarea><br/>
+				            		<textarea id="additionaladdress" name="additionaladdress" placeholder="{{ 'regularuser.additional_address'|trans  }}"></textarea><br/>
+				           			<input type="text" id="pincode" name="pincode" placeholder="{{ 'regularuser.postcode1'|trans }}"/><br/>
+									<button type="submit"> {{ 'regularuser.ok'|trans|upper }}</button>
+			    	        	</form>
+							{% else %}							
+			    	        	<p>{{ 'regularuser.verifing_location_message'|trans|upper }}</p>
+	    	        	{% endif %}
+	    	        {% endif %}
+	        </div> 
+	        <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">   
+	    </div>    
+	    <div id="mask"></div>
+    </section>
                    
 {% endblock %}

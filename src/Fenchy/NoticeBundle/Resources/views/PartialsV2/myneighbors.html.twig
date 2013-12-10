@@ -10,8 +10,25 @@
 </style>
 
 {% if users2 %}
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			{% for user in users2 %}
+			$("#user_{{ user.id }}").tooltip({
+				cssClass: "ui-tooltips-neighbor", 
+				delay : 0,// time in milliseconds that you must leave the mouse over the link until the tooltip appears
+				duration : 500,//time in milliseconds that the tooltip will stay visible after you remove the mouse over the link
+				xOffset : 15,
+				yOffset : 15,
+				opacity : 0, 
+				fadeDuration: 400 
+			});
+			{% endfor %}
+			
+		});
+	</script>
 	{% for user in users2 %}
-		<a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice') }}/{{ user.id }}"><img width="50" height="50" src="/{{ user.twitterusername }}" alt="{{ user.email }}" /></a>
+		<a id="user_{{ user.id }}" title="{{ user.userregular.firstname }}" href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice') }}/{{ user.id }}"><img width="50" height="50" src="/{{ user.twitterusername }}"/></a>
 	{% endfor %}
 {% else %}
 	    <div id="no_neighbours_onload" ><h4>{{ 'regularuser.message.no_neighbors'|trans }}</h4></div>

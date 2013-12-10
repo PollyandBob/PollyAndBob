@@ -1,0 +1,223 @@
+{# //extends 'FenchyRegularUserBundle::settings.html.twig' #}
+{% extends 'FenchyRegularUserBundle::myProfileSettings.html.twig' %}
+
+{% form_theme form.location '::noLabelForm.html.twig' %}
+
+{% block stylesheets %}
+   {{ parent() }}
+<link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+<script type="text/javascript" src="{{ asset('js/regular_user/listing/create.js') }}"></script>
+<script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+{% include '::gmapsApiAsset.html.twig' %}
+
+<script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/mvvm/user-settings-view-model.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+
+<script type="text/javascript">
+
+    userSettingsViewModel = null;
+
+    $(document).ready(function() {
+        geocoder = new google.maps.Geocoder();
+        var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';
+
+        userSettingsViewModel = new UserSettingsViewModel(geocoder, baseSearchViewUri);
+
+        ko.applyBindings(userSettingsViewModel, document.getElementsByTagName('body')[0]);
+
+        autocomplete = new GApiAutocomplete(
+                document.getElementById('fenchy_userbundle_user_locationtype_location_location'),
+                userSettingsViewModel);
+
+
+    });
+    function hasCoordinates()
+    {
+    	{% if app.user.hasRequiredLocation %}
+        	return true;
+        {% endif %}
+
+        return false;
+    }
+
+    function getLatitude()
+    {
+        return '{{ app.user.location.latitude }}'
+    }
+
+    function getLongitude()
+    {
+        return '{{ app.user.location.longitude }}';
+    }
+    </script>
+    
+    <script src="{{ asset('js/geolocalization.js') }}"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        initialize();
+    });
+        </script>
+        <script type="text/javascript" src="{{ asset('js/regular_user/settings/form.js') }}"></script>
+        
+    <script type="text/javascript">
+		function verifyLocation()
+		{
+			var url = "{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}";
+			$.ajax({
+				url : url,
+				type : "post",
+				data : {
+					},
+				beforeSend : function() {
+					
+				},
+				success : function(response) {
+					alert(response);
+				},
+				error : function() {
+					alert('Something went wrong!');
+				},
+				complete : function() {					
+				}
+			});
+		}		
+	</script>
+{% endblock %}
+
+{% block content %}
+<style>
+.message .right .profilei img
+{
+	border-radius: 50% 50% 50% 50%;
+    float: left;
+    height: 50px;
+    margin-right: 10px;
+    width: 50px;
+}
+.message .right form input[type="submit"] {
+    float: right;
+    padding: 1px 5px 0;
+    margin-top: 15px;
+}
+.message .right form .profilei {
+    height: 50px;
+    left: 23px;
+    position: absolute;
+    top: 10px;
+    width: 50px;
+}
+#fenchy_message_reply label
+{
+	display:none;
+}
+.read_arrow, .unread_arrow 
+{
+	top:0px !important;
+}
+</style>
+	{% render 'FenchyRegularUserBundle:Groupprofile:groupavatar' with { 'groupId' : groupId } %}
+	{% render 'FenchyRegularUserBundle:Groupprofile:groupmenu' with { 'groupId' : groupId } %}
+		
+		
+       <div class="message">
+				<div class="left">
+                	<a href="{{ path('fenchy_regular_user_messages_index') }}" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>
+                    <div class="clearfix"></div>
+                    <div class="messagedetail">
+                    	{% if messages %}
+                          {% for message in messages %}
+	                    	<a href="{{ path('fenchy_regular_user_user_groupprofile_groupmessages_view', {'groupId': groupId ,'id': message.id}) }}" {% if not message.read %} {% if message.receiver != app.user %} class="message-read" {% else %} class="message-unread" {% endif %} {% endif %}>
+	                    	<div {% if message.read %}class="message-read"{% endif %}>
+	                            <div class="profilei">
+                          			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
+                          		</div>
+	                            {% if message.receiver != userObj %}
+	                            <img class="read_arrow" src="{{ asset('images/message-arrow1.png') }}" alt="" />
+	                            {% elseif message.receiver == userObj %}
+	                            <img class="read_arrow" src="{{ asset('images/message-arrow2.png') }}" alt="" />
+	                            {% endif %}
+	                            <p>{{ message.sender.userregular.firstname }}</p>
+	                            <p>{{ message.title }}</p>
+	                        </div>
+	                        </a>
+	                    	
+                    	 {% endfor %}
+                      {% else %}
+                         	{{'regularuser.message.no_messages'|trans}}</td>
+                      {% endif %}
+                    </div>
+                <div class="bgbottom"><img alt="" src="{{ asset('images/bgbottom_leftpart.png') }}"></div>
+                </div>
+                
+                <div class="right">
+                	{% for message in messagesView %}
+                				{% if message.sender.id == app.user.id %}
+                					{% set userurl = 'fenchy_regular_user_user_myprofile_aboutmychoice' %}
+								{% else %}
+									{% set userurl = 'fenchy_regular_user_user_otherprofile_aboutotherchoice' %}
+								{% endif %}
+								<a href="{{path(userurl, {'userId': message.sender.id})}}">
+					            <div class="profilei">	
+									{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
+					            </div>
+					            </a>
+					            
+					        <p class="name">{{ message.sender.userregular.firstname }}</p>
+		                    <div class="clearfix"></div>
+		                    <p class="message-all">{{ message.content|nl2br }}</p>
+                    		<br/><br/><br/>
+                    {% endfor %}
+                    
+                    {% if messagesView.first.replyable %}
+                    <form action="{{ path('fenchy_regular_user_messages_sendbygroup', {'groupId': groupId, 'prev_id':messagesView.last.id}) }}" method="post" {{ form_enctype(form1) }}>
+                    	
+                    	{{ form_widget(form1) }}
+                    	<div class="profilei">
+                    		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': app.user.id } %}
+                    	</div>
+                    	{{ form_rest(form1) }}
+                    	
+                        <input type="submit" id="continue" class="blue_button" value="{{ 'btn.send'|trans }}"/>
+                    </form>
+                     {% endif %}
+                    <div class="bgbottom_right"><img alt="" src="{{ asset('images/bgbottom_contantinner.png') }}"></div>
+                    
+					     
+						
+                </div>
+            </div>
+            
+         <a id="successDialog2" href="#dialog35" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+            
+        <section id="boxes2">
+				<div id="dialog35" class="window">
+				   	<div class="big_popup">
+				      	<div class="big_popupclose"><a href="" class="close"></a></div>
+						<div id="messageForm">
+							<p>{{ 'regularuser.msg_send'|trans }}</p>
+					</div>
+				</div>
+			</div>
+			<div id="mask"></div>
+		</section>    
+		<section id="boxes2">
+    		<div id="dialog2" class="window"> 
+    	    	<div class="big_popup">
+	            	<div class="big_popupclose"><a href="" class="close"></a></div>
+            
+					<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>			
+            		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
+						<button>{{ 'regularuser.ok'|trans|upper }}</button>
+    	        	</form>
+        		</div>    
+    		</div>    
+    		<div id="mask"></div>
+    	</section>
+                   
+{% endblock %}

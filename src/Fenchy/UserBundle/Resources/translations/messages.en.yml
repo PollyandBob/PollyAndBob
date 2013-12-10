@@ -1,11 +1,11 @@
 user:
-  rest_pass_msg: Please enter your new password
+  rest_pass_msg: Please enter your new password!
 
-  enter_pass_again: Please enter your password again
+  enter_pass_again: Please enter your password again!
 
   forgot_your_password: Forgot your password?
 
-  password_changed_msg: Success! Your password has been changed!
+  password_changed_msg: Your password has been changed successfully.
 
   password_changed_link_msg: Click here to continue.
 
@@ -18,9 +18,7 @@ user:
   password_reset:
     name: Reset your password
 
-  account_deleted: Account has been deleted
-
-  twitter_disconnected: Twitter disconnected
+  account_deleted: Account has been deleted successfully.
 
   could_not_get_token: Sorry, something went wrong. Please try it again.
 
@@ -33,49 +31,11 @@ user:
 
   user_with_confirmation_token_not_exist: The user with confirmation token %s% does not exist
 
-  your_facebook_account_already_connected: Your Facebook account is already connected to another Fenchy account.
-
-  facebook_connected: Facebook connected
-
-  facebook_disconnected: Facebook disconnected
-
-  facebook_timeline_connected: Connected to Facebook Timeline
-
-  facebook_timeline_disconnected: Disconnected from Facebook Timeline
-
-  twitter_user_exists:
-    0: Your Twitter account is already connected to another Fenchy account.
-
-    1: If you wish to connect your account with your Twitter profile,
-
-    2: you have to login with you username and password and go to settings -> social networks
-
-    3: You can also create a new Fenchy account using your Twitter profile. In doing so, please provide us with a new e-mail address
-
-    4: and a new username
-
-  some_fb_data_invalid_for_fenchy: Sorry, we can't use certain data of Facebook for Fenchy.
-
-  facebook_user_exists:
-    0: There is already an account connected with your Facebook profile.
-
-    1: If you wish to connect your account with your Facebook profile,
-
-    2: you have to login with you username and password and go to settings -> social networks
-
-    3: You can also create a new Fenchy account using your Facebook profile. In doing so, you have to provide us with a new email address
-
-    4: and a username
-
   new_user_created: The account has been created.
 
   token_expired: Token has been used or expired
 
-  user_twitter_reg_not_exist: This Twitter name does not exist.
-
   registration: Registration
-
-  register_welcome_msg_twitter: You are logged in with Twitter, to complete the registration click on the following link.
 
   go_to_main_page: Go to main page
 change_password:
@@ -96,7 +56,7 @@ register:
 
   save_button: Sign Up
 
-  title: Sign Up
+  title: Register now as a Test User!
 
   with_fb: Sign Up with Facebook
 

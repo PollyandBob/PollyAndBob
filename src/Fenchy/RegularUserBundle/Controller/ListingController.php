@@ -12,6 +12,18 @@ use Fenchy\NoticeBundle\Form\NoticeDeleteType,
     Fenchy\NoticeBundle\Entity\Review;
 use Fenchy\RegularUserBundle\Entity\Document;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Fenchy\UserBundle\Entity\NotificationGroupInterval;
+use Fenchy\UserBundle\Entity\NotificationQueue;
+
+use Fenchy\UserBundle\Entity\User;
+use Fenchy\RegularUserBundle\Entity\UserRegular;
+
+use Paymill\Request;
+use Paymill\Models\Request\Preauthorization;
+use Paymill\Models\Request\Transaction;
+use Fenchy\MessageBundle\Entity\Message;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * This controller should manage listings (notices) and all other operations should not be here.
@@ -30,14 +42,15 @@ class ListingController extends Controller
     public function create1Action() {
         
     	$user = $this->get('security.context')->getToken()->getUser();
-    	
+    	$em = $this->getDoctrine()->getManager();
     	$alertmsg = true;
-    	
-    	if($user->getActivity() < 400 )
-    	{
+    	$managertype = $em->getRepository('FenchyRegularUserBundle:UserRegular')
+    		->getManagerType($user);
+    	if($user->getActivity() < 400 and $managertype[0] !="pioneer" )
+	    {
     		$alertmsg = false;
     	}
-    	
+    	$groupId=$this->getRequest()->get('groupId');
         $direction = $this->container->getParameter('notice_menu_property');
         $em = $this->getDoctrine()->getManager();
         $types = $em->getRepository('FenchyNoticeBundle:Type')->getAllWithProperties();
@@ -47,7 +60,8 @@ class ListingController extends Controller
                 array(
                     'types' => $types,
                     'direction' => $direction,
-                	'alertmsg'=> $alertmsg, 	
+                	'alertmsg'=> $alertmsg,
+                	'groupId' => $groupId,	
                 ));
     }
     
@@ -65,10 +79,13 @@ class ListingController extends Controller
     	
     	 
         $em = $this->getDoctrine()->getManager();
+        $groupIdbyGroup=$this->getRequest()->get('groupId');
         
         $user = $this->get('security.context')->getToken()->getUser();
+        
         $location = $user->getLocation();
         $payment = false;
+        $success = false;
         $paymentsetting = $em->getRepository('UserBundle:Payment')->checkUser($user);        
         if($paymentsetting)
         	$payment = true;
@@ -81,13 +98,23 @@ class ListingController extends Controller
     	$val = $this->get('translator')->trans('regularuser.only_community_Neighborhood_manager');
     	$alertmsg = '';
     	
+    	
     	if($typename=='offergroups')
     	{	
-	    	if($user->getActivity() < 400 )
+    		$managertype = $em->getRepository('FenchyRegularUserBundle:UserRegular')
+    		->getManagerType($user);
+    		
+    		//if ($managertype[1]!='C' || $managertype[1]!='N' || $managertype[2]!='violet') return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+    		
+	    	if($user->getActivity() < 400 and $managertype[0] !="pioneer" )
 	    	{	
 	    		$alertmsg =  "alert('".$val."');";
 	    	}
+	    	
     	}
+    	$saveByUsergroup = null;
+    	
+    	//print_r($saveByUsergroup->getUserGroup());
     	
 		if($groupId)
 		{	
@@ -143,6 +170,8 @@ class ListingController extends Controller
             $data['alertmsg'] = $alertmsg;
             $data['neighborsNext50'] = $neighborsNext50;
             $data['payment'] = $payment;
+            $data['success'] = $success;
+            $data['groupId'] = $groupIdbyGroup;
             
             return $this->render(
                 'FenchyRegularUserBundle:Listing:create2.html.twig', $data);
@@ -170,7 +199,16 @@ class ListingController extends Controller
             if ($form->isValid()) {
                 // Notice is not a draft any more.
                 $notice->setDraft(FALSE);
-
+				
+                // save info usergroup in notice when create by UserGroup Profile
+               
+	            if($groupIdbyGroup)
+		    	{
+		    		$saveByUsergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupIdbyGroup);
+		    		$notice->setUserGroup($saveByUsergroup);
+		    	}
+                
+                
                 // We need to manually set all Value entities
                 $notice->setValues($this->getValuesFromForm($form->get('type'), $direction));
                 $tags = $this->get('fenchy_dictionary')->store($notice->getTags(), TRUE);
@@ -184,44 +222,30 @@ class ListingController extends Controller
                 // And again we need to call gallery manager to handle gallery changes.
                 $this->get('fenchy.gallery_manager')->manageGallery($notice->getGallery(), TRUE);
                 
-                // PUT ON FB
-                //$fb_feed = $facebookProvider = $this->get('fenchy.facebook.user')->post($notice);
-                
-                $positive = $this->get('translator')
-                        ->trans('notice.added_successfully');
-                
-                $negative = '';
-                
-//                 if($fb_feed instanceof \Fenchy\NoticeBundle\Entity\FacebookFeed) {
-//                     $em->persist($fb_feed);
-//                     $positive .= '<br/>'.$this->get('translator')
-//                         ->trans('notice.successfully_posted_on_fb');
-//                 }
-//                 elseif(FALSE === $fb_feed) {
-//                     $negative .= $this->get('translator')
-//                         ->trans('notice.posting_on_fb_failed');
-//                 }
-
                 $em->persist($notice);
                 $em->flush();
-                
-                // set flash messages
-                $this->get('session')->setFlash('positive', $positive);
-                if($negative) $this->get('session')->setFlash('negative', $negative);
-                
+                $success = true;
                 // Done :) Let the user see new notice.
-                $created_at = $notice->getCreatedAt();
                 
-                if($created_at) {
-                    return $this->redirect($this->generateUrl('fenchy_notice_show_slug', array(
-                        'slug' => $notice->getSlug(),
-                        'year' => $created_at->format('Y'),
-                        'month' => $created_at->format('m'),
-                        'day' => $created_at->format('d')
-                    )));
-                } else {
-                    return $this->redirect($this->generateUrl('fenchy_regular_user_notice_show', array('id' => $notice->getId())));
-                }                
+                $data = $this->get('fenchy.gallery_manager')->manageGallery($notice->getGallery(), FALSE);
+                $data['notice']   = $notice;
+                $data['form']     = $form->createView();
+                $data['form_ugroup'] = $form_ugroup->createView();
+                $data['type']     = $type;
+                $data['direction'] = $direction;
+                $data['location'] = $location;
+                $data['tags']   = $this->get('fenchy_dictionary')->getAllListingTags();
+                $data['displayUser'] = $user;
+                $data['alertmsg'] = $alertmsg;
+                $data['neighborsNext50'] = $neighborsNext50;
+                $data['payment'] = $payment;
+                $data['success'] = $success;
+                $data['groupId'] = $groupIdbyGroup;
+                
+                return $this->render(
+                		'FenchyRegularUserBundle:Listing:create2.html.twig', $data);
+                
+                $created_at = $notice->getCreatedAt();                         
                 
             }
             else {
@@ -239,6 +263,8 @@ class ListingController extends Controller
                 $data['alertmsg'] = $alertmsg;
                 $data['neighborsNext50'] = $neighborsNext50;
                 $data['payment'] = $payment;
+                $data['success'] = $success;
+                $data['groupId'] = $groupIdbyGroup;
 
                 return $this->render(
                     'FenchyRegularUserBundle:Listing:create2.html.twig', $data);
@@ -303,10 +329,23 @@ class ListingController extends Controller
     
     			if($user->getLocation()!="" && $userid!=$currentuid)
     			{
-    				$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
-    				$data = file_get_contents($url);
-    				//$data = utf8_decode($data);
-    				$obj = json_decode($data);
+    				
+    				$lat = $user->getLocation()->getLatitude();
+    				$log = $user->getLocation()->getLongitude();
+    				
+    				$lat2 = $displayUser->getLocation()->getLatitude();
+    				$log2 = $displayUser->getLocation()->getLongitude();
+    				
+    				$theta = $log - $log2;
+    				// Find the Great Circle distance
+    				$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+    				$distance = $distance * 60 * 1.1515;
+    				$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+    				
+//     				$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
+//     				$data = file_get_contents($url);
+//     				//$data = utf8_decode($data);
+//     				$obj = json_decode($data);
     
     				//echo($obj->rows[0]->elements[0]->distance->text); //km
     				//echo($obj->rows[0]->elements[0]->distance->value); // meters
@@ -325,9 +364,7 @@ class ListingController extends Controller
     					$dist = 30000; // slider distance
     				}
     
-    
-    
-    				$gmap_distance =  $obj->rows[0]->elements[0]->distance->value; // location with gmap api distance
+	    			
     
     				if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
     				{
@@ -429,10 +466,14 @@ class ListingController extends Controller
                 $this->get('fenchy.gallery_manager')->manageGallery($notice->getGallery(), TRUE);
                 
                 // Done :) Let the user see edited notice.
-                $success_msg = $this->get('translator')->trans('listing.edit.flash_success');
-                $this->get('session')->setFlash('positive', $success_msg);
+//                 $success_msg = $this->get('translator')->trans('listing.edit.flash_success');
+//                 $this->get('session')->setFlash('positive', $success_msg);
                 
-                return $this->redirect($this->generateUrl('fenchy_regular_user_notice_edit', array('id' => $notice->getId())));
+                // Done :) Let the user see new notice.
+                
+                return $this->redirect($this->generateUrl('fenchy_regular_user_listing_manage'));
+                
+                //return $this->redirect($this->generateUrl('fenchy_regular_user_notice_edit', array('id' => $notice->getId())));
             }
             else {
                 // form is invalid so we need to display it again, but gallery 
@@ -441,7 +482,9 @@ class ListingController extends Controller
                 $data['notice']   = $notice;
                 $data['form']     = $form->createView();
                 $data['type']     = $notice->getType();
-
+                $data['location'] = $notice->getLocation();
+                $data['tags']     = $this->get('fenchy_dictionary')->getAllListingTags();
+                
                 return $this->render(
                     'FenchyRegularUserBundle:Listing:edit.html.twig', $data);
             }
@@ -503,6 +546,16 @@ class ListingController extends Controller
         $userLoggedIn = $this->get('security.context')->getToken()->getUser();
         $reviewRepo = $em->getRepository('FenchyNoticeBundle:Review');
         
+        $managertype = $em
+	        ->getRepository('FenchyRegularUserBundle:UserRegular')
+	        ->getManagerType($notice->getUser());
+        $managertypeLoggedIn = array();
+        if( $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User  )
+        {
+	        $managertypeLoggedIn = $em
+	        	->getRepository('FenchyRegularUserBundle:UserRegular')
+	        	->getManagerType($userLoggedIn);
+        }	        
         if ( $notice->getUser() == $userLoggedIn ) 
             $usersOwnListing = true;
         else
@@ -548,8 +601,26 @@ class ListingController extends Controller
         $initialComments = $commentRepo->findByInJSON(
         		$this->container->get('router'),
         		array('aboutNotice'=>$notice->getId()),
-        		array('created_at'=>'DESC'), $pagination+1, 0);        
-             
+        		array('created_at'=>'DESC'), $pagination+1, 0); 
+        $commentManagertype = array();
+        $i =  0;
+        $userRepository = $this->getDoctrine()
+        	->getRepository('UserBundle:User');
+        foreach($initialComments as $initialComment)
+        {
+        	$commentManagertype[$i++] = $em
+	        	->getRepository('FenchyRegularUserBundle:UserRegular')
+	        	->getManagerType($userRepository->find($initialComment['author']['id']));
+        }
+		$reviewManagertype = array();
+        $i =  0;
+        foreach($initialReviews as $initialReview)
+        {
+        	$reviewManagertype[$i++] = $em
+	        	->getRepository('FenchyRegularUserBundle:UserRegular')
+	        	->getManagerType($userRepository->find($initialReview['author']['id']));
+        }
+        
         return $this->render('FenchyRegularUserBundle:Listing:show.html.twig', array(
             'notice' => $notice,
             'usersOwnListing' => $usersOwnListing,
@@ -560,6 +631,10 @@ class ListingController extends Controller
         	'initialReviews' => $initialReviews,
         	'initialComments'=>	$initialComments,
         	'userLoggedIn' =>	$userLoggedIn,
+        	'managerType' => $managertype,
+        	'reviewManagertype' => $reviewManagertype,
+        	'commentManagertype' =>  $commentManagertype,
+        	'managertypeLoggedIn' => $managertypeLoggedIn	
         ));
     }
     
@@ -625,13 +700,39 @@ class ListingController extends Controller
     public function manageAction() {
         
         $user = $this->get('security.context')->getToken()->getUser();       
-        
+       	$user->getPaymentId()->getType();
         $em = $this->getDoctrine()->getEntityManager();
         
         $repo = $em->getRepository('FenchyNoticeBundle:Notice');
+        $requestRepo = $em->getRepository('FenchyNoticeBundle:Request');
         
         $listings = $repo->getUserNotices($user);
-        
+        $neighbourRequests = $requestRepo->getNeighboursRequests($user);
+        $i=0;$msgForms[] = array();
+        foreach ($neighbourRequests as $k =>$neighbourRequest)
+        {
+        	if($neighbourRequest->getAboutNotice())
+        	{
+        		unset($neighbourRequests[$k]);
+        	}
+        	else
+        	{
+        		$neighbourRequest->setIsRead(true);
+        		$em->persist($neighbourRequest);
+        		$em->flush($neighbourRequest);
+        	}
+        	
+        	$messenger = $this->get('fenchy.messenger');
+        	$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($neighbourRequest->getAuthor()->getId());
+        	if (null === $receiver || $receiver === $this->getUser()) {
+        		throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+        	}
+        	$messenger->setReceiver($receiver);
+        	$msgForm = $messenger->createForm();
+			$msgForms[$i] = $msgForm->createView();
+			$i++;
+        	
+        }
         $userId = $user->getId();
         $displayUser = false;
         
@@ -645,14 +746,14 @@ class ListingController extends Controller
 
         }
         $requestRepo = $em->getRepository('FenchyNoticeBundle:Request');
-       		$my_req_count = $requestRepo->countUnreadUsersStatusRequests($user);
-       		$req_count = $requestRepo->countUnreadUsersRequests($user);
+       		
         
         $initialReviews[] = array();
         $initialComments[] = array();
         $initialRequests[] = array();
         $forms[][] = array();
         $count[] = array();
+        $managertype[] = array();
         $statusflag = true; 
         $i=0;$j=0;
         foreach ($listings as $listing)
@@ -685,13 +786,26 @@ class ListingController extends Controller
         			array('aboutNotice'=>$notice->getId()),
         			array('created_at'=>'DESC'), $pagination+1, 0);
         	
+        	
         	$j=0;
         	$forms[][] = array();
+        	
         	$c = 0;$status='';$statusflag = true; 
         	foreach ( $initialRequests[$i] as $initialRequest )
         	{
         		if ($initialRequest)
         		{
+        			$targetRequest = $requestRepo->findOneBy( array('id'=>$initialRequest['id']) );
+        			$targetRequest->setIsRead(true);
+        			$em->persist($targetRequest);
+        			$em->flush();        			
+        			$userRepository = $this->getDoctrine()
+        				->getRepository('UserBundle:User');
+        			
+        			$managertype[$i][$j] = $em
+        				->getRepository('FenchyRegularUserBundle:UserRegular')
+        				->getManagerType($userRepository->find($initialRequest['author']['id']));
+        			
 		        	$messenger = $this->get('fenchy.messenger');
 		        	$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($initialRequest['author']['id']);
 		        	if (null === $receiver || $receiver === $this->getUser()) {
@@ -719,31 +833,40 @@ class ListingController extends Controller
         	if($statusflag)
         	{
         		if($c == 0)
-        			$count[$i] = 'PENDING';
+        			$count[$i] = 'pending';
         		else
-        			$count[$i] = $c." RUNNING";
+        			$count[$i] = $c." running";
         	}
         	else 
         	{
+        		if($status == '')
+        			$status = 'rejected';
         		$count[$i] = $status;
         	}
         	$i++;
         }           
-        
+        $my_req_count = $requestRepo->countUnreadUsersStatusRequests($user,$listings);
+        $req_count = $requestRepo->countUnreadUsersRequests($user, $listings);
+        $cvv_code = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5('!p@a#b$o'), base64_decode($user->getPaymentId()->getCvvCode()), MCRYPT_MODE_CBC, md5(md5('!p@a#b$o'))), "\0");
 		//echo "sssss<pre>";print_r($form1[5][0]);exit;
 //        echo "<pre>";print_r($initialRequests[5]);exit;
         return $this->render('FenchyRegularUserBundle:Listing:manage.html.twig', array(
             	'listings' => $listings,
             	'displayUser' => $displayUser,
+        		'user' => $user,
             	'usersOwnProfile' => true,
         		'initialReviews' => $initialReviews,
         		'initialComments'=>	$initialComments,
         		'initialRequests' => $initialRequests,
+        		'managerTypes'	=> $managertype,
         		'reviews'	=> sizeof($initialReviews),        		
         		'forms' => $forms,
         		'count' => $count,
         		'my_req_count' => $my_req_count,
         		'req_count' => $req_count,
+        		'neighbourRequests' => $neighbourRequests,
+        		'msgForm' => $msgForms,
+        		'cvv_code' => $cvv_code
          ));
         
     }
@@ -756,14 +879,42 @@ class ListingController extends Controller
     
     	$requestRepo = $em->getRepository('FenchyNoticeBundle:Request');
     	$requests = $requestRepo->getNoticeIds($user);
-
+		$neighbourRequests = $requestRepo->getRequests($user);
+		
+		$i=0;$msgForms[] = array();
+		foreach ($neighbourRequests as $k =>$neighbourRequest)
+		{		
+			if($neighbourRequest->getAboutNotice())
+			{
+				unset($neighbourRequests[$k]);
+			}
+			else
+			{ 
+				$neighbourRequest->setIsReadStatus(true);
+				$em->persist($neighbourRequest);
+				$em->flush($neighbourRequest);			
+			}
+			$messenger = $this->get('fenchy.messenger');
+			$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($neighbourRequest->getAboutUser()->getId());
+			if (null === $receiver || $receiver === $this->getUser()) {
+				throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+			}
+			$messenger->setReceiver($receiver);
+			$msgForm = $messenger->createForm();
+			$msgForms[$i] = $msgForm->createView();
+			$i++;
+		}
     	$listings = array();
     	$j = 0; $k = 0;
+
     	foreach ($requests as $request)
     	{
-    		$listings[$j++]  = $request->getAboutNotice();
+    		if($request->getAboutNotice())
+    		{
+    			$listings[$j++]  = $request->getAboutNotice();
+    		}
     	}
-
+    	
     	foreach($listings as $k => $listing)
     	{
     		foreach($listings as $key => $value)
@@ -772,6 +923,13 @@ class ListingController extends Controller
     			{
     				unset($listings[$k]);
     			}
+    		}
+    	}
+    	foreach ($listings as $k => $listing)
+    	{
+    		if($listing->getUserGroup()!=null)
+    		{
+    			unset($listings[$k]);
     		}
     	}
     	
@@ -787,14 +945,12 @@ class ListingController extends Controller
     		$displayUser = $userOther;
     
     	}
-        	
-    	$my_req_count = $requestRepo->countUnreadUsersStatusRequests($user);
-    	$req_count = $requestRepo->countUnreadUsersRequests($user);
     	
     	$initialReviews[] = array();
     	$initialComments[] = array();
     	$initialRequests[] = array();
     	$forms[][] = array();
+    	$managertype[] = array();
     	$count[] = array();
     	$statusflag = true;
     	$i=0;
@@ -831,11 +987,24 @@ class ListingController extends Controller
     		
     		$k=0;
     		$forms[][] = array();
+    		
     		$c = 0;$status='';$statusflag = true;
     		foreach ( $initialRequests[$i] as $initialRequest )
     		{
     			if ($initialRequest)
     			{
+    				$targetRequest = $requestRepo->findOneBy( array('id'=>$initialRequest['id']) );
+    				$targetRequest->setIsReadStatus(true);
+    				$em->persist($targetRequest);
+    				$em->flush();
+    				
+    				$userRepository = $this->getDoctrine()
+    						->getRepository('UserBundle:User');
+    				 
+    				$managertype[$i][$k] = $em
+		    				->getRepository('FenchyRegularUserBundle:UserRegular')
+		    				->getManagerType($userRepository->find($initialRequest['author']['id']));
+    				
     				$messenger = $this->get('fenchy.messenger');
     				$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($initialRequest['aboutuser']['id']);
     				if (null === $receiver || $receiver === $this->getUser()) {
@@ -867,10 +1036,15 @@ class ListingController extends Controller
     		}
     		else
     		{
+    			if($status == '')
+    				$status = 'rejected';
     			$count[$i] = $status;
     		}
     		$i++;
+    		
     	}
+    	$my_req_count = $requestRepo->countUnreadUsersStatusRequests($user, $listings);
+    	$req_count = $requestRepo->countUnreadUsersRequests($user, $listings);
     	//echo $count[0];exit;
     	return $this->render('FenchyRegularUserBundle:Listing:myRequests.html.twig', array(
     			'listings' => $listings,
@@ -879,11 +1053,14 @@ class ListingController extends Controller
     			'initialReviews' => $initialReviews,
     			'initialComments'=>	$initialComments,
     			'initialRequests' => $initialRequests,
+    			'managerTypes'	=> $managertype,
     			'reviews'	=> sizeof($initialReviews),
     			'forms' => $forms,
     			'count'=> $count,
     			'my_req_count' => $my_req_count,
     			'req_count' => $req_count,
+    			'neighbourRequests' => $neighbourRequests,
+    			'msgForm' => $msgForms
     	));
     
     }
@@ -1043,13 +1220,35 @@ class ListingController extends Controller
    			{
    				$avatar = 'images/default_profile_picture.png';
    			}
+   			
+   			
+   			$managertypeLoggedIn = array();
+   			if( $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User  )
+   			{
+   				$managertypeLoggedIn = $em
+	   				->getRepository('FenchyRegularUserBundle:UserRegular')
+	   				->getManagerType($userLoggedIn);
+   			}
+   			
    			$str = '<a href="javascript:void(0);">';
    			$str .= '<img style="position: absolute; margin-top: 10px; display: block; border-radius: 50% 50% 50% 50%;" src="/'.$avatar. '" width="23" height="23" alt="" />';
-   			$str .= '</a><div class="descdata" style="margin-left: 34px; width: 89% !important;"><p><input id="commenttext" style="width: 80%" type="textarea" placeholder="post a comment"/></p></div>';
+   			$str .= '</a>';
+   			$str .= '<div class="neighbor '. $managertypeLoggedIn[2] .'" style="margin-top: 7px;">';
+			$str .= '<p style="color: #FFFFFF !important; font-size: 11px; margin-left: 9px; margin-top: 5px; position: absolute;">'. $managertypeLoggedIn[1].'</p>';
+			$str .= '<span style="margin-top: 13px;">'.$userLoggedIn->getActivity().'</span></div>';
+			$str .= '<div class="descdata" style="margin-left: 65px; width: 83% ! important; margin-top: 10px;"><p><input id="commenttext" style="width: 80%" type="textarea" placeholder="post a comment"/></p></div>';
    			$str .= '<input style="float: right; margin-left: 16px; margin-top: -42px; position: relative; cursor: pointer;" class="blue_button" type="button" value="POST" onclick="postComment();" />';
    			
+   			$userRepository = $this->getDoctrine()
+        			->getRepository('UserBundle:User');
+   			$commentManagertype = array();
+   			$i=0;
    			foreach ($initialComments as $initialComment)
    			{
+   				$commentManagertype[$i] = $em
+	   				->getRepository('FenchyRegularUserBundle:UserRegular')
+	   				->getManagerType($userRepository->find($initialComment['author']['id']));
+   				
    				$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($initialComment['author']['id']);
    				
    				if($result)
@@ -1065,8 +1264,12 @@ class ListingController extends Controller
    					$str .= '<div class="data">';
    					$str .= '<a href="'. $initialComment['author']['profileUrl'] . '">';
    					$str .= '<img style="border-radius: 50% 50% 50% 50%;" src="/'. $avatar .'" width="23" height="23" alt="" /></a>';
-   					$str .= '<p>' .$initialComment['text']. '</p></div>';
+   					$str .= '<div class="neighbor '.$commentManagertype[$i][2].'">';
+					$str .= '<p>'.$commentManagertype[$i][1].'</p>';
+					$str .= '<span>'.$initialComment['author']['activity'].'</span></div> ';
+   					$str .= '<p>' .nl2br($initialComment['text']). '</p></div>';
    				}
+   				$i++;
    			}
    			$response = array("success" => $str); 
  			return new Response(json_encode($response)); 	
@@ -1117,6 +1320,24 @@ class ListingController extends Controller
     			$review->setAboutNotice($targetNotice);
      			$em->persist($review);
      			$em->flush();
+     			
+     			$messenger = $this->get('fenchy.messenger');
+     			$notice = $messenger->setNotice($targetNotice->getId());
+     			
+     			$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($targetUser->getId());
+     			if (null != $receiver && $receiver != $this->getUser())
+     			{
+     				$messageObject = new Message();
+     				$messenger->setReceiver($receiver);
+     				$messageObject->setTitle($this->get('translator')->trans('regularuser.message.message_part', array(
+    					'%username%' => $targetUser->getRegularUser()->getFirstname())));
+     				$messageObject->setContent($text);
+     				$messageObject->setSender($userLoggedIn);
+     				$messageObject->setReceiver($receiver);
+     				$message = $messenger->send($messageObject);
+     				if ( $this->container->getParameter('notifications_enabled'))
+     						$this->requestMessageNotification($message);
+     			}
     		}
     	}    	    	
 
@@ -1209,6 +1430,25 @@ class ListingController extends Controller
 		    	$noticerequest->setProposeprice($offerprice);
 		    	$em->persist($noticerequest);
 		    	$em->flush();
+		    	
+		    	
+		    	$messenger = $this->get('fenchy.messenger');
+		    	$notice = $messenger->setNotice($targetNotice->getId());
+		    	
+		    	$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($targetUser->getId());
+		    	if (null != $receiver && $receiver != $this->getUser())
+		    	{
+		    		$messageObject = new Message();
+		    		$messenger->setReceiver($receiver);
+     				$messageObject->setTitle($this->get('translator')->trans('regularuser.message.message_part', array(
+    					'%username%' => $targetUser->getRegularUser()->getFirstname())));
+		    		$messageObject->setContent($text);
+		    		$messageObject->setSender($userLoggedIn);
+		    		$messageObject->setReceiver($receiver);
+		    		$message = $messenger->send($messageObject);
+		    		if ( $this->container->getParameter('notifications_enabled'))
+		    			$this->requestMessageNotification($message);
+		    	}
 		    }
     	}
     	return new Response();
@@ -1220,16 +1460,77 @@ class ListingController extends Controller
     	$requestId = $request->get('request_id');
     	$notice_id = $request->get('notice_id');
     	
-    	$em = $this->getDoctrine()->getManager();
+    	$em = $this->getDoctrine()->getManager();   	
+
     	$requestRepo = $em->getRepository('FenchyNoticeBundle:Request');
-    	
+    	 
     	$targetRequest = $requestRepo->findOneBy( array('id'=>$requestId) );
+    	
+    	$noticeObj = $em->getRepository('FenchyNoticeBundle:Notice')->find($notice_id);
+    	$complete = false;
+    	if($status == 'accepted')
+    	{
+    		$ava_item = 0;
+    		$req_item = $targetRequest->getPieceSpot();
+    		$type = $noticeObj->getType();
+    		if($type =='goods' || $type =='offergoods')
+    		{
+    			$ava_item = $noticeObj->getPieces();
+    			if($ava_item<=0)
+    			{
+    				$response = array("success" => 'Piece Completed');
+    				return new Response(json_encode($response));
+    			}
+    			if($ava_item<$req_item)
+    			{
+    				$targetRequest->setPieceSpot($ava_item);
+    				$targetRequest->setTotalprice($ava_item * $targetRequest->getPrice());
+    				$noticeObj->setPieces(0);
+    				$noticeObj->setCompleted(true);
+    				$em->persist($noticeObj);
+    				$em->persist($targetRequest);
+    				$em->flush();    				
+    			}
+    			else
+    			{
+    				$noticeObj->setPieces($ava_item - $req_item);
+    				$targetRequest->setTotalprice($req_item * $targetRequest->getPrice());
+    			}   			
+    		}    		
+    		if($type=='offerevents')
+    		{
+    			$ava_item = $noticeObj->getSpot();
+    			if($ava_item<=0)
+    			{
+    				$response = array("success" => 'Spot Completed');
+    				return new Response(json_encode($response));
+    			}
+    			if($ava_item<$req_item)
+    			{
+    				$targetRequest->setPieceSpot($ava_item);
+    				$targetRequest->setTotalprice($ava_item * $targetRequest->getPrice());
+    				$noticeObj->setCompleted(true);
+    				$noticeObj->setSpot(0);
+    				$em->persist($noticeObj);
+    				$em->persist($targetRequest);
+    				$em->flush();    				
+    			}
+    			else
+    			{
+    				$noticeObj->setSpot($ava_item - $req_item);
+    				$targetRequest->setTotalprice($req_item * $targetRequest->getPrice());
+    			}
+    		}
+    	}
+    	
+    	$em = $this->getDoctrine()->getManager();
+    	
     	if($status != 'rejected')
-    		$targetRequest->setStatus($status);
+    		$targetRequest->setStatus($status);    	
     	$targetRequest->setRequeststatus($status);
     	$targetRequest->setIsReadStatus(false);
     	$em->persist($targetRequest);
-    	$em->flush();
+    	
     	
     	$pagination = $this->container->getParameter('reviews_pagination');
     	$initialRequests = $requestRepo->findByInJSON(
@@ -1240,6 +1541,16 @@ class ListingController extends Controller
 
     	$c = 0;$status='';$statusflag = true;
     	$str='';
+    	
+    	if($targetRequest->getRequestStatus() == "done")
+    	{
+    		$author = $targetRequest->getAuthor();
+    		$aboutUser = $targetRequest->getAboutUser();
+    		$author->addActivity(1);
+    		$em->persist($author);
+    		$aboutUser->addActivity(1);
+    		$em->persist($aboutUser);
+    	}
     	
     		if ($targetRequest->getRequestStatus() == 'pending')
     		{
@@ -1262,9 +1573,16 @@ class ListingController extends Controller
 //     			$str .= $this->get('translator')->trans('regularuser.message');
 //     			$str .= '</a>';
     			
-    		
+    		$em->flush();
    		foreach ( $initialRequests as $initialRequest )
-   		{	 
+   		{	
+   			if($initialRequest['status'] == 'pending' && $initialRequest['aboutnotice']['completed'])
+   			{
+   				$requestObj = $em->getRepository('FenchyNoticeBundle:Request')->findOneBy( array('id'=>$initialRequest['id']));
+   				$requestObj->setRequeststatus('rejected');
+   				$em->persist($requestObj);
+   				$em->flush();
+   			}	
     		if ($initialRequest)
     		{
     			if($initialRequest['status'] != 'pending')
@@ -1280,19 +1598,27 @@ class ListingController extends Controller
     				$c++;    	
     		}
     	}
+    	$count = "";
     	if($statusflag)
     	{
     		if($c == 0)
-    			$count = 'PENDING';
+    			$count = 'pending';
     		else
-    			$count = $c." RUNNING";
+    			$count = $c." running";
     	}
     	else
     	{
+    		if($status == '')
+    			$status = 'rejected';
     		$count = $status;
     	}
     	$str .= "^^".$count;
     	$str .= "^^".$targetRequest->getRequeststatus();
+    	$str .= "^^".intval((($targetRequest->getTotalprice()*10)/100)*100);
+    	if(strcasecmp($targetRequest->getCurrency(),"EURO") == 0)    		
+    		$str .= "^^".'EUR';
+    	else 
+    		$str .= "^^".'USD';
     	
     	$response = array("success" => $str);
     	return new Response(json_encode($response));
@@ -1315,5 +1641,372 @@ class ListingController extends Controller
     	$em->persist($targetRequest);
     	$em->flush();
     	return new Response();
-    }    
+    }
+    
+    public function paymillPaymentAction()
+    {    	
+    	$user = $this->get('security.context')->getToken()->getUser();
+    	
+    	$request = $this->getRequest(); 
+    	if('POST' == $request->getMethod())
+    	{
+    		$apiKey = '3239306c3583663267c0261c2253d39f';
+    		$paymillrequest = new Request($apiKey);
+    		if($user->getPaymentId()->getType()=='credit')
+    		{   			
+	    		$preAuth = new Preauthorization();
+	    		$preAuth->setToken($request->get('token'))//'098f6bcd4621d373cade4e832627b4f6')
+	    				->setAmount($request->get('amount'))
+	    				->setCurrency($request->get('currency'));
+	    		$response = $paymillrequest->create($preAuth);
+	    		echo "done";exit;
+    		}
+    		else 
+    		{	    		
+	    		$transaction = new Transaction();
+	    		$transaction->setAmount($request->get('amount')) // e.g. "4200" for 42.00 EUR
+	    					->setCurrency($request->get('currency'))
+	    					->setToken($request->get('token'));
+	    					//->setDescription('Test Transaction');
+	    	
+	    		$response = $paymillrequest->create($transaction);
+	    		echo "done";exit;
+    		}	    	
+    	}  	
+    }
+    
+    public function inviteToListingAction($noticeId)
+    {
+    	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+    	$em = $this->getDoctrine()->getEntityManager();
+    	
+    	if (!$userLoggedIn instanceof \Fenchy\UserBundle\Entity\User) 
+    		return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+    	
+    	$displayUser = $userLoggedIn;
+    	
+    	$request = $this->getRequest();
+    	$inviteNeighbors = $request->get('invite_neighbors');
+    	$inviteNeighborsNext50 = $request->get('invite_neighborsnext50');
+    	$friends_email = $request->get('friends_email1');
+		
+    	$link = "";
+    	$noticeObj = $em->getRepository('FenchyNoticeBundle:Notice')->find($noticeId);
+    	if($noticeObj->getCreatedAt()) {
+    		$link = $this->generateUrl('fenchy_notice_show_slug', array(
+    				'slug' => $noticeObj->getSlug(),
+    				'year' => $noticeObj->getCreatedAt()->format('Y'),
+    				'month' => $noticeObj->getCreatedAt()->format('m'),
+    				'day' => $noticeObj->getCreatedAt()->format('d')
+    		));
+    	} else {
+    		$link = $this->generateUrl('fenchy_regular_user_notice_show', array('id' => $noticeObj->getId()));
+    	}   	 
+//     	echo "<pre>"; print_r($inviteNeighbors);
+//     	print_r($inviteNeighborsNext50);
+//     	print_r($friends_email);
+//     	exit;
+    	$neighborsNext50 = $this->neighborsNext50();
+    	
+    	if (!empty($inviteNeighbors))
+    	{
+    		foreach ($inviteNeighbors as $key => $neighbor)
+    		{
+    			$userOther = $this->getDoctrine()->getManager()->getRepository('UserBundle:User')->getAllData($neighbor);
+    			$neighbor_id = $userOther->getId();
+    			//echo $userOther->getEmail();
+    	
+    			$messenger = $this->get('fenchy.messenger');
+    			$messageObject = new Message();
+    			$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($neighbor_id);
+    			if (null === $receiver || $receiver === $this->getUser())
+    			{
+    				throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+    			}
+    			$messenger->setReceiver($receiver);
+    			$title = $this->get('translator')->trans('regularuser.message.subject_notice', array(
+    					'%username%' => $userOther->getRegularUser()->getFirstname())) . "";
+    			$content = '';
+    			$content .= $this->get('translator')->trans('regularuser.message.message_part', array(
+    					'%username%' => $userOther->getRegularUser()->getFirstname()));
+    			$content .= '                                                                    ';
+    			//$content .= $userOther->getRegularUser()->getFirstname().' ';
+    			$content .= $this->get('translator')->trans('regularuser.message.message_first_part1', array(
+    					'%user%' => $userLoggedIn->getRegularUser()->getFirstname()));
+				//$content .= $link;     		
+    			$content .= '                                                                    ';
+    			$content .= $this->get('translator')->trans('regularuser.message.message_last_part');
+    			$messageObject->setTitle($title);
+    	
+    			$messageObject->setContent($content);
+    	
+    			$messageObject->setSender($displayUser);
+    			$messageObject->setReceiver($receiver);
+    	
+    			$message = $messenger->send($messageObject);
+    	
+    			if ($this->container->getParameter('notifications_enabled')) $this->messageNotification($message,$userLoggedIn);
+    	
+    		}
+    	
+    	}
+    	 
+    	
+    	// Invite Neighbors next 50 around me (only for community and neighborhood manager)
+    	if ($inviteNeighborsNext50)
+    	{   		
+    		if ($neighborsNext50)
+    		{
+    			$i = 1;
+    			foreach ($neighborsNext50 as $key => $neighbor)
+    			{
+    				$userOther = $this->getDoctrine()->getManager()->getRepository('UserBundle:User')->getAllData($neighbor);
+    				$neighbor_id = $userOther->getId();
+    				//echo $userOther->getEmail();
+    	
+    				$messenger = $this->get('fenchy.messenger');
+    				$messageObject = new Message();
+    				$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($neighbor_id);
+    				if (null === $receiver || $receiver === $this->getUser())
+    				{
+    					throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+    				}
+    				$messenger->setReceiver($receiver);
+    				$title = $this->get('translator')->trans('regularuser.message.subject_notice', array(
+    						'%username%' => $userOther->getRegularUser()->getFirstname())) . "";
+    				$content = ' ';
+    				$content .= $this->get('translator')->trans('regularuser.message.message_part', array(
+    						'%username%' => $userOther->getRegularUser()->getFirstname()));
+    				$content .= '                                                                    ';
+    				//$content .= $userOther->getRegularUser()->getFirstname().' ';
+    				$content .= $this->get('translator')->trans('regularuser.message.message_first_part1', array(
+    						'%user%' => $userLoggedIn->getRegularUser()->getFirstname()));
+     				//$content .= $link;
+    				$content .= '                                                                    ';
+    				$content .= $this->get('translator')->trans('regularuser.message.message_last_part');
+    				$messageObject->setTitle($title);
+    	
+    				$messageObject->setContent($content);
+    	
+    				$messageObject->setSender($displayUser);
+    				$messageObject->setReceiver($receiver);
+    	
+    				$message = $messenger->send($messageObject);
+    	
+    				if ($this->container->getParameter('notifications_enabled')) $this->messageNotification($message, $userLoggedIn);
+    	
+    				if ($i == 50)
+    				{
+    					break;
+    				}
+    				$i++;
+    			}
+    		}
+    	}
+
+    	// invite another friends by email
+    	$data = array(
+    			'sender' => $displayUser,
+    			'user' => $displayUser,
+    			'link'=> $link    			
+    			);
+    	
+    	if (!empty($friends_email))
+    	{
+    		foreach ($friends_email as $key => $receiverEmail)
+    		{
+    			if($receiverEmail != "")
+    			{
+    				$emailNotification = \Swift_Message::newInstance()->setFrom($this->container->getParameter('from_email'), $this->container->getParameter('from_name'))->setTo($receiverEmail)->setSubject($this->get('translator')->trans('regularuser.message.subject_for_invitelistingby_mail'))->setBody($this->renderView('FenchyRegularUserBundle:Notifications:noticeInviteByEmailHTML.html.twig', $data), 'text/html');
+	    			//->addPart($this->renderView('FenchyRegularUserBundle:Notifications:reviewEmailPlain.html.twig', $data), 'text/plain');
+    				$mailer = $this->get('mailer');
+    				$mailer->send($emailNotification);
+    			}
+    		}
+    	}
+    	return $this->redirect($this->generateUrl('fenchy_regular_user_listing_manage'));
+    }
+    protected function messageNotification(Message $message, User $sender)
+    {
+    	$receiver = $message->getReceiver();
+    
+    	$notifications = $receiver->getNotifications();
+    	$niterator = $notifications->getIterator();
+    
+    	$message_notification = false;
+    	foreach ($niterator as $onen)
+    	{
+    		if ($onen->getName() == 'message') $message_notification = true;
+    	}
+    
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($sender->getId());
+    	 
+    	if($result)
+    	{
+    		$avatar = $result->getWebPath();
+    		if($avatar == "")
+    			$avatar = 'images/default_profile_picture.png';
+    	}
+    	else
+    	{
+    		$avatar = 'images/default_profile_picture.png';
+    	}
+    	if ($message_notification)
+    	{
+    
+    		$interval = $receiver->getNotificationGroupIntervals()->first();
+    		if ($interval != null)
+    			$interval_val = $interval->getInterval();
+    		else $interval_val = null;
+    
+    		if ($interval_val === NotificationGroupInterval::INTERVAL_DAILY)
+    		{
+    
+    			$queue_processing_hour = $this->container->getParameter('notification_queue_processing_hour');
+    
+    			$now = new \DateTime;
+    			$now_hour = (integer) $now->format('G');
+    
+    			$send_after = new \DateTime;
+    			if ($now_hour >= $queue_processing_hour)
+    			{
+    				$send_after->modify('+1 day');
+    			}
+    			$send_after->setTime($queue_processing_hour, 0, 0);
+    
+    			$toQueue = new NotificationQueue;
+    			$toQueue->setSendAfter($send_after)->setFromAddress($this->container->getParameter('from_email'))->setFromName($this->container->getParameter('from_name'))->setToAddress($receiver->getEmail())->setSubject($this->get('translator')->trans('message.notification.email.subject', array(
+    					'%username%' => $sender->getRegularUser()->getFirstname())))->setBodyHtml($this->renderView('FenchyMessageBundle:Notifications:messageEmailHTML.html.twig', array(
+    							'sender' => $sender,
+    							'message' => $message)))->setBodyPlain($this->renderView('FenchyMessageBundle:Notifications:messageEmailPlain.html.twig', array(
+    									'sender' => $sender,
+    									'message' => $message,
+    									'avatar' => $avatar,
+    							)));
+    							$em = $this->getDoctrine()->getManager();
+    							$em->persist($toQueue);
+    							$em->flush();
+    		}
+    		elseif ($interval_val === NotificationGroupInterval::INTERVAL_IMMEDIATELY)
+    		{
+    			$emailNotification = \Swift_Message::newInstance()->setFrom($this->container->getParameter('from_email'), $this->container->getParameter('from_name'))->setTo($receiver->getEmail())->setSubject($this->get('translator')->trans('message.notification.email.subject', array(
+    					'%username%' => $sender->getRegularUser()->getFirstname())))->setBody($this->renderView('FenchyMessageBundle:Notifications:messageEmailHTML.html.twig', array(
+    							'sender' => $sender,
+    							'message' => $message, 
+    							'avatar' => $avatar)), 'text/html')->addPart($this->renderView('FenchyMessageBundle:Notifications:messageEmailPlain.html.twig', array(
+    									'sender' => $sender,
+    									'message' => $message)), 'text/plain');
+    							$mailer = $this->get('mailer');
+    							$mailer->send($emailNotification);
+    		}
+    	}
+    
+    }
+
+    protected function requestMessageNotification(Message $message)
+    {
+    	$receiver = $message->getReceiver();
+    	$sender = $message->getSender();
+    	$notifications = $receiver->getNotifications();
+    	$niterator = $notifications->getIterator();
+    
+    	$request_notification = false;
+    	foreach( $niterator as $onen ) {
+    		if ( $onen->getName() == 'request' )
+    			$request_notification = true;
+    	}
+    
+    	if ( $request_notification ) {
+    
+    		$interval = $receiver->getNotificationGroupIntervals()->first();
+    		if ( $interval != null )
+    			$interval_val = $interval->getInterval();
+    		else
+    			$interval_val = null;
+    
+    		if ( $interval_val === NotificationGroupInterval::INTERVAL_DAILY ) {
+    
+    			$queue_processing_hour = $this->container->getParameter('notification_queue_processing_hour');
+    
+    			$now = new \DateTime;
+    			$now_hour = (integer)$now->format('G');
+    
+    			$send_after = new \DateTime;
+    			if ( $now_hour >= $queue_processing_hour ) {
+    				$send_after->modify('+1 day');
+    			}
+    			$send_after->setTime($queue_processing_hour, 0, 0);
+    
+    			$toQueue = new NotificationQueue;
+    			$toQueue->setSendAfter($send_after)
+    			->setFromAddress($this->container->getParameter('from_email'))
+    			->setFromName($this->container->getParameter('from_name'))
+    			->setToAddress($receiver->getEmail())
+    			->setSubject($this->get('translator')->trans('message.req_notification.email.subject', array(
+    					'%username%' => $sender->getRegularUser()->getFirstname())))
+    			->setBodyHtml($this->renderView('FenchyMessageBundle:Notifications:requestEmailHTML.html.twig',
+    					array()))
+    					->setBodyPlain($this->renderView('FenchyMessageBundle:Notifications:requestEmailPlain.html.twig',
+    							array()));
+    			$em = $this->getDoctrine()->getManager();
+    			$em->persist($toQueue);
+    			$em->flush();
+    		} elseif ( $interval_val === NotificationGroupInterval::INTERVAL_IMMEDIATELY ) {
+    			$emailNotification = \Swift_Message::newInstance()
+    			->setFrom($this->container->getParameter('from_email'),
+    					$this->container->getParameter('from_name'))
+    					->setTo( $receiver->getEmail() )
+    					->setSubject( $this->get('translator')->trans('message.req_notification.email.subject', array(
+    						'%username%' => $sender->getRegularUser()->getFirstname())))
+    					->setBody($this->renderView('FenchyMessageBundle:Notifications:requestEmailHTML.html.twig',
+    							array()),
+    							'text/html')
+    							->addPart($this->renderView('FenchyMessageBundle:Notifications:requestEmailPlain.html.twig',
+    									array()),
+    									'text/plain');
+    			$mailer = $this->get('mailer');
+    			$mailer->send($emailNotification);
+    		}
+    	}
+    
+    }   
+    public function storeSessionAction()
+    {
+    	$request = $this->getRequest();   	
+    	
+    	// set and get session attributes
+    	$session = $this->get('session');
+    	$session->getFlashBag()->add('title', $request->get('title'));
+    	$session->getFlashBag()->add('desc', $request->get('desc'));
+    	$session->getFlashBag()->add('tag', $request->get('tag'));
+    	$session->getFlashBag()->add('start_date', $request->get('start_date'));
+    	$session->getFlashBag()->add('start_time', $request->get('start_time'));
+    	$session->getFlashBag()->add('end_date', $request->get('end_date'));
+    	$session->getFlashBag()->add('date_arrange', $request->get('date_arrange'));
+    	$session->getFlashBag()->add('time_arrange', $request->get('time_arrange'));
+    	$session->getFlashBag()->add('end_time', $request->get('end_time'));
+    	$session->getFlashBag()->add('location', $request->get('location'));
+    	$session->getFlashBag()->add('loc_arrange', $request->get('loc_arrange'));
+    	$session->getFlashBag()->add('price', $request->get('price'));
+    	$session->getFlashBag()->add('spot', $request->get('spot'));
+    	$session->getFlashBag()->add('piece', $request->get('piece'));
+    	$session->getFlashBag()->add('unlimited', $request->get('unlimited'));
+    	$session->getFlashBag()->add('one_piece', $request->get('one_piece'));
+    	$session->getFlashBag()->add('free', $request->get('free'));
+    	$session->getFlashBag()->add('payment_setting', $request->get('payment_setting'));
+    	$session->getFlashBag()->add('currency', $request->get('currency'));
+    	$session->getFlashBag()->add('chk1', $request->get('chk1'));
+    	$session->getFlashBag()->add('chk2', $request->get('chk2'));
+    	$session->getFlashBag()->add('chk3', $request->get('chk3'));
+    	$session->getFlashBag()->add('chk4', $request->get('chk4'));
+    	$session->getFlashBag()->add('chk5', $request->get('chk5'));
+    	$session->getFlashBag()->add('chk6', $request->get('chk6'));
+    	
+    	
+//     	$this->get('session')->set('title', $title);
+//     	$this->get('session')->set('desc', $desc);
+//     	$this->get('session')->set('tag', $tag);
+    	return new Response();
+    }
 }

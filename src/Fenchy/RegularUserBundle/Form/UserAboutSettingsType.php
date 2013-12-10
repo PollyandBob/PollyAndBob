@@ -18,20 +18,28 @@ class UserAboutSettingsType extends AbstractType
                 'attr' => array('placeholder' => 'regularuser.your_first_name')))
             ->add('lastname', null, array(
                 'label' => 'regularuser.lastname',
-                'attr' => array('placeholder' => 'regularuser.your_last_name')
+                'attr' => array('placeholder' => 'regularuser.lastname')
                 ))
             ->add('gender', 'choice', array(
                 'label' => 'regularuser.gender',
                 'choices' => UserRegular::$genderMap, 
-                'expanded' => true))
+                'expanded' => true,
+            	'required' => false))
             ->add('age', null, array(
                 'label' => 'regularuser.age',
                 'required' => false,
                 'attr' => array('placeholder' => 'regularuser.your_age')))
             ->add('languages', 'text', array(
-                'label' => ' ',
+                'label' => 'regularuser.your_languages',
                 'required' => false,
                 'attr' => array('placeholder' => 'regularuser.your_languages')))
+            ->add('birthday', null, array(
+            	
+            	'widget' => 'single_text',
+            	'format' => 'd.MM.y',            	
+            	'label' => 'regularuser.birthdate',
+            	'required' => false,
+            	'attr' => array('placeholder' => 'regularuser.birthdate')))                
             ->add('mylike', 'text', array(
             	'label' => ' ',
             	'required' => false,

@@ -126,7 +126,8 @@ class ReviewRepository extends EntityRepository
                     'id' => $author->getId(),
                     'name' => $author->getUserRegular()->getFirstname(),
                     'image' =>  $author->getUserRegular()->getAvatar(),
-                    'profileUrl' => $authorProfileUrl
+                    'profileUrl' => $authorProfileUrl,
+                	'activity' => $author->getActivity()
                 ),
                 'aboutuser' => array(
                     'id' => $aboutUser->getId(),

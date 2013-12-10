@@ -18,7 +18,9 @@ class SettingsLocationType extends base
                 'label' => 'regularuser.printable_location',
                 'attr' => array(
                     'placeholder' => 'regularuser.printable_location'
-                )));  
+                )))
+            ->add('latitude', 'hidden')                
+            ->add('longitude', 'hidden');  
         ;
     }
 }

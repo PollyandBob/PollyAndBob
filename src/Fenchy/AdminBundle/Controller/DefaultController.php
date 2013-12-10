@@ -23,10 +23,13 @@ use Fenchy\AdminBundle\Entity\UsersFilter,
     Fenchy\AdminBundle\Form\ReviewsFilterType,
     Fenchy\AdminBundle\Form\IdentityVerificationFilter,
 	Fenchy\AdminBundle\Form\IdentityVerificationFilterType,
+	Fenchy\AdminBundle\Form\LocationVerificationFilter,
+	Fenchy\AdminBundle\Form\LocationVerificationFilterType,
 	Fenchy\NoticeBundle\Form\CategoryType,
 	Fenchy\AdminBundle\Form\CategoryNewType;
 use	Fenchy\UserBundle\Entity\IdentityVerification;
-
+use	Fenchy\UserBundle\Entity\LocationVerification;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class DefaultController extends Controller
@@ -420,7 +423,7 @@ class DefaultController extends Controller
 
                 $notices = $em
                     ->getRepository('FenchyNoticeBundle:Notice')
-                    ->getFullDetailedList($filter);
+                    ->getFullDetailedListAdmin($filter);
                 
                 return $this->render(
                     'FenchyAdminBundle:Default:notices.html.twig',
@@ -433,7 +436,7 @@ class DefaultController extends Controller
         }
 
         $notices = $em->getRepository('FenchyNoticeBundle:Notice')
-                ->getFullDetailedList();
+                ->getFullDetailedListAdmin();
             
 
         return $this->render(
@@ -732,6 +735,7 @@ class DefaultController extends Controller
     
     public function identitySwitchAction() {
     
+    	$user = $this->get('security.context')->getToken()->getUser();
     	$id = $this->getRequest()->get('id');
     	$status = $this->getRequest()->get('status');
     
@@ -755,14 +759,98 @@ class DefaultController extends Controller
     	}
     	else {
     		$identity->setStatus('Verified');
+    		if(!$identity->getActivitypoint())
+    		{
+    			$identity->setActivitypoint(100);
+    			$user->addActivity(100);
+    			$em->persist($user);
+    		}
     	}
     	$em->persist($identity);
     	$em->flush();
     
-    	echo json_encode(array(
+    	$str = json_encode(array(
     			'status' => $identity->getStatus(),
     			'id'        => $identity->getId()
     	));
-    	exit;
+    	return new Response($str);
+    }
+    
+    public function locationAction () {
+    
+    	$em = $this->getDoctrine()->getManager();
+    
+    	$filter = new \Fenchy\AdminBundle\Entity\LocationVerificationFilter();
+    
+    	$form = $this->createForm(new \Fenchy\AdminBundle\Form\LocationVerificationFilterType(), $filter);
+    
+    	$request = $this->getRequest();
+    
+    	if($request->isMethod('POST'))
+    	{
+    		$form->bindRequest($request);
+    
+    		if ($form->isValid())
+    		{
+    			$locations = $em
+    			->getRepository('UserBundle:LocationVerification')
+    			->getFullDetailedList($filter);
+    			 
+    			return $this->render(
+    					'FenchyAdminBundle:Default:location.html.twig',
+    					array(
+    							'locations'	=> $locations,
+    							'filter'    => $form->createView()
+    					));
+    		}
+    	}
+    
+    	$locations = $em
+    	->getRepository('UserBundle:LocationVerification')
+    	->getFullDetailedList($filter);
+    
+    	return $this->render(
+    			'FenchyAdminBundle:Default:location.html.twig',
+    			array(
+    					'locations'	=> $locations,
+    					'filter'       => $form->createView()
+    			)
+    	);
+    }
+    
+    public function locationSwitchAction() {
+    
+    	$id = $this->getRequest()->get('id');
+    	$status = $this->getRequest()->get('status');
+    
+    	if(!$id) {
+    		$this->createNotFoundException();
+    	}
+    
+    	if(!$status) {
+    		$this->createNotFoundException();
+    	}
+    
+    	$em = $this->getDoctrine()->getManager();
+    	$location = $em->getRepository('UserBundle:LocationVerification')->find($id);
+    
+    	if(!$location) {
+    		$this->createNotFoundException();
+    	}
+    	 
+    	if(strcasecmp($location->getStatus(),'Verified')==0) {
+    		$location->setStatus('Requested');
+    	}
+    	else {
+    		$location->setStatus('Verified');
+    	}
+    	$em->persist($location);
+    	$em->flush();
+    
+    	$str = json_encode(array(
+    			'status' => $location->getStatus(),
+    			'id'        => $location->getId()
+    	));
+    	return new Response($str);
     }
 }

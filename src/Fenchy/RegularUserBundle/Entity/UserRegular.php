@@ -47,6 +47,14 @@ class UserRegular
     private $firstname;
     
     /**
+     * @var string $postcode
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     */
+    private $postcode;
+    
+    /**
      * @var string $lastname
      * 
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -256,15 +264,7 @@ class UserRegular
         $this->gender = $gender;
     }
     
-    public function getBirthday()
-    {
-        return $this->birthday;
-    }
-    
-    public function setBirthday(\DateTime $birthday)
-    {
-        $this->birthday = $birthday;
-    }
+   
     
     public function getAge()
     {
@@ -591,6 +591,7 @@ class UserRegular
 	
 	public function setPrefLocale($prefLocale)
     {
+    	// Re-changed By Jignesh
         $this->pref_locale = $prefLocale;
         return $this;
     }
@@ -831,5 +832,51 @@ class UserRegular
     public function getInterestsAndActivities() {
         
         return NULL;
+    }
+
+    /**
+     * Set postcode
+     *
+     * @param string $postcode
+     * @return UserRegular
+     */
+    public function setPostcode($postcode)
+    {
+        $this->postcode = $postcode;
+    
+        return $this;
+    }
+
+    /**
+     * Get postcode
+     *
+     * @return string 
+     */
+    public function getPostcode()
+    {
+        return $this->postcode;
+    }
+
+    /**
+     * Set birthday
+     *
+     * @param \DateTime $birthday
+     * @return UserRegular
+     */
+    public function setBirthday($birthday)
+    {
+        $this->birthday = $birthday;
+    
+        return $this;
+    }
+
+    /**
+     * Get birthday
+     *
+     * @return \DateTime 
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
     }
 }

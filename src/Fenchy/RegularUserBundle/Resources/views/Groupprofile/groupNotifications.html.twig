@@ -1,0 +1,464 @@
+{% extends 'FenchyRegularUserBundle::myProfileSettings.html.twig' %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# any view specific stylesheets for this view #}
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/sidebar-v2.css')) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/search-bar-v2.css')) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/inner-content-v2.css')) }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/article-box-v2.css')) }}" type="text/css" />    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/landing-page-view-model.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('http://connect.facebook.net/en_US/all.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script> 
+
+    <script type="text/javascript">
+        
+        var userProfileViewModel;
+        var spinnerHTML = '<div id="spinner-div"><i class="icon-spinner icon-spin"></i></div>';
+        var tabsJQ;
+
+        $(document).ready(function() {
+            
+            $('.add-sticker').fancybox({type:'iframe'});
+
+            geocoder = new google.maps.Geocoder();
+            var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';
+
+            landingPageViewModel = new LandingPageViewModel(geocoder, baseSearchViewUri);
+            
+            ko.applyBindings( landingPageViewModel, document.getElementsByTagName('body')[0] );
+            
+            autocomplete = new GApiAutocomplete(
+                document.getElementById('location'),
+                landingPageViewModel );
+ 
+   
+            autocomplete = new GApiAutocomplete(
+                document.getElementById('location'),
+                userProfileViewModel );
+                   
+            $('a.facebook-invite-button').click(function(){
+                sendInvitationsFacebook();
+            });
+            
+            function sendInvitationsFacebook() {
+              FB.ui({method: 'apprequests',
+                message: '{{'regularuser.social.invite_facebook'|trans}}'
+              }, requestCallback);
+            }    
+            
+ 
+            function requestCallback(response) {
+                
+            }   
+            
+            $('#spoken-languages').tagit({
+                readOnly: true
+            });
+
+            $("div[class^='reviewForm']").hide();
+            $("div[class^='messageForm']").hide();
+            $("[id^=reviewtext]").val("");
+            $("[id^=messagetitle]").val("");
+            $("[id^=messagetext]").val("");
+            $("div[class^='requestDivs']").hide();
+        });
+        
+    </script>
+    <script type="text/javascript">
+		function deleteListing(id)
+		{
+			var url = "{{path('fenchy_regular_user_listing_delete_confirm')}}";
+			$.ajax({
+				url : url,
+				type : "post",
+				data : {
+					'id': id,
+					},
+				beforeSend : function() {
+					
+				},
+				success : function(response) {
+					alert('Your listing deleted');
+				},
+				error : function() {
+					alert('Something went wrong!');
+				},
+				complete : function() {					
+				}
+			});
+		}	
+
+		function changeStatus(status,id,notice_id)
+		{
+			//alert(status +"=>"+id);			
+			
+			 $.post('{{path('fenchy_regular_user_listing_change_status')}}',
+		                {request_id: id, status: status, notice_id: notice_id}, 
+		            function(response){
+		               	var str = response.success.split("^^");					
+						$('#redtitle1'+id).html(str[2]);
+						$('#redtitle'+notice_id).html(str[1]);
+						$('#status'+id).html(str[0]);
+						if(str[2] == 'done')
+							$('#ReviewWriteBtn'+notice_id).show();
+						//alert(str[0]);
+						//alert(str[1]);
+						//alert(str[2]);
+		    }, "json");  
+		}
+
+		function markAsRead(id,isRead)
+		{
+			//alert(isRead +"=>"+id);
+			if(isRead=="")
+			{			
+				var url = "{{ path('fenchy_regular_user_listing_markread') }}";
+				$.ajax({
+					url : url,
+					type : "post",
+					data : {
+						'request_id': id,
+						'flag': false,										
+						},
+					beforeSend : function() {
+						$('#markread'+id).css('background','none repeat scroll 0 0 #51B9D4');
+					},
+					success : function(response) {
+						
+					},
+					error : function() {
+						alert('Something went wrong!');
+					},
+					complete : function() {	
+						setTimeout(function(){ location.reload(); }, 100);				
+					}
+				});
+			}
+		}
+
+		function showMessageForm(requestid)
+		{
+			var a = $('.messageForm'+requestid).css('display');
+			if(a == 'block')			
+				$('.messageForm'+requestid).hide();			
+			else
+				$('.messageForm'+requestid).show();
+		}
+
+		function showRequestDivs(requestid)
+		{
+			var a = $('.requestDivs'+requestid).css('display');
+			if(a == 'block')			
+				$('.requestDivs'+requestid).hide();			
+			else
+				$('.requestDivs'+requestid).show();
+		}
+		
+		function showReviewForm(noticeid)
+		{
+			var a = $('.reviewForm'+noticeid).css('display');
+			if(a == 'block')			
+				$('.reviewForm'+noticeid).hide();			
+			else
+				$('.reviewForm'+noticeid).show();
+		}				
+		function writeReview(noticeId){
+			
+			var text = $('#reviewtext'+noticeId).val();
+		    $.post('{{path('fenchy_notice_write_review')}}',
+		                {noticeId: noticeId, text: text}, 
+		            function(response){
+		                $('#reviewReplace'+noticeId).html(response.success);
+		                $('#reviewtext'+noticeId).val("");
+						$('.reviewForm'+noticeId).hide();
+
+		    }, "json");    
+		}
+		
+	</script>
+    {# any view specific JS scripts for this view #}
+{% endblock %}
+
+{% block content %}
+	{% render 'FenchyRegularUserBundle:Groupprofile:groupAvatar' with { 'groupId' : groupId } %}
+	{% render 'FenchyRegularUserBundle:Groupprofile:groupmenu' with { 'groupId' : groupId } %}
+	
+	<style>
+	    .optionsdetail.actions {    	
+		    margin-left: 635px;	    
+	    } 
+	    .optionsdetail.actions a {
+		   	text-align: center;
+    		width: 101px;
+	    }       
+	</style>
+	<div class="groupnoti_block">
+	{% if my_req_count  %}
+		<div class="myrequestcount">{{ my_req_count }}</div>
+	{% endif %}
+	{% if req_count %}
+		<div class="mylistingcount" style="background: none repeat scroll 0 0 #51B9D4;">{{ req_count }}</div>
+	{% endif %}
+	</div>
+	{% include 'FenchyRegularUserBundle:Groupprofile:grouplistingMenu.html.twig' %}
+    {# put view specific content here #}
+    {{ facebook_initialize({'frictionlessRequests': true }) }}
+    <div id="other-profile">
+    	<div class="leftside">
+			<div class="feedsdetail">
+            	{% if listings %}
+            	{% set i=0 %}
+                	{% for notice in listings %}
+                	<h3>{{ notice.createdAt|date('d.m.Y') }}&nbsp; &nbsp;{{ notice.createdAt|date('h:i A') }}&nbsp; &nbsp; - {{ notice.type }}</h3>
+                    	<div class="feeds2" style="width: 610px;">
+                        	<div class="leftimg">
+                        		<a href="{{path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')  })}}">
+                        			<img style="border-radius: 0 0 0 0; height: 135px !important; width: 199px !important;" alt="" src="{{notice.avatar}}">
+                        		</a>
+                        	</div>
+                        	<div class="rightimg"><img src="{{ absolute(asset('images/bgright_rightpart.png')) }}" alt="" /></div>
+                            <div class="right">
+                              	<div class="redtitle" id="redtitle{{ notice.id }}" onclick="showRequestDivs('{{ notice.id }}')" style="cursor: pointer;">
+                               		{{ count[i]|upper }}
+                               	</div>
+                               	<a href="{{path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')  })}}">
+                                	<h3>{{notice.title}}</h3>
+                                </a>
+                                <div class="clearfix"></div>
+                               	{# {{notice.location.location}} #}
+                                <p>{{notice.content|truncate(130)|replace({'...': ". . ."})|raw }}</p>
+                                <div class="bottom-buttons">
+                                	<div class="comments">
+                                        <div id="comments" class="comments">Show Comments</div>
+                                        <div id="commentdetail" class="commentdetail">
+                                            <div class="commentopen">Show Comments</div>
+                                                {% if i < reviews %}                                    		
+	                    						{% for initialComment in initialComments[i] %}
+			                                    	{% if initialComment %}
+			                                    		<div class="data">                                      	 
+				                                      		<a href="{{ initialComment['author']['profileUrl'] }}">
+				                                      			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialComment['author']['id'] } %}
+				                                      		</a>
+				                                      		<p>{{ initialComment['text'] }}</p>
+				                                     	</div>
+			                                      	{% endif %}
+		                                		{% endfor %}
+	                                		{% endif %}                                                  
+                                        </div>
+                                    </div>
+                                	<div class="reviews">
+                                		<div id="reviews" class="reviews">Show Reviews</div>
+                                    	<div id="reviewdetail" class="reviewdetail">
+                                    		<div class="reviewopen">Show Reviews</div>
+                                    		<div id="reviewReplace{{ notice.id }}">                                    		
+                                    		{% if i < reviews %}                                    		
+	                    						{% for initialReview in initialReviews[i] %}
+			                                    	{% if initialReview %}
+			                                    		<div class="data">                                      	 
+				                                      		<a href="{{ initialReview['author']['profileUrl'] }}">
+				                                      			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialReview['author']['id'] } %}
+				                                      		</a>
+				                                      		<p>{{ initialReview['text'] }}</p>
+				                                     	</div>
+			                                      	{% endif %}
+		                                		{% endfor %}
+	                                		{% endif %}
+	                                		</div>
+                                        </div>                                    
+                                    </div>  
+                             	</div>                  		
+                         	</div>
+                         	<div class="reviewForm{{ notice.id }}" id="reviewforms">
+	    	      			<div class="descdata" style="margin-left: 34px; width: 89% !important;">
+	    	      				<p>Write a review to {{ displayUser.name }} about {{ notice.title }}</p>
+						       	<p><input id="reviewtext{{ notice.id }}" style="width: 80%" type="textarea" placeholder="{{ 'regularuser.write_your_review'|trans }}" /></p>
+						    
+						    	<input style="float: right; margin-left: 14px; margin-top: -19px; position: relative; cursor: pointer;" class="blue_button" type="button" value="SEND" onclick="writeReview({{ notice.id }});"/>
+						    	<div class="rightimg"><img src="{{ absolute(asset('images/bgright_rightpart.png')) }}" alt="" style="left: 26px; position: relative; margin-top: -87px; height: 100px; position: relative;"/></div>
+						    </div>
+    	                	</div>
+    	                	<div class="requestDivs{{ notice.id }}">
+                            {% if i < reviews %}
+                            {% set j=0 %}
+	                    		{% for initialRequest in initialRequests[i] %}
+			                      	{% if initialRequest %}
+			                          	<div class="leftimg"></div>
+			                               	<div class="rightimg"><img src="{{ absolute(asset('images/bgright_rightpart.png')) }}" alt="" style="margin-top:20px; height:115px"/></div>
+			                                  	<div class="rightrequest">
+			                                  	<div class="redtitle" id="redtitle1{{ initialRequest.id }}">
+                               						{{ initialRequest['requeststatus']|trans|upper }}
+                               					</div>
+			                                   		<div class="data">
+			                    	              		<p>{{ initialRequest['createdAt']|date('d.m.y') }}&nbsp; &nbsp;{{ initialRequest['createdAt']|date('h:m') }}</p>
+			                    	              		<div class="profile">			                    	              			
+					                                  			<a href="{{ initialRequest['author']['profileUrl'] }}">
+					                                  				{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialRequest['author']['id'] } %}
+					                                   			</a>
+					                                   			<div class="neighbor {{ managerTypes[i][j][2] }}" style="margin-left:-40px">
+																	<p style="width: 0px !important; margin-top: 0px; margin-left: 9px;">{{ managerTypes[i][j][1] }}</p>
+																	<span style="left: 6px;">{{ initialRequest['author']['activity'] }}</span>
+																</div>
+				                                   		</div>
+				                                  		<p>{{ initialRequest['text'] }}</p>
+				                                  	</div>
+				                    	    	</div>
+				                          	<div class="status">
+				                          	<div id="status{{ initialRequest.id }}">
+				                          	{% if initialRequest['requeststatus'] == 'pending' %}
+	                        					<a class="blue-button" href="javascript:void(0);" onclick="changeStatus('accepted',{{ initialRequest['id'] }},{{ notice.id }});">
+                        							{{ 'regularuser.accept' |trans }}
+                        						</a>
+                        						<a class="blue-button" href="javascript:void(0);" onclick="changeStatus('rejected', {{ initialRequest['id'] }},{{ notice.id }});">
+													{{ 'regularuser.reject'|trans }}
+                        						</a>                        						
+                        					{% endif %}
+                        					{% if initialRequest['requeststatus'] == 'accepted' %}
+	                        					<a class="blue-button" href="javascript:void(0);" onclick="changeStatus('done', {{ initialRequest['id'] }},{{ notice.id }});">
+                            						{{ 'regularuser.mark_done'|trans }}
+                            					</a>
+                            				{% endif %}
+                            				</div>
+                        					<a class="blue-button" href="javascript:void(0);" onclick="showMessageForm({{ initialRequest['id'] }});">
+													{{ 'regularuser.write_msg'|trans }}
+                        					</a>
+                        					<a href="#dialog{{ initialRequest['id'] }}" name="modal" id="vzoom_1944" class="zoomthis blue-button">
+													{{ 'regularuser.view_detail'|trans }}
+                        					</a>
+                        					{% if initialRequest['is_read'] %}
+                        						<a id="markread{{ initialRequest['id']  }}" class="blue-button" href="javascript:void(0);" onclick="markAsRead('{{ initialRequest['id'] }}','{{ initialRequest['is_read'] }}');">
+													{{ 'regularuser.mark_read'|trans }}
+                        						</a>
+                        					{% else %}
+                        						<a id="markread{{ initialRequest['id'] }}" class="blue-button" href="javascript:void(0);" onclick="markAsRead('{{ initialRequest['id'] }}','{{ initialRequest['is_read'] }}');" style="background: none repeat scroll 0 0 #E14E44;">
+													{{ 'regularuser.mark_read'|trans }}
+                        						</a>
+                        					{% endif %}
+    	                					</div>   
+    	                					<div class="messageForm{{ initialRequest['id'] }}" id="messageforms">
+			    	      						<div class="descdata" style="margin-left: 34px; width: 87% !important;">
+			    	      						
+			    	      						<form action="{{ path('fenchy_regular_user_sendmessages') }}" method="post" {{ form_enctype(forms[i][j]) }}>
+				    	      						<p>Write a message to {{ initialRequest['author']['name'] }} about {{ notice.title }}</p>
+				    	      						
+									    			{{ form_row(forms[i][j].title, {'attr': {'placeholder': 'title','label':''} }) }}
+									    			{{ form_row(forms[i][j].content, {'attr': {'placeholder': 'Write content','label':''} }) }}
+									    			{{ form_rest(forms[i][j]) }}
+									    			<input class="blue_button" style="margin-left: 460px; margin-top: -27px;" type="submit" id="continue" value="{{ 'btn.send'|trans }}"/>
+									    			<div class="rightimg"><img src="{{ absolute(asset('images/bgright_rightpart.png')) }}" alt="" style="left: 26px; position: relative; margin-top: -126px; height: 129px;"/></div>
+									    		</form>
+									    		{% set j=j+1 %}
+									    		
+							    				</div>
+    	                					</div>
+    	                					
+    	                					<section id="boxes2">
+										    	<div id="dialog{{ initialRequest['id'] }}" class="window">
+										    	<div id="dialog41">
+										        	<div class="big_popup">
+											           	<div class="big_popupclose"><a href="" class="close"></a></div>
+											           	<p>{{ initialRequest['createdAt']|date('d.m.y') }} &nbsp;{{ initialRequest['createdAt']|date('h:m') }}</p>
+											           	<p>{{ initialRequest['text'] }}</p>
+											           	<p>
+											           		{% if initialRequest['proposeprice']>0 %}
+											           			{{ 'request.proposed'|trans|upper }}&nbsp;
+											           			{{ initialRequest['proposeprice'] }}
+											           			{{ initialRequest['currency']|trans }}
+											           		{% elseif  initialRequest['free']  %}
+											           			{{ 'request.proposed'|trans|upper }}&nbsp;
+											           			{{ 'listing.create.free' }}
+											           		{% endif %}
+											           	</p>
+											           	<p>{% if initialRequest['piece_spot'] >0 %}
+											           		{{ initialRequest['author']['name'] }} {{ 'request.want'|trans|upper }} {{ initialRequest['piece_spot'] }} 
+											           		{% endif %}
+											           		{% if initialRequest['price'] >0 %}
+												           		{{ 'request.in_price'|trans|upper }} {{ initialRequest['price'] }} {{ initialRequest['currency']|trans }}. 
+												           		<br>{{ 'request.total_price'|trans|upper }} = {{ initialRequest['totalprice'] }}
+											           		{% endif %}
+											           	</p>
+											           	<br><br>
+										       		</div>    
+										    	</div>
+										    	</div>    
+										    	<div id="mask"></div>
+										    </section>
+			            			{% endif %}
+			            			
+			            			<!-- <div class="messageForm{{ initialRequest['id'] }}" id="messageforms">
+	    	      						<div class="descdata" style="margin-left: 34px; width: 87% !important;">
+		    	      						<p>Write a message to {{ initialRequest['author']['name'] }} about {{ notice.title }}</p>
+		    	      						<p><input id="messagetitle{{ initialRequest['id'] }}" style="width: 80%" type="textarea" placeholder="{{ 'regularuser.title'|trans }}" /></p>
+							       			<p><input id="messagetext{{ initialRequest['id'] }}" style="width: 80%" type="textarea" placeholder="{{ 'regularuser.write_your_message'|trans }}" /></p>
+							    
+							    			<input style="float: right; margin-left: 14px; margin-top: -19px; position: relative; cursor: pointer;" class="blue_button" type="button" value="SEND" onclick="sendMessage({{ initialRequest['id'] }});"/>
+							    			<div class="rightimg"><img src="{{ absolute(asset('images/bgright_rightpart.png')) }}" alt="" style="left: 26px; position: relative; margin-top: -120px; height: 129px;"/></div>
+							    		</div>
+    	                			</div>-->
+		                    	{% endfor %}		                    	
+	                    	{% endif %}
+	                    </div>                       		
+              			</div>
+                       	<div class="optionsdetail actions">
+                        	<a class="blue-button" href="{{path('fenchy_regular_user_notice_edit', {'id': notice.id})}}">
+                            	{{'btn.edit'|trans}}
+                            </a>
+	                        <a href="#dialog{{ notice.id }}11" name="modal" id="vzoom_1944" class="zoomthis blue-button">
+                            	{{'btn.delete'|trans}}
+                            </a>
+                            {% if count[i] == "done" %}
+	                            <div id="ReviewWrite{{ notice.id }}">
+	                            <a href="javascript:void(0);" class="blue-button" onclick="showReviewForm({{ notice.id }});">
+	                            	{{'regularuser.write_review'|trans}}
+	                            </a>
+	                            </div>
+	                        {% else %}
+	                        	<div id="ReviewWriteBtn{{ notice.id }}" style="display: none;">
+	                            <a href="javascript:void(0);" class="blue-button" onclick="showReviewForm({{ notice.id }});">
+	                            	{{'regularuser.write_review'|trans}}
+	                            </a>
+	                            </div>
+                            {% endif %}
+    	                </div>
+    	                
+					   	<section id="boxes2">
+					    	<div id="dialog{{ notice.id }}11" class="window">
+					    	<div id="dialog41">
+					        	<div class="big_popup">
+						           	<div class="big_popupclose"><a href="" class="close"></a></div>
+							           	<form action="{{path('fenchy_regular_user_listing_delete_confirm', {'id': notice.id})}}" method="post">
+							           		<p>{{'listing.delete.msg'|trans({'%notice%': ''~notice.title~'' })|raw}}</p>
+							            	
+							            	<a class="blue-btn" style="padding-top: 8px; height: 21px;" href="{{path('fenchy_regular_user_listing_manage')}}">
+							            		{{ 'btn.no'|trans }}
+							           		</a>
+							           		<input class="blue-btn" type="submit" id="continue" value="{{ 'btn.yes'|trans }}"/>
+							  			</form>
+					       		</div>    
+					    	</div>
+					    	</div>    
+					    	<div id="mask"></div>
+					    </section>
+
+          	         	{%   set i=i+1 %}                       
+                  	{% endfor %}
+           		{% else %}
+	                <p>{{'listing.no'|trans}}</p>
+                {% endif %}
+			</div>
+    	</div>
+   
+{#    		{% render 'FenchyRegularUserBundle:Groupprofile:groupLeftSidebar' with { 'groupId' : groupId } %}#}
+    </div>    <!-- #E14E44; -->
+{% endblock %}

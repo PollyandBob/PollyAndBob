@@ -19,9 +19,9 @@ monolog:
             level: debug
 
 
-swiftmailer:
-    spool:
-      type: file
-      path: "%kernel.root_dir%/Spool"
-    antiflood:
-      threshold: 1000  
+#swiftmailer:
+#    spool:
+#      type: file
+#      path: "%kernel.root_dir%/Spool"
+#    antiflood:
+#      threshold: 1000  

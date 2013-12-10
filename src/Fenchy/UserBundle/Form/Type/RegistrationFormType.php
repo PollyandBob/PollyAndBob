@@ -34,7 +34,7 @@ class RegistrationFormType extends BaseType
             ->add('email', NULL, array(
 			    'label' => 'user.email',
                             'attr' => array(
-                                'placeholder' => 'form.email'
+                                'placeholder' => 'Email:'
                             ),
                 'invalid_message' => 'form.validation.invalid_email'
 			))
@@ -46,7 +46,7 @@ class RegistrationFormType extends BaseType
                 'attr' => array(
                     'placeholder' => 'form.password'
                 ),
-                'invalid_message' => 'form.validation.invalid_pass_match'
+                'invalid_message' => 'The Password confirmation is invalid'
             ))
             ->addEventSubscriber($subscriber)
         ;

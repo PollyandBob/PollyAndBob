@@ -26,10 +26,7 @@
                                         {{ 'regularuser.message.dear_user'|trans }}
                                     </p>
                                     <p style="margin: 30px 0">
-                                        {{ 'regularuser.message.message_first_part'|trans }}
-                                    </p>
-                                    <p style="margin: 30px 0">
-                                        {{ 'regularuser.message.message_second_part'|trans({'%link%': link, '%groupname%': ''~groupname~'' }) }}
+                                        {{ 'regularuser.message.message_first_part'|trans({'%groupname%': groupname, '%administrator%': sender.regularuser.firstname}) }}
                                    		<a href="{{ app.request.getSchemeAndHttpHost() }}{{ link }}">Click Here</a>	
                                     </p>
                                     <p style="margin: 40px 0">

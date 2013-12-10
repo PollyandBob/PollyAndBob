@@ -33,9 +33,21 @@
 			var noticetype = '{{ notice.type }}';
 			//alert(request_text);
 			
+			var itemAvailableDisplay = $('#itemAvailable').css('display');
 			var display = $('#proposeprice').css('display');
-			
 			var flag = true;
+			if(itemAvailableDisplay == 'block')
+			{				
+				var item = parseInt($('#pieces').val(), 10);				
+				var ava_item = parseInt($('#hiddentext').val(), 10);				
+				if(item <= 0 )
+				{
+					alert('ENTER MORE THAN ONE');
+					flag = false;
+				}
+			}	
+			
+			
 			if(display == 'block')
 			{
 				if($('#freebox').is(':checked') && $('#offerprice').val()!="" )
@@ -56,7 +68,7 @@
 						flag = false;
 					}
 				}
-				if(noticetype !=  'service')
+				if(noticetype ==  'service')
 				{
 					if(!$('#default_settings').is(':checked'))
 					{
@@ -90,17 +102,19 @@
 						
 					},
 					success : function(response) {
-						alert('Your request send');
-						$('#requestDiv').html("<p>{{ 'request.msg1'|trans }}</p><br><br>");
+						//alert('Your request send');
+						$('#RequestSend').click();
+						$('#dialog42').hide();
 					},
 					error : function() {
 						alert('Something went wrong!');
 					},
 					complete : function() {
 						$('#requestdata').val('');
-						$('#pieces').val('');			
-						$('#price').val('');
-						$('#total').val('');
+						$('#pieces').val('0');
+						var price = "{{ notice.price }}";
+						$('#price').val(price);
+						$('#total').val('0');
 						$('#cur option:selected').text('');
 						$('#freebox').prop('checked', false);
 						//$('#freebox').attr('checked' : false);
@@ -111,6 +125,24 @@
 				}); 
 			}				
 		}
+		$(function(){
+			  $('#freebox').click(function(){
+					var item = parseInt($('#pieces').val(), 10);
+					var price1 = '{{ notice.price }}'; 
+				  	if($('#freebox').is(':checked'))
+				  	{
+					  	$('#price').val(0);	
+					  	$('#offerprice').val(0);
+						$('#total').val(item * parseInt($('#price').val(), 10));	
+				  	}
+				  	else
+				  	{
+				  		$('#price').val(price1);
+				  		$('#total').val(item * parseInt($('#price').val(), 10));  
+				  	}
+			  });
+		});
+		$('#freebox').is(':checked');
 		$(function(){
 			  $('.zoomthis').click(function(){
 			    
@@ -124,22 +156,30 @@
 			});
 		$(function(){
 			  $('#pieces').blur(function(){
-				var item = $('#pieces').val();
-				var price = $('#price').val();
-				var ava_item = $('#hiddentext').val();
+				var item = parseInt($('#pieces').val(), 10);
+				var price = parseInt($('#price').val(), 10);
+				var ava_item = parseInt($('#hiddentext').val(), 10);
+				
 				if(item > ava_item)
 				{
-					$('#pieces').val('');
+					$('#pieces').val(0);
 					alert("ONLY " + ava_item + " AVAILABLE");
+					$('#total').val(parseInt($('#pieces').val(), 10) * price);
 				}
 				else
-					$('#total').val(item*price);								   
+					$('#total').val(parseInt($('#pieces').val(), 10) *price);								   
 			  });
 			});
 		$(function(){
 			  $('#offerprice').blur(function(){
+				var item = parseInt($('#pieces').val(), 10);
 				var price = $('#offerprice').val();
-				$('#price').val(price);												   
+				var price1 = '{{ notice.price }}'; 
+				if(price=="")
+					$('#price').val(price1);
+				else
+					$('#price').val(price);	
+				$('#total').val(item * parseInt($('#price').val(), 10));											   
 			  });
 			});
 		function sendMsg()
@@ -197,13 +237,15 @@
   	  	{% if notice.type != "neighbours" and notice.type != "groups" and notice.type != "offergroups" %}
 	    	{% set price = notice.price %}
 	    	{% if (price|length) > 0 %}
+	    		<h4>{{ price }} {% if notice.currency !="currency" %} {{ notice.currency |trans }}{% else %} {{ 'euro'|trans }} {% endif %} 
 	    		{% if notice.type == 'offerevents' %}
-    				<h4>{{ price }} {{ notice.currency |trans }} {{ 'notice.perspot' | trans }}</h4>
+    				{{ 'notice.perspot' | trans }}
     			{% elseif notice.type == 'offerservice' %}
-    				<h4>{{ price }} {{ notice.currency |trans }} {{ 'notice.perhour' | trans }}</h4>
+    				{{ 'notice.perhour' | trans }}
     			{% elseif notice.type == 'offergoods' %}
-    				<h4>{{ price }} {{ notice.currency |trans }} {{ 'notice.perpiece' | trans }}</h4>
+    				{{ 'notice.perpiece' | trans }}
     			{% endif %}
+    			</h4>
     		{% elseif notice.type.priceAvailable %}
     			<h4> Free </h4>    			
     		{% endif %}
@@ -212,11 +254,15 @@
                 {% for value in notice.values %}
                 	{% set options = value.valueAsString | split('^') %}
                 	{% for option in options %}
-						{% if option %}	
+						{% if option %}
 							{% if app.user.id is defined and app.user.id != displayUser.id and (option != "need" and option != "offer")%}
-    							<a href="#dialog42" name="modal" id="vzoom_1944" class="zoomthis blue-button">{{ option|trans }}</a>
+								{% if notice.completed %}
+									<a href="#dialog43" name="modal" id="vzoom_1944" class="zoomthis blue-button">{{ option|trans }}{%  if option == "contact_me" %}&nbsp;{{ displayUser.name }}!{% endif %}</a>
+								{% else %}
+    								<a href="#dialog42" name="modal" id="vzoom_1944" class="zoomthis blue-button">{{ option|trans }}{%  if option == "contact_me" %}&nbsp;{{ displayUser.name }}!{% endif %}</a>
+    							{% endif %}
                 			{% elseif (option != "need" and option != "offer")%}
-    							<a href="#dialog43" name="modal" id="vzoom_1944" class="zoomthis blue-button">{{ option|trans }}</a>
+    							<a href="#dialog43" name="modal" id="vzoom_1944" class="zoomthis blue-button">{{ option|trans }}{%  if option == "contact_me" %}&nbsp;{{ displayUser.name }}!{% endif %}</a>
     						{% endif %}
     					{% endif %}
     				{% endfor %}
@@ -226,17 +272,21 @@
             {% if notice.type != "neighbours" and notice.type != "groups" and notice.type != "offergroups" %}
     		<h2>
 	    		{% if notice.startDate %}
-	    			From {{ notice.startDate|date('d.m.Y')}}
-	    				{% if notice.startTime %}
-	    					{{ notice.startTime|date('H:m') }}
-	    				{% endif %}
+	    			{{ 'regularuser.message.date'|trans }} {{ notice.startDate|date('d.m.Y')}}
+	    				
 	    		{% endif %}
 	    		{% if notice.endDate %}
-	    			to {{ notice.endDate|date('d.m.Y')}}
-	    			{% if notice.endTime %}
-	    					{{ notice.endTime|date('H:m') }}
-	    				{% endif %}
+	    			{% if date(notice.endDate) != date(notice.startDate) %}
+	    				{{ 'regularuser.message.to'|trans }} {{ notice.endDate|date('d.m.Y')}}
+	    			{% endif %}
+	    		{% endif %}<br>
+	    		{% if notice.startTime %}
+					{{ 'regularuser.message.from'|trans }} {{ notice.startTime|date('H:m') }}
 	    		{% endif %}
+	    		{% if notice.endTime %}
+	    			{{ 'regularuser.message.to'|trans }} {{ notice.endTime|date('H:m') }}
+	    		{% endif %}
+	    		
 	    	</h2>
 	    	<h2>
 	    		{% if not notice.startDate %}
@@ -260,11 +310,19 @@
     		<h4>{{ displayUser.name }}</h4>
     		<div class="profile">        	
         		<div class="person">
+        		{% if app.user %}
+        		<a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice',{'userId': displayUser.id}) }}">
             		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': displayUser.id } %}
-            			<div class="neighbor red">
-							<p> </p>
+            	</a>
+            	{% else %}
+            	<a href="javascript:void(0);">
+            		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': displayUser.id } %}
+            	</a>
+            	{% endif %}	
+            			<div class="neighbor {{ managerType[2] }}">
+							<p>{{ managerType[1] }}</p>
 							<span>{{ displayUser.activity }}</span>
-						</div>               
+					</div>               
             	</div>
             </div>
             <h2>{{displayUser.regularuser.aboutMe|truncate(200)}}</h2>
@@ -291,7 +349,8 @@
 		    	<h2>{{ 'request.msg2'|trans }} {{ displayUser.name }}</h2>	    	
     			
     			{% if notice.pieces >1 or notice.spot >1 %}
-    			<p>     				
+    			<div id="itemAvailable">
+    			<p>     			
 	    			{% if notice.type == "offerservice" %}
 	    				<input type="text" id="pieces" placeholder="{{ 'listing.create.hour'|trans|upper }}"></input>  X
     				{% elseif notice.type == "offergoods" %}
@@ -306,6 +365,7 @@
     				<input type="text" id="price" value="{{ notice.price }}" readonly="readonly"></input> =
     				<input type="text" id="total" placeholder="{{ 'listing.create.total'|trans|upper }}" readonly="true"></input>    				
     			</p>
+    			</div>
     			{% endif %}
     			
     			<div id="proposeprice">
@@ -322,8 +382,9 @@
     				
     				<select id="cur">
     					<option>CURRENCY</option>
-    					<option>DOLLAR</option>
     					<option>EURO</option>
+    					<option>DOLLAR</option>
+    					
     				</select>
     				<input type="checkbox" value="free" id="freebox"> FREE
     				<br><br>
@@ -339,13 +400,14 @@
     			<p> {{ 'request.message_to_user'|trans|upper }} {{ displayUser.name }}<br>
     				<input type="text" id="requestdata" style="width: -moz-available" placeholder="Request Message"/>
     			</p>
-			    <a class="blue-btn" style="padding-top: 8px; height: 21px;" href="{{path('fenchy_regular_user_notice_create1')}}">
+			    <a class="blue-btn" style="padding-top: 8px; height: 21px;" href="{{path('fenchy_notice_indexv2')}}">
 			    	{{ 'request.return_to_listing'|trans }}
 			  	</a>
 				<input class="blue-btn" type="button" id="continue" value="{{ 'request.send'|trans }}" onclick="sendRequest();"/>
 				</div>
 			</form>
 		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%;" />
 	</div>
 	<div id="mask"></div>
 </section>
@@ -353,11 +415,25 @@
 	<div id="dialog43" class="window">
 	   	<div class="big_popup">
 	      	<div class="big_popupclose"><a href="" class="close"></a></div>
-			{% if app.user.id is defined %}
+	      	{% if app.user.id is defined and app.user.id != displayUser.id %}
+	      		{% if notice.completed %}
+	      			<div id="requestDiv">
+		    			<p>{{'request.sorry_msg'|trans }}
+				      		{% if notice.type == "offerevents" %}
+				      				{{ 'notice.spot'|trans }}
+				      		{% else %}
+				      				{{ 'notice.piece'|trans }}
+				      		{% endif %}
+	      				</p>  			
+   					</div>
+	      		{% endif %}
+	      	{% endif %}
+			{% if app.user.id is defined and app.user.id == displayUser.id%}
 		    	<div id="requestDiv">
 		    		<p>{{ 'request.your_list'|trans }}</p>  			
    				</div>
-   			{% else %}
+   			{% endif %}
+   			{% if app.user.id is not defined %}
    				<div id="requestDiv">
 		    		<p>{{ 'request.login_require'|trans }}</p>  			
    				</div>
@@ -388,6 +464,20 @@
 	      	<div class="big_popupclose"><a href="" class="close"></a></div>
 			<div id="messageForm">
 				<p>{{ 'regularuser.msg_send'|trans }}</p>
+			</div>
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+	</div>
+	<div id="mask"></div>
+</section>
+
+<a id="RequestSend" href="#dialog49" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+<section id="boxes2">
+	<div id="dialog49" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+			<div id="messageForm">
+				<p>{{ 'request.msg1'|trans }}</p>
 			</div>
 		</div>
 		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">

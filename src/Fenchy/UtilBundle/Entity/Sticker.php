@@ -16,18 +16,22 @@ use Fenchy\UserBundle\Entity\User,
  */
 class Sticker {
     
-    const REASON_HARASS     = 0;
-    const REASON_SPAM       = 1;
-    const REASON_COMMERCIAL = 2;
-    const REASON_FORBIDDEN  = 3;
-    const REASON_BEHAVIOUR  = 4;
+	const REASON_FORBIDDEN  = 0;
+    const REASON_HARASS     = 1;
+    const REASON_BEHAVIOUR  = 2;
+    const REASON_NOTPOLLYNBOB = 3;
+    const REASON_SPAM       = 4;
+    const REASON_COMMERCIAL = 5;
+    const REASON_OTHER = 6;
     
     static public $reasonMap = array(
-        self::REASON_HARASS     => 'harass',
-        self::REASON_SPAM       => 'spam',
-        self::REASON_COMMERCIAL => 'commercial',
-        self::REASON_FORBIDDEN  => 'forbidden',
-        self::REASON_BEHAVIOUR  => 'behaviour'
+    	self::REASON_FORBIDDEN    => 'forbidden',
+        self::REASON_HARASS       => 'harass',
+    	self::REASON_BEHAVIOUR    => 'behaviour',
+    	self::REASON_NOTPOLLYNBOB => 'notpollynbob',    		
+        self::REASON_SPAM         => 'spam',
+        self::REASON_COMMERCIAL   => 'commercial',
+    	self::REASON_OTHER		  => 'other_type'
     );
 
     /**

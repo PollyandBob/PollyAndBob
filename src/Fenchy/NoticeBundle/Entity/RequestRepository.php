@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
 
 use Fenchy\UserBundle\Entity\User;
+use Symfony\Bundle\AsseticBundle\Factory\Worker\UseControllerWorker;
 /**
  * RequestRepository
  *
@@ -62,6 +63,7 @@ class RequestRepository extends EntityRepository
 							'title' => $aboutNotice->getTitle(),
 							'image' => '',
 							'noticeUrl' => $aboutNoticeUrl,
+							'completed' => $aboutNotice->getCompleted()
 					) : null,
 					'id' => $oneRequest->getId(),
 					'status' => $oneRequest->getStatus(),
@@ -112,23 +114,133 @@ class RequestRepository extends EntityRepository
 	 * @return integer
 	 * @param \Fenchy\UserBundle\Entity\User $user
 	 */
-	public function countUnreadUsersRequests(User $user) {
+	public function countUnreadUsersRequests(User $user, $listings=NULL) {
 
-		$query = $this->createQueryBuilder('r')
-		->select('COUNT(r.id)')
-		->where('r.is_read = :read and r.aboutUser = :user')
-		->setParameters(array(
-				'read' => 'false',
-				'user' => $user
-		))
-		->getQuery();
-
+		$i = 0;
+		$listing1 = array();
+		if($listings)
+		{
+			foreach ($listings as $listing)
+			{
+				if($listing->getUserGroup()==null)
+				{
+					$listing1[$i++] = $listing;
+				}
+			}
+		}
+		if($listing1)
+		{
+			$query = $this->createQueryBuilder('r')
+			->select('COUNT(r.id)')
+			->where('r.is_read = :read and r.aboutUser = :user and r.aboutNotice IN(:listings)' )
+			->setParameters(array(
+					'read' => 'false',
+					'user' => $user,
+					'listings'=> array_values($listing1)
+			))
+			->getQuery();
+		}
+		else 
+		{
+			$query = $this->createQueryBuilder('r')
+			->select('COUNT(r.id)')
+			->where('r.is_read = :read and r.aboutUser = :user')
+			->setParameters(array(
+					'read' => 'false',
+					'user' => $user
+			))
+			->getQuery();
+		}
 		$total = $query->getSingleScalarResult();
 		return $total;
 
 	}
+	
+	public function countUnreadUsersRequestsInGroup($notices) {
+	
+		$total = 0;
+		foreach($notices as $notice)
+		{	
+			$query = $this->createQueryBuilder('r')
+			->select('COUNT(r.id)')
+			->where('r.is_read = :read and r.aboutNotice = :notice')
+			->setParameters(array(
+					'read' => 'false',
+					'notice' => $notice
+			))
+			->getQuery();
+	
+			$total += $query->getSingleScalarResult();
+		}
+		
+		return $total;
+	
+	}
 
-	public function countUnreadUsersStatusRequests(User $user) {
+	public function countUnreadUsersStatusRequests(User $user, $listings) {
+	
+		$i = 0;
+		$listing1 = array();
+		if($listings)
+		{
+			foreach ($listings as $listing)
+			{
+				if($listing->getUserGroup()==null)
+				{
+					$listing1[$i++] = $listing;
+				}				
+			}
+		}
+		if($listing1)
+		{		
+			$query = $this->createQueryBuilder('r')
+			->select('COUNT(r.id)')
+			->where('r.is_read_status = :read and r.author = :user and r.aboutNotice IN(:listings)')
+			->setParameters(array(
+					'read' => 'false',
+					'user' => $user,
+					'listings'=> array_values($listing1)
+			))
+			->getQuery();
+		}
+		else 
+		{
+			$query = $this->createQueryBuilder('r')
+			->select('COUNT(r.id)')
+			->where('r.is_read_status = :read and r.author = :user')
+			->setParameters(array(
+					'read' => 'false',
+					'user' => $user,					
+			))
+			->getQuery();
+		}
+	
+		$total = $query->getSingleScalarResult();
+		return $total;
+	
+	}
+	
+	public function countUnreadUsersStatusRequestsInGroup($notices) {
+	
+		$total = 0;
+		foreach($notices as $notice)
+		{	
+			$query = $this->createQueryBuilder('r')
+			->select('COUNT(r.id)')
+			->where('r.is_read = :read and r.aboutNotice = :notice')
+			->setParameters(array(
+					'read' => 'false',
+					'notice' => $notice
+			))
+			->getQuery();
+	
+			$total += $query->getSingleScalarResult();
+		}
+		
+		return $total;
+	}
+	
+	public function countUnreadUsersStatusGroupRequests(User $user,$groupId) {
 	
 		$query = $this->createQueryBuilder('r')
 		->select('COUNT(r.id)')
@@ -140,6 +252,7 @@ class RequestRepository extends EntityRepository
 		->getQuery();
 	
 		$total = $query->getSingleScalarResult();
+		
 		return $total;
 	
 	}
@@ -163,10 +276,9 @@ class RequestRepository extends EntityRepository
 			$query->andWhere('r.type = '.$criteria['type']);
 		}
 
-
-
 		return $query->getQuery()->getSingleScalarResult();
 	}
+	
 	public function getNoticeIds(User $user)
 	{
 		return  $this->createQueryBuilder('r')
@@ -175,5 +287,77 @@ class RequestRepository extends EntityRepository
 				->setParameter('author', $user->getId())	
 				->getQuery()
 				->getResult();
+	}
+	
+	public function getRequests(User $user)
+	{
+		return  $this->createQueryBuilder('r')
+		->select('r')
+		->where('r.author = :author')		
+		->setParameter('author', $user->getId())
+		->getQuery()
+		->getResult();
+	}
+	
+	public function getGroupNoticeIds(User $user)
+	{
+		return  $this->createQueryBuilder('r')
+				->select('r')
+				->where('r.author = :author')
+				->setParameter('author', $user->getId())
+				->getQuery()
+				->getResult();
+	}
+	
+	public function getSingleNeighbourRequeste(User $user, User $aboutuser)
+	{
+		return  $this->createQueryBuilder('r')
+				->select('r')
+				->where('r.author = :author and r.aboutUser = :aboutuser')
+				->setParameter('author', $user->getId())
+				->setParameter('aboutuser', $aboutuser->getId())
+				->getQuery()
+				->getResult();
+	}
+	
+	public function getNeighboursRequests(User $user)
+	{
+		return  $this->createQueryBuilder('r')
+				->select('r')
+				->where('r.aboutUser = :aboutuser')
+				->setParameter('aboutuser', $user->getId())
+				->getQuery()
+				->getResult();
+	}
+	
+	public function countUsersDoneRequest(User $user) {
+	
+		$query = $this->createQueryBuilder('r')
+		->select('COUNT(r.id)')
+		->where('r.requeststatus = :done and r.aboutUser = :user')
+		->setParameters(array(
+				'done' => 'done',
+				'user' => $user
+		))
+		->getQuery();
+	
+		$total = $query->getSingleScalarResult();
+		return $total;
+	
+	}
+	
+	public function countMyRequestMarkAsDone(User $user) {
+	
+		$query = $this->createQueryBuilder('r')
+		->select('COUNT(r.id)')
+		->where('r.requeststatus = :done and r.author = :user')
+		->setParameters(array(
+				'done' => 'done',
+				'user' => $user
+		))
+		->getQuery();
+	
+		$total = $query->getSingleScalarResult();
+		return $total;
 	}
 }

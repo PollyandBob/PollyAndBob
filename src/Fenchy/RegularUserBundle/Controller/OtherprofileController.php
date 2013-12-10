@@ -28,6 +28,7 @@ use Fenchy\UserBundle\Form\UserLocationType;
 use Fenchy\RegularUserBundle\Form\UserAboutSettingsType;
 use Doctrine\Tests\Common\Annotations\True;
 use Doctrine\Tests\Common\Annotations\False;
+use Doctrine\Tests\Common\Annotations\Null;
 
 
 class OtherprofileController extends Controller
@@ -64,6 +65,11 @@ class OtherprofileController extends Controller
 		
 		$request = $this->getRequest();
 	
+		if ($userLoggedIn->getId()==$userId)
+		{
+			return new RedirectResponse($this->container->get('router')->generate('fenchy_regular_user_user_myprofile_aboutmychoice'));
+		}
+		
 		return $this->render('FenchyRegularUserBundle:Otherprofile:aboutOtherChoice.html.twig', 
 				array('displayUser' => $displayUser,
 					  'userId'		=> $userId));
@@ -115,32 +121,15 @@ class OtherprofileController extends Controller
 				->getRepository('UserBundle:IdentityVerification')->getIdentityStatus($displayUser);
 			
 		
-		// Added By jignesh for Manager type
+		// Added By bhumi for Manager type
 		
-		if($displayUser->getActivity() >= 400 && $displayUser->getActivity() < 1000)
-		{
-			$managertype = "Community Manager";
-			$managertype_alpha = "C";
-			$classColor = "green";
-		}
-		elseif($displayUser->getActivity() >= 1000)
-		{
-			$managertype = "Neighborhood Manager";
-			$managertype_alpha = "N";
-			$classColor = "orange";
-		}
-		elseif($displayUser->getManagerType()==1)
-		{
-			$managertype = "House Manager";
-			$managertype_alpha = "H";
-			$classColor = "blue";
-		}
-		else
-		{
-			$managertype = "";
-			$managertype_alpha = " ";
-			$classColor = "red";
-		}
+		$userRepository = $this->getDoctrine()
+			->getRepository('UserBundle:User');
+			
+		$managertype = $em
+			->getRepository('FenchyRegularUserBundle:UserRegular')
+			->getManagerType($userRepository->find($displayUser));
+		
 		// Added By jignesh for Manager type
 
 		return $this->render('FenchyRegularUserBundle:Otherprofile:otherAvatar.html.twig',
@@ -151,8 +140,6 @@ class OtherprofileController extends Controller
 						'verified'	 => $verified,
 						'identity'	 => $identity,
 						'managertype'=>$managertype,
-						'managertype_alpha'=>$managertype_alpha,
-						'classColor'		=> $classColor,
 						'profilepath'	 => $proimg,
 						'coverpath'	 	 => $covrimg,
 				));
@@ -186,6 +173,8 @@ class OtherprofileController extends Controller
 		$currentuid = $displayUser->getId();
 		$request = $this->getRequest();
 		$users2 = array();
+		$managertype = array();
+		$i = 0 ;
 		$filterdata = "";
 		foreach ($users as $user) {
 				
@@ -225,10 +214,24 @@ class OtherprofileController extends Controller
 			
 			if($user->getLocation()!="" && $userid!=$currentuid)
 			{
-				$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
-				$data = file_get_contents($url);
-				//$data = utf8_decode($data);
-				$obj = json_decode($data);
+				
+				$lat = $user->getLocation()->getLatitude();
+				$log = $user->getLocation()->getLongitude();
+				
+				$lat2 = $displayUser->getLocation()->getLatitude();
+				$log2 = $displayUser->getLocation()->getLongitude();
+				
+				$theta = $log - $log2;
+				// Find the Great Circle distance
+				$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+				$distance = $distance * 60 * 1.1515;
+				$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+				
+				
+// 				$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
+// 				$data = file_get_contents($url);
+// 				//$data = utf8_decode($data);
+// 				$obj = json_decode($data);
 		
 				//echo($obj->rows[0]->elements[0]->distance->text); //km
 				//echo($obj->rows[0]->elements[0]->distance->value); // meters
@@ -247,38 +250,14 @@ class OtherprofileController extends Controller
 					$dist = 30000; // slider distance
 				}
 				
-				
-				
-				$gmap_distance =  $obj->rows[0]->elements[0]->distance->value; // location with gmap api distance
-				
 				if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
 				{
 					// Added By jignesh for Manager type
 					
-					if($user->getActivity() >= 400 && $user->getActivity() < 1000)
-					{
-						$managertype = "Community Manager";
-						$managertype_alpha = "C";
-						$classColor = "green";
-					}
-					elseif($user->getActivity() >= 1000)
-					{
-						$managertype = "Neighborhood Manager";
-						$managertype_alpha = "N";
-						$classColor = "orange";
-					}
-					elseif($user->getManagerType()==1)
-					{
-						$managertype = "House Manager";
-						$managertype_alpha = "H";
-						$classColor = "blue";
-					}
-					else
-					{
-						$managertype = "";
-						$managertype_alpha = " ";
-						$classColor = "red";
-					}
+					$managertype[$i++] = $em
+					        ->getRepository('FenchyRegularUserBundle:UserRegular')
+					        ->getManagerType($user);
+					
 					// Added By jignesh for Manager type
 					$user->setTwitterUsername($avatar);
 					$users2[] = $user;
@@ -304,7 +283,8 @@ class OtherprofileController extends Controller
 						'filterDistanceSliderDefaultUser'=>$this->container->getParameter('distance_slider_default_user'),
 						'filterDistanceSliderSnapUser'=>$this->container->getParameter('distance_slider_snap_user'),
 						'filterLastUrl' => $this->get('session')->get('lastFilterUrl'),
-						'userId'		=> $userId
+						'userId'		=> $userId,
+						'managertype' => $managertype
 				));
 	}
 	public function otherFilterUsersAction($userId)
@@ -344,7 +324,8 @@ class OtherprofileController extends Controller
 		$request = $this->getRequest();
 		$users2 = array();
 		$filterdata = "";
-		
+		$managertype = array();
+		$i = 0;
 		foreach ($users as $user) {
 			
 			//$avatar = $user->getRegularUser()->getAvatar(false);
@@ -382,46 +363,40 @@ class OtherprofileController extends Controller
 		
 			if($user->getLocation()!="" && $userid!=$currentuid)
 			{
-				$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
-				$data = file_get_contents($url);
-				//$data = utf8_decode($data);
-				$obj = json_decode($data);
+				$lat = $user->getLocation()->getLatitude();
+				$log = $user->getLocation()->getLongitude();
+				
+				$lat2 = $displayUser->getLocation()->getLatitude();
+				$log2 = $displayUser->getLocation()->getLongitude();
+				
+				$theta = $log - $log2;
+				// Find the Great Circle distance
+				$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+				$distance = $distance * 60 * 1.1515;
+				$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+				
+				
+// 				$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
+// 				$data = file_get_contents($url);
+// 				//$data = utf8_decode($data);
+// 				$obj = json_decode($data);
 				
 				//echo($obj->rows[0]->elements[0]->distance->text); //km
 				//echo($obj->rows[0]->elements[0]->distance->value); // meters
 				$mindist = $this->container->getParameter('filter_min_distance_user');// minimum distance
 				$maxdist = $this->container->getParameter('filter_max_distance_user');// maximum distance 
 				$dist = $request->query->get('dist'); // slider distance
-				$gmap_distance =  $obj->rows[0]->elements[0]->distance->value; // location with gmap api distance
+				
+				
 				
 				if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
 				{		
 					// Added By jignesh for Manager type
 					
-					if($user->getActivity() >= 400 && $user->getActivity() < 1000)
-					{
-						$managertype = "Community Manager";
-						$managertype_alpha = "C";
-						$classColor = "green";
-					}
-					elseif($user->getActivity() >= 1000)
-					{
-						$managertype = "Neighborhood Manager";
-						$managertype_alpha = "N";
-						$classColor = "orange";
-					}
-					elseif($user->getManagerType()==1)
-					{
-						$managertype = "House Manager";
-						$managertype_alpha = "H";
-						$classColor = "blue";
-					}
-					else
-					{
-						$managertype = "";
-						$managertype_alpha = " ";
-						$classColor = "red";
-					}
+					$managertype[$i] = $em
+					        ->getRepository('FenchyRegularUserBundle:UserRegular')
+					        ->getManagerType($user);
+					
 					// Added By jignesh for Manager type
 					
 					$filterdata .= '<div class="persen">
@@ -430,8 +405,8 @@ class OtherprofileController extends Controller
 										<div class="persenname">
 											<p>'.$firstname.'</p>
 										</div>';
-			        $filterdata .=	'<div class="neighbor '.$classColor.'">
-											<p>'.$managertype_alpha.'</p>
+			        $filterdata .=	'<div class="neighbor '.$managertype[$i][2].'">
+											<p>'.$managertype[$i][1].'</p>
 											<span>'.$user->getActivity().'</span>
 										</div>
 									</a>
@@ -439,6 +414,7 @@ class OtherprofileController extends Controller
 				}
 			}
 		 }
+		 $i++;
 		}
 		
 		echo $filterdata;
@@ -459,7 +435,8 @@ class OtherprofileController extends Controller
 						'filterDistanceSliderDefaultUser'=>$this->container->getParameter('distance_slider_default_user'),
 						'filterDistanceSliderSnapUser'=>$this->container->getParameter('distance_slider_snap_user'),
 						'filterLastUrl' => $this->get('session')->get('lastFilterUrl'),
-						'userId'		=> $userId
+						'userId'		=> $userId,
+						'managertype' => $managertype
 				));
 	}
 	public function otherCommunityPointsAction($userId)
@@ -509,14 +486,47 @@ class OtherprofileController extends Controller
 		
 		$reputationPoints = $this->get('fenchy.reputation_counter')->getPointsList($displayUser);
 		
-		$profileUrl = $this->get('router')->generate('fenchy_regular_user_user_profilev2', array('userId' => $displayUser->getId()));		
+		$profileUrl = $this->get('router')->generate('fenchy_regular_user_user_profilev2', array('userId' => $displayUser->getId()));
+				
+		$requestRepo = $em->getRepository('FenchyNoticeBundle:Request');
+		$neighbourServed = $requestRepo->countUsersDoneRequest($displayUser);
+		$completedAcitivities = $requestRepo->countMyRequestMarkAsDone($displayUser);
+		
+		$verified = $this->getDoctrine()
+			->getRepository('UserBundle:LocationVerification')->getStatus($displayUser);
+		
+		$identity = $this->getDoctrine()
+			->getRepository('UserBundle:IdentityVerification')->getIdentityStatus($displayUser);
+		
+		$em = $this->getDoctrine()->getEntityManager();
+		$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($displayUser->getId());
+			
+		if($result)
+		{
+			if($result->getWebPath()!="")
+			{
+				$reputationPoints['profilePercent'] += 0.25;
+			}
+				
+			if($result->getWebPath2()!="")
+			{
+				$reputationPoints['profilePercent'] += 0.10;
+			}
+		}
+		$reputationPoints['profile'] = $reputationPoints['profilePercent'] * 20;
+		$reputationPoints['profilePercent'] = ($reputationPoints['profilePercent'] *100) .'%';
 		
 		return $this->render('FenchyRegularUserBundle:Otherprofile:otherCommunityPoints.html.twig',
 				array(
 						'repBreakdown' => $reputationBreakdown,
 						'reputationPoints' => $reputationPoints,
 						'displayUser'	=> $displayUser,
-						'userId'		=> $userId
+						'userId'		=> $userId,
+						'neighbourCount' => $this->otherNeighborsCount($userId),
+						'neighbourServed' => $neighbourServed,
+						'completedAcitivities' => $completedAcitivities,
+						'verified'		=> $verified,
+						'identity'		=> $identity,
 				));
 	}
 	public function otherListingsReviewsAction($userId)
@@ -548,6 +558,15 @@ class OtherprofileController extends Controller
 		}
 		$user->setTwitterUsername($avatar);
         
+		// Added By bhumi for Manager type
+		
+		$userRepository = $this->getDoctrine()
+		->getRepository('UserBundle:User');
+			
+		$managertype = $em
+			->getRepository('FenchyRegularUserBundle:UserRegular')
+			->getManagerType($userRepository->find($user));
+		
         $request = $this->getRequest();
         $param = explode("/", $request->getPathInfo());
         $islocation = "".$param[sizeof($param)-1];
@@ -598,6 +617,7 @@ class OtherprofileController extends Controller
                     	'initialReviews' 	=> $initialReviews,
                     	'initialComments'	=> $initialComments,
                     	'reviews'			=> sizeof($initialReviews),
+                    	'managarType'		=> $managertype
                     	)
         			);	
 	}
@@ -608,12 +628,26 @@ class OtherprofileController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 		$request = $this->getRequest();
 		$targetNeighborId = $request->get('neighborId');
-		$remove = $request->get('remove');
 		
-		 
+		$neighborRequestId = $request->get('neighbourRequestId');		
+		$remove = $request->get('remove');
+		$rejectN = $request->get('rejectN');
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		if($rejectN)
+		{
+			$requestObj = $em->getRepository('FenchyNoticeBundle:Request')->find($neighborRequestId);
+			$em->remove($requestObj);
+			$em->flush();
+			echo "rejected";
+			exit;
+		} 
 		$user_regular = $user->getRegularUser();
 		 
-		$em = $this->getDoctrine()->getManager();
+		
+		$neighborpoint = $em->getRepository('UserBundle:User');
+		$neighborforPoint = $neighborpoint->find($targetNeighborId);	
 		
 		$neighbor = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findById($targetNeighborId,$user->getId());
 		if(!$neighbor)
@@ -635,10 +669,30 @@ class OtherprofileController extends Controller
 				if($remove)
 				{
 					$em->remove($neighbor);
+					$neighborforPoint->setActivity($neighborforPoint->getActivity()-2);
+					$em->persist($neighborforPoint);
+						
+					$user->setActivity($user->getActivity()-2);
+					$em->persist($user);
+					
+					$requestObj = $em->getRepository('FenchyNoticeBundle:Request')->find($neighborRequestId);
+					$em->remove($requestObj);
 				}
 				else
 				{
 					$em->persist($neighbor);
+					$neighborforPoint->addActivity(2);
+					$em->persist($neighborforPoint);
+					
+					$user->addActivity(2);
+					$em->persist($user);
+					
+					$requestObj = $em->getRepository('FenchyNoticeBundle:Request')->find($neighborRequestId);
+					$requestObj->setStatus('accepted');
+					$requestObj->setIsReadStatus(false);
+					$requestObj->setRequeststatus('accepted');
+					$em->persist($requestObj);
+					
 				}
 				$em->flush();
 				
@@ -648,10 +702,58 @@ class OtherprofileController extends Controller
 	
 	}
 	
+	public function addNeighborRequestAction()
+	{
+	
+		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+		$request = $this->getRequest();
+		$targetNeighborId = $request->get('neighborId');
+		//$remove = $request->get('remove');
+				
+		$user_regular = $userLoggedIn->getRegularUser();
+			
+		$em = $this->getDoctrine()->getManager();
+		if ( !$request->isMethod('POST') ) {
+			return new Response('',401);
+		}
+		$targetUser = $em->getRepository('UserBundle:User')->find($targetNeighborId);
+			
+		if ( ! ($userLoggedIn instanceof \Fenchy\UserBundle\Entity\User) )
+			return new Response('',401);
+		
+		$noticerequest = new \Fenchy\NoticeBundle\Entity\Request();
+		$noticerequest->setTitle($userLoggedIn->getRegularUser()->getFirstName(). " ". $this->get('translator')->trans('regularuser.want_to_add_as_neighbour'));
+		$userLoggedIn->addOwnRequest($noticerequest);
+		$em->persist($userLoggedIn);
+		$noticerequest->setAuthor($userLoggedIn);
+		//$noticerequest->setAboutNotice(null);
+		$noticerequest->setText($this->get('translator')->trans('regularuser.add_me_in_your_neighbor'). " " .$targetUser->getRegularUser()->getFirstName()." ".$this->get('translator')->trans('regularuser.to_your_neighborlist'));
+		$noticerequest->setStatus('pending');
+		$noticerequest->setRequeststatus('pending');
+		$noticerequest->setAboutUser($targetUser);
+		$em->persist($noticerequest);
+		$em->flush();
+				
+		return new Response();	
+	
+	}
 	public function checkNeighborAction($neighborId)
 	{
 		$userLogged = $this->get('security.context')->getToken()->getUser();
 		$em = $this->getDoctrine()->getEntityManager();
+		$requestRepo = $em->getRepository('FenchyNoticeBundle:Request');
+		$aboutuser = $em->getRepository('UserBundle:User')->find($neighborId);
+		$neighbourRequests = $requestRepo->getSingleNeighbourRequeste($userLogged,$aboutuser);
+		if(!$neighbourRequests)
+			$neighbourRequests = $requestRepo->getNeighboursRequests($userLogged);
+		$requestObj = null;
+		foreach ($neighbourRequests as $k =>$neighbourRequest)
+		{
+			if($neighbourRequest->getAboutNotice())			
+				unset($neighbourRequests[$k]);
+			else
+				$requestObj = $neighbourRequest;
+		}
 		
 		if ( $neighborId != NULL )
 		{
@@ -687,29 +789,133 @@ class OtherprofileController extends Controller
 		{
 			$valId =  '';
 		}
-		$origin = str_replace(" ", "", $userLogged->getLocation());
 		
-		$destination = str_replace(" ", "", $neighbor_info->getLocation());
 		
-		$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
-		$data = file_get_contents($url);
-		//$data = utf8_decode($data);
-		$obj = json_decode($data);
+		$lat = $userLogged->getLocation()->getLatitude();
+		$log = $userLogged->getLocation()->getLongitude();
+		
+		$lat2 = $neighbor_info->getLocation()->getLatitude();
+		$log2 = $neighbor_info->getLocation()->getLongitude();
+		
+		$theta = $log - $log2;
+		// Find the Great Circle distance
+		$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+		$distance = $distance * 60 * 1.1515;
+		$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+		
+		
+// 		$origin = str_replace(" ", "", $userLogged->getLocation());
+		
+// 		$destination = str_replace(" ", "", $neighbor_info->getLocation());
+		
+// 		$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
+// 		$data = file_get_contents($url);
+// 		//$data = utf8_decode($data);
+// 		$obj = json_decode($data);
 		 
-		$gmap_distance =  $obj->rows[0]->elements[0]->distance->value;
-		
-		
+				
 		return $this->render(
 				'FenchyRegularUserBundle:Otherprofile:otherLeftSidebar.html.twig', array(
 						'check'		=> $valId,
 						'userId'	=> $neighborId,
 						'distanceBetween' => $gmap_distance,
 						'userLogged' => $userLogged,
-						'displayUser' => $displayUser
+						'displayUser' => $displayUser,
+						'requestObj' =>$requestObj
 				)
 		);
 		
 	}
 	
+	public function otherNeighborsCount($userId)
+	{
 	
+		$em = $this->getDoctrine()->getEntityManager();
+	
+		if ( $userId != NULL )
+		{
+				
+			$userOther = $em->getRepository('UserBundle:User')->getAllData( $userId );
+				
+			if ( ! $userOther instanceof \Fenchy\UserBundle\Entity\User )
+				return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+			$displayUser = $userOther;
+			$usersOwnProfile = 0;
+		}
+			
+	
+		$filterService = $this->get('listfilter');
+		$emptyFilter = $returnFilter = $filterService->getFilter();
+		//Get Users info
+		$users = $this->getDoctrine()
+		->getEntityManager()
+		->getRepository('UserBundle:User')
+		->findAllWithStickers($emptyFilter);
+	
+		$origin = str_replace(" ", "", $displayUser->getLocation());
+		$currentuid = $displayUser->getId();
+		$request = $this->getRequest();
+		$i = 0 ;
+		
+		foreach ($users as $user) {
+	
+			//$avatar = $user->getRegularUser()->getAvatar(false);
+			$em = $this->getDoctrine()->getEntityManager();
+			$neighbor = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findById($currentuid,$user->getId());
+			if(!$neighbor)
+			{
+				$neighbor = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findById($user->getId(),$currentuid);
+			}
+			$neighbors = '';
+			if($neighbor)
+			{
+				$neighbors = $neighbor->getId();
+			}
+			if($neighbors)
+			{	
+								
+				$firstname= $user->getRegularUser()->getFirstname();
+				$destination = str_replace(" ", "", $user->getLocation());
+				$userid= $user->getId();				
+					
+				if($user->getLocation()!="" && $userid!=$currentuid)
+				{
+	
+					$lat = $user->getLocation()->getLatitude();
+					$log = $user->getLocation()->getLongitude();
+	
+					$lat2 = $displayUser->getLocation()->getLatitude();
+					$log2 = $displayUser->getLocation()->getLongitude();
+	
+					$theta = $log - $log2;
+					// Find the Great Circle distance
+					$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+					$distance = $distance * 60 * 1.1515;
+					$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+	
+					$mindist = $this->container->getParameter('filter_min_distance_user');// minimum distance
+					$maxdist = $this->container->getParameter('filter_max_distance_user');// maximum distance
+	
+					$dist1 = $request->getUri();
+	
+					if(strpos($dist1,'dst=') !== false)
+					{
+						$dist1 = explode("dst=",$request->getUri());
+						$dist = $dist1[1]; // slider distance
+					}
+					else
+					{
+						$dist = 30000; // slider distance
+					}
+	
+					if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
+					{
+						$i++;
+					}
+				}
+	
+			}
+		}
+		return $i;	
+	}	
 }

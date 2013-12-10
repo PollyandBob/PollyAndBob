@@ -1,5 +1,28 @@
 <script type="text/javascript">
 
+function addNeighbors(receiver)
+{	
+	var url = "{{path('fenchy_regular_user_user_otherprofile_addneighborrequest')}}";
+	$.ajax({
+		url : url,
+		type : "post",
+		data : {
+			'neighborId': receiver,
+			},
+		beforeSend : function() {
+		},
+		success : function(response) {			
+			$('#neighbor_request_send').click();
+			$('.added_n').hide();
+			$('.requested_n').show();
+		},
+		error : function() {
+			alert('Something went wrong!');
+		},
+		complete : function() {								
+		}
+	}); 
+}
 function sendMsg()
 		{
 			var flag = true;
@@ -43,22 +66,42 @@ function sendMsg()
 			}		
 		}
 </script>
+<script type="text/javascript">
+	$(function() {
+		$('.add-sticker').click(function(event) {
+			  event.preventDefault();
+				  $('#flagwindow').slideToggle('fast', function() {
+			  });
+		});
+	});
+</script>
 <div class="rightside">
                  <div class="right" >
                     <div class="options">
                         <h4>YOUR OPTIONS</h4>
                         <div class="optionsdetail">
                         <a href="#dialog44" class="zoomthis blue_button" name="modal" id="vzoom_1944">{{ 'regularuser.send_new_message'|trans }}</a>
-                            <a href="javascript:void(0);"  {% if check %}style="display: block;" {% else %}style="display: none;" {% endif %}  class="blue_button remove_n" id="{{ 'regularuser.remove_neighbor_success'|trans }}" onclick="removeNeighbor({{ userId }},this);">{{ 'regularuser.remove_neighbor'|trans }}</a>
+                        	{% if requestObj %}
+                            	<a href="javascript:void(0);"  {% if check!="" and requestObj and requestObj.status == "accepted" %}style="display: block;" {% else %}style="display: none;" {% endif %}  class="blue_button remove_n" id="{{ 'regularuser.remove_neighbor_success'|trans }}" onclick="removeNeighbor({{ userId }},this,{{ requestObj.id }});">{{ 'regularuser.remove_neighbor'|trans }}</a>
+                        	{% endif %}
                             {% if (distanceBetween <  30000 ) %} 
-                            <a href="javascript:void(0);"  {% if check %}style="display: none;" {% else %} style="display: block;" {% endif %} class="blue_button added_n" id="{{ 'regularuser.added_neighbor_success'|trans }}" onclick="addNeighbor({{ userId }},this);">{{ 'regularuser.add_neighbor'|trans }}</a>                
+                            	<a href="javascript:void(0);"  {% if check=="" and not requestObj %}style="display: block;" {% else %} style="display: none;" {% endif %} class="blue_button added_n" id="{{ 'regularuser.added_neighbor_success'|trans }}" onclick="addNeighbors({{ userId }});">{{ 'regularuser.add_neighbor'|trans }}</a>
+                                <a href="#dialog303" class="zoomthis blue_button requested_n" name="modal" id="vzoom_1944" {% if check == "" and requestObj %}style="display: block;" {% else %} style="display: none;" {% endif %} >{{ 'regularuser.add_neighbor'|trans }}</a>
                             {% endif %}
-                            <a href="#" class="blue_button">{{ 'regularuser.block'|trans }}</a>               
-                            <a href="#" class="blue_button">{{ 'regularuser.flag'|trans }}</a>                
+                            <a href="#" class="blue_button">{{ 'regularuser.block'|trans }}</a>
+                            {% if userLogged.id != displayUser.id %}
+                				<a href="{{ url('fenchy_create_user_sticker', {id: displayUser.id}) }}" class="add-sticker">{{ 'regularuser.flag'|trans }}</a>
+                			{% endif %}
                         </div>
 		            </div>
 		        </div>
-		            <div class="neighbour-comments">
+		        {% if userLogged.id != displayUser.id %}
+			        <div id="flagwindow" class="userflagwindow">
+						<img class="iconarrow" src="{{ asset('images/icon_arrow.png') }}" alt="" />
+						{% render 'FenchyUtilBundle:Sticker:userSticker' with {'id': displayUser.id} %}
+					</div>
+					{% endif %}
+		            <div class="neighbour-comments" style="display: none;">
                     	<div class="title">
                         	<div class="left">Laura</div>
                             <div class="right">Online</div>
@@ -130,7 +173,7 @@ function sendMsg()
                     </div>
 		         
 </div>
-<a id="successDialog" href="#dialog45" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+<a id="successDialog" href="#dialog301" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
 <section id="boxes2">
 	<div id="dialog44" class="window">
 	   	<div class="big_popup">
@@ -146,7 +189,8 @@ function sendMsg()
 </section>
 
 <section id="boxes2">
-	<div id="dialog45" class="window">
+	<div id="dialog301" class="window">
+	<div id="dialog45">
 	   	<div class="big_popup">
 	      	<div class="big_popupclose"><a href="" class="close"></a></div>
 			<div id="messageForm">
@@ -157,3 +201,48 @@ function sendMsg()
 	</div>
 	<div id="mask"></div>
 </section>
+<a id="neighbor_remove" href="#dialog302" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+    <section id="boxes2">
+		<div id="dialog302" class="window">
+		<div id="dialog45">
+		   	<div class="big_popup">
+		      	<div class="big_popupclose"><a href="" class="close"></a></div>
+				<div id="messageForm">
+					<p>{{ 'regularuser.remove_neighbor_success'|trans }}</p>
+				</div>
+			</div>
+			<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+		</div>
+		</div>
+		<div id="mask"></div>
+	</section>
+
+	<section id="boxes2">
+		<div id="dialog303" class="window">
+		<div id="dialog45">
+		   	<div class="big_popup">
+		      	<div class="big_popupclose"><a href="" class="close"></a></div>
+				<div id="messageForm">
+					<p>{{ 'regularuser.requested_neighbor'|trans }}</p>
+				</div>
+			</div>
+			<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+		</div>
+		</div>
+		<div id="mask"></div>
+	</section>
+<a id="neighbor_request_send" href="#dialog304" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">	
+	<section id="boxes2">
+		<div id="dialog304" class="window">
+		<div id="dialog45">
+		   	<div class="big_popup">
+		      	<div class="big_popupclose"><a href="" class="close"></a></div>
+				<div id="messageForm">
+					<p>{{ 'regularuser.your_request_send'|trans }}</p>
+				</div>
+			</div>
+			<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+		</div>
+		</div>
+		<div id="mask"></div>
+	</section>

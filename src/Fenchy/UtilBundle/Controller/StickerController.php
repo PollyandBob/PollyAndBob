@@ -3,6 +3,8 @@
 namespace Fenchy\UtilBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 use Fenchy\UtilBundle\Entity\Sticker,
     Fenchy\UtilBundle\Form\StickerType;
@@ -95,16 +97,24 @@ class StickerController extends Controller
                 $em->persist($sticker);
                 $em->flush();
 
-                return $this->render('FenchyUtilBundle:Sticker:added.html.twig', array(
-                    'sticker' => $sticker
-                ));
+                $response = new Response();
+                $output[] = array('success' => true, 'sticker' => $sticker);
+                $response->headers->set('Content-Type', 'application/json');
+                $response->setContent(json_encode($output));
+                return $response;
+//                 return  $this->container->get('templating')->renderResponse('FenchyUtilBundle:Sticker:new.html.twig', array(
+//                     'sticker' => $sticker,
+//                 	'form'   => $form->createView(),
+//                 	'flagged' => true
+//                 ));
             }
 
         }
         
         return $this->render('FenchyUtilBundle:Sticker:new.html.twig', array(
             'sticker' => $sticker,
-            'form'   => $form->createView()
+            'form'   => $form->createView(),
+        	'flagged' => false
         ));
     }
     

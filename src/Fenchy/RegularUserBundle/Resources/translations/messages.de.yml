@@ -1,216 +1,385 @@
 regularuser:
-  leave_a_review: Bewertung verfassen
+  leave_a_review: Gebe Feedback
 
-  edit_review: Bewertung bearbeiten
+  edit_review: Feedback ändern.
 
-  load_more: Referenz bearbeiten
+  load_more: mehr
 
-  positives: Positiv
+  positives: x
 
-  negatives: Negativ
+  negatives: x
 
-  positive: Positiv
+  positive: x
 
-  negative: Negativ
-      
-  open: Open
+  negative: x
+    
+  open: offen
   
-  closed: Closed
+  closed: geschlossen
   
-  you_are_member: YOU ARE A MEMBER
+  you_are_member: DU BIST MITGLIED
+  
+  you_are_not_member: DU BIST KEIN MITGLIED
 
-  you_are_admin: YOU ARE ADMINISTRATOR
+  you_are_admin: DU BIST ADMINISTRATOR
+  
+  make_administrator: zum Administrator machen
+  
+  remove: Entfernen
+  
+  remove_members: Mitglieder entfernen
+  
+  remove_admin: Administratoren entfernen
 
+  
   all_trust_points: Reputation:
 
-  dont_ask: Diese Frage nicht nochmal stellen.
+  dont_ask: Stelle diese Frage nicht noch einmal.
 
-  disable_connect: Diese Frage nicht nochmal stellen.
+  disable_connect: Stelle diese Frage nicht noch einmal.
 
-  no_contacts: Du hast noch keine Kontakte auf Fenchy. Verbinde einfach deinen Account, um Freunde aus Facebook einzuladen.
+  no_contacts: Du hast bisher noch keine Kontakte. Verbinde dich jetzt mit Facebook oder Twitter, um Freunde oder Follower von dort einzuladen.
   
-  only_community_Neighborhood_manager: Only Community Manager or Neighborhood Manager Create this group
+  only_community_Neighborhood_manager: Das Gründen von Gruppen ist ausschliesslich Community Managern oder Nachbarschaftsmanagern vorbehalten.
   
-  added_neighbor_success: This Neighbor Successfully added to My Neighbors
+  added_neighbor_success: Nachbar erfolgreich hinzugefügt.
+  
+  remove_neighbor_success: Nachbar erfolgreich  aus Meine Nachbarn Liste entfernt.
 
-  references: Bewertungen
+  reject_neighbor_success: Nachbar abgelehnt.
+  
+  requested_neighbor: Ihre Anfrage wird bereits zu senden. Bitte warten Sie, oder senden Mitteilung ihn erinnern.
+  
+  your_request_send: Ihre Anfrage erfolgreich versandt.
+  
+  references: xxxx
+  
+  your_listing_success: Listing erfolgreich erstellt.
+  
+  invite_neighbor_to_listing: Möchtest du Nachbarn zu deinem Listing einladen?
+  
+  no_thank_you: Nein danke.
+  
+  let_me_go_newsfeed: Zur Startseite
 
-  reviews_: Bewertungen
+  reviews_: Feedbacks
 
   contacts: Kontakte
 
-  completed: Beendet
+  completed: xxx
 
-  facebook_friends: Facebook Freunde
+  facebook_friends: Facebook Friends
 
-  email: Email
+  email: E-mail
 
-  invite: Zu Fenchy einladen
+  invite: zu Polly & Bob einladen
+  
+  invite_neighbor: Lade Nachbarn zu deinem Listing ein?
 
-  join_to_fenchy: Fenchy beitreten
+  join_to_fenchy: trete Polly & Bob bei
 
-  would_like_to_invite_you: möchte dich als Kontakt hinzufügen. Folge einfach dem Link und trete Fenchy bei.
+  all: alle
 
-  unexpected_problem_facebook: Bitte entschuldige! Ein unerwarteter Fehler beim Erstellen der Verbindung zu Facebook ist aufgetreten. Bitte versuche es noch einmal.
+  unread: ungelesen
 
-  all: Alle
+  unreplied: unbeantwortet
 
-  unread: Ungelesen
+  sent: gesendet
 
-  unreplied: Unbeantwortet
-
-  sent: Gesendet
-
-  send_new_message: Nachricht senden
+  send_new_message: Nachricht gesendet
+  
+  add_neighbor: zu Meine Nachbarn hinzufügen
+  
+  remove_neighbor: aus Meine Nachbarn entfernen
+  
+  block: Blockiern
+  
+  flag: Melden
 
   change_password: Passwort ändern
 
-  delete_account: Account löschen
+  delete_account: Profil löschen
 
+  write_your_review: Gebe dein feedback
+  
+  write_your_message: Schreibe eine Nachricht
+  
+  post_comment: Kommentieren
+  
+  title: Titel
+  
+  invite_myneighbors: Lade alle Meine Nachbarn ein. 
+  
+  invite_next_50_around: Lade die nächsten 50 Nachbarn im Umkreis ein. 
+  
+  invite_this_neighbor: diesen Nachbarn einladen
+  
+  invite_another_friends: andere Freunde per email einladen
+  
+  join_group: Gruppe beitreten
+  
+  leave_group: Gruppe verlassen
+  
+  joined_group_success: Gruppe erfolgreich beigetreten. 
+  
+  left_group_success: Du wurdest aus der Gruppe entfernt.
+  
+  members_removed_success: Ausgewählte Nachbarn erfolgreich aus der Gruppe entfernt.
+  
+  msg_send: Nachricht gesendet. 
+  
+  group_messages: Nachrichten
+  
+  there_no_members: Noch keine Mitglieder vorhanden.
+  
+  delete_group: Gruppe löschen.
+
+  write_message: Nachricht verfassen.
+  
+  write_msg_to: Nachricht an:
+  
+  payment_settings: Setze zunächst deine Zahlungseinstellungen, bevor du ein Geld involvierendes Angebot machst. 
+  
+  female: weiblich
+  
+  male: männlich
+  
+  black_board: schwarzes Brett
+  
+  setpayment: Paymentsettings
+  
+  need_your_location: Sie benötigen, um Sie Ort, bevor Sie mit Polly & Bob.
+  
+  listing_deleted: Ihr Eintrag wurde erfolgreich gelöscht.
+  
+  change_pass_success: Das Passwort wurde erfolgreich geändert
+  
+  no_newsfeeds: Kein Eintrag zu Ihrer Suche. Was ist mit diesen Ergebnissen (sie sind in der Nähe):
+  
+  no_newsfeeds_in_given_circle: in der gegebenen Kreis keine Inserate, aber es gibt die Suchergebnisse in einem größeren Gebiet, schauen Sie bitte:
+  
+  no_newsfeeds_with_exact_match: wir nicht finden keine genaue Übereinstimmung noch ähnlich, um die Suche, hier sind andere Ergebnisse in Ihren Suchbereich, oder Sie erstellen eine Liste nach Ihren Suchkriterien.
+  
+  find_neighbors: Find neighbors now
+  
+  want_to_add_as_neighbour: möchte Sie als Nachbar hinzufügen  
+  
+  add_me_in_your_neighbor: Sie möchten hinzufügen
+  
+  to_your_neighborlist: um Ihre Nachbarliste
+  
   message:
-    sent: Deine Nachricht wurde gesendet!
+    sent: Nachricht gesendet!
 
-    deleted: Die Nachricht wurde gelöscht.
+    deleted: Nachricht gelöscht!
 
     about_pre_title: "Über:"
 
-    no_messages: Du hast noch keine Nachrichten erhalten.
+    no_messages: Keine Nachrichten in deinem E-Mail Eingang.
 
-    check_any_message: Bitte wähle mindestens eine Nachricht aus.
+    check_any_message: Bitte mindestens eine Nachricht auswählen.
 
-    messages_has_been_deleted: Die Nachrichten wurden gelöscht.
+    messages_has_been_deleted: Nachrichten erfolgreich gelöscht. 
 
-    to: zu
-
+    to: an
+    
+    from: Von
+    
     new_message: Neue Nachricht
 
-    delete_selected: Lösche die ausgewählten Nachrichten
+    delete_selected: Ausgewählte Nachrichten löschen.
 
-    sender: Von
+    sender: Absender
 
     subject: Betreff
 
     date: Datum
 
-    read: Alle Nachrichten wurden als gelesen markiert.
+    read: Alle Nachrichten als gelesen markiert.
 
-    mark_all_as_read: Alle Nachrichten als gelesen markieren
+    mark_all_as_read: Alle Nachrichten als gelesen markieren.
 
-    refresh: Neu laden
+    refresh: Erneurn
 
-    show_dd: Zeige
+    show_dd: zeige
 
-    message_center: Nachrichten
+    message_center: Deine Nachricht
     
-  save: Speichern
+    no_neighbors: Keine Nachbarn im gewählten Umkreis.
+    
+    no_location: xxx
+    
+    group_created: Gruppe erfolgreich gegründet.
+    
+    are_you_sure_group: Möchtest du diese Gruppe wirklich löschen???
+    
+    group_deleted: Gruppe erfolgreich gelöscht.
+    
+    all_group_members_remove_first: Um die Gruppe zu löschen, muss du zuerst alle Gruppenmitglieder aus der Gruppe entfernen.
+    
+    subject_group: Neue Gruppen Einladung
+    
+    subject_notice: Neue Einladung zu einem Listing
+    
+    subject_members: %groupname% Administrator hat eine Nachricht gesendet.
+    
+    subject_for_invitegroupby_mail: Neue Gruppen Einladung von Polly & Bob
+    
+    subject_for_invitelistingby_mail: Neue Listing Einladung von Polly & Bob
+    
+    subject_for_buy_share_mail: Zeichne Anteile an Polly & Bob
+    
+    message_part: Hallo, %username%
+    
+    message_first_part: Auf Polly & Bob wurde die Gruppe %groupname% von %Administrator% gegründet.
+    
+    message_first_part1: %username% hat dich zu seinem Listing eingeladen.
+    
+    message_first_part_members: ?????Deutsch
+    
+    message_second_part_members: Auf Polly & Bob wurde die Gruppe %groupname% von %Administrator% gegründet. Schau es dir an:
+    
+    message_last_part: von Polly & Bob 
+    
+    dear_user: Liebe Nutzer*in,
+
+  save: Sichern
 
   cancel: Abbrechen
 
   add: Hinzufügen
 
-  edit: Bearbeiten
+  edit: Ändern
 
   delete: Löschen
 
+  accept: Akzeptieren
+  
+  reject: Absagen
+  
+  write_review: Feedback schreiben
+  
+  mark_done: Erledigt
+  
+  write_msg: Nachricht
+  
+  view_detail: Details
+  
+  mark_read: Gelesen
+  
   show: Zeigen
 
-  change: ändern
+  change: Ändern
   
-  about_me: Über mich
+  about_me: Über Mich
 
-  my_community_ponts: MY COMMUNITY POINTS
+  my_community_ponts: MEINE COMMUNITY PUNKTE
   
-  my_neighbours: MY NEIGHBOURS
+  my_neighbours: MEINE NACHBARN
   
-  my_location: MY LOCATION
+  my_location: MEIN STANDORT
   
-  find_me_by_what_i_like: Find Me by what i like
+  other_community_ponts: COMMUNITY PUNKTE
+  
+  other_neighbours: NACHBARN
+  
+  other_listingsreviews: Listings & Feedbacks
+  
+  group_settings: Gruppen Einstellungen
+  
+  group_info: Info
+  
+  find_me_by_what_i_like: Finde mich anhand dessen, was mir gefällt.
 
-  i_like: I Like
+  i_like: Mir gefällt: 
 
-  hot_places: Hot Places in the neighborhood
+  hot_places: Heiße Orte in der Nachbarschaft.
 
-  promoted_initiaives: Promoted Initiatives in the
+  promoted_initiaives: Unterstützte Initiativen in der Nachbarschaft
 
-  my_languages: My Languages
+  my_languages: Meine Sprachen
 
-  not_shown_information: Not shown information
+  not_shown_information: Nicht öffentlich Informationen
 
-  neighbours: Neighbors
-  
-  total_community_points: TOTAL COMUNITY POINTS
-  
-  profile_completion: PROFILE COMPLETION
-  
-  my_neighbors: MY NEIGHBORS
-  
-  listings_posted: LISTINGS POSTED
-  
-  neighbors_served: NEIGHBORS SERVED
-  
-  reviews_received: REVIEWES RECEIVED
-  
-  completed_activities: COMPLETED ACTIVITIES
-
-  written_reviews: WRITTEN REVIEWS
-
-  invited_and_registered_users: INVITED AND REGISTERED USERS
-  
-  shareholder: SHAREHOLDER
-  
-  location_verified: LOCATION VERIFIED
-  
-  passport_verified: PASSPORT VERIFIED
-  
-  fill_my_profile_now: FILL MY PROFILE NOW!
-  find_new_neighbours_now: FIND NEW NEIGHBOURS NOW!
-  create_listing: CREATE LISTINGS!
-  uptodate_your_listings_now: UPTODATE_YOUR_LISTINGS_NOW!
-  ask_for_reviews: ASK FOR REVIEWS!
-  search_new_activity: SEARCH NEW ACIVITY!
-  write_review_now: WRITE REVIEW NOW!
-  tell_friend_about_pollyandbob_now: TELL A FRIEND ABOUT POLLY&BOB NOW!
-  become_shareholder_now: BECOME SHAREHOLDER NOW!
-  verify_your_location_now: VERIFY YOUR LOCATION NOW!
-  verify_your_passport_now: VERYFY YOUR PASSPORT NOW!
-  verify_this_location: VERIFY THIS LOCATION!
-  verify_location_message: A poscard has been sent to your address. Please follow the instructions in order to verify your location.
-  verified_location_message: Your location is already verified.
-  verify_identity_message: Press Ok and submit your identity verification request. Admin will verify this and update your status as soon as possible.
-  verified_identity_message: Your identity verified.
-  verifing_identity_message: Your identity verification request is submitted. Please wait until admin verify it.
-  change_email: CHANGE EMAIL
-  
-  back: back
-  ok: ok
-  continue: publish
-  enter_password: ENTER PASSWORD
-  location_verification: LOCATION VERIFICATION    
   neighbours: Nachbarn
+  
+  listing_reviews: Listing & Feedbacks
+  
+  around_you: im Umkreis
+  
+  total_community_points: COMUNITY PUNKTE GESAMT
+  
+  profile_completion: PROFIL VOLLSTÄNDIGKEIT
+  
+  my_neighbors: MEINE NACHBARN
+  
+  listings_posted: LISTINGS VERÖFFENTLICHT
+  
+  neighbors_served: Aktivität von Listing
+  
+  reviews_received: FEEDBACKS BEKOMMEN
+  
+  completed_activities: Aktivität auf Anfrage
 
-  disconnect_twitter: Verbindung zu Twitter trennen
+  written_reviews: FEEDBACKS GESCHRIEBEN
 
-  connect_to_twitter: Mit Twitter verbinden
+  invited_and_registered_users: ANMELDUNG VON EINGELADENEN FREUNDEN
+  
+  shareholder: MITGLIED IM NACHBARSCHAFTGREMIUM
+  
+  location_verified: Standort VERIFIZIERT
+  
+  passport_verified: IDENTITÄT VERIFIZIERT
+  
+  fill_my_profile_now: JETZT PROFIL VERVOLLSTÄNDIGEN!
+  find_new_neighbours_now: NEUE NACHBARN FINDEN!
+  create_listing: LISTING ERSTELLEN!
+  update_your_listings_now: LISTINGS AKTUALISIEREN!
+  ask_for_reviews: FEEDBACK NACHFRAGEN!
+  search_new_activity: SUCHE NACH AKTIVITÄTEN!
+  write_review_now: SCHREIBE EIN FEEDBACK!
+  tell_friend_about_pollyandbob_now: ERZÄHLE FREUNDEN VON POLLY & BOB!!
+  become_shareholder_now: WERDE JETZT MITGLIED!
+  verify_your_location_now: VERIFIZIERE DEINEN STANDORT JETZT!
+  verify_your_passport_now: VERIFIZIERE DEINE IDENTITÄT JETZT!
+  verify_this_location: VERIFIZIERE DIESEN STANDORT!
+  no_listing: Keine Listings vorhanden.
+  verify_location_message: Wir haben dir eine Postkarte geschickt. Folge bitte den den Anweisungen, um deinen Standort zu verifizieren.
+  verified_location_message: Dein Standort ist schon oder wird gerade verifiziert. 
+  verify_identity_message: Klicke auf OK um deine Identität verifizieren zu lassen. 
+  verified_identity_message: Deine Identität ist jetzt verifiziert.
+  verifing_identity_message: Danke für deine Anfrage. Wir verifizieren deine Anfrage, so schnell wie möglich.
+  verifing_location_message: Danke für deine Anfrage. Ihr Standort ist in Überprüfung. Wir senden Ihnen Postkarte so bald wie möglich mit Ihrem Passwort.
+  change_email: E-MAIL & PASSWORT
+  
+  back: zurück
+  ok: ok
+  enter_password: PASSWORT EINGEBEN
+  location_verification: STANDORT VERIFIZIERUNG
+  continue: publish
+  disconnect_twitter: Twitter Verbindung trennen
 
-  connect_to_facebook: Mit Facebook verbinden
+  connect_to_twitter: Twitter Verbindung aufbauen
 
-  disconnect_facebook: Verbindung zu Facebook trennen
+  connect_to_facebook: Facebook Verbindung aufbauen
 
-  add_to_timeline: Auf Timeline posten
+  disconnect_facebook: Facebook Verbindung trennen
 
-  disconnect_timeline: Verbindung zur Timeline trennen
+  add_to_timeline: Auf deiner Timeline posten
 
-  only_jpg_png_maximum2m: bitte nur jpg oder png Dateien verwenden.
+  disconnect_timeline: Timeline Verbindung trennen
 
-  put_pin: Pin auf auf gewünschten Standort setzen.
+  only_jpg_png_maximum2m: Bitte lediglich jpeg oder png Formate benuzten und maximale Größe von 5MB einhalten. 
 
-  location: Dein genauer Standort
+  put_pin: Setze den Pin
+
+  location: Dein Standort
 
   printable_location_description: Wird allen Nachbarn angezeigt.
 
   printable_location: Deine Nachbarschaft
 
-  general: Allgemein
+  general: Generell
 
   notification: Benachrichtigung
 
@@ -220,33 +389,36 @@ regularuser:
 
   submit: Senden
 
-  ivitation_to_fenchy_sent: Eine Einladung zu Fenchy wurde gesendet!
+  ivitation_to_fenchy_sent: Eine Einladung wurde an Polly & Bob gesendet.
 
-  no_search_results_for_criteria: Wir konnten zu deiner Suchanfrage keine passenden Ergebnisse finden.
+  no_search_results_for_criteria: Deine Suchanfrage hat keine Ergebnisse geliefert. 
 
-  about_him: Über
+  about_him: xxx
 
-  put_on_fb: Auf Timeline veröffentlichen.
+  put_on_fb: Auf Facebook veröffentlichen.
 
   filter_notSelected: Filter
 
   category_notSelected: Kategorie
 
-  about_you: Beschreibung
+  about_you: Über dich
 
-  link_to_your_page: Link auf deine Seite
+  link_to_your_page: Link to your page
 
-  postcode: Postleitzahl
+  postcode1: Postleitzahl
 
+  em: Email
   your_postal_code: Deine Postleitzahl
 
   city: Stadt
 
+  street: Staße
+  
   your_city: Deine Stadt
 
-  district: Stadtteil
+  district: xxx
 
-  your_district: Dein Stadtteil
+  your_district: xxx
 
   street: Straße
 
@@ -257,68 +429,44 @@ regularuser:
   your_country: Dein Land
 
   firstname: Vorname:
+  
+  birthdate: Geburtstag  
+  
+  postcode: "Postleitzahl:"
 
   your_firstname: Dein Vorname
 
-  lastname: Nachnahme
+  lastname: Nachname:
 
   your_lastname: Dein Nachname
 
+  additional_address: Ihre zusätzliche Adresse
+  
   gender: Geschlecht:
 
   age: Alter:
 
-  your_age: Dein Alter
-
-  friends:
-    exists: %friend% ist bereits in deiner Kontaktliste.
-
-    not: %friend% ist noch nicht in deiner Kontaktliste.
-
-    invite: Kontaktanfrage
-
-    invitation:
-      title: Offene Kontaktanfragen.
-
-      no: Du hast keine offenen Kontaktanfragen.
-
-      send: Kontaktanfrage wurde versendet.
-
-      already: %friend% wurde bereits von dir eingeladen.
-
-      accept: Annehmen
-
-      reject: Ablehnen
-
-      rejected: Du hast die Kontaktanfrage von %friend% abgelehnt.
-
-      invitefb: Freunde einladen
-
-    contacts:
-      no: In deiner Kontaktliste befinden sich noch keine Kontakte.
-
-      no_other: In dieser Kontaktliste befinden sich noch keine Kontakte.
-
-      title: Kontaktliste
-
-    delete:
-      1: Willst du %user% wirklich aus deiner Kontaktliste löschen?
-
-    added: %friend% ist jetzt in deiner Kontaktliste.
-
-    deleted: %friend% wurde aus deiner Kontaktliste entfernt.
-
-  interval: Wie häufig:
+  your_age: XXX
+  
+  your_groupname: Deine Gruppe
+  
+  your_aboutgroup: Über die Gruppe
+  
+  groupname: Gruppenbezeichnung 
+  
+  aboutgroup: Beschreibung 
+  
+  groupStatus: Gruppe ist:
 
   neighbours_filter:
-    today: Heute
+    today: Today
 
-    contacts: Kontakte
+    contacts: xxx
 
-    these_days: 
+    these_days: x x
 
   notice:
-    deleted: Das Listing wurde gelöscht.
+    deleted: Das Listing wurde erfolgreich gelöscht.
 
   filter:
     yesterday: Gestern
@@ -327,247 +475,290 @@ regularuser:
 
     tomorrow: Morgen
 
-  not_shown_publicy: Dein Standort wird nicht öffentlich angezeigt.
+  not_shown_publicy: Dein Standort wird nicht veröffentlicht.
 
-  start_fenchy: Starte Fenchy
+  start_fenchy: Start Polly & Bob
 
   locationpopup:
-    required_confirmation_message: Account bestätigen
+    required_confirmation_message: Bestätige bitte dein Konto.
 
-    required_location_message: 
+    required_location_message: Gib deinen Standort an. 
 
-  languages: Gesprochene Sprache (n)
+  languages: Meine Sprachen
 
-  your_languages: Gesprochene Sprache (n)
+  your_languages: Meine Sprachen
 
-  about_me_placeholder: Kurze Beschreibung über dich selbst.
+  about_me_placeholder: Schreibe ein paar Worte über dich.
 
   change_your_password: Passwort ändern
 
-  delete_your_account: Passwort löschen
+  delete_your_account: Konto löschen
 
-  social:
-    connected: Verbunden
 
-    notconnected: Nicht verbunden
-
-    connect: Verbinden
-
-    disconnect: Trennen
-
-    publish_facebook: Listings auf Facebook veröffentlichen
-
-    invite_facebook: Lade deine Freunde zu Fenchy ein.
-
-  additional_info: Zusätzliche Infos
+  additional_info: Zusätzliche Informationen
 
   validation:
-    invalid__firstname: Dein Vorname enthält ungültige Satzzeichen.
+    invalid__firstname: xxxxFirst name validation
 
-  settings_delete: Usu?ä konto
+  settings_delete: Konto löschen
 
-  end_of_list_msg: 
-
-  end_of_notice_list_msg: 
-
-  ref_trust_points: 
-
-  con_trust_points: 
-
-  activ_trust_points: 
-
-  reviews_tab: Bewertungen
+  reviews_tab: Feedbacks
 
   listings_tab: Listings
 
-  reviews_of_others_tab: Verfasste Bewertungen
+  reviews_of_others_tab: geschriebene Feedbacks 
 
   about: Über
+  
+  status: Gruppe is:
 
-  read_all_messages: Als gelesen markieren
+  read_all_messages: Alle als gelesen markieren.
 
   settings: Einstellungen
 
-  interests_and_activities: 
+  interests_and_activities: xxxxx"Interests & Activities:"
 
-  a_place_near_you: 
+  a_place_near_you: vvvvvvvvvvvPlatz in der Nähe
 
   interest_or_activity:
-    deleted: 
+    deleted: Deutsch??? or activity has been deleted
 
-  edit_I_or_A: 
+  edit_I_or_A: ????? Deutsch edit interest / activity
 
   reviews:
     email:
-      subject: %username% hat eine Bewertung geschrieben
+      subject: %username% hat ein Feedback geschrieben
 
-      1: Hallo %username%,
+      1: Hi %username%,
 
-      2: "%username% hat eine Bewertung zu deinem Listing %listing% geschrieben. Um darauf zu antworten, folge einfach dem folgenden Link:"
+      2: "%username% hat ein Feedback an dich geschrieben. Um dieses Feedback zu beantworten, folge bitte diesem link:"
 
     form:
       title: Titel des Listings
 
-      text: Dein Text
+      text: Text
 emailchange:
   flash:
-    change_requested: Um die Änderung deiner E-Mail-Adresse zu bestätigen, folge bitte dem Link, den wir soeben an deine neue E-mail-Addresse versendet haben.
+    change_requested: Bitte bestätige deine neue E-mail Adresse mit dem Link in deiner E-Mail inbox.
 
-    request_denied: Du hast bereits innerhalb der letzten %ttlh% Stunden eine Anfrage zur ?änderung deiner E-mail-Addresse gesendet. Bitte best?ñtige den Link um deine E-Mail-Addresse zu ?ñndern. Bitte pr??fe auch deinen Spamordner.
+    request_denied: You have already requested to change your email address within the last %ttlh% hours. Please confirm the link we sent to your new email address. Please check your spam folder, in case you did not receive the mail.
 
-    token_expired: Die Änderung deiner E-Mail-Adresse wurde vor mehr als %ttlh% Stunden angefordert und ist leider abgelaufen. Bitte sende eine neue Anfrage zur Änderung deiner E-Mail-Adresse.
+    token_expired: Deine letzte Anfrage ist noch keine %ttlh% her. Bestätige diese bitte mit dem link, den wir auf diese E-Mail  geschickt haben.
 
-    change_success: Du hast deine E-Mail-Adresse erfolgreich geändert.
+    change_success: Deine E-Mail Adresse wurde erfolgreich geändert..
 
-    change_aborted: Die Vorgang zur Änderung deiner E-Mail-Adresse wurde abgebrochen.
+    change_aborted: Der Prozess der Änderung deiner E-Mail wurde gestoppt.
 
   email:
-    subject: E-Mail-Adresse ändern
+    subject: E-mail ändern.
 
-    1: Hallo %username%,
+    1: Hi %username%,
 
-    2: um deine Fenchy E-Mail-Adresse zu ändern, folge bitte diesem Link:
+    2: Um deine E-Mail zur Anmeldung bei Polly & Bob zu ändern, klicke bitte auf diesen link: 
 
-    3: E-Mail-Adresse ändern
+    3: E-mail ändern.
 
-    4: Falls dieser Link nicht funktioniert, kopiere bitte die URL und füge sie in die Addresszeile deines Browsers ein.
+    4: Wenn dieser link nicht funktioniert, kopiere bitte den folgenden link in deinen Browser.
 
-    6: Änderung der E-Mail-Addresse abbrechen.
+    6: E-mail ändern abbrechen.
 
-    7: oder kopiere den folgenden Link in die Adresszeile deines Browsers.
+    7: oder kopiere den link in deinen Browser. 
 
-    8: Du hast nicht die Änderung deiner Email-Addresse angefordert? Bitte ignoriere diese E-mail.
+    8: Du wolltest deine E-Mail Adresse auf Polly & Bob nicht ändern? Ignoriere bitte diese mail.
 
-    9: Wahrscheinlich hat jemand ausversehen deine E-Mail-Adresse verwendet.
+    9: Wahrscheinlich hat jemand aus Versehen deine E-Mail Adresse angegeben.
 
-    10: Vielen Dank!
+    10: Danke,
 
-    11: Dein Fenchy-Team
+    11: Dein Polly & Bob team
 
-    5: Um die Änderung deiner E-Mail-Adresse abzubrechen, folge bitte dem untenstehenden Link: 
-help: Help
-need_help: Need Help
-goods: Goods
-events: Event
-_events: Events
-others: Something Else
-_others: others
-neighbours: Neighbours
-service: Service
-demand_service: Demand Service
-groups: Groups
-offerhelp: Help
-offer_help: Offer Help
-offergoods: Goods
-need_goods: Need Goods
-offer_goods: Offer Goods
-offerevents: Event
-offerothers: Something Else
-offer_others: others
-offerservice: Service
-offer_service: Offer Service
-offergroups: Groups
+    5: Um die E-Mail Änderung auf Polly & Bob zu stoppen, klicke bitte auf diesen link:
+help: Hilfe
+need_help: Hilfe suchen
+goods: Sachen
+events: Veranstaltung
+_events: Veranstaltungen
+others: Etwas anderes
+_others: Sonstige
+neighbours: Nachbarn
+service: Dienstleistung
+demand_service: Dienstleistung suchen
+groups: Gruppe
+offerhelp: Hilfe
+offer_help: Hilfe anbieten
+offergoods: Sachen
+need_goods: Sachen suchen
+offer_goods: Sachen anbieten
+offerevents: Veranstaltung
+offerothers: Etwas anderes
+offer_others: Sonstiges
+offerservice: Dienstleistung
+offer_service: Dienstleistung anbieten
+
+offergroups: Gruppe
 help_prefix: ''
 goods_prefix: ''
 events_prefix: ''
 others_prefix: ''
-offer: Offer
-need: Needed
-find_help: Find help in the Neighbour
-find: Find
-ask_for: Ask for
+offer: Angebot
+need: Gesuch
+find_help: Finde nachbarschaftliche Hilfe.
+find: Finde
+ask_for: Frage nach
+service1: Eine kostenlose Dienstleistung läuft bei Polly & Bob in der Kategorie Hilfe. 
+service2: Wenn du eine Dienstleistung konstenlos anbietest, legen wir es automatisch in die Kategorie Hilfe. 
+to_sell: An dich verkaufen.
+to_swap: Es mit dir tauschen.
+to_lend: Es dir leihen.
+to_use: Dich benutzen lassen. 
+to_give: Es dir schenken. 
+sports: x
+party: x
+arts: x
+music: x
+other: Sonstige
+contact_me: Kontakt 
+propose_time_price: Zeit und Preis vorschlagen. 
+reserve_spot: Einen Platz reservieren. 
+take_part: Kommen und teilnehmen.
+buy: Kaufen
+buy_a_spot: Einen Platz kaufen. 
+propose_price: Einen Preis vorschlagen
+borrow_bring: Ausleihen und wiederbringen. 
+use_it: Bei mir benutzen. 
+swap_it: Ein Tauschangebot machen. 
+take_free: Es geschenkt nehmen. 
 
 listing:
-  my_listing: MY LISTINGS
-  my_request: MY REQUESTS
-  request: REQUESTS
+  my_listing: MEINE LISTINGS
+  my_request: MEINE ANFRAGEN
+  
+  my_grouplisting: Gruppe LISTINGS
+  my_grouprequest: Gruppe ANFRAGEN
   create:
-    title: Listing erstellen
+    title: Listing Erstellen
 
     tab_title:
-      1: Kategorie
+      1: Listing Kategorie
 
-      2: Details des Listings
+      2: Listing Details
 
     1:
-      subtitle: Kategorie auswählen
+      subtitle: Was möchtest du tun? 
 
       description: Wähle die Kategorie, die dein Listing am besten beschreibt.
       
-      find_something : Find something
-      in_neighbourhood: in the Neighbourhood
+      find_something : Möchtest du etwas finden?
+      in_neighbourhood: in der Nachbarschaft
       
-      offer_something : Offer something
-      to_neighbourhood: to the Neighbourhood
+      offer_something : Möchtest du etwas anbieten?
+      to_neighbourhood: in der Nachbarschaft
       
-      event_to_neighbour: Event to the Neighbourhood
+      event_to_neighbour: Veranstaltung in der Nachbarschaft
       
-      something_else: I want to do something else
+      something_else: Du möchtest etwas anderes tun.
 
     2:
-      subtitle: Über
+      subtitle_neighbours: Du möchtest Nachbarn finden.
+      subtitle_help: Du suchst Hilfe.
+      subtitle_goods: Du brauchst einen Gegenstand.
+      subtitle_events: Du möchtest ein Event finden.
+      subtitle_others: Du möchtest etwas anderes anbieten.      
+      subtitle_service: Du suchst eine Dienstleistung.
+      subtitle_service1: Kostenlose Dienstleistungen findest du in der Kategorie Hilfe.
+      subtitle_service2: Wenn du eine Dienstleistung konstenlos anbietest, legen wir es automatisch in die Kategorie Hilfe. 
+      subtitle_groups: Du möchtest eine Gruppe finden.
+      subtitle_offerhelp: Du möchtest Hilfe anbieten.
+      subtitle_offergoods: Du möchtest eine Sache anbieten.
+      subtitle_offerevents: Du möchtest ein Event organisieren.
+      subtitle_offerothers: Du möchtest etwas anderes anbieten.
+      subtitle_offerservice: Du möchtest eine Dienstleistung anbieten.
+      subtitle_offergroups: Du möchtest eine Gruppe eröffnen.
+      
+      description: Erzähle uns mehr über dein Listing!
 
-      description: Erzähle uns mehr über dein Listing.
+    date_arrange: Datum bitte abstimmen.
+    
+    start_date: Datum
 
-    start_date: Start Date
-    
-    date_arrange: Date has to arranged
+    end_date: Datum
 
-    end_date: Ende
+    end_time: Zeit
     
-    end_time: End Time
+    start_time: Zeit
     
-    start_time_arrange: Time has to be arranged
+    start_time_arrange: Zeit bitte abstimmen.
     
-    end_time_arrange: Time has to be arranged
+    end_time_arrange: Zeit bitte abstimmen.
     
-    location_arrange: Location to be arranged 
+    location_arrange: Ort bitte abstimmen.
+    
+    pieces: Anzahl
+    
+    one_piece: nut 1 Stück
+    
+    price_piece: Preis/Stück
+    
+    price_hour: Preis/Stunde
+    
+    price_spot: Preis/Platz
+    
+    total: Gesamtpreis
+    
+    spot: Plätze
+    
+    hour: Stunden
+    
+    unlimited: unbegrenzt
+    
+    currency: Währung
+    
+    price: Preis
+    
+    free: kostenlos
+    
+    default_setting: Nutze die voreingestellte Zahlungseinstellungen.
+    
+    for_free: kostenlos
+    learn_more: Über Zahlungseinstellungen
 
-    pieces: Pieces
-    
-    one_piece: Only 1 piece
-    
-    price_piece: Price/piece
-    
-    price_hour: Price/hour
-    
-    price_spot: Price/spot
-    
-    spots: Spots free
-    
-    unlimeted: Unlimeted 
-    
-    currency: Currency
-    
   show:
     tags: Tags
 
     description: Beschreibung
+    
+    reviews: Feedbacks
+    
+    writereviews: Feedback geben
+    comment: Kommentieren
 
   edit:
-    title: Listing bearbeiten
+    title: Listing ändern
 
-    back_to_management: Zurück zur Liste
+    back_to_management: zurück zur Liste
 
-    flash_success: Die Änderungen wurden gespeichert.
+    flash_success: Änderungen erfolgreich gespeichert.
 
   manage_listings: Meine Listings
 
-  no: Du hast noch kein Listing erstellt.
+  no: Du hast noch keine Listings erstellt.
+  noreq: Du hast noch keine Anfragen gestellt.
 
   delete:
-    msg: Möchtest du das Listing %notice% wirklich löschen?
+    msg: Möchtest du dieses Listing wirklich löschen?
 
   manage:
     flash:
-      delete: Das Listing wurde gelöscht.
+      delete: Das Listing wurde erfolgreich gelöscht.
 
   category: Kategorie
 settings:
   general:
-    name: Profilinformationen
+    name: Profil Information
 
-    profile_photo: Profilbild
+    profile_photo: Profil Bild
+    
+    cover_photo: Titel Bild
 
   location:
     name: Standort
@@ -575,53 +766,148 @@ settings:
     label: Dein Standort
 
   emailnotifications:
-    name: E-Mail Benachrichtigungen
+    name: E-mail Benachrichtigungen
 
   socialnetworks:
     name: Soziale Netzwerke
 
   account:
-    name: Account
+    name: Einstellungen
 
-    delete_confirm_action: Bitte bestätige die Löschung deines Accounts. Nach der Löschung kann dein Account nicht wieder hergestellt werden.
+    delete_confirm_action: Bestätige bitte nocheinmal die Löschung deines Profils. Wenn es gelöscht ist, kann es nicht wieder hergestellt werden. 
 
-    change_password_name: Passwort deines Accounts ändern
+    change_password_name: Passwort
+      
+    payment: Zahlungseinstellungen
 
   flash:
-    data_saved: Die Profilinformationen wurden geändert.
+    data_saved: Die Profil Informationen wurden geändert. 
 
-    form_errors: Ein Fehler ist aufgetreten. Bitte entschuldige.
+    form_errors: Beim Übertragen des Formulars ist ein Fehler aufgetreten.
+    
+    group_location_saved: The Group location saved successfully 
+    
+    location_twice_a_year: Location can not be change more than two times in a year
+    
+    first_entry_as_pioneer: Oh, congratulations! Your are the first one in this particular area. You are granted Pioneer Status, which means you can act like a community manager from the start.
 
   locationpopup:
-    success: Danke für das Angeben deines Standorts.
+    success: Danke für die Mitteilung deines Standortes.
 
-    name: Bitte gib deinen aktuellen Standort an.
+    name: Gebe bitte deinen Standort an.
 
-    description: Bitte teile uns deinen Standort mit, damit du die Suchfunktionen vollständig nutzen kannst.
+    description: Gebe bitte deinen Standort an.
+
 reputation:
   title: Reputation
 
   listings: Listings
 
-  positive_reviews: Positive Bewertungen
+  positive_reviews: Positive xxx
 
-  written_reviews: Verfasste Bewertungen
+  written_reviews: Feedbacks geschrieben xx
 
-  facebook: Facebook Connect
+  facebook: Facebook Verbingung
 
   contacts: Kontakte
 
-  profile: Profil-Informationen
-member_since: Mitglied seit
+  profile: Profil Information  
+member_since: Mitgleid seit
 invitations:
   email:
-    subject: %username% hat eine Kontaktanfrage gesendet.
+    subject: %username% möchte dich zu seiner Meine Nachbarn Liste hinzufügen.
 
     1: Hallo %username%,
 
-    2: "%username% hat dir eine Kontaktanfrage auf Fenchy gesendet. Um die Anfrage zu bestätigen, folge einfach dem untenstehenden Link:"
+    2: %username% möchte dich in seine Meine Nachbarn  auf Polly & Bobaufnehmen. Zur Bestätigung folge bitte diesem link:"
 
   buttons:
     accept: Akzeptieren
 
     reject: Ablehnen
+    
+otherprofile:
+  members: Mitglieder
+  
+  member: Mitglied
+  
+  community_m: Community Manager
+    
+  house_m: Haus Manager
+  
+  neighbor: Nachbarsschaftsmanager
+  
+  pioneer: Pionier
+
+request:
+  msg1: Schön, dass du dich mit der Nachbarschaft verbindest.
+  msg2: Danke für die Anfrage an
+  send: Senden
+  return_to_listing: zurück zum Listing
+  your_list: Dies ist dein eigenes Listing. :-)
+  price_propose: Schlage einen Preis vor:
+  login_require: Registrieren/Login nötig um fortzufahren. 
+  left: verfügbar.
+  how_many: Wieviele möchtest du?
+  in_price: für den Preis von
+  total_price: Gesamtpreis
+  proposed: Vorgeschlagen
+  want: möchte
+  message_to_user: Nachricht an
+  write_a_review: Schreiben Sie einen Erfahrungsbericht
+  sorry_msg: Vielen Dank für den Besuch der Auflistung, es tut uns leid, aber es gibt nicht mehr  
+payment:
+  default_payment: Voreingestellte Zahlungseinstellungen
+  no_default: Keine Zahlungseinstellungen eingestellt. 
+  choose_default: Wähle ein Zahlungseinstellung.
+  direct_debit: Bankeinzug
+  paypal: Paypal
+  credit_card: Kreditkarte
+  why_payment_setting: Warum Zahlungseinstellungen?
+  why_payment_setting1: Um eine Platform wie Polly & Bob zu betreiben, braucht man eine komplexe Serverinfrastuktur und Leute, die den Job machen. 
+  why_payment_setting2: Um Polly & Bob zu unterhalten, nehmen wir 10% Provision auf alle Geld involvierenden Transaktionen.
+  why_payment_setting3: Alle anderen Transaktionen sind kostenlos.
+  why_payment_setting4: Wir bitten dich Polly & Bob durch den Verkauf von Sachen oder das Anbieten von Dienstleistungen zu unterstützen. 10% des Umsatzes gehen auf unser Konto.
+  why_payment_setting5: 
+  why_payment_setting6: Hilf Polly & Bob durch das Verkaufen über unsere Platform.
+  why_payment_setting7: Ein Teil des Geldes geben wir wieder in die Nachbarschaft zurück. Wir unterstützen Nachbarschaftsmanager mit finanziellen Mitteln. Nachbarschaftsmanager tun viel für die Nachbarschaft. Wir unterstützen sie mit Budgets. 
+  how_decide_term: Wie kannst du über Nutzungsbedingungen mitbestimmen?
+  board_neighbour: Nachbarschaftsgremium
+  how_support: Wie kann ich Polly & Bob noch unterstützen?
+  you_can_msg: Du kannst Sachen auf Polly & Bob verkaufen.
+  become_member: Werde Mitglied im Nachbarschaftsgremium. 
+  place: Hier kannst du Mitreden über wichtige Themen wie Datenschutz, Nutzungsbedingungen und Geschäftsmodell.
+  offer_good: Sachen anbieten
+  offer_service: Dienstleistung anbieten
+  offer_event: Event organisieren
+  you_can_invest: Du kannst in Polly & Bob investieren, indem du uns Geld leihst.
+  invest: Unterstüze Polly & Bob
+  donate: Du kannst auch Spenden!
+  donation: Spende
+  account_holder: Kontoinhaber
+  account: Kontonummer
+  bank_code: Bankleitzahl
+  term_condition: Ich authorisiere Polly & Bob 10 % Provision auf alles was ich über Polly & Bob vekaufe.
+  save: Einstellungen speichern
+  save2: Einstellungsn speichern und zurück zum Listing.
+  sepa: SEPA
+  email_to_paypal: E-mail Paypal Konto
+  type_of_card: Art der Kreditkarte
+  card: Kreditkarte
+  card_holder: Karteninhaber
+  valid_till: gültig bis
+  visa: Visa
+  master_card: Master Card
+  change: ändern
+  delete: löschen
+  deletemsg: Keine Zahlungseinstellungen.
+  savemsg: Zahlungseinstellungen erfogreich geändert.
+  cvv: cvv code
+account:
+  old_pass: Altes Passwort
+  new_pass: Neues Passwort
+  confirm: Bestätigen
+  location_identity: Standort & Identität
+  your_email: Your E-mail
+  msg0: E-Mail Benachrichtigung bei neuen Nachrichten
+  msg1: E-Mail Benachrichtigung bei neuen Anfragen

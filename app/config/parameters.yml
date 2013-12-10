@@ -2,9 +2,9 @@ parameters:
     database_driver: pdo_pgsql
     database_host: localhost
     database_port: '5432'
-    database_name: fenchy
+    database_name: alphapollyandbob_prod 
     database_user: postgres
-    database_password: postgres
+    database_password: GU8BvDxQbh2H2Zw
     mailer_transport: smtp
     mailer_host: smtp.googlemail.com
     mailer_port: 465
@@ -58,7 +58,7 @@ parameters:
     filter_max_distance: 30000
     filter_max_distanceDate: 30000
     filter_max_distance_user: 30000
-    filter_max_distance_myneighbors: 50000
+    filter_max_distance_myneighbors: 30000
     filter_default_lat: 52.519171
     filter_default_lng: 13.406091
     file_uploader.max_number_of_files: 4
@@ -67,9 +67,9 @@ parameters:
     file_uploader.sizes: { thumbnail: { folder: thumbnail, max_width: 124 }, medium: { folder: medium, max_width: 710, max_height: 330 } }
     file_uploader.crop: { small: { folder: crop_small, width: 60, height: 60 }, big: { folder: crop_big, width: 212, height: 212 } }
     reviews_pagination: 5
-    distance_slider_default: 50000
+    distance_slider_default: 30000
     distance_slider_defaultDate: 50000
-    distance_slider_default_user: 50000
+    distance_slider_default_user: 30000
     distance_slider_snap: 100
     distance_slider_snapDate: 100
     distance_slider_snap_user: 100

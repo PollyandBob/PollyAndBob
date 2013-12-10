@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
+   	<style>
+		.checkbox li {
+		    width: 245px;
+	}
+	</style>
 {% endblock %}
 
     
@@ -24,12 +29,189 @@
     <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery.timepicker.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/fenchydropdown.js') }}"></script> 
-    
+    <script type="text/javascript" src="{{ asset('js/regular_user/listing/jquery.session.js') }}"></script>
+   
     <script type="text/javascript">
 
+	    function paymentInSession() {
+	    	//var filea = $('#gallery-file').val();
+	    	//alert(filea);
+	        var title = $('#fenchy_noticebundle_noticetype_title').val();
+	        var desc =  $('#fenchy_noticebundle_noticetype_content').val();
+	        var tag = $('#fenchy_noticebundle_noticetype_tags').val();
+	        var start_date = $('#fenchy_noticebundle_noticetype_start_date').val();
+	        var start_time = $('#fenchy_noticebundle_noticetype_start_time').val();
+	        var end_date = $('#fenchy_noticebundle_noticetype_end_date').val();	        
+	        var end_time = $('#fenchy_noticebundle_noticetype_end_time').val();
+	        var date_arrange = $('#fenchy_noticebundle_noticetype_date_arrange').is(':checked');
+	        var time_arrange = $('#fenchy_noticebundle_noticetype_start_time_arrange').is(':checked');
+	        var location = $('#location_gapi').val();	        
+	        var loc_arrange = $('#fenchy_noticebundle_noticetype_location_arrange').is(':checked');
+	        var price = $('#fenchy_noticebundle_noticetype_price').val();
+	        var spot = $('#fenchy_noticebundle_noticetype_spot').val();
+	        var piece = $('#fenchy_noticebundle_noticetype_pieces').val();	        
+			var unlimited = $('#fenchy_noticebundle_noticetype_unlimited').is(':checked');
+			var one_piece = $('#fenchy_noticebundle_noticetype_one_piece').is(':checked');
+	        var free = $('#fenchy_noticebundle_noticetype_free').is(':checked');
+	        var payment_setting = $('#fenchy_noticebundle_noticetype_default_setting').is(':checked');
+	        var currency = $("#fenchy_noticebundle_noticetype_currency option:selected").text();
+	        	        
+	        var chk1 = false;
+        	var chk2 = false;
+        	var chk3 = false;
+        	var chk4 = false;
+        	var chk5 = false;
+        	var chk6 = false;
+        	
+	        {% if type == 'offerevents' %}
+	        	var chk1 = $('#fenchy_noticebundle_noticetype_type_value_9_value_0').is(':checked');
+	        	var chk2 = $('#fenchy_noticebundle_noticetype_type_value_9_value_1').is(':checked');
+	        	var chk3 = $('#fenchy_noticebundle_noticetype_type_value_9_value_2').is(':checked');
+	        	var chk4 = $('#fenchy_noticebundle_noticetype_type_value_9_value_3').is(':checked');
+	        {% endif %}
+
+	        {% if type == 'offergoods' %}
+	        	var chk1 = $('#fenchy_noticebundle_noticetype_type_value_2_value_0').is(':checked');
+	        	var chk2 = $('#fenchy_noticebundle_noticetype_type_value_2_value_1').is(':checked');
+	        	var chk3 = $('#fenchy_noticebundle_noticetype_type_value_2_value_2').is(':checked');
+	        	var chk4 = $('#fenchy_noticebundle_noticetype_type_value_2_value_3').is(':checked');
+	        	var chk5 = $('#fenchy_noticebundle_noticetype_type_value_2_value_4').is(':checked');
+	        	var chk6 = $('#fenchy_noticebundle_noticetype_type_value_2_value_5').is(':checked');
+	        {% endif %}
+
+	        {% if type == 'offerservice' %}
+	        	var chk1 = $('#fenchy_noticebundle_noticetype_type_value_7_value_0').is(':checked');
+	        	var chk2 = $('#fenchy_noticebundle_noticetype_type_value_7_value_1').is(':checked');
+	        {% endif %}
+    
+        
+		    $.post('{{path('fenchy_notice_store_session')}}',
+		                {desc: desc, title: title, tag: tag, start_date: start_date, start_time: start_time, end_date: end_date, end_time: end_time, date_arrange: date_arrange, time_arrange: time_arrange, location: location, loc_arrange: loc_arrange, price: price, spot: spot, unlimited: unlimited, free: free, payment_setting: payment_setting, piece: piece, one_piece: one_piece, currency: currency, chk1: chk1, chk2: chk2, chk3: chk3, chk4: chk4, chk5: chk5, chk6: chk6}, 
+		            function(response){
+		                	window.location.replace('{{ app.request.getSchemeAndHttpHost() }}{{ path('fenchy_regular_user_settings_payment', {'noticeType':type.name, 'groupId': groupId}) }}');                	          
+		    }, "json"); 
+	    }
         var landingPageViewModel;
 
         $(document).ready(function() {
+            var title = '{{ app.session.flash('title') }}';
+        	if(title != "")
+        		$('#fenchy_noticebundle_noticetype_title').val(title);
+        	var desc = '{{ app.session.flash('desc') }}';
+        	if(desc !="")
+        		$('#fenchy_noticebundle_noticetype_content').val(desc);
+        	var tag = '{{ app.session.flash('tag') }}';
+        	if(tag !="")
+        		$('#fenchy_noticebundle_noticetype_tags').val(tag);
+        	var start_date = '{{ app.session.flash('start_date') }}';
+        	if(start_date !="")
+        		$('#fenchy_noticebundle_noticetype_start_date').val(start_date);
+    		var start_time = '{{ app.session.flash('start_time') }}';
+    		if(start_time !="")
+	        	$('#fenchy_noticebundle_noticetype_start_time').val(start_time);
+        	var end_date = '{{ app.session.flash('end_date') }}';
+        	if(end_date !="")
+	        	$('#fenchy_noticebundle_noticetype_end_date').val(end_date);
+        	var end_time = '{{ app.session.flash('end_time') }}';
+        	if(end_time !="")
+	        	$('#fenchy_noticebundle_noticetype_end_time').val(end_time);
+
+	       	var loc_gapi = '{{ app.session.flash('location') }}';
+	       	if(loc_gapi !="")
+	     		$('#location_gapi').val(loc_gapi);
+	        var time_arrange =  '{{ app.session.flash('time_arrange') }}';
+	        if(time_arrange == 'true')
+		        $('#fenchy_noticebundle_noticetype_start_time_arrange').prop('checked','checked');
+
+		    var date_arrange =  '{{ app.session.flash('date_arrange') }}';
+		    if(date_arrange == 'true')
+			    $('#fenchy_noticebundle_noticetype_date_arrange').prop('checked','checked');
+			        
+		    var loc = $.session.get("Location");
+		    	$('#location_gapi').val(loc);
+	        var loc_arrange = '{{ app.session.flash('loc_arrange') }}';
+	        if(loc_arrange == 'true')
+	       		$('#fenchy_noticebundle_noticetype_location_arrange').prop('checked','checked');
+       		
+	        var price = $('#fenchy_noticebundle_noticetype_price').val('{{ app.session.flash('price') }}');
+	        var spot = $('#fenchy_noticebundle_noticetype_spot').val('{{ app.session.flash('spot') }}');
+	        var piece = $('#fenchy_noticebundle_noticetype_pieces').val('{{ app.session.flash('piece') }}');
+	        
+	        var unlimited = '{{ app.session.flash('unlimited') }}';
+	        if(unlimited == 'true')
+				$('#fenchy_noticebundle_noticetype_unlimited').prop('checked','checked');
+			
+	        var one_piece = '{{ app.session.flash('one_piece') }}';
+	        if(unlimited == 'true')
+				$('#fenchy_noticebundle_noticetype_one_piece').prop('checked','checked');
+			
+	        var free = '{{ app.session.flash('free') }}';
+	        if(free == 'true')
+	        	$('#fenchy_noticebundle_noticetype_free').prop('checked','checked');
+
+	        var payment_setting = '{{ app.session.flash('payment_setting') }}';
+	        if(payment_setting == 'true')
+		        $('#fenchy_noticebundle_noticetype_default_setting').prop('checked','checked');
+	        var currency = '{{ app.session.flash('currency') }}';
+	        if(currency == 'Dollar')
+        		$('#fenchy_noticebundle_noticetype_currency').val('Dollar');
+
+        	{% if type == 'offerevents' %}
+        		var chk1 = '{{ app.session.flash('chk1') }}';
+        		if( chk1 =='true' )
+	        		$('#fenchy_noticebundle_noticetype_type_value_9_value_0').prop('checked','checked');
+	        	var chk2 = '{{ app.session.flash('chk2') }}';
+	        	if( chk2 =='true' )	
+	        		$('#fenchy_noticebundle_noticetype_type_value_9_value_1').prop('checked','checked');
+	        	var chk3 = '{{ app.session.flash('chk3') }}';
+	        	if( chk3 =='true' )	
+	        		$('#fenchy_noticebundle_noticetype_type_value_9_value_2').prop('checked','checked');
+        		var chk4 = '{{ app.session.flash('chk4') }}';
+        		if( chk4 =='true' )
+	        		$('#fenchy_noticebundle_noticetype_type_value_9_value_3').prop('checked','checked');
+	        {% endif %}
+	
+	        {% if type == 'offergoods' %}
+	        	var chk1 = '{{ app.session.flash('chk1') }}';
+    			if( chk1 =='true' )
+	        		$('#fenchy_noticebundle_noticetype_type_value_2_value_0').prop('checked','checked');
+
+	        	var chk2 = '{{ app.session.flash('chk2') }}';
+	       		if( chk2 =='true' )	
+	     		   	$('#fenchy_noticebundle_noticetype_type_value_2_value_1').prop('checked','checked');
+
+	     		var chk3 = '{{ app.session.flash('chk3') }}';
+	        	if( chk3 =='true' )
+	        		$('#fenchy_noticebundle_noticetype_type_value_2_value_2').prop('checked','checked');
+
+	        	var chk4 = '{{ app.session.flash('chk4') }}';
+	        	if( chk4 =='true' )
+	        		$('#fenchy_noticebundle_noticetype_type_value_2_value_3').prop('checked','checked');
+
+	        	var chk5 = '{{ app.session.flash('chk5') }}';
+	        	if( chk5 =='true' )
+	        		$('#fenchy_noticebundle_noticetype_type_value_2_value_4').prop('checked','checked');
+
+	        	var chk6 = '{{ app.session.flash('chk6') }}';
+	        	if( chk6 =='true' )	
+	        		$('#fenchy_noticebundle_noticetype_type_value_2_value_5').prop('checked','checked');
+	        {% endif %}
+	
+	        {% if type == 'offerservice' %}
+		        var chk1 = '{{ app.session.flash('chk1') }}';
+				if( chk1 =='true' )
+	        		$('#fenchy_noticebundle_noticetype_type_value_7_value_0').prop('checked','checked');
+	        	var chk2 = '{{ app.session.flash('chk2') }}';
+    			if( chk2 =='true' )
+	        		$('#fenchy_noticebundle_noticetype_type_value_7_value_1').prop('checked','checked');
+	        {% endif %}
+	    	
+            var success = '{{ success }}';
+            if(success)
+            {
+            	$.session.remove('Location');
+                $('#PublishedSuccesfully').click();
+            }
             
             createListing.step2.init();
         
@@ -46,6 +228,68 @@
                     landingPageViewModel );
             {% endif %}
 
+            $("#fenchy_noticebundle_noticetype_price").keydown(function(event) {
+            	if($('#fenchy_noticebundle_noticetype_free').is(':checked'))
+               	{
+                   	alert('You marked it free'); 
+               	}
+		        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+		           	return;
+		        } else {
+		            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+		                event.preventDefault();
+		            }
+		        }
+		    });
+
+            $("#fenchy_noticebundle_noticetype_pieces").keydown(function(event) {
+            	if($('#fenchy_noticebundle_noticetype_one_piece').is(':checked'))
+              	{
+                  	alert('You marked only one piece'); 
+              	}
+		        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+		           	return;
+		        } else {
+		            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+		                event.preventDefault();
+		            }
+		        }
+		    });
+		    
+            $("#fenchy_noticebundle_noticetype_spot").keydown(function(event) {
+            	if($('#fenchy_noticebundle_noticetype_unlimited').is(':checked'))
+              	{
+                  	alert('You marked unlimited'); 
+              	}
+		        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+		           	return;
+		        } else {
+		            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+		                event.preventDefault();
+		            }
+		        }
+		    });
+            
+		    $('#fenchy_noticebundle_noticetype_type_value_2_value_0').click(function()
+		   	{
+			   if($('#fenchy_noticebundle_noticetype_free').is(':checked') || $('#fenchy_noticebundle_noticetype_type_value_2_value_5').is(':checked'))
+			   {
+				   alert('you marked it free');
+				   $('#fenchy_noticebundle_noticetype_type_value_2_value_0').prop( "checked", false );
+			   }	
+		   	});
+            $('#fenchy_noticebundle_noticetype_type_value_5_value_0').prop('checked','checked');
+            $('#fenchy_noticebundle_noticetype_type_value_5_value_0').click(function()
+            {
+            	$('#fenchy_noticebundle_noticetype_type_value_5_value_0').prop('checked','checked');
+            });
+
+            $('#fenchy_noticebundle_noticetype_type_value_8_value_0').prop('checked','checked');
+            $('#fenchy_noticebundle_noticetype_type_value_8_value_0').click(function()
+            {
+            	$('#fenchy_noticebundle_noticetype_type_value_8_value_0').prop('checked','checked');
+            });
+            
             $('#fenchy_noticebundle_noticetype_default_setting').click(function()
            	{
                	var payment = '{{ payment }}';
@@ -61,11 +305,127 @@
             	if($('#fenchy_noticebundle_noticetype_type_value_2_value_5').is(':checked'))
             	{             	
         			$('#fenchy_noticebundle_noticetype_price').attr('readonly','readonly');
+        			$('#fenchy_noticebundle_noticetype_price').val('');
             	}
             	else
             	{
             		$('#fenchy_noticebundle_noticetype_price').removeAttr('readonly');
             	}
+            });
+
+            $('#fenchy_noticebundle_noticetype_free').click(function()
+            {                
+              	if($('#fenchy_noticebundle_noticetype_free').is(':checked'))
+               	{             	
+            		$('#fenchy_noticebundle_noticetype_price').attr('readonly','readonly');
+            		$('#fenchy_noticebundle_noticetype_price').val('');
+               	}
+               	else
+               	{
+               		$('#fenchy_noticebundle_noticetype_price').removeAttr('readonly');
+               	}
+	        });
+
+            $('#fenchy_noticebundle_noticetype_one_piece').click(function()
+            {                
+              	if($('#fenchy_noticebundle_noticetype_one_piece').is(':checked'))
+              	{             	
+              		$('#fenchy_noticebundle_noticetype_pieces').attr('readonly','readonly');
+             		$('#fenchy_noticebundle_noticetype_pieces').val('');
+               	}
+               	else
+               	{
+               		$('#fenchy_noticebundle_noticetype_pieces').removeAttr('readonly');
+               	}
+        	});
+
+            $('#fenchy_noticebundle_noticetype_unlimited').click(function()
+            {                
+              	if($('#fenchy_noticebundle_noticetype_unlimited').is(':checked'))
+              	{             	
+              		$('#fenchy_noticebundle_noticetype_spot').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_spot').val('');
+               	}
+               	else
+              	{
+              		$('#fenchy_noticebundle_noticetype_spot').removeAttr('readonly');
+              	}
+           });
+
+            $('#fenchy_noticebundle_noticetype_location_arrange').click(function()
+           	{                
+              	if($('#fenchy_noticebundle_noticetype_location_arrange').is(':checked'))
+              	{             	
+               		$('#location_gapi').attr('readonly','readonly');
+               		$('#location_gapi').val('');
+               		$.session.remove('Location');
+               	}
+              	else
+               	{
+               		$('#location_gapi').removeAttr('readonly');
+               	}
+            });
+
+            $('input#location_gapi').autocomplete({
+            	 source: function (request, response) {
+                     // your ajax code
+                  },
+                        	              	              	 
+            	  minLength: 1,
+                  change: function (event, ui) {
+                	  setTimeout(function(){
+                		  var loc = $('#location_gapi').val();
+                          $.session.set("Location",loc);        
+                      },10);
+                	  var loc = $('#location_gapi').val();
+                      $.session.set("Location",loc);                        
+                  },
+                  select: function(event, ui) {
+                  },                 
+                  
+            });
+            $('#location_gapi').blur(function()
+            {
+                var loc = $('#location_gapi').val();
+                $.session.set("Location",loc);                
+            });
+            $('#fenchy_noticebundle_noticetype_date_arrange').click(function()
+	      	{               	                            
+            	if($('#fenchy_noticebundle_noticetype_date_arrange').is(':checked'))
+              	{             	
+            		$('#fenchy_noticebundle_noticetype_start_date').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_start_date').val('');
+               		$('#fenchy_noticebundle_noticetype_start_date').datepicker('disable');
+               		$('#fenchy_noticebundle_noticetype_end_date').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_end_date').val('');
+               		$('#fenchy_noticebundle_noticetype_end_date').datepicker('disable');
+               	}
+              	else
+              	{
+               		$('#fenchy_noticebundle_noticetype_start_date').removeAttr('readonly');
+               		$('#fenchy_noticebundle_noticetype_end_date').removeAttr('readonly');
+               		$('#fenchy_noticebundle_noticetype_start_date').datepicker('enable');
+               		$('#fenchy_noticebundle_noticetype_end_date').datepicker('enable');
+               	}            	
+            });
+            $('#fenchy_noticebundle_noticetype_start_time_arrange').click(function()
+            {                
+              	if($('#fenchy_noticebundle_noticetype_start_time_arrange').is(':checked'))
+               	{             	
+               		$('#fenchy_noticebundle_noticetype_start_time').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_start_time').val('');
+               		$('#fenchy_noticebundle_noticetype_start_time').timepicker('disable');
+               		$('#fenchy_noticebundle_noticetype_end_time').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_end_time').val('');
+               		$('#fenchy_noticebundle_noticetype_end_time').timepicker('disable');
+               	}
+               	else
+               	{
+               		$('#fenchy_noticebundle_noticetype_start_time').removeAttr('readonly');
+               		$('#fenchy_noticebundle_noticetype_end_time').removeAttr('readonly');
+               		$('#fenchy_noticebundle_noticetype_start_time').timepicker('enable');
+               		$('#fenchy_noticebundle_noticetype_end_time').timepicker('enable');
+               	}
             });
         });
 
@@ -84,6 +444,7 @@
     		             reader.onload = function(e) {
     		              target =  e.target || e.srcElement;
     		              	$("img.form_file").prop("src", target.result);
+    		  		    	$('#add_profile_image').children('img').css('border','1px solid grey');
     		             };
     		              reader.readAsDataURL(obj.files[0]);
     		          }
@@ -137,9 +498,11 @@
     		        }
     		    });
 				$('.add_email').click( function () {
-    		    	$('.friends_email').append('<input type="text" name="friends_email[]" style="margin-top: 5px;" value="' + this.id + '" />');
+    		    	$('.friends_email').append('<input type="text" onfocus="myFocus(this);" onblur="myBlur(this);" name="friends_email[]" style="margin-top: 5px;" value="' + this.id + '" />');
 				});
           });
+
+        
     </script>
     <script type="text/javascript" src="{{ asset('js/regular_user/listing/form.js') }}"></script>
     
@@ -307,7 +670,7 @@
 	<a class="createtitle" href="javascript:void(0);" style="float: left; margin-top: -36px;">{{ ('listing.create.2.subtitle_'~type.name)|trans }}</a>
 	
 	<section id="contentinner">        
-		<div class="wrapper" style="margin-top: -45px;" >
+		<div id="mainDiv" class="wrapper" style="margin-top: -45px;" >
 		  {% if type.name == 'offergroups' %}
 			<form action="{{ path('fenchy_regular_user_user_groupprofile_creategroup') }}" method="post" {{ form_enctype(form_ugroup) }} class="form-settings location">
 
@@ -329,7 +692,7 @@
 		    		</li>
 		    		<div class="left">
                     <div class="persen" id="add_profile_image" style="cursor: pointer;">
-                    	<img alt="" class="form_file" src="{{ asset('images/default_profile_picture.png') }}">
+                    	<img alt="" class="form_file" style="border:1px solid #FFFFFF;" src="{{ asset('images/default_profile_picture.png') }}">
 						</div>
 	                    <div class="clearfix"></div>
 	                    <div class="clearfix"></div>
@@ -381,7 +744,7 @@
 			    
     		{% else %}
 			
-			<form class="form-wrapper listing-form" action="{{ path('fenchy_regular_user_notice_create2', {'typename': type.name, 'direction': direction}) }}" method="post" {{ form_enctype(form) }}>
+			<form class="form-wrapper listing-form" action="{{ path('fenchy_regular_user_notice_create2', {'typename': type.name, 'direction': direction,'groupId': groupId }) }}" method="post" {{ form_enctype(form) }}>
 		   	
 		   		{{ block('galleryContainer') }}
     		<div class="clearfix"></div>    		
@@ -455,11 +818,11 @@
                             	<input type="text" value="" id="location_gapi"/>                            	
                             	<div class="clearfix"></div>                            	
 	                      	</div>
-	                      	<div class="checkbox">
+	                      	<div class="checkbox" style="margin-left: -2px;">
 									{{ form_row(form.location_arrange) }}
 	                        </div>
                     	</div>
-                    </div>	            	
+                    </div>
 	          	{% endif %}
 	          	{% set subId = type.subcategoryId %}
 	            {% if subId %}
@@ -467,7 +830,7 @@
 	          	<div class="createlistingdata halfleft">
 	          		<h4>{{ 'notice.action'|trans|upper }}</h4>
 	          		<div class="createlistingdetail">
-	          			<p>what do you want the other person to do?</p>
+	          			<p>{{ 'notice.what_other_person'|trans }}</p>
 	          			<div class="clearfix"></div>
 	          			<div class="actioncheck">
                          	<div class="checkboxaction">
@@ -517,7 +880,7 @@
                                 	<div class="checkbox">
                             			{{ form_row(form.default_setting) }}
                             		</div>	
-                            		<a href="{{ path('fenchy_regular_user_settings_payment', {'noticeType':type.name}) }}" class="blue_button">{{ 'listing.create.learn_more'|trans|upper }}</a>
+                            		<a onclick="paymentInSession();" href="javascript:void(0);" class="blue_button">{{ 'listing.create.learn_more'|trans|upper }}</a>
                                 </div>
                            {% endif %}
                            </div>
@@ -554,7 +917,7 @@
                                 	<div class="checkbox">
                             			{{ form_row(form.default_setting) }}
                             		</div>	
-                            		<a href="{{ path('fenchy_regular_user_settings_payment', {'noticeType':type.name}) }}" class="blue_button">{{ 'listing.create.learn_more'|trans|upper }}</a>
+                            		<a onclick="paymentInSession();" href="javascript:void(0);" class="blue_button">{{ 'listing.create.learn_more'|trans|upper }}</a>
                                 </div>
                             </div>
                         </div>
@@ -581,7 +944,7 @@
                             		<div class="checkbox">
                             			{{ form_row(form.default_setting) }}
                             		</div>	
-                            		<a href="{{ path('fenchy_regular_user_settings_payment', {'noticeType':type.name}) }}" class="blue_button">{{ 'listing.create.learn_more'|trans|upper }}</a>
+                            		<a onclick="paymentInSession();" href="javascript:void(0);" class="blue_button">{{ 'listing.create.learn_more'|trans|upper }}</a>
                             	</div>                            	
                             </div>
                         </div>
@@ -614,8 +977,9 @@
     		<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
     	</div>
     </div>
+    
 	</section>
-   	<a id="SetPayment" href="#dialog45" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">                  
+   	<a id="SetPayment" href="#dialog45" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
     <section id="boxes2">
 		<div id="dialog45" class="window">
 	   	<div class="big_popup">
@@ -623,12 +987,42 @@
 			<div id="messageForm">
 				<p>{{ 'regularuser.payment_settings'|trans }}</p>
 			</div>
+			<a href="{{ path('fenchy_regular_user_notice_create1') }}" class="blue_button left" style="margin-left:20px;">{{ 'regularuser.back'|trans }}</a>
+			<a href="javascript:void(0);" onclick="paymentInSession();" class="blue_button right" style="margin-right:20px;">{{ 'regularuser.setpayment'|trans }}</a>
 		</div>
 		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
 		</div>
 		<div id="mask"></div>
 	</section>
 
+	<section id="boxes2">
+		  	<div id="dialog28" class="window">
+			  	<div class="big_popup">
+			     	<div class="big_popupclose"><a href="" class="close"></a></div>
+                   	{% render "FenchyNoticeBundle:GlobalFilter:inviteneighborstolisting" with { 'userId': displayUser.id, 'noticeId': notice.id } %}
+			   	</div>
+			   	<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">    
+			</div>
+			<div id="mask"></div>
+	</section>
+	<a id="PublishedSuccesfully" href="#dialog29" name="modal" id="vzoom_1944" class="zoomthis" style="display: none;"></a>
+	<section id="boxes2">
+        <div id="dialog29" class="window"> 
+            <div class="big_popup">
+                <div class="big_popupclose"><a href="" class="close"></a></div>
+                <!-- Your custom code here -->
+                <div class="published">
+                    <div class="title">{{ 'regularuser.your_listing_success'|trans }}</div>	
+                    <a id="InviteNeighbour" href="#dialog28" class="zoomthis blue_button" name="modal" id="vzoom_1944" onclick="$('#dialog29').hide();">{{ 'regularuser.invite_neighbor_to_listing'|trans }}</a>
+                    <a href="{{ path('fenchy_notice_indexv2') }}" class="blue_button right">{{ 'regularuser.no_thank_you'|trans }}<br>{{ 'regularuser.let_me_go_newsfeed'|trans }}</a>
+                </div>
+                <!-- Your custom code end -->
+            </div>
+            <img class="popup_bottom" src="/images/popup_bottom.png" alt="" />
+        </div>
+        <div id="mask"></div>
+    </section>
+    
     <script type="text/javascript">
         $(document).ready(function () {
             var sampleTags = {{ tags|json_encode|raw }};

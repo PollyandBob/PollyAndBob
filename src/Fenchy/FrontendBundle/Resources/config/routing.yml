@@ -23,6 +23,27 @@ fenchy_frontend_signup:
     defaults: { _controller: UserBundle:Registration:register }
 
 #Foot options
+
+fenchy_frontend_boardofneigbor:
+    pattern:  /boardofneighbor
+    defaults: { _controller: FenchyFrontendBundle:Frontend:boardofneighbor }
+
+fenchy_frontend_investinus:
+    pattern:  /investinus
+    defaults: { _controller: FenchyFrontendBundle:Frontend:investinus }
+
+fenchy_frontend_joinus:
+    pattern:  /joinus
+    defaults: { _controller: FenchyFrontendBundle:Frontend:joinus }
+
+fenchy_frontend_share:
+    pattern:  /share
+    defaults: { _controller: FenchyFrontendBundle:Frontend:share }
+
+fenchy_frontend_aboutandimprint:
+    pattern:  /aboutandimprint
+    defaults: { _controller: FenchyFrontendBundle:Frontend:aboutAndImprint }
+        
 fenchy_frontend_about:
     pattern:  /about
     defaults: { _controller: FenchyFrontendBundle:Frontend:about }

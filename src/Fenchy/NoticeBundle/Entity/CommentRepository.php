@@ -50,7 +50,8 @@ class CommentRepository extends EntityRepository
 							'id' => $author->getId(),
 							'name' => $author->getUserRegular()->getFirstname(),
 							'image' =>  $author->getUserRegular()->getAvatar(),
-							'profileUrl' => $authorProfileUrl
+							'profileUrl' => $authorProfileUrl,
+							'activity' => $author->getActivity()
 					),
 					'aboutuser' => array(
 							'id' => $aboutUser->getId(),
@@ -71,6 +72,57 @@ class CommentRepository extends EntityRepository
 			);
 		}
 
+		return $commentsJSON;
+	}
+	
+	public function findGroupCommentsByInJSON($router, array $criteria, array $orderBy, $limit, $offset) {
+		$comments = $this->findBy($criteria,$orderBy,$limit,$offset);
+		$commentsJSON = array();
+	
+		foreach($comments as $oneComment) {
+	
+			$author = $oneComment->getAuthor();
+			$authorProfileUrl = $router->generate(
+					'fenchy_regular_user_user_otherprofile_aboutotherchoice',
+					array('userId' => $author->getId()) );
+	
+			$aboutUser = $oneComment->getAboutUser();
+			$aboutUserProfileUrl = $router->generate(
+					'fenchy_regular_user_user_profilev2',
+					array('userId' => $aboutUser->getId()) );
+	
+			$aboutUserGroup = $oneComment->getAboutUserGroup();
+			//echo "<pre>"; print_r($aboutUserGroup);exit;
+	
+			$hasNotice = ( $aboutUserGroup && $aboutUserGroup->getId() );
+			
+			$commentsJSON[] = array(
+					'author'=>array(
+							'id' => $author->getId(),
+							'name' => $author->getUserRegular()->getFirstname(),
+							'image' =>  $author->getUserRegular()->getAvatar(),
+							'profileUrl' => $authorProfileUrl
+					),
+					'aboutuser' => array(
+							'id' => $aboutUser->getId(),
+							'name' => $aboutUser->getUserRegular()->getFirstname(),
+							'image' => $aboutUser->getUserRegular()->getAvatar(),
+							'profileUrl' => $aboutUserProfileUrl
+					),
+					'aboutusergroup' => $hasNotice ? array(
+							'id' => $aboutUserGroup->getId(),
+							'title' => '',
+							'image' => '',
+							'noticeUrl' => '',
+					) : null,
+					'id' => $oneComment->getId(),
+					'type' => $oneComment->getType(),
+					'text' => $oneComment->getText(),
+					'title' => $oneComment->getTitle(),
+					'createdAt' => $oneComment->getCreatedAt(),
+			);
+		}
+	
 		return $commentsJSON;
 	}
 

@@ -1,5 +1,6 @@
 main:
   title_suffix: Polly & Bob
+  home: Home
   this_field_is_required: This field is required
   about_us: About us
   jobs: Jobs
@@ -15,7 +16,7 @@ main:
   first_blue_popup_desc: Polly & Bob is a neighborhood network on the internet. We want to change the way live together in the neighborhood. More together. More for each other. More offline.
   take_time_enrich: Take the time. Enrich your life.
   first_popup_link: Find out what Polly & Bob can do for you.
-  you_can_do: You can do a lot on Polly & Bob
+  you_can_do: Uncountable opportunities on Polly & Bob
   find_something: Find Something
   offer_some: Offer Something
   in_neighborhood: in the neighborhood
@@ -53,8 +54,8 @@ schema:
   offer: Offer
   need: Need
   contact: Viewable by all neighbours
-  men: Restricted to men
-  women: Restricted to women
+  men: Men only
+  women: Women only
   male: Male
   female: Female
   emails_when_someone_sends_you_a_message: Emails when someone sends You a message
@@ -62,7 +63,7 @@ schema:
   emails_when_someone_edits_a_request: Emails when someone edist a request
   emails_when_someone_transfers_currency: Emails when someone transfers currency
   emails_when_someone_sends_you_a_contact_request: Emails when someone sends You a contact request
-  emails_when_someone_writes_a_reference_about_you: Emails when someone writes a reference about You
+  emails_when_someone_writes_a_review_about_you: Emails when someone writes a reference about You
   never: Never
   immediately: Immediately
   daily: Daily

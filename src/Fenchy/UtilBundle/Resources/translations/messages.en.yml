@@ -51,6 +51,10 @@ util:
     in_x_weeks: '{0,1}Next week|[2,Inf]In %number% weeks'
 
     next_month: Next month
+    
+    flag: Flag
+    
+    why: Why do you want to flag this?
 btn:
   continue: Continue
 
@@ -77,11 +81,13 @@ btn:
   edit: Edit
 
   send_message: Send Message
-harass: harassed me or a friend of mine.
-spam: spammed or scammed.
-commercial: published commercial content.
-forbidden: published sexual, political or religious content.
-behaviour: behaved violently or harmfully
+harass: Attacks person or group
+spam: Spam
+commercial: Commercial trafic on wrong place
+forbidden: Pornographie, violence or nakedness
+behaviour: Violence of property rights
+notpollynbob: Not Polly & Bob like 
+other_type: Others
 sticker:
   added_title: Your report has been sent!
 
@@ -91,7 +97,7 @@ sticker:
 male: male
 female: female
 or: or
-load_more: Load More
+load_more: Load more
 never: Never
 immediately: Immediately
 daily: Daily

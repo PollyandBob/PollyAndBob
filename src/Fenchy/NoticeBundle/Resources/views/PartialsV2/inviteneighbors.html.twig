@@ -53,7 +53,7 @@
                                 <div class="invite_another">
                                 	<p>{{ 'regularuser.invite_another_friends'|trans }} </p>
                                     <div class="friends_email">
-                                    <input type="text" name="friends_email[]" value="{{ 'regularuser.email'|trans }}">
+                                    <input type="text" onfocus="myFocus(this);" onblur="myBlur(this);" name="friends_email[]" value="{{ 'regularuser.email'|trans }}">
                                     <a href="javascript:void(0)" id="{{ 'regularuser.email'|trans }}" class="add_email"><img alt="" src="{{ asset('images/icon_add.png') }}"></a>
                                     <div class="clearfix"></div>
                                     </div>

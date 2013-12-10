@@ -59,7 +59,7 @@
     <script src="{{ asset('js/geolocalization.js') }}"></script>
     <script type="text/javascript">
     $(document).ready(function() {
-        initialize();
+    	initialize();
     });
         </script>
         <script type="text/javascript" src="{{ asset('js/regular_user/settings/form.js') }}"></script>
@@ -87,19 +87,44 @@
 			});
 		}		
 	</script>
+	<script type="text/javascript">
+		function postCommentToGroup(){
+			var groupId = {{ groupId }};
+			var text = $('#commenttext').val();
+		    $.post('{{path('fenchy_usergroup_post_comment')}}',
+		                {groupId: groupId, text: text}, 
+		            function(response){
+		                $('.commentdata').html(response.success);
+		                $('#commenttext').val('');
+		                $('#commenttext').blur();
+		    }, "json");    
+		}
+	</script>
 {% endblock %}
 
 {% block content %}
 	{% render 'FenchyRegularUserBundle:Groupprofile:groupAvatar' with { 'groupId' : groupId } %}
 	{% render 'FenchyRegularUserBundle:Groupprofile:groupmenu' with { 'groupId' : groupId } %}
-		
+		<style>
+		#group-profile div.form {
+		    display: inline-block;
+		    width: 100%;
+		}
+		#group-profile div.form textarea
+		{
+			color: #000000;
+		    font-family: code_boldregular;
+		    font-size: 12px;
+		    letter-spacing: 1px;
+		}
+		</style>
 		<div class="clearfix"></div>
            	<div id="group-profile">
                 <div class="leftside">
                     <h4>{{ 'regularuser.about'|trans|upper }}</h4>
                     <div class="aboutdata">
                     	<div {% if(usergroup.user.id == displayUser.id) %} style="display:block;"{% else %}style="display:none;"{% endif %}>
-	                    	<form action="{{ path('fenchy_regular_user_user_groupprofile_creategroup') }}" method="post" {{ form_enctype(form) }} class="form-settings location">
+	                    	<form action="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', {'groupId': groupId }) }}" method="post" {{ form_enctype(form) }} class="form-settings location">
 									<label>{{ 'regularuser.groupname'|trans|upper }}:</label>
 									{{ form_widget(form.groupname) }}
 									<br><br><br><br>
@@ -135,41 +160,39 @@
                     <h4>Administrators</h4>
                     <div class="clearfix"></div>
                     <div class="administratorimg">
-                    	<img src="images/person.png" alt="" />
-                    	<img src="images/person.png" alt="" />
-                    	<img src="images/person.png" alt="" />
+                    	{% for administrator in administrators %}
+                    		<img alt="" src="{{ asset(administrator.neighbor.twitterusername) }}">
+                    	{% endfor %}
                     </div>
+                    
                     <div class="clearfix"></div>
-                    <div class="blockboard">
-                        <h4>Black Board</h4>
-                        <form name="">
-                            <textarea onBlur="myBlur(this);" onFocus="myFocus(this);">post your message to the group here</textarea>
-                            <button class="blue_button">Send</button>
-                        </form>
-                    </div>
-                    <p>12.08.2013</p>
-                    <div class="aboutdata">
-                        <p class="redcolor">From Betty</p>
-                        <p>At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubren, no sea takimata sanctus est Lorem ipsum dolor sit amet.  At vero eos et accusam et justo duo dolores et ea rebum.</p>
-                        <div class="reviews">
-                            <div id="reviews">Show Reviews</div>
-                            <div id="reviewdetail">
-                                <div class="reviewopen">Show Reviews</div>
-                                <div class="data">
-                                    <img src="images/person.png" width="23" height="23" alt="" />
-                                    <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
-                                </div>
-                                <div class="data">
-                                    <img src="images/person.png" width="23" height="23" alt="" />
-                                    <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
-                                </div>
-                                <div class="data">
-                                    <img src="images/person.png" width="23" height="23" alt="" />
-                                    <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                      {% if(groupMember==1 or usergroup.user.id==displayUser.id) %}
+ 						<div class="blockboard">
+                        	<h4>{{ 'regularuser.black_board'|trans }}</h4>
+                        	<div class="form">
+				            {% if app.user.id is defined %}
+		                            <textarea id="commenttext" onBlur="myBlur(this);" onFocus="myFocus(this);">{{ 'regularuser.post_comment_group'|trans }}</textarea>
+		                            <input type="hidden" value="" id="textarea_comment" />
+		                            <button class="blue_button" onclick="postCommentToGroup();">{{ 'request.send'|trans }}</button>
+		                    {% endif %}
+		                    </div>    
+		               </div>
+		               <div class="commentdata">
+                    	{% for initialComment in initialComments %}
+			                {% if initialComment %}
+			        			<p>{{ initialComment['createdAt']|date('d-m-Y') }}&nbsp; &nbsp;{{ initialComment['createdAt']|date('h:i A') }}</p>
+			                    
+			                    <div class="aboutdata">
+			                        {# <a href="{{ initialComment['author']['profileUrl'] }}">#}
+			                        	<p class="redcolor">From {{ initialComment['author']['name'] }}</p>
+			                        {# </a>#}
+			                        <p>{{ initialComment['text']|nl2br }}</p>
+			                    </div>
+			               		
+			               	{% endif %}
+		                {% endfor %}
+                    	</div>
+                      {% endif %}	
                 </div>
                 {% render 'FenchyRegularUserBundle:Groupprofile:groupLeftSidebar' with { 'groupId' : groupId } %}
             </div>		        

@@ -1,6 +1,10 @@
 <?php
 
 namespace Fenchy\RegularUserBundle\Controller;
+use Fenchy\RegularUserBundle\Form\UserGroupLocationType;
+
+use Fenchy\UtilBundle\Entity\Location;
+
 use Fenchy\RegularUserBundle\Entity\GroupMembers;
 
 use Fenchy\MessageBundle\Entity\Message;
@@ -51,7 +55,7 @@ class GroupprofileController extends Controller
 		$inviteNeighbors = $request->get('invite_neighbors');
 		$inviteNeighborsNext50 = $request->get('invite_neighborsnext50');
 		$friends_email = $request->get('friends_email');
-
+		
 		if ($groupId)
 		{
 			$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
@@ -86,11 +90,14 @@ class GroupprofileController extends Controller
 			if ($form->isValid())
 			{
 				$em = $this->getDoctrine()->getEntityManager();
-
+				
+				$location = new Location();
 				$data_saved = $this->get('translator')->trans('settings.flash.data_saved');
 				$this->get('session')->setFlash('positive', $data_saved);
 
 				$usergroup->setUser($displayUser);
+				$location->setLocation($displayUser->getLocation());
+				$usergroup->setLocation($location);
 				$usergroup->upload();
 				$usergroup->uploadcover();
 
@@ -121,16 +128,17 @@ class GroupprofileController extends Controller
 							throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
 						}
 						$messenger->setReceiver($receiver);
-						$title = $this->get('translator')->trans('regularuser.message.subject', array(
+						$title = $this->get('translator')->trans('regularuser.message.subject_group', array(
 								'%username%' => $userOther->getRegularUser()->getFirstname())) . "";
 						$content = '';
 						$content .= $this->get('translator')->trans('regularuser.message.message_part', array(
 								'%username%' => $userOther->getRegularUser()->getFirstname()));
 						$content .= '                                                                    ';
-						$content .= $this->get('translator')->trans('regularuser.message.message_first_part');
-						$content .= $this->get('translator')->trans('regularuser.message.message_second_part', array(
-								'%link%' => $link,
+						//$content .= $this->get('translator')->trans('regularuser.message.message_first_part');
+						$content .= $this->get('translator')->trans('regularuser.message.message_first_part', array(
+								'%administrator%' => $userOther->getRegularUser()->getFirstname(),
 								'%groupname%' => $groupn));
+						//$content .= $link;
 						$content .= '                                                                    ';
 						$content .= $this->get('translator')->trans('regularuser.message.message_last_part');
 						$messageObject->setTitle($title);
@@ -171,16 +179,16 @@ class GroupprofileController extends Controller
 								throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
 							}
 							$messenger->setReceiver($receiver);
-							$title = $this->get('translator')->trans('regularuser.message.subject', array(
+							$title = $this->get('translator')->trans('regularuser.message.subject_group', array(
 									'%username%' => $userOther->getRegularUser()->getFirstname())) . "";
 							$content = '';
 							$content .= $this->get('translator')->trans('regularuser.message.message_part', array(
 									'%username%' => $userOther->getRegularUser()->getFirstname()));
 							$content .= '                                                                    ';
 							$content .= $this->get('translator')->trans('regularuser.message.message_first_part');
-							$content .= $this->get('translator')->trans('regularuser.message.message_second_part', array(
-									'%link%' => $link,
-									'%groupname%' => $groupn));
+							$content .= $this->get('translator')->trans('regularuser.message.message_first_part', array(
+								'%administrator%' => $userOther->getRegularUser()->getFirstname(),
+								'%groupname%' => $groupn));
 							$content .= '                                                                    ';
 							$content .= $this->get('translator')->trans('regularuser.message.message_last_part');
 							$messageObject->setTitle($title);
@@ -215,10 +223,14 @@ class GroupprofileController extends Controller
 				{
 					foreach ($friends_email as $key => $receiverEmail)
 					{
-						$emailNotification = \Swift_Message::newInstance()->setFrom($this->container->getParameter('from_email'), $this->container->getParameter('from_name'))->setTo($receiverEmail)->setSubject($this->get('translator')->trans('regularuser.message.subject_for_invitegroupby_mail'))->setBody($this->renderView('FenchyRegularUserBundle:Notifications:groupInviteByEmailHTML.html.twig', $data), 'text/html');
-						//->addPart($this->renderView('FenchyRegularUserBundle:Notifications:reviewEmailPlain.html.twig', $data), 'text/plain');
-						$mailer = $this->get('mailer');
-						$mailer->send($emailNotification);
+						$result = filter_var( $receiverEmail, FILTER_VALIDATE_EMAIL );
+						if($result)
+						{
+							$emailNotification = \Swift_Message::newInstance()->setFrom($this->container->getParameter('from_email'), $this->container->getParameter('from_name'))->setTo($receiverEmail)->setSubject($this->get('translator')->trans('regularuser.message.subject_for_invitegroupby_mail'))->setBody($this->renderView('FenchyRegularUserBundle:Notifications:groupInviteByEmailHTML.html.twig', $data), 'text/html');
+							//->addPart($this->renderView('FenchyRegularUserBundle:Notifications:reviewEmailPlain.html.twig', $data), 'text/plain');
+							$mailer = $this->get('mailer');
+							$mailer->send($emailNotification);
+						}
 					}
 				}
 
@@ -313,6 +325,11 @@ class GroupprofileController extends Controller
 
 		$groupMember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $userLoggedIn->getId());
 
+		$adminmember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $userLoggedIn->getId());
+		if($adminmember)
+		{
+			$adminmember = $adminmember->getAdmin();
+		}
 		if ($groupMember)
 		{
 			$groupMembers = 1;
@@ -322,7 +339,8 @@ class GroupprofileController extends Controller
 				'displayUser' => $userLoggedIn,
 				'groupMember' => $groupMembers,
 				'groupId' => $groupId,
-				'usergroup' => $usergroup));
+				'usergroup' => $usergroup,
+				'adminmember' => $adminmember));
 
 	}
 
@@ -333,12 +351,27 @@ class GroupprofileController extends Controller
 		{
 			$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
 		}
+		
+		$members = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findAllById($groupId);
+		
+		if(!$members)
+		{	
+				$em->remove($usergroup);
+				$em->flush();
+				
+				$this->get('session')->setFlash('positive', 'regularuser.message.group_deleted');
 
-		$em->remove($usergroup);
-		$em->flush();
-		$this->get('session')->setFlash('positive', 'regularuser.message.group_deleted');
-
-		return $this->redirect($this->generateUrl('fenchy_regular_user_user_myprofile_aboutmychoice'));
+			return $this->redirect($this->generateUrl('fenchy_regular_user_user_myprofile_aboutmychoice'));
+		}
+		else
+		{
+			$this->get('session')->setFlash('negative', 'regularuser.message.all_group_members_remove_first');
+			
+			return $this->redirect($this->generateUrl('fenchy_regular_user_user_groupprofile_groupinfo', array(
+				'groupId' => $groupId)));
+			
+		}
+		
 	}
 
 	protected function neighborsNext50()
@@ -393,10 +426,23 @@ class GroupprofileController extends Controller
 
 				if ($user->getLocation() != "" && $userid != $currentuid)
 				{
-					$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins=' . $origin . '&destinations=' . $destination . '&mode=driving&language=en&sensor=false';
-					$data = file_get_contents($url);
-					//$data = utf8_decode($data);
-					$obj = json_decode($data);
+					$lat = $user->getLocation()->getLatitude();
+					$log = $user->getLocation()->getLongitude();
+					
+					$lat2 = $displayUser->getLocation()->getLatitude();
+					$log2 = $displayUser->getLocation()->getLongitude();
+					
+					$theta = $log - $log2;
+					// Find the Great Circle distance
+					$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+					$distance = $distance * 60 * 1.1515;
+					$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+					
+					
+// 					$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins=' . $origin . '&destinations=' . $destination . '&mode=driving&language=en&sensor=false';
+// 					$data = file_get_contents($url);
+// 					//$data = utf8_decode($data);
+// 					$obj = json_decode($data);
 
 					//echo($obj->rows[0]->elements[0]->distance->text); //km
 					//echo($obj->rows[0]->elements[0]->distance->value); // meters
@@ -414,8 +460,6 @@ class GroupprofileController extends Controller
 					{
 						$dist = 30000; // slider distance
 					}
-
-					$gmap_distance = $obj->rows[0]->elements[0]->distance->value; // location with gmap api distance
 
 					if ($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
 					{
@@ -471,6 +515,20 @@ class GroupprofileController extends Controller
 			if ($onen->getName() == 'message') $message_notification = true;
 		}
 
+		$em = $this->getDoctrine()->getEntityManager();
+		$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($sender->getId());
+		 
+		if($result)
+		{
+			$avatar = $result->getWebPath();
+			if($avatar == "")
+				$avatar = 'images/default_profile_picture.png';
+		}
+		else
+		{
+			$avatar = 'images/default_profile_picture.png';
+		}
+		
 		if ($message_notification)
 		{
 
@@ -500,7 +558,9 @@ class GroupprofileController extends Controller
 						'sender' => $sender,
 						'message' => $message)))->setBodyPlain($this->renderView('FenchyMessageBundle:Notifications:messageEmailPlain.html.twig', array(
 						'sender' => $sender,
-						'message' => $message)));
+						'message' => $message,
+						'avatar' => $avatar
+						)));
 				$em = $this->getDoctrine()->getManager();
 				$em->persist($toQueue);
 				$em->flush();
@@ -512,7 +572,8 @@ class GroupprofileController extends Controller
 						'sender' => $sender,
 						'message' => $message)), 'text/html')->addPart($this->renderView('FenchyMessageBundle:Notifications:messageEmailPlain.html.twig', array(
 						'sender' => $sender,
-						'message' => $message)), 'text/plain');
+						'message' => $message,
+						'avatar' => $avatar)), 'text/plain');
 				$mailer = $this->get('mailer');
 				$mailer->send($emailNotification);
 			}
@@ -526,7 +587,7 @@ class GroupprofileController extends Controller
 		$em = $this->getDoctrine()->getEntityManager();
 
 		$displayUser = $userLoggedIn;
-
+		$request = $this->getRequest();
 		$usersOwnProfile = 1;
 
 		// Create form for info save of Group Profile
@@ -546,16 +607,189 @@ class GroupprofileController extends Controller
 				'label' => 'regularuser.status',
 				'choices' => UserGroup::$statusMap))->getForm();
 
+		$administrators = array();
+		$administrators2 = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findAllAdministrators($groupId);
+
+		foreach($administrators2 as $user)
+		{
+				$document = new Document();
+				$em = $this->getDoctrine()->getEntityManager();
+				$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getNeighbor()->getId());
+				
+				if($result)
+				{
+					$avatar = $result->getWebPath();
+				
+				}
+				else
+				{
+					$avatar = 'images/default_profile_picture.png';
+				}
+				$userm = $user->getNeighbor();
+				$userm->setTwitterUsername($avatar);
+				
+				$administrators[] = $user;
+				
+		}
+		
+		if ('POST' == $request->getMethod())
+		{
+			$form->bindRequest($request);
+		
+			if ($form->isValid())
+			{
+				$em = $this->getDoctrine()->getEntityManager();
+		
+				$location = new Location();
+				$data_saved = $this->get('translator')->trans('settings.flash.data_saved');
+				$this->get('session')->setFlash('positive', $data_saved);
+		
+				$em->persist($usergroup);
+				$em->flush();
+				if (!$groupId)
+				{
+					$groupId = $usergroup->getId();
+					$groupn = $usergroup->getGroupname();
+				}
+							
+				return $this->redirect($this->generateUrl('fenchy_regular_user_user_groupprofile_groupinfo', array(
+						'groupId' => $groupId)));
+			}
+			else
+			{
+				$form_errors = $this->get('translator')->trans('settings.flash.form_errors');
+		
+				$this->get('session')->setFlash('negative', $form_errors);
+				if (!$groupId)
+				{
+					return $this->redirect($this->generateUrl('fenchy_regular_user_user_groupprofile_groupinfo', array(
+							'groupId' => $groupId)));
+				}
+			}
+			
+		}	
+		
+		// Show comment & send comment part
+		$pagination = $this->container->getParameter('reviews_pagination');
+		$commentRepo = $em->getRepository('FenchyNoticeBundle:Comment');
+		$initialComments = $commentRepo->findGroupCommentsByInJSON(
+				$this->container->get('router'),
+				array('aboutUserGroup'=>$usergroup->getId()),
+				array('created_at'=>'DESC'), $pagination+1, 0);
+		
+		// Only Group Member & Owner shows comments
+		$groupMembers = '';
+		$groupMember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $displayUser->getId());
+		
+		if ($groupMember)
+		{
+			$groupMembers = 1;
+		}
+		
 		return $this->render('FenchyRegularUserBundle:Groupprofile:createGroup.html.twig', array(
 				'displayUser' => $displayUser,
 				'form' => $form->createView(),
 				'groupId' => $groupId,
 				'usergroup' => $usergroup,
 				'user' => $usergroup->getUser(),
-				'groupmembers' => $groupmembers,));
+				'groupmembers' => $groupmembers,
+				'administrators' => $administrators,
+				'initialComments' => $initialComments,
+				'groupMember' => $groupMembers,));
 
 	}
 
+	
+	public function postCommentToGroupAction()
+	{
+		$request = $this->getRequest();
+		$targetgroupId = $request->get('groupId');
+		$text = $request->get('text');
+		 
+		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+		$em = $this->getDoctrine()->getManager();
+		if($text != "")
+		{
+			if ( !$request->isMethod('POST') ) {
+				return new Response('',401);
+			}
+	
+			$commentRepo = $em->getRepository('FenchyNoticeBundle:Comment');
+	
+			if ( ! ($userLoggedIn instanceof \Fenchy\UserBundle\Entity\User) )
+				return new Response('',401);
+	
+			if ( $targetgroupId != NULL ) {
+				$usergroupRepo = $em->getRepository('FenchyRegularUserBundle:UserGroup');
+	
+				$targetUserGroup = $usergroupRepo->getAllData($targetgroupId);
+				
+	
+				if ( ! ($targetUserGroup instanceof \Fenchy\RegularUserBundle\Entity\UserGroup) )
+					return new Response('',401);
+	
+				$targetUser = $targetUserGroup->getUser();
+				if ( ! ($targetUser instanceof \Fenchy\UserBundle\Entity\User) )
+					return new Response('',401);
+	
+				$comment = new \Fenchy\NoticeBundle\Entity\Comment();
+				$comment->setTitle($targetUserGroup->getGroupname());
+				$userLoggedIn->addOwnComment($comment);
+				$em->persist($userLoggedIn);
+				$comment->setAuthor($userLoggedIn);
+				$comment->setText($text);
+				$comment->setType(1);
+				$comment->setAboutUser($targetUser);
+				$comment->setAboutUserGroup($targetUserGroup);
+				$em->persist($comment);
+				$em->flush();
+			}
+		}
+		$commentRepo = $em->getRepository('FenchyNoticeBundle:Comment');
+		$pagination = $this->container->getParameter('reviews_pagination');
+		$initialComments = $commentRepo->findGroupCommentsByInJSON(
+				$this->container->get('router'),
+				array('aboutUserGroup'=> $targetgroupId),
+				array('created_at'=>'DESC'), $pagination+1, 0);
+	
+		$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($userLoggedIn->getId());
+			
+		if($result)
+		{
+			$avatar = $result->getWebPath();
+		}
+		else
+		{
+			$avatar = 'images/default_profile_picture.png';
+		}
+		
+		$str = '';
+	
+		foreach ($initialComments as $initialComment)
+		{
+			$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($initialComment['author']['id']);
+				
+			if($result)
+			{
+				$avatar = $result->getWebPath();
+			}
+			else
+			{
+				$avatar = 'images/default_profile_picture.png';
+			}
+			if ($initialComment)
+			{
+				$str .= '<p>'.$initialComment['createdAt']->format('d-m-Y').'&nbsp; &nbsp;'.$initialComment['createdAt']->format('h:i A').'</p>';
+				$str .= '<div class="aboutdata">';
+				$str .= '<p class="redcolor">From ' .$initialComment['author']['name']. '</p>';
+				$str .= '<p>' .nl2br($initialComment['text']). '</p></div>';
+			}
+		}
+		$response = array("success" => $str);
+		return new Response(json_encode($response));
+	}
+	
+	
 	public function groupAvatarAction($groupId)
 	{
 		$em = $this->getDoctrine()->getEntityManager();
@@ -576,7 +810,12 @@ class GroupprofileController extends Controller
 
 		$groupMembers = '';
 		$groupMember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $userLoggedIn->getId());
-
+		$adminmember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $userLoggedIn->getId());
+		if($adminmember)
+		{
+			$adminmember = $adminmember->getAdmin();
+		}
+		
 		if ($groupMember)
 		{
 			$groupMembers = 1;
@@ -591,14 +830,17 @@ class GroupprofileController extends Controller
 				'profilepath' => $usergroup->getWebpath(),
 				'coverpath' => $usergroup->getWebpath2(),
 				'groupId' => $groupId,
-				'groupMember' => $groupMembers,));
+				'groupMember' => $groupMembers,
+				'adminmember' => $adminmember,));
 	}
 
 	public function groupmenuAction($groupId)
 	{
 		$em = $this->getDoctrine()->getEntityManager();
 		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
-
+		$router = $this->get("router");
+    	$route = $router->match($this->getRequest()->getPathInfo());
+    	$link =$route['_route'];
 		if ($userLoggedIn)
 		{
 			$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
@@ -613,7 +855,12 @@ class GroupprofileController extends Controller
 		}
 
 		$groupMembers2 = '';
-
+		$adminmember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $userLoggedIn->getId());
+		if($adminmember)
+		{
+			$adminmember = $adminmember->getAdmin();
+		}
+		
 		$groupmembers = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findAllById($groupId);
 		$membersIds = array();
 		foreach ($groupmembers as $member)
@@ -627,7 +874,7 @@ class GroupprofileController extends Controller
 		}
 
 		$neighbors = 0;
-
+		
 		$mutualNeighbors = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findMutualGroupMembers($displayUser->getId());
 		$curentNeighbors = array();
 		foreach ($mutualNeighbors as $mutualNeighbor)
@@ -645,7 +892,34 @@ class GroupprofileController extends Controller
 
 		//$em->getRepository('FenchyRegularUserBundle:UserGroup')->findById( $userId );
 		$result = array_intersect($membersIds, $curentNeighbors);
-
+		$type = null;
+		$userObj = $usergroup->getUser();
+		if($this->getRequest()->get('_format') == 'json') {
+			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type, $this->getRequest()->get('ids'),$userObj);
+			$m = array();
+			foreach($messages as $msg) {
+				$m[] = array(
+						'id'    => $msg->getId(),
+						'sender' => $msg->getSystem() ? 'Fenchy' : $msg->getSender()->getUserRegular()->getFirstname(),
+						'url'   => $this->generateUrl('fenchy_regular_user_messages_view', array('id' => $msg->getId())),
+						'red'   => $msg->isUnread() && $msg->getReceiver()->getId() == $this->get('security.context')->getToken()->getUser()->getId() ? 'unread' : '',
+						'title' => $msg->getTitle(),
+						'date'  => $this->getTimeFrom($msg->getCreatedAt()),
+						'avatar'=> $msg->getSender()->getRegularUser()->getAvatar().''
+				);
+			}
+			$messages = $m;
+		} else {
+			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type,null,$userObj);
+		}
+		$groupMessages = array();
+		foreach ($messages as $message)
+		{
+			if($message->getUsergroup() == $usergroup)
+			{
+				$groupMessages[] = $message;
+			}
+		}
 		return $this->render('FenchyRegularUserBundle:Groupprofile:groupmenu.html.twig', array(
 				'locale' => $this->getRequest()->getLocale(),
 				'displayUser' => $displayUser,
@@ -653,8 +927,92 @@ class GroupprofileController extends Controller
 				'groupMember' => $groupMembers2,
 				'groupmembers' => $groupmembers,
 				'groupId' => $groupId,
-				'mutualNeighbors' => $result,));
+				'mutualNeighbors' => $result,
+				'messages' => $groupMessages,
+				'adminmember'=> $adminmember,
+				'link' => $link,
+				));
+				
 	}
+	
+	public function groupListingsReviewsAction($groupId)
+	{
+		$em = $this->getDoctrine()->getEntityManager();
+	
+		$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
+		
+		$user = $usergroup->getUser();
+		$document = new Document();
+		$em = $this->getDoctrine()->getEntityManager();
+		$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
+		$userId = $user->getId();
+		if($result)
+		{
+			$avatar = $result->getWebPath();
+	
+		}
+		else
+		{
+			$avatar = 'images/default_profile_picture.png';
+		}
+		$user->setTwitterUsername($avatar);
+	
+		$request = $this->getRequest();
+		$param = explode("/", $request->getPathInfo());
+		$islocation = "".$param[sizeof($param)-1];
+		 
+		$form = $this->createForm(new UserLocationType(), $user);
+			
+		$user_regular = $user->getRegularUser();
+	
+		$em = $this->getDoctrine()->getEntityManager();
+	
+		$repo = $em->getRepository('FenchyNoticeBundle:Notice');
+	
+		$listings = $repo->getUserGroupNotices($usergroup);
+		$initialReviews[] = array();
+		$initialComments[] = array();
+		$i=0;
+		foreach ($listings as $listing)
+		{
+			$notice1 = $this->getDoctrine()
+			->getManager()
+			->getRepository('FenchyNoticeBundle:Notice')
+			->findFullDetailed($listing->getId());
+			$slug = $notice1->getSlug();
+			$notice = $em
+			->getRepository('FenchyNoticeBundle:Notice')
+			->findFullDetailedWithSlug($slug);
+			$pagination = $this->container->getParameter('reviews_pagination');
+			$reviewRepo = $em->getRepository('FenchyNoticeBundle:Review');
+			$commentRepo = $em->getRepository('FenchyNoticeBundle:Comment');
+			 
+			$initialReviews[$i] = $reviewRepo->findByInJSON(
+					$this->container->get('router'),
+					array('aboutNotice'=>$notice->getId()),
+					array('created_at'=>'DESC'), $pagination+1, 0);
+	
+			$initialComments[$i] = $commentRepo->findByInJSON(
+					$this->container->get('router'),
+					array('aboutNotice'=>$notice->getId()),
+					array('created_at'=>'DESC'), $pagination+1, 0);
+			$i++;
+		}
+		return $this->render(
+				'FenchyRegularUserBundle:Groupprofile:groupListingsReviews.html.twig', array(
+						'form' 				=> $form->createView(),
+						'user' 				=> $user,
+						'userId'			=> $userId,
+						'listings' 			=> $listings,
+						'initialReviews' 	=> $initialReviews,
+						'initialComments'	=> $initialComments,
+						'reviews'			=> sizeof($initialReviews),
+						'groupId'			=> $groupId,
+				)
+		);
+	}
+	
+	
 
 	public function groupMembersAction($groupId)
 	{
@@ -667,9 +1025,14 @@ class GroupprofileController extends Controller
 		$selected_members = $request->get('selected_members');
 
 		$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
-
+		$groupn = $usergroup->getGroupname();
 		$form = $this->createForm(new UserLocationType(), $displayUser);
-		
+		$adminmember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $userLoggedIn->getId());
+		$adminmember1 = 0;
+		if($adminmember)
+		{
+			$adminmember1 = $adminmember->getAdmin();
+		}
 		if($select_action=="remove")
 		{	
 			if(!empty($selected_members))
@@ -687,17 +1050,114 @@ class GroupprofileController extends Controller
 			}
 		}
 		
-		$groupmembers = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findAllById($groupId);
+		if($select_action=="send_message")
+		{
+			if(!empty($selected_members))
+			{
+				foreach ($selected_members as $key=>$val)
+				{
+					$userOther = $this->getDoctrine()->getManager()->getRepository('UserBundle:User')->getAllData($val);
+					$neighbor_id = $userOther->getId();
+					//echo $userOther->getEmail();
+					
+					$messenger = $this->get('fenchy.messenger');
+					$messageObject = new Message();
+					$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($neighbor_id);
+					if (null === $receiver || $receiver === $this->getUser())
+					{
+						throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+					}
+					$messenger->setReceiver($receiver);
+					$title = $this->get('translator')->trans('regularuser.message.subject_members', array(
+							'%groupname%' => $groupn)) . "";
+					$content = '';
+					$content .= $this->get('translator')->trans('regularuser.message.message_part', array(
+							'%username%' => $userOther->getRegularUser()->getFirstname()));
+					$content .= '                                                                    ';
+					$content .= $this->get('translator')->trans('regularuser.message.message_first_part_members');
+					$content .= $this->get('translator')->trans('regularuser.message.message_second_part_members', array(
+							'%groupname%' => $groupn));
+					$content .= '                                                                    ';
+					$content .= $this->get('translator')->trans('regularuser.message.message_last_part');
+					$messageObject->setTitle($title);
+					
+					$messageObject->setContent($content);
+					
+					$messageObject->setSender($displayUser);
+					$messageObject->setReceiver($receiver);
+					
+					$message = $messenger->send($messageObject);
+					
+					if ($this->container->getParameter('notifications_enabled')) $this->messageNotification($message, $displayUser);
+					$this->get('session')->setFlash('positive', 'regularuser.msg_send');
+				}
+			}
+		}
 		
+		if($select_action=="admin")
+		{
+			if(!empty($selected_members))
+			{
+				foreach ($selected_members as $key=>$val)
+				{
+					$groupmember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $val);
+					
+					if ($groupmember)
+					{
+						$groupmember->setAdmin(true);
+						$em->persist($groupmember);
+						$em->flush();
+					}
+				}
+			}	
+			
+		}
+		
+		if($select_action=="remove_admin")
+		{
+			if(!empty($selected_members))
+			{
+				foreach ($selected_members as $key=>$val)
+				{
+					$groupmember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $val);
+						
+					if ($groupmember)
+					{
+						$groupmember->setAdmin(false);
+						$em->persist($groupmember);
+						$em->flush();
+					}
+				}
+			}
+				
+		}
+		
+		$adminManagertype = $em->getRepository('FenchyRegularUserBundle:UserRegular')->getManagerType($usergroup->getUser());
+		
+		$groupmembers = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findAllById($groupId);
+		$managertype = array();
+		$groupmembers2 = array();
+		$i = 0;
+		foreach ($groupmembers as $groupmember1)
+		{
+			$managertype[$i++] = $em->getRepository('FenchyRegularUserBundle:UserRegular')->getManagerType($groupmember1->getNeighbor());
+				
+			// Added By bhumi for Manager type
+			$groupmembers2[] = $groupmember1;
+		}
 
 		return $this->render('FenchyRegularUserBundle:Groupprofile:groupMembers.html.twig', array(
 				'displayUser' => $displayUser,
 				'groupId' => $groupId,
 				'user' => $displayUser,
-				'groupmembers' => $groupmembers,
+				'groupmembers' => $groupmembers2,
 				'form' => $form->createView(),
 				'usergroup' => $usergroup,
 				'members_removed' => $members_removed,
+				'adminmember1' => $adminmember1,
+				'adminManagertype' => $adminManagertype,
+				'managertype' => $managertype,
+				
 			));
 
 	}
@@ -722,32 +1182,66 @@ class GroupprofileController extends Controller
 		$request = $this->getRequest();
 		$param = explode("/", $request->getPathInfo());
 		$islocation = "" . $param[sizeof($param) - 1];
-
-		$form = $this->createForm(new UserLocationType(), $displayUser);
-
+		
+		$form = $this->createForm(new UserGroupLocationType(), $usergroup);
+		
 		if ('POST' == $request->getMethod())
 		{
-			$form->bindRequest($request);
-
-			if ($form->isValid())
+			$createdAt = strtotime($usergroup->getCreatedAt()->format('Y-m-d H:i:s'));
+			$createdAt1 = $usergroup->getCreatedAt();
+			$currentDate = time();
+			$createdAt1->modify('+1 year');
+			$endDate = strtotime($createdAt1->format('Y-m-d H:i:s'));
+			
+			//$date_diff=$currentDate-$createdAt;
+			//$years = round(($date_diff)/(60*60*24*365),1);
+			if($currentDate > $createdAt && $endDate > $currentDate)
 			{
-				$em = $this->getDoctrine()->getEntityManager();
-
-				$location = $form->getData();
-
-				$data_saved = $this->get('translator')->trans('settings.flash.data_saved');
-				$this->get('session')->setFlash('positive', $data_saved);
-
-				$em->persist($location);
-				$em->flush();
-				return $this->redirect($this->generateUrl('fenchy_regular_user_user_groupprofile_groupsettings'));
+				$yearsCond = 0;
 			}
 			else
 			{
-				$form_errors = $this->get('translator')->trans('settings.flash.form_errors');
-
-				$this->get('session')->setFlash('negative', $form_errors);
+				$yearsCond = 1;
 			}
+			
+			if($yearsCond < 1 && ($usergroup->getLocsave()==null or $usergroup->getLocsave()==1 ) )
+			{	
+				$form->bindRequest($request);
+				
+				if ($form->isValid())
+				{
+					$em = $this->getDoctrine()->getEntityManager();
+					$location = $form->getData();
+					
+					$data_saved = $this->get('translator')->trans('settings.flash.group_location_saved');
+					$this->get('session')->setFlash('positive', $data_saved);
+					if($location->getLocsave()==null)
+					{
+						$location->setLocsave(1);
+					}
+					elseif($location->getLocsave()==1)
+					{
+						$location->setLocsave(2);
+						$location->setCreatedAt(new \DateTime($createdAt1->format('Y-m-d H:i:s')));
+					}
+					
+					
+					$em->persist($location);
+					$em->flush();
+					return $this->redirect($this->generateUrl('fenchy_regular_user_user_groupprofile_groupsettings',array('groupId' => $groupId)));
+				}
+				else
+				{
+					$form_errors = $this->get('translator')->trans('settings.flash.form_errors');
+					$this->get('session')->setFlash('negative', $form_errors);
+				}
+			}
+			else
+			{
+				$form_errors = $this->get('translator')->trans('settings.flash.location_twice_a_year');
+				$this->get('session')->setFlash('negative', $form_errors);
+			}	
+			
 		}
 
 		$verified = $this->getDoctrine()->getRepository('UserBundle:LocationVerification')->getStatus($displayUser);
@@ -757,7 +1251,8 @@ class GroupprofileController extends Controller
 				'groupId' => $groupId,
 				'form' => $form->createView(),
 				'user' => $displayUser,
-				'verified' => $verified));
+				'verified' => $verified,
+				'usergroup' => $usergroup));
 
 	}
 
@@ -997,62 +1492,365 @@ class GroupprofileController extends Controller
 				'userId' => $userId));
 	}
 
-	public function groupListingsReviewsAction($userId)
-	{
+
+	/**
+	 * manage user's listings action
+	 * @author Mateusz Krowiak <mkrowiak@pgs-soft.com>
+	 */
+	public function groupNotificationsAction($groupId) {
+	
+		$user = $this->get('security.context')->getToken()->getUser();
+		$managertype = "";
 		$em = $this->getDoctrine()->getEntityManager();
-
-		if ($userId != NULL)
-		{
-
-			$userOther = $em->getRepository('UserBundle:User')->getAllData($userId);
-
-			if (!$userOther instanceof \Fenchy\UserBundle\Entity\User) return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
-			$user = $userOther;
-			$usersOwnProfile = 0;
+		$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
+		$repo = $em->getRepository('FenchyNoticeBundle:Notice');
+	
+		$listings = $repo->getUserGroupNotices($usergroup);
+		
+		$requestRepo = $em->getRepository('FenchyNoticeBundle:Request');
+		
+		$requests = $requestRepo->getGroupNoticeIds($user);
+		
+		$listings2 = array();
+		$j = 0; $k = 0;
+		foreach ($requests as $request)
+		{	
+			if($request->getAboutNotice())
+			{		
+				$listings2[$j++]  = $request->getAboutNotice();	
+			}		
 		}
 
-		$request = $this->getRequest();
-		$param = explode("/", $request->getPathInfo());
-		$islocation = "" . $param[sizeof($param) - 1];
-
-		$form = $this->createForm(new UserLocationType(), $user);
-
-		$user_regular = $user->getRegularUser();
-
-		$em = $this->getDoctrine()->getEntityManager();
-
-		$repo = $em->getRepository('FenchyNoticeBundle:Notice');
-
-		$listings = $repo->getUserNotices($user);
+		foreach ($listings as $k => $listing)
+		{
+			if($listing->getUserGroup()==null)
+			{
+				unset($listings[$k]);
+			}
+		}
+		
+		foreach($listings2 as $k => $listing1)
+		{
+			foreach($listings2 as $key => $value)
+			{
+				if($k != $key && $listing1->getId() == $value->getId())
+				{
+					unset($listings2[$k]);
+				}
+			}
+		}
+		
+		
+		$userId = $user->getId();
+		$adminmember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $userId);
+		if($adminmember)
+		{
+			$adminmember = $adminmember->getAdmin();
+		}
+		if ($usergroup->getUser()->getId() != $userId and $adminmember != 1 ) return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+		
+		$displayUser = false;
+		
+		if ( $userId != NULL ) {
+	
+			$userOther = $this->getDoctrine()->getManager()->getRepository('UserBundle:User')->getAllData( $userId );
+	
+			if ( ! $userOther instanceof \Fenchy\UserBundle\Entity\User )
+				return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+			$displayUser = $userOther;
+	
+		}
+		$form1 = $this->createForm(new UserLocationType(), $displayUser);
+		
+		$requestRepo = $em->getRepository('FenchyNoticeBundle:Request');
+		$my_req_count = $requestRepo->countUnreadUsersStatusRequestsInGroup($listings2);
+		$req_count = $requestRepo->countUnreadUsersRequestsInGroup($listings);
+	
 		$initialReviews[] = array();
-		$i = 0;
+		$initialComments[] = array();
+		$initialRequests[] = array();
+		$forms[][] = array();
+		$count[] = array();
+		$statusflag = true;
+		$i=0;$j=0;
 		foreach ($listings as $listing)
 		{
-			$notice1 = $this->getDoctrine()->getManager()->getRepository('FenchyNoticeBundle:Notice')->findFullDetailed($listing->getId());
-			$slug = $notice1->getSlug();
-			$notice = $em->getRepository('FenchyNoticeBundle:Notice')->findFullDetailedWithSlug($slug);
+			$notice1 = $this->getDoctrine()
+			->getManager()
+			->getRepository('FenchyNoticeBundle:Notice')
+			->findFullDetailed($listing->getId());
+			 
+			$notice = $em
+			->getRepository('FenchyNoticeBundle:Notice')
+			->findFullDetailedWithSlug($notice1->getSlug());
 			$pagination = $this->container->getParameter('reviews_pagination');
 			$reviewRepo = $em->getRepository('FenchyNoticeBundle:Review');
-
-			$initialReviews[$i++] = $reviewRepo->findByInJSON($this->container->get('router'), array(
-					'aboutNotice' => $notice->getId()), array(
-					'created_at' => 'DESC'), $pagination + 1, 0);
-
+			$commentRepo = $em->getRepository('FenchyNoticeBundle:Comment');
+			 
+	
+			$initialReviews[$i] = $reviewRepo->findByInJSON(
+					$this->container->get('router'),
+					array('aboutNotice'=>$notice->getId()),
+					array('created_at'=>'DESC'), $pagination+1, 0);
+	
+			$initialComments[$i] = $commentRepo->findByInJSON(
+					$this->container->get('router'),
+					array('aboutNotice'=>$notice->getId()),
+					array('created_at'=>'DESC'), $pagination+1, 0);
+			 
+			$initialRequests[$i] = $requestRepo->findByInJSON(
+					$this->container->get('router'),
+					array('aboutNotice'=>$notice->getId()),
+					array('created_at'=>'DESC'), $pagination+1, 0);
+			 
+			 
+			$j=0;
+			$forms[][] = array();
+			$managertype[] = array();
+			$c = 0;$status='';$statusflag = true;
+			foreach ( $initialRequests[$i] as $initialRequest )
+			{
+				if ($initialRequest)
+				{
+					$userRepository = $this->getDoctrine()
+					->getRepository('UserBundle:User');
+					 
+					$managertype[$i][$j] = $em
+					->getRepository('FenchyRegularUserBundle:UserRegular')
+					->getManagerType($userRepository->find($initialRequest['author']['id']));
+					 
+					$messenger = $this->get('fenchy.messenger');
+					$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($initialRequest['author']['id']);
+					if (null === $receiver || $receiver === $this->getUser()) {
+						throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+					}
+					$messenger->setReceiver($receiver);
+					$form = $messenger->createForm();
+					$forms[$i][$j] = $form->createView();
+					 
+					if($initialRequest['status'] != 'pending')
+					{
+						$statusflag = false;
+						if($initialRequest['status'] != "rejected")
+							if ($initialRequest['status'] == "done")
+							$status = 'done';
+						//else if($status != 'done')
+						//$status = $initialRequest['status'];
+					}
+					else
+						$c++;
+	
+					$j++;
+				}
+			}
+			if($statusflag)
+			{
+				if($c == 0)
+					$count[$i] = 'PENDING';
+				else
+					$count[$i] = $c." RUNNING";
+			}
+			else
+			{
+				$count[$i] = $status;
+			}
+			$i++;
 		}
-		return $this->render('FenchyRegularUserBundle:Otherprofile:otherListingsReviews.html.twig', array(
-				'form' => $form->createView(),
-				'user' => $user,
-				'userId' => $userId,
+	
+		//echo "sssss<pre>";print_r($form1[5][0]);exit;
+		//        echo "<pre>";print_r($initialRequests[5]);exit;
+		return $this->render('FenchyRegularUserBundle:Groupprofile:groupNotifications.html.twig', array(
 				'listings' => $listings,
+				'displayUser' => $displayUser,
+				'groupId' => $groupId,
+				'form' => $form1->createView(),
+				'usersOwnProfile' => true,
 				'initialReviews' => $initialReviews,
-				'reviews' => sizeof($initialReviews),));
+				'initialComments'=>	$initialComments,
+				'initialRequests' => $initialRequests,
+				'managerTypes'	=> $managertype,
+				'reviews'	=> sizeof($initialReviews),
+						'forms' => $forms,
+						'count' => $count,
+						'my_req_count' => $my_req_count,
+						'req_count' => $req_count,
+				));
+	
+	}
+	
+	public function groupNotificationsRequestsAction($groupId)
+	{
+		$user = $this->get('security.context')->getToken()->getUser();
+		$managertype ='';
+		$em = $this->getDoctrine()->getEntityManager();
+		$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
+		$repo = $em->getRepository('FenchyNoticeBundle:Notice');
+		
+		$listings2 = $repo->getUserGroupNotices($usergroup);
+		
+		$requestRepo = $em->getRepository('FenchyNoticeBundle:Request');
+		
+		$requests = $requestRepo->getGroupNoticeIds($user);
+	
+		$listings = array();
+		$j = 0; $k = 0;
+		foreach ($requests as $request)
+		{
+			if($request->getAboutNotice())
+			{
+				$listings[$j++]  = $request->getAboutNotice();
+			}			
+		}
+	
+		foreach ($listings as $k => $listing)
+		{
+			if($listing->getUserGroup()==null)
+			{
+				unset($listings[$k]);
+			}
+		}
+		
+		foreach($listings as $k => $listing)
+		{
+			foreach($listings as $key => $value)
+			{
+				if($k != $key && $listing->getId() == $value->getId())
+				{
+					unset($listings[$k]);
+				}
+			}
+		}
+			
+		$userId = $user->getId();
+		$displayUser = false;
+	
+		if ( $userId != NULL ) {
+	
+			$userOther = $this->getDoctrine()->getManager()->getRepository('UserBundle:User')->getAllData( $userId );
+	
+			if ( ! $userOther instanceof \Fenchy\UserBundle\Entity\User )
+				return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+			$displayUser = $userOther;
+	
+		}
+		$form1 = $this->createForm(new UserLocationType(), $displayUser);
+		$my_req_count = $requestRepo->countUnreadUsersStatusRequestsInGroup($listings);
+		$req_count = $requestRepo->countUnreadUsersRequestsInGroup($listings2);
+			
+		$initialReviews[] = array();
+		$initialComments[] = array();
+		$initialRequests[] = array();
+		$forms[][] = array();
+		$count[] = array();
+		$statusflag = true;
+		$i=0;
+		foreach ($listings as $listing)
+		{
+			$notice1 = $this->getDoctrine()
+			->getManager()
+			->getRepository('FenchyNoticeBundle:Notice')
+			->findFullDetailed($listing->getId());
+	
+			$notice = $em
+			->getRepository('FenchyNoticeBundle:Notice')
+			->findFullDetailedWithSlug($notice1->getSlug());
+	
+			$pagination = $this->container->getParameter('reviews_pagination');
+			$reviewRepo = $em->getRepository('FenchyNoticeBundle:Review');
+			$commentRepo = $em->getRepository('FenchyNoticeBundle:Comment');
+	
+	
+			$initialReviews[$i] = $reviewRepo->findByInJSON(
+					$this->container->get('router'),
+					array('aboutNotice'=>$notice->getId()),
+					array('created_at'=>'DESC'), $pagination+1, 0);
+	
+			$initialComments[$i] = $commentRepo->findByInJSON(
+					$this->container->get('router'),
+					array('aboutNotice'=>$notice->getId()),
+					array('created_at'=>'DESC'), $pagination+1, 0);
+	
+			$initialRequests[$i] = $requestRepo->findByInJSON(
+					$this->container->get('router'),
+					array('aboutNotice'=>$notice->getId()),
+					array('created_at'=>'DESC'), $pagination+1, 0);
+	
+			$k=0;
+			$forms[][] = array();
+			$managertype[] = array();
+			$c = 0;$status='';$statusflag = true;
+			foreach ( $initialRequests[$i] as $initialRequest )
+			{
+				if ($initialRequest)
+				{
+					$userRepository = $this->getDoctrine()
+					->getRepository('UserBundle:User');
+	
+					$managertype[$i][$k] = $em
+					->getRepository('FenchyRegularUserBundle:UserRegular')
+					->getManagerType($userRepository->find($initialRequest['author']['id']));
+	
+					$messenger = $this->get('fenchy.messenger');
+					$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($initialRequest['aboutuser']['id']);
+					if (null === $receiver || $receiver === $this->getUser()) {
+						throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+					}
+					$messenger->setReceiver($receiver);
+					$form = $messenger->createForm();
+					$forms[$i][$k] = $form->createView();
+					if($initialRequest['status'] != 'pending')
+					{
+						$statusflag = false;
+						if($initialRequest['status'] != "rejected")
+							if ($initialRequest['status'] == "done")
+							$status = 'done';
+						//else if($status != 'done')
+						//$status = $initialRequest['status'];
+					}
+					else
+						$c++;
+					$k++;
+				}
+			}
+			if($statusflag)
+			{
+				if($c == 0)
+					$count[$i] = 'PENDING';
+				else
+					$count[$i] = $c." RUNNING";
+			}
+			else
+			{
+				$count[$i] = $status;
+			}
+			$i++;
+	
+		}
+		//echo $count[0];exit;
+		return $this->render('FenchyRegularUserBundle:Groupprofile:groupNotificationsRequests.html.twig', array(
+				'listings' => $listings,
+				'displayUser' => $displayUser,
+				'groupId' => $groupId,
+				'form' => $form1->createView(),
+				'usersOwnProfile' => true,
+				'initialReviews' => $initialReviews,
+				'initialComments'=>	$initialComments,
+				'initialRequests' => $initialRequests,
+				'managerTypes'	=> $managertype,
+				'reviews'	=> sizeof($initialReviews),
+				'forms' => $forms,
+				'count'=> $count,
+				'my_req_count' => $my_req_count,
+				'req_count' => $req_count,
+		));
+	
 	}
 	
 	public function groupMessagesAction($groupId)
 	{
 		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
 		$em = $this->getDoctrine()->getEntityManager();
-		
+		$type = null;
 		$displayUser = $userLoggedIn;
 		
 		$form = $this->createForm(new UserLocationType(), $displayUser);
@@ -1062,6 +1860,43 @@ class GroupprofileController extends Controller
 			$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
 		}
 		
+		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+		 
+		$request = $this->getRequest();
+		
+		$userObj = $usergroup->getUser();
+		if($this->getRequest()->get('_format') == 'json') {
+			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type, $this->getRequest()->get('ids'),$userObj);
+			$m = array();
+			foreach($messages as $msg) {
+				$m[] = array(
+						'id'    => $msg->getId(),
+						'sender' => $msg->getSystem() ? 'Fenchy' : $msg->getSender()->getUserRegular()->getFirstname(),
+						'url'   => $this->generateUrl('fenchy_regular_user_messages_view', array('id' => $msg->getId())),
+						'red'   => $msg->isUnread() && $msg->getReceiver()->getId() == $this->get('security.context')->getToken()->getUser()->getId() ? 'unread' : '',
+						'title' => $msg->getTitle(),
+						'date'  => $this->getTimeFrom($msg->getCreatedAt()),
+						'avatar'=> $msg->getSender()->getRegularUser()->getAvatar().''
+				);
+			}
+			$messages = $m;
+		} else {
+			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type,null,$userObj);
+		}
+		
+		$groupMessages = array();
+		foreach ($messages as $message)
+		{
+			if($message->getUsergroup() == $usergroup or $message->getUsergroup() != null)
+			{
+				$groupMessages[] = $message;
+			}
+		}
+		
+		$messagesToNeighbors = $this->messagesToNeighbors($userLoggedIn->getId());
+		
+		$groupmembers = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findAllById($groupId);
+		
 		return $this->render('FenchyRegularUserBundle:Groupprofile:groupMessages.html.twig', array(
 				'displayUser' => $displayUser,
 				'form' => $form->createView(),
@@ -1069,7 +1904,182 @@ class GroupprofileController extends Controller
 				'userId' => $displayUser->getId(),
 				'groupId' => $groupId,
 				'usergroup' => $usergroup,
+				'messages' => $groupMessages,
+				'type' => null === $type ? 'all' : $type,
+				'displayUser' => $userLoggedIn,
+				'messagesToNeighbors'=>$messagesToNeighbors,
+				'userObj' => $userObj,
+				'groupmembers' => $groupmembers
 				));
+	}
+	
+	public function groupMessagesViewAction($groupId,$id)
+	{
+		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+		$em = $this->getDoctrine()->getEntityManager();
+		$type = null;
+		$read = true;
+		$messenger = $this->get('fenchy.messenger');
+		$last_message = $messenger->findLastById($id, $read);
+		$displayUser = $userLoggedIn;
+	
+		$form = $this->createForm(new UserLocationType(), $displayUser);
+	
+		if ($groupId)
+		{
+			$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
+		}
+	
+		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+			
+		$request = $this->getRequest();
+		$userObj = $usergroup->getUser();
+		if($this->getRequest()->get('_format') == 'json') {
+			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type, $this->getRequest()->get('ids'),$userObj);
+			$m = array();
+			foreach($messages as $msg) {
+				$m[] = array(
+						'id'    => $msg->getId(),
+						'sender' => $msg->getSystem() ? 'Fenchy' : $msg->getSender()->getUserRegular()->getFirstname(),
+						'url'   => $this->generateUrl('fenchy_regular_user_messages_view', array('id' => $msg->getId())),
+						'red'   => $msg->isUnread() && $msg->getReceiver()->getId() == $this->get('security.context')->getToken()->getUser()->getId() ? 'unread' : '',
+						'title' => $msg->getTitle(),
+						'date'  => $this->getTimeFrom($msg->getCreatedAt()),
+						'avatar'=> $msg->getSender()->getRegularUser()->getAvatar().''
+				);
+			}
+			$messages = $m;
+		} else {
+			$messages = $this->get('fenchy.messenger')->findReceivedMessages($type);
+		}
+	
+		$groupMessages = array();
+		foreach ($messages as $message)
+		{
+			if($message->getUsergroup() == $usergroup)
+			{
+				$groupMessages[] = $message;
+			}
+		}
+	
+		$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type,null,$userObj);
+	
+		$messages = $messenger->findThreadMessages();
+		
+		$form1 = null;
+		if ($last_message->isReplyable()) {
+			$form1 = $messenger->createForm()->createView();
+		}
+		
+		return $this->render('FenchyRegularUserBundle:Groupprofile:groupMessagesView.html.twig', array(
+				'displayUser' => $displayUser,
+				'form' => $form->createView(),
+				'user' => $displayUser,
+				'userId' => $displayUser->getId(),
+				'groupId' => $groupId,
+				'usergroup' => $usergroup,
+				'messages' => $groupMessages,
+				'type' => null === $type ? 'all' : $type,
+				'displayUser' => $userLoggedIn,
+				'messagesView' => $messages,
+				'form1' => $form1,
+				'userObj' => $userObj
+		));
+	}
+	
+	public function messagesToNeighbors($userId)
+	{
+		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+	
+		if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
+			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+	
+		$displayUser = $userLoggedIn;
+		$filterService = $this->get('listfilter');
+		$emptyFilter = $returnFilter = $filterService->getFilter();
+		//Get Users info
+		$users = $this->getDoctrine()
+		->getEntityManager()
+		->getRepository('UserBundle:User')
+		->findAllWithStickers($emptyFilter);
+	
+		$origin = str_replace(" ", "", $displayUser->getLocation());
+		$currentuid = $displayUser->getId();
+		$request = $this->getRequest();
+	
+		$filterdata = "";
+		$users2 = array();
+		foreach ($users as $user) {
+	
+			//$avatar = $user->getRegularUser()->getAvatar(false);
+			$em = $this->getDoctrine()->getEntityManager();
+			$neighbor = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findById($currentuid,$user->getId());
+			if(!$neighbor)
+			{
+				$neighbor = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findById($user->getId(),$currentuid);
+			}
+			$neighbors = '';
+			if($neighbor)
+			{
+				$neighbors = $neighbor->getId();
+			}
+			if($neighbors)
+			{
+				$document = new Document();
+				$em = $this->getDoctrine()->getEntityManager();
+				$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
+	
+				if($result)
+				{
+					$avatar = $result->getWebPath();
+	
+				}
+				else
+				{
+					$avatar = 'images/default_profile_picture.png';
+				}
+	
+				$firstname= $user->getRegularUser()->getFirstname();
+				$destination = str_replace(" ", "", $user->getLocation());
+				$userid= $user->getId();
+	
+	
+				if($user->getLocation()!="" && $userid!=$currentuid)
+				{
+	
+					if($user->getActivity() >= 400 && $user->getActivity() < 1000)
+					{
+						$managertype = "Community Manager";
+						$managertype_alpha = "C";
+						$classColor = "green";
+					}
+					elseif($user->getActivity() >= 1000)
+					{
+						$managertype = "Neighborhood Manager";
+						$managertype_alpha = "N";
+						$classColor = "orange";
+					}
+					elseif($user->getManagerType()==1)
+					{
+						$managertype = "House Manager";
+						$managertype_alpha = "H";
+						$classColor = "blue";
+					}
+					else
+					{
+						$managertype = "";
+						$managertype_alpha = " ";
+						$classColor = "red";
+					}
+					// Added By jignesh for Manager type
+					$user->setTwitterUsername($avatar);
+					$users2[] = $user;
+	
+				}
+			}
+		}
+	
+		return $users2;
 	}
 
 }

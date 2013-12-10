@@ -11,7 +11,7 @@
             <div class="form-box-wrapper">
                 <div class="error">
                     {% if invalid_username is defined %}
-                    <p>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}</p>
+                    <p style="">{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}</p>
                     {% endif %}
                 </div>
                 <div class="row input-wrapper">
@@ -23,7 +23,7 @@
             </div>            
             <footer class="clearfix">
                 <div class="button grey-button pull-left" id="buttons">
-                    <a id="back" class="wrapper" href="{{ path('fenchy_user_login') }}">
+                    <a id="back" class="wrapper" href="{{ path('fenchy_frontend_indexv2') }}">
                         <strong>{{ 'user.back_to_login'|trans }}</strong>
                     </a>                            
                 </div>

@@ -180,7 +180,7 @@ function GlobalFilterViewModel(
     self.fcDistance = ko.observable(self.defaultDistance);
     self.fcDistanceText = ko.computed(function() {
         var fcDistance = self.fcDistance();
-        if ( fcDistance < self.distanceDefaults.distanceSliderMax ) {
+        if ( fcDistance <= self.distanceDefaults.distanceSliderMax ) {
             return (fcDistance / 1000 ).toString() + ' km';
         } else {
             return self.translations.no_limit;

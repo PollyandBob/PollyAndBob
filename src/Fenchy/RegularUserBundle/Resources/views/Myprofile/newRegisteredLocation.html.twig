@@ -1,0 +1,111 @@
+{# //extends 'FenchyRegularUserBundle::settings.html.twig' #}
+{% extends 'FenchyRegularUserBundle::myProfileSettings.html.twig' %}
+
+{% form_theme form.location '::noLabelForm.html.twig' %}
+
+{% block stylesheets %}
+   {{ parent() }}
+<link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+<script type="text/javascript" src="{{ asset('js/regular_user/listing/create.js') }}"></script>
+<script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+{% include '::gmapsApiAsset.html.twig' %}
+
+<script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/mvvm/user-settings-view-model.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+
+<script type="text/javascript">
+
+    userSettingsViewModel = null;
+
+    $(document).ready(function() {
+        $('#NeedLocation').click();
+        geocoder = new google.maps.Geocoder();
+        var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';
+
+        userSettingsViewModel = new UserSettingsViewModel(geocoder, baseSearchViewUri);
+
+        ko.applyBindings(userSettingsViewModel, document.getElementsByTagName('body')[0]);
+
+        autocomplete = new GApiAutocomplete(
+                document.getElementById('fenchy_userbundle_user_locationtype_location_location'),
+                userSettingsViewModel);
+
+
+    });
+    function hasCoordinates()
+    {
+    	{% if app.user.hasRequiredLocation %}
+        	return true;
+        {% endif %}
+
+        return false;
+    }
+
+    function getLatitude()
+    {
+        return '{{ app.user.location.latitude }}'
+    }
+
+    function getLongitude()
+    {
+        return '{{ app.user.location.longitude }}';
+    }
+    </script>
+    
+    <script src="{{ asset('js/geolocalization.js') }}"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        initialize();
+    });
+        </script>
+        <script type="text/javascript" src="{{ asset('js/regular_user/settings/form.js') }}"></script>
+        
+{% endblock %}
+
+{% block content %}
+		
+		<div class="mylocation">
+	    	<form action="{{ path('fenchy_regular_user_user_your_location') }}" method="post" {{ form_enctype(form) }} class="form-settings location">
+          	
+				{{ form_row(form.location.location) }}
+                <span>or</span>
+
+                <a class="button" href="#" onclick="putPin()">{{ 'regularuser.put_pin'|trans }}</a>
+				<div style="display: none">
+	            	{{form_rest(form)}}
+	            </div>
+	            <input type="submit" id="continue" class="blue_button" value="{{ 'btn.save'|trans }}"/>
+
+	      	</form>
+
+            <div class="clearfix"></div>
+	        <div class="map">
+		    	<div id="map_canvas"></div>
+		    </div>
+	   	</div>
+       	<div class="clearfix"></div>
+	   	<div class="bgbottom">
+			<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
+		</div>
+        <a id="NeedLocation" href="#dialog45" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+        
+        <section id="boxes2">
+			<div id="dialog45" class="window">
+			   	<div class="big_popup">
+			      	<div class="big_popupclose"><a href="" class="close"></a></div>
+					<div id="messageForm">
+						<p>{{ 'regularuser.need_your_location'|trans }}</p>
+					</div>
+				</div>
+				<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+			</div>
+			<div id="mask"></div>
+		</section>
+           
+{% endblock %}

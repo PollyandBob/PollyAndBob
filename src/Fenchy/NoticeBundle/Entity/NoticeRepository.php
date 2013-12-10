@@ -5,8 +5,10 @@ namespace Fenchy\NoticeBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\EntityManager;
 
 use Fenchy\UserBundle\Entity\User;
+use Fenchy\RegularUserBundle\Entity\UserGroup;
 
 class NoticeRepository extends EntityRepository
 {
@@ -37,14 +39,185 @@ class NoticeRepository extends EntityRepository
      * Returns of notices with full detailed information from related entities.
      * @param \Fenchy\NoticeBundle\Entity\NoticesFilter $filter
      * @return array
+     *
+     * @uses AdminBundle
+     */
+    public function getFullDetailedListAdmin($filter = NULL) {
+    
+    	if(!($filter instanceof \Fenchy\AdminBundle\Entity\NoticesFilter)) {
+    
+    		return $this->createQueryBuilder('n')
+    		->select("n, p, v, t, u, l, s, su")
+    		->leftJoin('n.values', 'v')
+    		->leftJoin('v.property', 'p')
+    		->join('n.user', 'u')
+    		->join('n.location', 'l')
+    		->leftJoin('n.type', 't')
+    		->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
+    		->leftJoin('s.reported_by', 'su')
+    		->getQuery()
+    		->getResult();
+    	}
+    
+    	$sub = $this->getEntityManager()->createQuery("
+                        SELECT count(s2.id) FROM FenchyUtilBundle:Sticker s2
+                        WHERE s2.notice = n AND s2.discarded_at IS NULL"
+    	);
+    
+    	$query = $this->createQueryBuilder('n')
+    	->select("n, p, v, t, u, l, s, su, (".$sub->getDQL().") as HIDDEN stickersQ")
+    	->leftJoin('n.values', 'v')
+    	->leftJoin('v.property', 'p')
+    	->join('n.user', 'u')
+    	->join('n.location', 'l')
+    	->leftJoin('n.type', 't');
+    
+    	if($filter->reported_only) {
+    		$query->join('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
+    		->leftJoin('s.reported_by', 'su');
+    	} else {
+    		$query->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
+    		->leftJoin('s.reported_by', 'su');
+    	}
+    
+    	if($filter->title) {
+    		$query->where('n.title like :title')
+    		->setParameter('title', '%'.$filter->title.'%');
+    	}
+    
+    	if($filter->created_after) {
+    		$query->andWhere('n.created_at > :after')
+    		->setParameter('after', $filter->created_after);
+    	}
+    
+    	if($filter->created_before) {
+    		$query->andWhere('n.created_at < :before')
+    		->setParameter('before', $filter->created_before);
+    	}
+    
+    	if($filter->sort === 'stickersQ') {
+    		return $query
+    		->orderBy($filter->sort, $filter->order)
+    		->getQuery()
+    		->getResult();
+    	}
+    
+    	return $query
+    	->orderBy('n.'.$filter->sort, $filter->order)
+    	->getQuery()
+    	->getResult();
+    }
+    
+    
+    public function searchAllNeighboursOnLoad()
+    {
+    	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+    
+    	if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
+    		return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+    
+    	$location = $userLoggedIn->getLocation();
+    	$lat = $location->getLongitude();
+    	$log = $location->getLatitude();
+    	$emptyFilter = '';
+    	$users = $this->getDoctrine()->getEntityManager()->getRepository('UserBundle:User')->findAllWithStickers($emptyFilter);
+    
+    	$users2 = array();
+    	$distanceArray = array();
+    	if($users)
+    	{
+    		foreach ($users as $user)
+    		{
+    			$location = $user->getLocation();
+    			$lat2 = $location->getLongitude();
+    			$log2 = $location->getLatitude();
+    
+    			$theta = $log - $log2;
+    			// Find the Great Circle distance
+    			$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+    			$distance = $distance * 60 * 1.1515;
+    			$distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+    
+    			if($user->getId() != $userLoggedIn->getId())
+    			{
+    				if($distance < 30000 && $distance > 0)
+    				{
+    					$users2[] = $user;
+    					$distanceArray[] = $distance;
+    				}
+    			}
+    		}
+    		$result[0] = $users2;
+    		$result[1] = $distanceArray;
+    		return $result;
+    	}
+    	$result[0] = null;
+    	$result[1] = null;
+    	return $result;
+    }
+    
+    public function getAllUserGroups($searchword=null,$flag=true,$when=null,$now=null)
+    {
+    	if($searchword)
+    	{
+    		$searchword = strtolower('%'.$searchword.'%');
+    		return $this->getEntityManager()
+    		->createQuery('SELECT ug,u,l FROM FenchyRegularUserBundle:UserGroup ug
+    				   LEFT JOIN ug.user u LEFT JOIN ug.location l WHERE LOWER(ug.groupname) LIKE :groupname ORDER BY ug.id DESC')
+    		->setParameter('groupname', $searchword)
+    		->getResult();
+    	}
+    	else if($flag==true && $when=='' && $now=='')
+    	{
+    		return $this->getEntityManager()
+    		->createQuery('SELECT ug,u,l FROM FenchyRegularUserBundle:UserGroup ug
+    				   LEFT JOIN ug.user u LEFT JOIN ug.location l ORDER BY ug.id DESC')
+    		->getResult();
+    	}
+    	else if($flag==true && ($when!='' || $now!=''))
+    	{
+    		$date = explode('to',$when);
+    		$startdate = date('Y-m-d H:i:s',$date[0]);
+    		$enddate = date('Y-m-d H:i:s',$date[1]);
+    		 
+    		if($now)
+    		{
+    			$dateStart = new \DateTime();
+    			$dateStart->setTime(0, 0, 1);
+    			$startdate = $dateStart;
+    			$dateEnd = new \DateTime();
+    			$dateEnd->setTime(23, 59, 59);
+    			$enddate = $dateEnd;
+    			 
+    		}
+    		
+    		return $this->getEntityManager()
+    		->createQuery('SELECT ug,u,l FROM FenchyRegularUserBundle:UserGroup ug
+    				   LEFT JOIN ug.user u LEFT JOIN ug.location l WHERE ug.created_at >= :start AND ug.created_at <= :end ORDER BY ug.id DESC')
+    		->setParameter('start', $startdate)
+    		->setParameter('end', $enddate)
+    		->getResult();
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    	
+    }
+    
+    /**
+     * Returns of notices with full detailed information from related entities.
+     * @param \Fenchy\NoticeBundle\Entity\NoticesFilter $filter
+     * @return array
      * 
      * @uses AdminBundle
      */
-    public function getFullDetailedList($filter = NULL,$types,$sortby, $aroundyou,$when, $now, $keyword) {
+    public function getFullDetailedList($filter = NULL,$types,$sortby, $aroundyou,$when, $now, $keyword, $userSearchedTypes) {
 
+    	
         if(!($filter instanceof \Fenchy\AdminBundle\Entity\NoticesFilter) and empty($types) and (!$sortby) and (!$aroundyou)  and (!$when) and (!$now) and (!$keyword) ) {
             
-            return $this->createQueryBuilder('n')
+           $query = $this->createQueryBuilder('n')
                     ->select("n, p, v, t, u, l, s, su")
                     ->leftJoin('n.values', 'v')
                     ->leftJoin('v.property', 'p')
@@ -53,9 +226,24 @@ class NoticeRepository extends EntityRepository
                     ->leftJoin('n.type', 't')
                     ->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
                     ->leftJoin('s.reported_by', 'su')
-                    ->where('n.draft = false')
-                    ->getQuery()
-                    ->getResult();
+                    ->where('n.draft = false');
+            
+           if(!empty($userSearchedTypes))
+           {
+     		if($userSearchedTypes[0])
+     		{      	
+           		$query->andWhere('n.type in (:type)')
+           			  ->setParameter('type', $userSearchedTypes);
+     		}	
+           }
+            $notices =  $query->getQuery()
+            				  ->getResult();
+           
+            $usergroups = $this->getAllUserGroups();
+            $result[0] = $notices;
+            $result[1] = $usergroups;
+            
+            return $result;
         } 
 
         $sub = $this->getEntityManager()->createQuery("
@@ -75,28 +263,39 @@ class NoticeRepository extends EntityRepository
        
         if($keyword)
         {
+        	
         	$query->andWhere('LOWER(n.title) like :title')
-        	->setParameter('title','%'.$keyword.'%');
+        	->setParameter(':title',strtolower('%' . $keyword . '%'));
         
         	$query->orWhere('LOWER(n.content) like :content')
-        	->setParameter('content','%'.$keyword.'%');
+        	->setParameter(':content',strtolower('%' . $keyword . '%'));
         
         	$query->orWhere('LOWER(t.name) like :name')
-        	->setParameter('name','%'.$keyword.'%');
+        	->setParameter(':name',strtolower('%' . $keyword . '%'));
         
         	$query->orWhere('LOWER(t.altText) like :altText')
-        	->setParameter('altText','%'.$keyword.'%');
+        	->setParameter(':altText',strtolower('%' . $keyword . '%'));
         
         	$query->orWhere('LOWER(l.location) like :location')
-        	->setParameter('location','%'.$keyword.'%');
+        	->setParameter(':location',strtolower('%' . $keyword . '%'));
+        	
+        	$query->orWhere('LOWER(n.tags) like :tags')
+        	->setParameter(':tags',strtolower('%' . $keyword . '%'));
         }
-        
+        $flag = false;
         if($types) {
         	$query->andWhere('n.type in (:type)')
         	->setParameter('type', $types);
         	
+        	if(in_array(8, $types))
+        	{
+        		$flag=true;
+        	}
         }
-       
+        else
+        {
+        	$flag=true;
+        }
         
         if($when or $now)
         {
@@ -119,13 +318,13 @@ class NoticeRepository extends EntityRepository
 	        {	
 	        	if(in_array(6, $types))
 	        	{
-		        	$query->andWhere('n.start_date >= :start AND n.start_date <= :end')
+		        	$query->orWhere('n.start_date >= :start AND n.start_date <= :end')
 		        	->setParameter('start', $startdate)
 		        	->setParameter('end', $enddate);
 	        	}
 	        	elseif(in_array(12, $types))
 	        	{
-	        		$query->andWhere('n.start_date >= :start AND n.start_date <= :end')
+	        		$query->orWhere('n.start_date >= :start AND n.start_date <= :end')
 	        		->setParameter('start', $startdate)
 	        		->setParameter('end', $enddate);
 	        	}
@@ -146,54 +345,74 @@ class NoticeRepository extends EntityRepository
         }
         
         
-        if($sortby=="date")
-        {
-        	$sortby = 'created_at';
-        	$query->orderBy('n.'.$sortby , "DESC");
-        }
-        elseif($sortby=="distance")
-        {
-        	
-        }
-        elseif($sortby=="relevance")
+        
+        if($sortby=="relevance")
         {
         	$sortby="title";
         	$query->orderBy('n.'.$sortby , "DESC");
         }
         
-		//         if($filter->reported_only) {
-		//             $query->join('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
-		//                 ->leftJoin('s.reported_by', 'su');
-		//         } else {
-		//             $query->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
-		//                 ->leftJoin('s.reported_by', 'su');
-		//         }
-		        
-		//         if($filter->title) {
-		//             $query->where('n.title like :title')
-		//                     ->setParameter('title', '%'.$filter->title.'%');
-		//         }
-		        
-		//         if($filter->created_after) {
-		//             $query->andWhere('n.created_at > :after')
-		//                     ->setParameter('after', $filter->created_after);
-		//         }
-		        
-		//         if($filter->created_before) {
-		//             $query->andWhere('n.created_at < :before')
-		//                     ->setParameter('before', $filter->created_before);
-		//         }
-		        
-		//         if($filter->sort === 'stickersQ') {
-		//            // return $query
-		//                     ->orderBy($filter->sort, $filter->order)
-		//                     ->getQuery()
-		//                     ->getResult();
-		//         }
         //echo $query->getQuery()->getSQL();
-        
-        return $query->getQuery()
+        $notices = $query->getQuery()
                     ->getResult();
+       
+        $usergroups = $this->getAllUserGroups($keyword,$flag,$when,$now);
+        
+        $result[0] = $notices;
+        $result[1] = $usergroups;
+        
+        return $result;
+    }
+    
+    
+    public function getSearchResult($searchword, $two=null) {
+    
+    	$sub = $this->getEntityManager()->createQuery("
+                        SELECT count(s2.id) FROM FenchyUtilBundle:Sticker s2
+                        WHERE s2.notice = n AND s2.discarded_at IS NULL"
+    	);
+    	$result= array();
+    	if(strlen($searchword)>=3 or $two)
+    	{
+    	$query = $this->createQueryBuilder('n');
+    	
+    		$query->select("n, p, v, t, u, l, (".$sub->getDQL().") as HIDDEN stickersQ")
+		    	->leftJoin('n.values', 'v')
+		    	->leftJoin('v.property', 'p')
+		    	->join('n.user', 'u')
+		    	->join('n.location', 'l')
+		    	->leftJoin('n.type', 't');    	
+    			
+    			// here in above query removed s,su from select part
+    		
+    		$query->andWhere('LOWER(n.title) like :title')
+    		->setParameter(':title',strtolower('%' . $searchword . '%'));
+    
+    		$query->orWhere('LOWER(n.content) like :content')
+    		->setParameter(':content',strtolower('%' . $searchword . '%'));
+    
+    		$query->orWhere('LOWER(t.name) like :name')
+    		->setParameter(':name',strtolower('%' . $searchword . '%'));
+    
+    		$query->orWhere('LOWER(t.altText) like :altText')
+    		->setParameter(':altText',strtolower('%' . $searchword . '%'));
+    
+    		$query->orWhere('LOWER(l.location) like :location')
+    		->setParameter(':location',strtolower('%' . $searchword . '%'));
+    		 
+    		$query->orWhere('LOWER(n.tags) like :tags')
+    		->setParameter(':tags',strtolower('%' . $searchword . '%'));
+    		
+    		$query->andWhere('n.draft = false');
+    		
+    		$result[0] = $query->getQuery()
+    						   ->getResult();
+    		
+    		$result[1] = $this->getAllUserGroups($searchword);
+    		
+    		return $result;
+    	}
+    	return null;
     }
     
     public function getFirstRecord() {
@@ -655,6 +874,30 @@ class NoticeRepository extends EntityRepository
                 ->orderBy('n.created_at', 'DESC')
                 ->getQuery()
                 ->getResult();
+    }
+    
+    /**
+     * retrieves usergroup notices from db
+     *
+     * @param \Fenchy\RegularUserBundle\Entity\UserGroup $usergroup
+     * @return Array
+     */
+    public function getUserGroupNotices(UserGroup $usergroup) {
+    
+    	return $this->createQueryBuilder('n')
+    	->select('n, g, i, l, v, t')
+    	->where('n.usergroup = :usergroup')
+    	->andWhere('n.draft = :draft')
+    	->join('n.gallery', 'g')
+    	->join('n.location', 'l')
+    	->join('n.type', 't')
+    	->leftJoin('n.values', 'v')
+    	->leftJoin('g.images', 'i')
+    	->setParameter('usergroup', $usergroup)
+    	->setParameter('draft', 'FALSE')
+    	->orderBy('n.created_at', 'DESC')
+    	->getQuery()
+    	->getResult();
     }
     
 }

@@ -28,7 +28,7 @@ class LocaleListener {
         $context = $this->container->get('security.context');
 
         $this -> useBrowserLocale($e);
-
+        // Re-changed By Jignesh
         $cookie_locale = $e->getRequest()->cookies->get('locale');
         if ( NULL != $cookie_locale &&  in_array($cookie_locale, array('pl', 'en', 'de'))) {
             $e->getRequest()->setLocale($cookie_locale);

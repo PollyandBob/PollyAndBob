@@ -55,7 +55,7 @@ function sendMsg()
 </script>   
 			<div class="message">
 				<div class="left">
-                	<a href="#" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>
+                	<a href="javascript:void(0);" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>
                     <div class="clearfix"></div>
                     <div class="messagedetail">
                     	{% if messages %}
@@ -63,7 +63,7 @@ function sendMsg()
 	                    	<a href="{{ path('fenchy_regular_user_messages_view', {'id': message.id}) }}" {% if not message.read %} {% if message.receiver != app.user %} class="message-read" {% else %} class="message-unread" {% endif %} {% endif %}>
 	                    	<div {% if message.read %}class="message-read"{% endif %}>
 	                            <div class="profilei">
-                          			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
+                          			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.id } %}
                           		</div>
 	                            {% if message.receiver != app.user %}
 	                            <img class="read_arrow" src="{{ asset('images/message-arrow1.png') }}" alt="" />
@@ -110,7 +110,7 @@ function sendMsg()
 					
 					<input class="blue_button" type="button" id="continue" value="{{ 'btn.send'|trans }}" onclick="sendMsg();"/>
                     
-                    <div class="bgbottom_right"><img src="images/bgbottom_contantinner.png" alt="" /></div>
+                    <div class="bgbottom_right"><img src="{{ asset('images/bgbottom_contantinner.png') }}" alt="" /></div>
                 </div>
             </div>
             

@@ -217,6 +217,11 @@ fenchy_regular_user_messages_send:
     defaults: { _controller: FenchyRegularUserBundle:Message:send, prev_id: null }
     requirements:
         _method: POST
+        
+fenchy_regular_user_messages_sendbygroup:
+    pattern: /messages/sendbygroup/{groupId}/{prev_id}
+    defaults: { _controller: FenchyRegularUserBundle:Message:sendByGroup, prev_id: null, groupId: null }
+
 
 fenchy_regular_user_messages_delete:
     pattern: /messages/{id}/delete
@@ -405,12 +410,16 @@ fenchy_regular_user_user_myprofile_mylocation:
     pattern: /mylocation
     defaults: { _controller: FenchyRegularUserBundle:Myprofile:myLocation }
 
+fenchy_regular_user_user_your_location:
+    pattern: /yourlocation
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:newRegisteredLocation }
+
 fenchy_regular_user_user_myprofile_mycommunitypoints:
     pattern: /mycommunitypoints
     defaults: { _controller: FenchyRegularUserBundle:Myprofile:myCommunityPoints }
 
 fenchy_regular_user_user_myprofile_myneighbors:
-    pattern: /myneighbors
+    pattern: /myneighbors/
     defaults: { _controller: FenchyRegularUserBundle:Myprofile:myNeighbors }
 
 fenchy_regular_user_user_myprofile_myneighborsdst:
@@ -461,7 +470,11 @@ fenchy_regular_user_user_otherprofile_otherfilterusers:
     
 fenchy_regular_user_user_otherprofile_addneighbors:
     pattern: /addneighbors
-    defaults: { _controller: FenchyRegularUserBundle:Otherprofile:addNeighbors }    
+    defaults: { _controller: FenchyRegularUserBundle:Otherprofile:addNeighbors }
+
+fenchy_regular_user_user_otherprofile_addneighborrequest:
+    pattern: /addneighborrequest
+    defaults: { _controller: FenchyRegularUserBundle:Otherprofile:addNeighborRequest }
 
 # For Group profile    
     
@@ -476,15 +489,30 @@ fenchy_regular_user_user_groupprofile_creategroup:
 fenchy_regular_user_user_groupprofile_groupinfo:
     pattern: /groupinfo/{groupId}/
     defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupInfo, groupId: null}
+
+fenchy_regular_user_user_groupprofile_grouplistingsreviews:
+    pattern: /grouplistingsreviews/{groupId}
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupListingsReviews, groupId: null }    
     
 fenchy_regular_user_user_groupprofile_groupmembers:
     pattern: /groupmembers/{groupId}/
     defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupMembers, groupId: null}
+    
+fenchy_regular_user_user_groupprofile_groupnotifications:
+    pattern: /groupnotifications/{groupId}
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupNotifications, groupId: null }    
+
+fenchy_regular_user_user_groupprofile_groupnotifications_requests:
+    pattern: /groupnotifications/requests/{groupId}
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupNotificationsRequests, groupId: null } 
         
 fenchy_regular_user_user_groupprofile_groupmessages:
     pattern: /groupmessages/{groupId}/
     defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupMessages, groupId: null}          
 
+fenchy_regular_user_user_groupprofile_groupmessages_view:
+    pattern: /groupmessages/{groupId}/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupMessagesView, groupId: null, id: null}    
 
 #fenchy_regular_user_user_groupprofile_groupleftsidebar:
 #    pattern: /groupleftsidebar/{groupId}
@@ -502,6 +530,10 @@ fenchy_regular_user_user_groupprofile_deletegroup:
     pattern: /deletegroup/{groupId}
     defaults: { _controller: FenchyRegularUserBundle:Groupprofile:deleteGroup, groupId: null}
     
+fenchy_usergroup_post_comment:
+    pattern: /postcommenttogroup
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:postCommentToGroup }
+    
 # Comment & Request & Reviews
     
 fenchy_notice_post_comment:
@@ -515,6 +547,10 @@ fenchy_notice_write_review:
 fenchy_notice_send_reueqst:
     pattern: /sendrequest
     defaults: { _controller: FenchyRegularUserBundle:Listing:sendRequest }
+
+fenchy_notice_store_session:
+    pattern: /storesession
+    defaults: { _controller: FenchyRegularUserBundle:Listing:storeSession }    
 
 fenchy_regular_user_sendmsgform:
     pattern: /sendmsgform
@@ -543,6 +579,10 @@ fenchy_regular_user_listing_change_status:
 fenchy_regular_user_listing_markread:
     pattern: /listing/read
     defaults: { _controller: FenchyRegularUserBundle:Listing:markAsRead }
+
+fenchy_notice_invite_to_listing:
+    pattern: /invitetolisting/{noticeId}
+    defaults: { _controller: FenchyRegularUserBundle:Listing:inviteToListing, noticeId : null }
     
 #payment settings
 
@@ -553,3 +593,7 @@ fenchy_regular_user_settings_paymentsave:
 fenchy_regular_user_settings_paymentdelete:
     pattern: /settings/paymentdelete
     defaults: { _controller: FenchyRegularUserBundle:Settings:deletePaymentSetting }
+
+fenchy_regular_user_paymillpayment:
+    pattern:  /paymillpayment
+    defaults: { _controller: FenchyRegularUserBundle:Listing:paymillPayment }

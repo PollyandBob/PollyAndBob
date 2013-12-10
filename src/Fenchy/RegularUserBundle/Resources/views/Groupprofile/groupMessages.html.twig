@@ -91,19 +91,84 @@
 {% endblock %}
 
 {% block content %}
-	{% render 'FenchyRegularUserBundle:Myprofile:myAvatar' %}
+	{% render 'FenchyRegularUserBundle:Groupprofile:groupavatar' with { 'groupId' : groupId } %}
 	{% render 'FenchyRegularUserBundle:Groupprofile:groupmenu' with { 'groupId' : groupId } %}
 		
-		<div class="mylocation">
-	    	
-	        
-            <div class="clearfix"></div>
-	        
-	   	</div>
-       	<div class="clearfix"></div>
-	   	<div class="bgbottom">
-			<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
-		</div>
+		
+       <div class="message">
+				<div class="left">
+                	<a href="#" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>
+                    <div class="clearfix"></div>
+                    <div class="messagedetail">
+                    	{% if messages %}
+                          {% for message in messages %}
+	                    	<a href="{{ path('fenchy_regular_user_user_groupprofile_groupmessages_view', {'groupId': groupId ,'id': message.id}) }}" {% if not message.read %} {% if message.receiver != app.user %} class="message-read" {% else %} class="message-unread" {% endif %} {% endif %}>
+	                    	<div {% if message.read %}class="message-read"{% endif %}>
+	                            <div class="profilei">
+                          			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
+                          		</div>
+	                            {% if message.receiver != userObj %}
+	                            <img class="read_arrow" src="{{ asset('images/message-arrow1.png') }}" alt="" />
+	                            {% elseif message.receiver == userObj %}
+	                            <img class="read_arrow" src="{{ asset('images/message-arrow2.png') }}" alt="" />
+	                            {% endif %}
+	                            <p>{{ message.sender.userregular.firstname }}</p>
+	                            <p>{{ message.title }}</p>
+	                        </div>
+	                        </a>
+	                    	
+                    	 {% endfor %}
+                      {% else %}
+                         	{{'regularuser.message.no_messages'|trans}}</td>
+                      {% endif %}
+                    </div>
+                <div class="bgbottom"><img alt="" src="{{ asset('images/bgbottom_leftpart.png') }}"></div>
+                </div>
+                
+                <div class="right">
+{#                     <img class="personimage" src="{{ asset('images/person.png') }}" alt="" />#}
+{#                     <p class="name">gregory</p>#}
+{#                     <div class="clearfix"></div>#}
+{#                     <p class="message-all">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>#}
+                    
+			     	<p>{{ 'regularuser.write_msg_to'|trans }} 
+			     	
+			     	<select name="select_receiver" id="select_receiver">
+			     	{% if groupmembers %}
+			     		{% for groupmember in groupmembers %}
+			     			<option value="{{ groupmember.neighbor.id }}">{{ groupmember.neighbor.regularuser.firstname }} {{ groupmember.neighbor.regularuser.lastname }}</option>
+			     		{% endfor %}
+			     	{% else %}
+			     	<option>No members</option>
+			     	{% endif %}
+			     	</select>
+			     	</p>
+			     	
+			     	<br>
+			     	<br>
+					<input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}"/>
+					<br>
+					<textarea id="MsgContent" style="padding: 5px;" placeholder="{{ 'message.content'|trans }}"></textarea>
+					
+					<input class="blue_button" type="button" id="continue" value="{{ 'btn.send'|trans }}" onclick="sendMsg();"/>
+                    
+                    <div class="bgbottom_right"><img src="{{ asset('images/bgbottom_contantinner.png') }}" alt="" /></div>
+                </div>
+            </div>
+            
+         <a id="successDialog2" href="#dialog35" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+            
+        <section id="boxes2">
+				<div id="dialog35" class="window">
+				   	<div class="big_popup">
+				      	<div class="big_popupclose"><a href="" class="close"></a></div>
+						<div id="messageForm">
+							<p>{{ 'regularuser.msg_send'|trans }}</p>
+					</div>
+				</div>
+			</div>
+			<div id="mask"></div>
+		</section>    
 		<section id="boxes2">
     		<div id="dialog2" class="window"> 
     	    	<div class="big_popup">

@@ -52,9 +52,14 @@
             'sort_time': '{{ 'notice.filter.sort.time' | trans }}'
         };
 
-
+        
         $(document).ready(function() {
-            
+
+        	var Welcome = '{{ app.session.flash('Welcome') }}';
+        	if(Welcome!='')
+        	{
+        		$('#Welcome_New_User').click();
+        	}
             notice_tinyscroll = $('#scrollable').tinyscrollbar();
             ko.bindingHandlers['class'] = {
                 'update': function(element, valueAccessor) {
@@ -144,13 +149,15 @@
                 //Start added for new dateslider 
                 var startDate = '{{ slider_startDate }}'*1000;
 				var endDate = '{{ slider_endDate }}'*1000;
+				var currentTime = '{{ currdate }}'*1000;
                
                 
                 $( "#slider-range" ).slider({
                 	range: true,
+                	step:5,
                 	min: startDate,
                 	max: endDate,
-                	values: [ startDate, endDate ],
+                	values: [ startDate, currentTime ],
                 	slide: function( event, ui ) {
                 		var startTimed = new Date(ui.values[ 0 ]);
      	            	var smonth1 = startTimed.getMonth() + 1;
@@ -165,11 +172,42 @@
      	            	var eyear2 = endTimed.getFullYear();
      	            	if (emonth2 < 10) emonth2 = '0' + emonth2;
      	            	if (eday2 < 10) eday2 = '0' + eday2;
+						var st = $("#slider-range > a.ui-slider-handle:first" ).css('left');
+						var lt = $("#slider-range > a.ui-slider-handle:last" ).css('left');
+						var stt = st.slice(0, -2);
+						var ltt = lt.slice(0, -2);
+						var finalStt = stt-10;
+     	            	
      	            	$("#slider-range > a.ui-slider-handle:first" ).attr('id',ui.values[ 0 ]);
      	            	$("#slider-range > a.ui-slider-handle:last" ).attr('id',ui.values[ 1 ]);
      	            	$("#slider-range > a.ui-slider-handle:first" ).html( "<span class='inner-tooltip'><strong class='tooltip-value'>"+sday1 + "." + smonth1 + "." + syear1+"</strong></span>" );
                     	$("#slider-range > a.ui-slider-handle:last" ).html( "<span class='inner-tooltip'><strong class='tooltip-value'>"+eday2 + "." + emonth2 + "." + eyear2+"</strong></span>" );
-             	    
+
+                    	if((ltt-stt) < 54)
+     	            	{
+         	            	var val = 45;
+         	            	var val2 = 1.8;
+         	            	if(ui.values[ 0 ] != ui.values[ 1 ])
+         	            	{
+     	            		$("#slider-range > a.ui-slider-handle:first" ).children('.inner-tooltip').css('left', '-'+val+'px');
+     	            		$("#slider-range > a.ui-slider-handle:last" ).children('.inner-tooltip').css('left', val2+'px');
+         	            	}
+         	            	else
+         	            	{
+             	            $("#slider-range > a.ui-slider-handle:first" ).children('.inner-tooltip').css('left', '-36px');
+         	            	$("#slider-range > a.ui-slider-handle:last" ).children('.inner-tooltip').css('left', '-8px');
+             	            }	
+         	            }
+						if(endDate==ui.values[ 1 ] || ltt > 182)
+						{
+							$("#slider-range > a.ui-slider-handle:last" ).children('.inner-tooltip').css('left', '-42px');
+						}	
+						if(startDate==ui.values[ 0 ] || stt < 18)
+						{
+							$("#slider-range > a.ui-slider-handle:first" ).children('.inner-tooltip').css('left', '0px');
+						}
+						
+                    	
                 	}
                 	});
 	                var startTime = new Date($( "#slider-range" ).slider( "values", 0 ));
@@ -185,23 +223,54 @@
 	            	var year2 = endTime.getFullYear();
 	            	if (month2 < 10) month2 = '0' + month2;
 	            	if (day2 < 10) day2 = '0' + day2;
-
 	            	$("#slider-range > a.ui-slider-handle:first" ).attr('id',$( "#slider-range" ).slider( "values", 0 ));
  	            	$("#slider-range > a.ui-slider-handle:last" ).attr('id',$( "#slider-range" ).slider( "values", 1 ));
                 	$("#slider-range > a.ui-slider-handle:first" ).html( "<span class='inner-tooltip'><strong class='tooltip-value'>"+day1 + "." + month1 + "." + year1+"</strong></span>" );
                 	$("#slider-range > a.ui-slider-handle:last" ).html( "<span class='inner-tooltip'><strong class='tooltip-value'>"+day2 + "." + month2 + "." + year2+"</strong></span>" );
-     
+                	//$("#slider-range > a.ui-slider-handle:last" ).css('left', '46.4143%');
+                	$("#slider-range > a.ui-slider-handle:first" ).children('.inner-tooltip').css('left', '0px');
+                	if(endDate >= $( "#slider-range" ).slider( "values", 1 ))
+					{
+						$("#slider-range > a.ui-slider-handle:last" ).children('.inner-tooltip').css('left', '-42px');
+					}
+                	{% if(findNeighbors == 'neighbors') %} 
+                	$('.selectoptions').css('pointer-events', 'none');
+                	$('#slider-range').css('pointer-events', 'none');
+                	$('.loginwindow3 #date').css('pointer-events', 'none');
+                	$('.loginwindow3 #relevance').css('pointer-events', 'none'); 
+                	{% endif %}
+
+                	//$(".feedsdetail>div").tsort("",{attr:"id"});
+                	  
                 // End added for new dateslider 
             
         });
-
+			
         
 		// apply binding here
     </script>
+    <script type="text/javascript">
+		$(document).ready(function() {
+			$('#container > div.newsfeeds').sort(function(a,b) {
+			     return $(a).attr('id') > $(b).attr('id') ? 1 : -1;
+			}).appendTo('#container');
+
+			$('#search').val('{{ app.request.get('search') }}');
+		});
+	</script>
     {# any view specific JS scripts for this view #}
 {% endblock %}
 
 {% block content %}
+	<style>
+	.wrapper div.flash-message {
+    	background: white !important;
+    	margin-bottom: 0  !important;
+    	min-height: 36px  !important;
+    	padding-left: 30px  !important;
+    	padding-top: 7px  !important;
+	}
+	</style>	
     {# put view specific content here #}
 			
 			<div class="leftpart">
@@ -215,5 +284,22 @@
             {# render "FenchyNoticeBundle:Widgets:userListings" with {'notice_id' : 2} #}
             {# render "FenchyNoticeBundle:Widgets:similarListings" with {'notice_id' : 2} #}
 
-         
+    	<section id="boxes2">
+		        <div class="window" id="dialog333" style="top: 213.5px; left: 395px; display: none;">
+		        <div id="dialog30"> 
+		            <div class="big_popup">
+		                <div class="big_popupclose"><a class="close" href=""></a></div>
+		                <!-- Your custom code here -->
+		                <div class="published">
+		                    <div class="title" style="font-size: 28px !important;">{{ 'settings.flash.first_entry_as_pioneer'|trans }}</div>	
+		                </div>
+		                <!-- Your custom code end -->
+		            </div>
+		            <img alt="" src="{{ asset('images/popup_bottom.png') }}" class="popup_bottom">
+		        </div>
+		        </div>
+		        <div id="mask"></div>
+		</section>
+		<a id="Welcome_New_User" href="#dialog333" class="zoomthis" id="vzoom_1944" name="modal" style="display: none;"></a>
+      		    
 {% endblock %}

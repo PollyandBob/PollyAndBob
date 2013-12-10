@@ -231,11 +231,16 @@ class Messenger {
      */
     public function createReply(Message $message)
     {
-        $reply = clone $message;
+    	$request = $request = $this->container->get('request');
+    	$groupId = "";
+    	$groupId=$request->get('groupId');
+    	
+    	$reply = clone $message;
         $reply->setFirst($message->getFirst())
                 ->setPrev($message)
                 ->unsetSenderDeletedAt()
-                ->unsetReceiverDeletedAt();
+                ->unsetReceiverDeletedAt()
+        		->setFromgroup($groupId);
         // Check if switch sender and receiver
         if ($message->getReceiver() === $this->getUser()) {
             $reply->setReceiver($message->getSender());
@@ -288,6 +293,12 @@ class Messenger {
         $em = $this->container->get('doctrine.orm.entity_manager');
         $this->setUser();
         return $this->setMessages($em->getRepository('FenchyMessageBundle:Message')->findReceivedMessages($this->getUser(), $type, $ids));
+    }
+    
+    public function findReceivedMessagesOfGroup($type = null, $ids = array(),$user)
+    {
+    	$em = $this->container->get('doctrine.orm.entity_manager');
+    	return $this->setMessages($em->getRepository('FenchyMessageBundle:Message')->findReceivedMessages($user, $type, $ids));
     }
     
     /**

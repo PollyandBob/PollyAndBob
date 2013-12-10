@@ -58,6 +58,10 @@ window.onload=function(){ $('.neighbor_success2').click(); };</script>
                     <div class="options">
                         <h4>YOUR OPTIONS</h4>
                         <div class="optionsdetail">
+                        
+                        	{% if(usergroup.user.id == displayUser.id or adminmember == 1) %}
+                        	<a href="{{path('fenchy_regular_user_notice_create1',{'groupId': groupId}) }}" class="blue_button">{{'frontend.create_listing'|trans}}</a>
+                            {% endif %}
                             <a href="#dialog34" class="zoomthis blue_button" name="modal" id="vzoom_1944">{{ 'regularuser.send_new_message'|trans }}</a>  
                             
 							{% if(usergroup.user.id == displayUser.id) %}
@@ -73,7 +77,7 @@ window.onload=function(){ $('.neighbor_success2').click(); };</script>
                         </div>
 		            </div>
 		        </div>
-		            <div class="neighbour-comments">
+		            <div class="neighbour-comments" style="display: none;">
                     	<div class="title">
                         	<div class="left">Laura</div>
                             <div class="right">Online</div>

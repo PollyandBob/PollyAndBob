@@ -59,26 +59,25 @@
 				{% if listings %}
 				{% set i=0 %}
                     {% for notice in listings %}
+                    {% if not notice.usergroup %}
                        	<div class="feeds2">
                             <div class="leftimg">
-                            	<div class="bg-gray"><!-- <img src="{{ absolute(asset('images/bg_gray.png')) }}"  alt="" />--></div>
-                                <img src="/{{ user.twitterusername }}" width="135" height="135" alt="" />
-                                <div class="neighbor orange">
-                                    <p>N</p>
-                                    <span>{{ user.activity }}</span>
-                                </div>		                            
-                                <div class="otherdetail">
-                                    <p>500M</p>
-                                    <span>300<br><b>{{ 'otherprofile.members'|trans|upper }}</b></span>
-                                </div>
-                            </div>
+                                	<a href="{{path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')  })}}">
+		                        		<img width="200" height="135" alt="" src="{{ asset(notice.mainimagelanding) }}"  onerror="imgError(this)">
+		                        	</a>
+		                    </div>
                             <div class="rightimg"><img src="{{ absolute(asset('images/bgright_rightpart.png')) }}" alt="" /></div>
                             <div class="right">
-                                <div class="redtitle">{{ 'otherprofile.community_m'|trans|upper }}</div>
                                 <a href="{{path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')  })}}">
                                 	<h3>{{notice.title}}</h3>
                                 </a>
                                 <div class="clearfix"></div>
+                                <div class="otherdetail">
+                                	<div class="left" style="letter-spacing: 1px;">
+                                		{% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceCode" with { 'noticeLocLat': notice.location.latitude,'noticeLocLon': notice.location.longitude } %}
+                                	</div>
+                            	</div>
+                            	<div class="clearfix"></div>
                                 <p>{{ notice.content|truncate(130)|replace({'...': ". . ."})|raw }}</p>
 								 <div class="bottom-buttons">
                                 	<div class="comments">
@@ -121,6 +120,7 @@
                             </div>
                         </div>                        
                         {%   set i=i+1 %}
+                        {% endif %}
                      {% endfor %}
                   {% else %}
                         <h3>{{ 'regularuser.no_listing'|trans|upper }}</h3>	
@@ -147,5 +147,14 @@
     		</div>    
     		<div id="mask"></div>
     	</section>
-                   
+        	<script>
+  			 function imgError(url)
+  			 {
+  			   var img = new Image();
+  			   img.src = url;
+  			   var newsrc = $(url).attr('src');
+  			   newsrc=newsrc.replace('square_l','medium');
+			   $(url).attr('src',newsrc);	   
+  			 }
+  			</script>            
 {% endblock %}

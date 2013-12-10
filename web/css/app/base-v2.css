@@ -106,7 +106,7 @@ body {
 }
 .footer-push {
     height: 65px;
-    clear: both;
+    /*clear: both;*/
 }
 
 .container {
@@ -542,9 +542,15 @@ div.loginform-ext .sign-btn + p strong {
 }
 #account-resume.alert-success {
     color: #55A0CB;
+    font-size: 31px;
+    letter-spacing: 1px;
+    font-family: mathletebulky;
 }
 #account-resume.alert-error {
     color: #EE3B3B;
+    font-size: 31px;
+    letter-spacing: 1px;
+    font-family: mathletebulky;
 }
 #account-resume .icon-ok {
     margin-right: 6px;

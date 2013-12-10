@@ -21,14 +21,14 @@
                       <tr>
                         <td width="40%">{{ 'regularuser.profile_completion'|trans }}</td>
                         <td width="10%">{{ reputationPoints.profilePercent }}</td>
-                        <td width="10%">{{ displayUser.activity }}</td>
+                        <td width="10%">{{ reputationPoints.profile }}</td>
                         {# {{ path('fenchy_regular_user_user_myprofile_main') }} 
 						<td width="40%"><a href="{{ path('fenchy_regular_user_settings_basic') }}" class="categorylink">{{ 'regularuser.fill_my_profile_now'|trans }}</a></td> #}
                       </tr>
                       <tr>
                         <td width="40%">{{ 'regularuser.my_neighbors'|trans }}</td>
-                        <td width="10%">25%</td>
-                        <td width="10%">5</td>
+                        <td width="10%">{{ neighbourCount }}</td>
+                        <td width="10%">{{ neighbourCount * 2 }}</td>
                         {# <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.find_new_neighbours_now'|trans }}</a></td> #}
                       </tr>
                       <tr>
@@ -39,8 +39,8 @@
                       </tr>
                       <tr>
                         <td width="40%">{{ 'regularuser.neighbors_served'|trans }}</td>
-                        <td width="10%">25</td>
-                        <td width="10%">5</td>
+                        <td width="10%">{{ neighbourServed }}</td>
+                        <td width="10%">{{ neighbourServed }}</td>
                         {# <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.uptodate_your_listings_now'|trans }}</a></td> #}
                       </tr>
                       <tr>
@@ -54,8 +54,8 @@
                       
                       <tr>
                         <td width="40%">{{ 'regularuser.completed_activities'|trans }}</td>
-                        <td width="10%">{{ repBreakdown.positiveRevCount }}</td>
-                        <td width="10%">{{ reputationPoints.reviews }}</td>
+                        <td width="10%">{{ completedAcitivities }}</td>
+                        <td width="10%">{{ completedAcitivities }}</td>
                         {# <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.search_new_activity'|trans }}</a></td>  #}
                       </tr>
                       
@@ -68,36 +68,36 @@
                       
                       <tr>
                         <td width="40%">{{ 'regularuser.invited_and_registered_users'|trans }}</td>
-                        <td width="10%">{{ reputationPoints.facebook }}</td>
-                        <td width="10%">{{ reputationPoints.reviews }}</td>
+                        <td width="10%"></td>
+                        <td width="10%"></td>
                         {# <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.tell_friend_about_pollyandbob_now'|trans }}</a></td> #}
                       </tr>
                       
                       <tr>
                         <td width="40%">{{ 'regularuser.shareholder'|trans }}</td>
-                        <td width="10%">{{ repBreakdown.positiveRevCount }}</td>
-                        <td width="10%">{{ reputationPoints.reviews }}</td>
+                        <td width="10%">{% if displayUser.member %}20{% else %}0{% endif %}</td>
+                        <td width="10%">{% if displayUser.member %}20{% else %}0{% endif %}</td>
                         {# <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.become_shareholder_now'|trans }}</a></td> #}
                       </tr>
                       
                       
                       <tr>
                         <td width="40%">{{ 'regularuser.location_verified'|trans }}</td>
-                        <td width="10%">{{ repBreakdown.positiveRevCount }}</td>
-                        <td width="10%">{{ reputationPoints.reviews }}</td>
+                        <td width="10%">{% if verified %}100{% else %}0{% endif %}</td>
+                        <td width="10%">{% if verified %}100{% else %}0{% endif %}</td>
                         {# <td width="40%"><a href="#dialog2" name="modal" id="vzoom_1944" class="zoomthis categorylink">{{ 'regularuser.verify_your_location_now'|trans }}</a></td> #}
                       </tr>
                       
                       <tr>
                         <td width="40%">{{ 'regularuser.passport_verified'|trans }}</td>
-                        <td width="10%">{{ repBreakdown.positiveRevCount }}</td>
-                        <td width="10%">{{ reputationPoints.reviews }}</td>
+                        <td width="10%">{% if identity %}100{% else %}0{% endif %}</td>
+                        <td width="10%">{% if identity %}100{% else %}0{% endif %}</td>
                         {# <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.verify_your_passport_now'|trans }}</a></td>  #}
                       </tr>
                       
                     </table>
                 </div>
-                <div class="bgbottom-big">
+                <div class="bgbottom-big"  style="top: 60px; position: relative;">
             	<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
             	</div>
             </div>

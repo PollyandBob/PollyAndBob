@@ -6,17 +6,29 @@
                 font-family: Helvetica,​Arial,​Verdana,​sans-serif;
             }
             h1 {
+             	border-bottom: 1px solid;
                 margin-bottom: 5px;
-                font-size: 18px;
+                font-size: 25px;
+                font-family: mathletebulky;
             }
+            #flagwindow1 p {
+			    color: #000000;
+			    font-family: code_boldregular;
+			    font-size: 11px;
+			    letter-spacing: 1px;
+			    margin-bottom: 13px;
+			    margin-left: 2px;
+			    margin-top: 15px;
+			}
             #out {
-                background: none repeat scroll 0 0 #E8E8E8;
+                background: none repeat scroll 0 0 #FFFFFF;
                 border: 0 none;
                 border-radius: 5px 5px 5px 5px;
                 padding: 8px 14px;
                 float: left;
             }
             #desc-cont {
+            	display: none;
                 background: none repeat scroll 0 0 #FFFFFF;
                 border: 1px solid #C1C1C1;
                 border-radius: 2px 2px 2px 2px;
@@ -28,9 +40,13 @@
                 margin-bottom: 15px;
             }
             #fenchy_utilbundle_stickertype_reason label {
+            	font-family:code_boldregular;
+				font-size:11px;
                 display: inline-block;
                 float: left;
                 clear: right;
+                letter-spacing: 1px;
+                margin-left: 15px;
             }
             #desc-cont textarea {
                 padding: 5px;
@@ -39,37 +55,69 @@
                 border: none;
                 resize: none;
             }
-            #save {
-                cursor: pointer;
-                display: inline-block;
-                font-size: 14px;
-                font-weight: bold;
-                padding: 5px 25px;
-                text-align: center;
-                background-image: linear-gradient(to top, rgba(1, 1, 1, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
-                border-radius: 3px 3px 3px 3px;
-                text-align: center;
-                font-family: Helvetica,​Arial,​Verdana,​sans-serif;
-                color: #FFFFFF;
-                background-color: #149A9A;
-                border: 2px solid #0E7777;
-                float: right;
-                margin-top: 20px;
-            }
+            #save {            
+				border:0;
+				font-family:code_boldregular;
+				font-size:11px;
+				color:#fff;
+				background:#51b9d4;
+				padding:1px 8px 0px;
+				letter-spacing:1px;
+				cursor:pointer;
+	            display: inline-block;
+	            text-align: center;                
+	            float: right;
+	            margin-top: -5px;
+	        }
         </style>
+        <script type="text/javascript">
+        
+        function flagFormsubmit(obj)
+		{	
+    		 var url = $('#flagForm').attr('action');
+		     var data = $('#flagForm').serialize();
+		     $.ajax({
+		        type: "POST",
+		        url: url,
+		        data: data,
+		        beforeSend: function()
+		        {
+			        $(".ajax_loader_info").show();
+		        },
+		        success : function(response) {    	
+    		      
+		         	$(".ajax_loader_info").hide();
+		        	 	$('#flagwindow').slideToggle('fast', function() {
+		        	   });    		    		 
+		        },
+		        error: function(response) {
+    		      	//alert(response.text);  
+    		    },
+		        complete : function() {
+	  		      	//alert('xt');    					
+		    	}    		     
+		     });
+		}
+        </script>
     </head>
     <body>
-        <h1>Report</h1>
+        <h1>{{ 'util.relative.flag'|trans }}</h1>
+        <div id="flagwindow1">        
+        	<p> {{ 'util.relative.why'|trans }}</p>
+        </div>
         <div id="out">
-            <form action="{{ path('fenchy_create_'~sticker.target~'_sticker', {id: sticker.targetId}) }}" method="post" {{ form_enctype(form) }} class="student-form">
+            <form id="flagForm" action="{{ path('fenchy_create_'~sticker.target~'_sticker', {id: sticker.targetId}) }}" method="post" {{ form_enctype(form) }} class="student-form">
                 {{ form_widget(form.reason) }}
                 <div style="clear: both;"></div>
                 <div id='desc-cont'>
                     {{ form_widget(form.description) }}
                 </div>
-                <input id="save" type="submit" value="{{ 'btn.send' | trans }}"/>
                 {{ form_rest(form) }}
+                <input id="save" type="button" value="{{ 'btn.send' | trans }}" onclick="flagFormsubmit(this)" />
             </form>
         </div>
+        <div class="ajax_loader_info" style="display: none; position: absolute; margin-left: 110px;">
+			<img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
+		</div>		
     </body>
 </html>

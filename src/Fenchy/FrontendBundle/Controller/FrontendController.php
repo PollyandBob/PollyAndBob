@@ -4,6 +4,10 @@ namespace Fenchy\FrontendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Fenchy\UserBundle\Entity\User;
+use Fenchy\UserBundle\Form\UserLocationType;
+use Fenchy\RegularUserBundle\Entity\Shareholder;
+use Fenchy\RegularUserBundle\Form\ShareholderType;
 
 class FrontendController extends Controller
 {
@@ -28,18 +32,125 @@ class FrontendController extends Controller
         $notices = $noticeRepo->getDashboardNotices();
 
         
+        $user = $this->get('security.context')->getToken()->getUser();
         
-        return $this->render('FenchyFrontendBundle:Frontend:indexV2.html.twig',
-            array(
-                'locale'=>$this->getRequest()->getLocale(),
-                'notices' => $notices,
-            	'flag' => $flag,
-//             	'get' => $get,
-//             	'location' => false
-                )
-        );
+        if (!($user instanceof User)) {
+        	
+	        return $this->render('FenchyFrontendBundle:Frontend:indexV2.html.twig',
+	            array(
+	                'locale'=>$this->getRequest()->getLocale(),
+	                'notices' => $notices,
+	            	'flag' => $flag,
+	            	'get' => $get,
+	            	'location' => false
+	                )
+	        );
+        }
+        else 
+        {        	
+        	$form = $this->createForm(new UserLocationType(), $user);
+			if($user->getLocation()=="")
+			{
+				return $this->redirect($this->generateUrl('fenchy_regular_user_user_your_location'));
+			}
+		       	
+        	return $this->render('FenchyFrontendBundle:Frontend:indexV2.html.twig',
+        			array(
+        					'locale'=>$this->getRequest()->getLocale(),
+        					'notices' => $notices,
+        					'flag' => $flag,
+        					'get' => $get,
+        			)
+        	);
+        }
+    }
+    
+    public function boardofneighborAction()
+    {
+    	return $this->render('FenchyFrontendBundle:Frontend/Foot:boardofneighbor.html.twig',
+    			array('locale'=>$this->getRequest()->getLocale()));
+    }
+    
+    public function investinusAction()
+    {
+    	return $this->render('FenchyFrontendBundle:Frontend/Foot:investinus.html.twig',
+    			array('locale'=>$this->getRequest()->getLocale()));
     }
 
+    public function joinusAction()
+    {
+    	return $this->render('FenchyFrontendBundle:Frontend/Foot:joinus.html.twig',
+    			array('locale'=>$this->getRequest()->getLocale()));
+    }
+    
+    public function aboutAndImprintAction()
+    {
+    	return $this->render('FenchyFrontendBundle:Frontend/Foot:aboutAndImprint.html.twig',
+    			array('locale'=>$this->getRequest()->getLocale()));
+    }
+    
+    public function shareAction()
+    {
+    	$em = $this->getDoctrine()->getEntityManager();
+    	
+    	$form = $this->createForm(new ShareholderType());
+    	
+    	$request = $this->getRequest();
+    	
+    	if ('POST' == $request->getMethod())
+    	{
+    		$form->bindRequest($request);
+    	
+    		//if ($form->isValid())
+    		{
+    			$em = $this->getDoctrine()->getEntityManager();
+    	
+    			$shareholder = $form->getData();    	
+    			$em->persist($shareholder);
+    			$user = $this->get('security.context')->getToken()->getUser();
+    			if ( ! $user instanceof \Fenchy\UserBundle\Entity\User )
+    			{
+    				$user = $this->getDoctrine()
+    					->getRepository('UserBundle:User')->getUserByEmail($shareholder->getEmail());
+    			}
+    			if($user)
+    			{
+    				if(!$user->getMember())
+    				{
+    					$user->addActivity(20);
+    					$user->setMember(true);
+    					$em->persist($user);
+    				}    				
+    			}
+    				
+    			$em->flush();
+    			$data['total'] = $shareholder->getTotalamount();
+    			$emailNotification = \Swift_Message::newInstance()->setFrom($this->container->getParameter('from_email'), $this->container->getParameter('from_name'))->setTo($shareholder->getEmail())->setSubject($this->get('translator')->trans('regularuser.message.subject_for_buy_share_mail'))->setBody($this->renderView('FenchyRegularUserBundle:Notifications:emailShare.html.twig', $data), 'text/html');
+
+    			$mailer = $this->get('mailer');
+    			$mailer->send($emailNotification);
+    			
+    			return $this->render('FenchyFrontendBundle:Frontend/Foot:share.html.twig',
+    			array('locale'=>$this->getRequest()->getLocale(),
+    					'form' => $form->createView(),
+    					'done'=> 'Done'
+    			));
+    		}
+//     		else
+//     		{
+//     			$form_errors = $this->get('translator')
+//     			->trans('settings.flash.form_errors');
+    			 
+//     			$this->get('session')->setFlash('negative', $form_errors);
+//     		}    		
+    	}
+    	return $this->render('FenchyFrontendBundle:Frontend/Foot:share.html.twig',
+    			array('locale'=>$this->getRequest()->getLocale(),
+    					'form' => $form->createView(),
+    					'done' => 'Notdone'
+    	));
+    }
+    
     public function profileAction()
     {
         return $this->render('FenchyFrontendBundle:Frontend:profile.html.twig',
@@ -155,5 +266,4 @@ class FrontendController extends Controller
     		
     	}	
     }
-    
 }

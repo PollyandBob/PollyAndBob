@@ -35,24 +35,24 @@
                 <div class="left">
                     <div class="persen">
                     	 {%  if profilepath %}
-							<img alt="" src="{{ absolute(asset(profilepath)) }}">
+							<img alt="" src="	{{ absolute(asset(profilepath)) }}">
 						 {% else %}
 							<img alt="" src="{{ absolute(asset('images/default_profile_picture.png')) }}">
 						 {% endif %}
                         <div class="persenname">
-                        	<p style="margin-top: 8px;">{{ displayUser.name }}</p>
+                        	<p style="margin-top: 8px;">{{ displayUser.regularuser.firstname|truncate(12) }}</p>
                         </div>
-                        <div class="neighbor {{ classColor }}">
-                        	<p>{{ managertype_alpha }}</p>
+                        <div class="neighbor {{ managertype[2] }}">
+                        	<p>{{ managertype[1]|trans }}</p>
                             <span>{{ displayUser.activity }}</span>
 						</div>		                            
                     </div>
                     <div class="clearfix"></div>
-                    <div class="about-details">
+                    <div class="about-details" align="center">
                     	{% if managertype %}
-                    	<span>{{ managertype }}</span>
+                    	<span>{{ ('otherprofile.'~managertype[0])|trans }}</span>
                     	{% endif %}<br>
-                        <span>
+                        <span style="display: none;">
                         {% set varStack = displayUser.location | split(',') %}
                     	{{ varStack[0] }}
                         </span>

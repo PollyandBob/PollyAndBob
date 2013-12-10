@@ -1,18 +1,76 @@
 {# empty Twig template #}
-		
-		
+		<style>
+		.loginwindow3 li a {
+		    color: #000000;
+		    font-family: code_boldregular;
+		    font-size: 12px !important;
+		    letter-spacing: 1px;
+		}
+		.loginwindow3 li a:hover {
+			color:#51B9D4;
+		}
+		#filter-distance-slider .ui-state-hover,#filter-distance-slider .ui-state-default, #slider-range  .ui-state-hover, #slider-range .ui-slider-handle
+		{
+			border:none !important;
+		}
+		</style>
+
 		<!-- Your Selected options -->
         <div class="options">
+        
             	<h4>{{ 'notice.filter.filters'|trans }}</h4>
             	<div class="right">
                 <a href="javascript:void(0);" onclick="clearOptions();">{{ 'notice.filter.clear'|trans }}</a>
             	</div>
             	
             <div class="optionsdetail">
+            	{% if(findNeighbors == 'neighbors') %} 
+            	<a href='javascript:void(0)' id='1' onclick='selectedOptions(this)' class='blue_button selected' >{{ 'neighbors'|trans }}</a>
+            	{% endif %}
+            	{% for type in types %}
+            		{% set stype = '' %}
+            		{% if userSearchedTypes %}	
+            			{% for key,userSearchedType in userSearchedTypes %}
+            				{% if (userSearchedType == type.id) %}
+            					{% set stype = userSearchedType %}
+            				{% endif %}
+            			{% endfor %}
+            		{% endif %}		
+				  {% if ( type.name=="help" or type.name=="offerhelp" or type.name=="service" or type.name=="offerservice" or type.name=="goods" or type.name=="offergoods" ) %}
+                		{% if not findNeighbors %}
+                		<a href='javascript:void(0)' id='{{ type.id }}' onclick='selectedOptions(this)' class='blue_button {% if stype %}selected{% endif %}' >{{ type.alttext|trans }}</a>
+                  		{% endif %}
+                  {% endif %}
+                {% endfor %} 
+                {% for type in types %}
+	                	{% set stype = '' %}
+	            		{% if userSearchedTypes %}	
+	            			{% for key,userSearchedType in userSearchedTypes %}
+	            				{% if (userSearchedType == type.id) %}
+	            					{% set stype = userSearchedType %}
+	            				{% endif %}
+	            			{% endfor %}
+	            		{% endif %}
+							 {% if ( type.name=="neighbours" or type.name=="groups" or type.name=="events" or type.name=="others" ) %}
+						 		{% if not findNeighbors %}
+                					<a href='javascript:void(0)' id='{{ type.id }}' onclick='selectedOptions(this)' class='blue_button {% if stype %}selected{% endif %}' >{{ type.alttext|trans }}</a>
+                  				{% endif %}
+			                 {% endif %}
+			                 {% if type.name=="offergroups" %}
+							 	<a href='javascript:void(0)' id='{{ type.id }}' class='blue_button {% if stype %}selected{% endif %}' style="display:none;">{{ type.alttext|trans }}</a>
+							 {% endif %}
+							 {% if type.name=="offerevents" %}
+							 	<a href='javascript:void(0)' id='{{ type.id }}' class='blue_button {% if stype %}selected{% endif %}' style="display:none;">{{ type.alttext|trans }}</a>
+							 {% endif %}
+							 {% if type.name=="offerothers" %}
+							 	<a href='javascript:void(0)' id='{{ type.id }}' class='blue_button {% if stype %}selected{% endif %}' style="display:none;">{{ type.alttext|trans }}</a>
+							 {% endif %}
+				{% endfor %}				  							
 				<!-- selected options -->
-			</div>
+				
+		   </div>            
 		   <div class="clearfix"></div>
-		   <div class="selectoptions" style="float: right; width:auto;">
+		   <div class="selectoptions" style="float: right; width:auto;" >
            		   <div class="selectoptions" id="reviews">{{ 'notice.filter.select_options'|trans }}</div>
                    <div class="reviewdetial" id="reviewdetail" style="display: none;">
                    		<div class="selectoptionsopen">{{ 'notice.filter.select_options'|trans }}</div>                                    		
@@ -45,8 +103,8 @@
 		                        </div>
 		                        
 								{% endfor %}
-		                        
-		                        <a href="javascript:void(0)" id="option_button" onclick="selectedOptions(this);" class="blue_button">Select</a>
+		                        <a href="javascript:void(0)" id="option_button" onclick="selectedOptions(this);" style="width: 42px; float: left;" class="blue_button">Select</a>
+		                        <a href="javascript:void(0)" id="option_button_all" onclick="selectedOptions(this);" class="blue_button">Select All</a>
 				   </div>
 			
 			</div>
@@ -103,7 +161,7 @@
         
         <!-- My Neighbours -->
         <div class="myneighbours">
-                	<h4>My neighbours</h4>
+                	<h4>{{ 'regularuser.my_neighbours'|trans }}</h4>
                 	
                     <div class="neighboursdetils">
                     	{% render "FenchyNoticeBundle:GlobalFilter:myNeighborsCode" with { 'userId': displayUser.id } %}

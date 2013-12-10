@@ -102,40 +102,44 @@
            	<div id="group-profile">
                 <div class="leftside">
                     <!-- <h4>{{ 'regularuser.about'|trans|upper }}</h4> -->
-                    	<div {% if(usergroup.user.id == displayUser.id) %} style="display:block;"{% else %}style="display:none;"{% endif %}>
+                    	<div {% if(usergroup.user.id == displayUser.id or adminmember1==1) %} style="display:block;"{% else %}style="display:none;"{% endif %}>
 	                    <form action="{{ path('fenchy_regular_user_user_groupprofile_groupmembers', {'groupId': groupId}) }}" method="post">	
+							<div class="persen">
+				               		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': usergroup.user.id } %}
+			                        <div class="persenname">
+			                        	<p>{{ usergroup.user.regularuser.firstname }}</p>
+									</div>
+									<div class="neighbor {{ adminManagertype[2] }}">
+			                        	<p>{{ adminManagertype[1] }}</p>
+			                            <span>{{ usergroup.user.activity }}</span>
+									</div>		                            
+			                </div>
+			                {% set i=0 %}
 							{% for groupmember in groupmembers %}
 				               <div class="persen">
 				               		<input type="checkbox" name="selected_members[]" value="{{ groupmember.neighbor.id }}">
-			                    	{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': groupmember.neighbor.id } %}
+			                    	<a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice') }}/{{ groupmember.neighbor.id }}" class="my_neighbour">
+									{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': groupmember.neighbor.id } %}
 			                        <div class="persenname">
 			                        	<p>{{ groupmember.neighbor.name }}</p>
 									</div>
-									{% if(groupmember.neighbor.activity >= 400 and groupmember.neighbor.activity < 1000 ) %}
-				                    	{% set managertype_alpha="C" %}
-				                    	{% set classColor="green" %}
-				                    {% elseif(groupmember.neighbor.activity >= 1000 ) %}
-				                    	{% set managertype_alpha="N" %}
-				                    	{% set classColor="orange" %}
-				                    {% elseif(groupmember.neighbor.managertype == 1) %}
-				                    	{% set managertype_alpha="H" %}
-				                    	{% set classColor="blue" %}
-				                    {% else %}
-				                    	{% set managertype_alpha="" %}
-				                    	{% set classColor="red" %}
-				                    {% endif %}
-			                        <div class="neighbor {{ classColor }}">
-			                        	<p>{{ managertype_alpha }}</p>
-			                            <span>{{ groupmember.neighbor.activity }}</span>
-									</div>		                            
+			                        <div class="neighbor {{ managertype[i][2] }}">
+                        				<p>{{ managertype[i][1] }}</p>
+                            			<span>{{ groupmember.neighbor.activity }}</span>
+									</div>
+									</a>			                            
 			                    </div>
+			                    {% set i = i+1 %}
 	                    	{% endfor %}
 	                    	<div class="clearfix"></div>
 	                    	<div style="float: right;margin-top: 45px;">
 		                    	
 			                    	<select name="select_action" style="float:left;margin-right: 22px;">
+			                    		{% if adminmember1!=1 %}
 			                    		<option value="admin" >{{ 'regularuser.make_administrator'|trans }}</option>
-			                    		<option value="remove" >{{ 'regularuser.remove'|trans }}</option>
+			                    		<option value="remove" >{{ 'regularuser.remove_members'|trans }}</option>
+			                    		<option value="remove_admin" >{{ 'regularuser.remove_admin'|trans }}</option>
+			                    		{% endif %}
 			                    		<option value="send_message" >{{ 'regularuser.send_new_message'|trans }}</option>
 			                    	</select>
 			                    	
@@ -145,42 +149,40 @@
 	                    </form>	
           				</div>
           				
-          				<div {% if(usergroup.user.id == displayUser.id) %} style="display:none;" {% else %}style="display:block;" {% endif  %}>
+          				<div {% if(usergroup.user.id == displayUser.id or adminmember1==1) %} style="display:none;" {% else %}style="display:block;" {% endif  %}>
           						<br>
+          						{% set i=0 %}
+          						<div class="persen">
+				               		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': usergroup.user.id } %}
+			                        <div class="persenname">
+			                        	<p>{{ usergroup.user.regularuser.firstname }}</p>
+									</div>
+									<div class="neighbor {{ adminManagertype[2] }}">
+			                        	<p>{{ adminManagertype[1] }}</p>
+			                            <span>{{ usergroup.user.activity }}</span>
+									</div>		                            
+			                	</div>
 								{% for groupmember in groupmembers %}
-				               <div class="persen">
-			                    	{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': groupmember.neighbor.id } %}
+				               	<div class="persen">
+			                    	<a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice') }}/{{ groupmember.neighbor.id }}" class="my_neighbour">
+									{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': groupmember.neighbor.id } %}
 			                        <div class="persenname">
 			                        	<p>{{ groupmember.neighbor.name }}</p>
 									</div>
-									{% if(groupmember.neighbor.activity >= 400 and groupmember.neighbor.activity < 1000 ) %}
-				                    	{% set managertype_alpha="C" %}
-				                    	{% set classColor="green" %}
-				                    {% elseif(groupmember.neighbor.activity >= 1000 ) %}
-				                    	{% set managertype_alpha="N" %}
-				                    	{% set classColor="orange" %}
-				                    {% elseif(groupmember.neighbor.managertype == 1) %}
-				                    	{% set managertype_alpha="H" %}
-				                    	{% set classColor="blue" %}
-				                    {% else %}
-				                    	{% set managertype_alpha="" %}
-				                    	{% set classColor="red" %}
-				                    {% endif %}
-			                        <div class="neighbor {{ classColor }}">
-			                        	<p>{{ managertype_alpha }}</p>
-			                            <span>{{ groupmember.neighbor.activity }}</span>
-									</div>		                            
+			                        <div class="neighbor {{ managertype[i][2] }}">
+                        				<p>{{ managertype[i][1] }}</p>
+                            			<span>{{ groupmember.neighbor.activity }}</span>
+									</div>
+									</a>			                            
 			                    </div>
-	                    	{% endfor %}
-									<br>
+			                    {% set i = i+1 %}
+	                    		{% endfor %}
+								<br>
 							
           				</div>
           				
           			{% set count = groupmembers|length %}	
-          			<div class="no_members" {% if count == 0 %} style="text-align: center; display: block;" {% endif %}}>
-          				<h4>{{ 'regularuser.there_no_members'|trans }}</h4>
-          			</div>	
-                    <div class="clearfix"></div>
+          			<div class="clearfix"></div>
                     
                 </div>
                 {% render 'FenchyRegularUserBundle:Groupprofile:groupLeftSidebar' with { 'groupId' : groupId } %}

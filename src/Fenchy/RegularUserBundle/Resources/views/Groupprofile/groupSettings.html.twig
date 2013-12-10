@@ -32,32 +32,28 @@
         ko.applyBindings(userSettingsViewModel, document.getElementsByTagName('body')[0]);
 
         autocomplete = new GApiAutocomplete(
-                document.getElementById('fenchy_userbundle_user_locationtype_location_location'),
+                document.getElementById('fenchy_regularuserbundle_usergroup_locationtype_location_location'),
                 userSettingsViewModel);
 
 
     });
     function hasCoordinates()
     {
-    	{% if app.user.hasRequiredLocation %}
-        	return true;
-        {% endif %}
-
         return false;
     }
 
     function getLatitude()
     {
-        return '{{ app.user.location.latitude }}'
+        return '{{ usergroup.location.latitude }}'
     }
 
     function getLongitude()
     {
-        return '{{ app.user.location.longitude }}';
+        return '{{ usergroup.location.longitude }}';
     }
     </script>
     
-    <script src="{{ asset('js/geolocalization.js') }}"></script>
+    <script src="{{ asset('js/geolocalizationUsergroup.js') }}"></script>
     <script type="text/javascript">
     $(document).ready(function() {
         initialize();
@@ -91,11 +87,11 @@
 {% endblock %}
 
 {% block content %}
-	{% render 'FenchyRegularUserBundle:Myprofile:myAvatar' %}
+	{% render 'FenchyRegularUserBundle:Groupprofile:groupAvatar' with { 'groupId' : groupId } %}
 	{% render 'FenchyRegularUserBundle:Groupprofile:groupmenu' with { 'groupId' : groupId } %}
 		
 		<div class="mylocation">
-	    	<form action="{{ path('fenchy_regular_user_user_myprofile_mylocation') }}" method="post" {{ form_enctype(form) }} class="form-settings location">
+	    	<form action="{{ path('fenchy_regular_user_user_groupprofile_groupsettings',{'groupId': groupId }) }}" method="post" {{ form_enctype(form) }} class="form-settings location">
           	
 				{{ form_row(form.location.location) }}
                 <span>or</span>
@@ -106,8 +102,7 @@
 	            </div>
 		        <input type="submit" id="continue" class="blue_button" value="{{ 'btn.save'|trans }}"/>
 	      	</form>
-	        <a href="#dialog2" name="modal" id="vzoom_1944" class="zoomthis button" href="javascript:void();">{{ 'regularuser.verify_this_location'|trans }}</a>
-            <div class="clearfix"></div>
+	        <div class="clearfix"></div>
 	        <div class="map">
 		    	<div id="map_canvas"></div>
 		    </div>

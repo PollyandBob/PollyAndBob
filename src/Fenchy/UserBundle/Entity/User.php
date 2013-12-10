@@ -63,11 +63,24 @@ class User extends BaseUser
      */
     protected $managertype;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="member", type="boolean", nullable=true)
+     */
+    protected $member;
+    
     /** 
      * @var string
      * @ORM\Column(type="string", nullable=true)
      */
     protected $twitterID;
+    
+    /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $typesID;
 
     /** 
      * @var string
@@ -134,17 +147,10 @@ class User extends BaseUser
     private $notifications;
     
     /**
-     * @var ArrayCollection $user
-     *
-     * @ORM\ManyToMany(targetEntity="Fenchy\RegularUserBundle\Entity\UserGroup", mappedBy="members")
-     */
-    private $user;
-    
-    /**
      * Logged users Neighbor
      * @var ArrayCollection $members
      *
-     * @ORM\OneToMany(targetEntity="Fenchy\RegularUserBundle\Entity\GroupMembers", mappedBy="neighbor", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Fenchy\RegularUserBundle\Entity\GroupMembers", mappedBy="neighbor", cascade={"remove", "persist"})
      * @ORM\OrderBy({"created_at"="DESC"})
      */
     private $members;
@@ -416,6 +422,26 @@ class User extends BaseUser
     public function getTwitterID()
     {
         return $this->twitterID;
+    }
+    
+    /**
+     * Set typesID
+     *
+     * @param string $typesID
+     */
+    public function setTypesID($typesID)
+    {
+    	$this->typesID = $typesID;
+    }
+    
+    /**
+     * Get typesID
+     *
+     * @return string
+     */
+    public function getTypesID()
+    {
+    	return $this->typesID;
     }
 
     /**
@@ -1828,5 +1854,51 @@ class User extends BaseUser
     public function removeMyNeighbor(\Fenchy\RegularUserBundle\Entity\Neighbors $myNeighbor)
     {
         $this->myNeighbor->removeElement($myNeighbor);
+    }
+
+    /**
+     * Set member
+     *
+     * @param boolean $member
+     * @return User
+     */
+    public function setMember($member)
+    {
+        $this->member = $member;
+    
+        return $this;
+    }
+
+    /**
+     * Get member
+     *
+     * @return boolean 
+     */
+    public function getMember()
+    {
+        return $this->member;
+    }
+
+    /**
+     * Add members
+     *
+     * @param Fenchy\RegularUserBundle\Entity\GroupMembers $members
+     * @return User
+     */
+    public function addMember(\Fenchy\RegularUserBundle\Entity\GroupMembers $members)
+    {
+        $this->members[] = $members;
+    
+        return $this;
+    }
+
+    /**
+     * Remove members
+     *
+     * @param Fenchy\RegularUserBundle\Entity\GroupMembers $members
+     */
+    public function removeMember(\Fenchy\RegularUserBundle\Entity\GroupMembers $members)
+    {
+        $this->members->removeElement($members);
     }
 }

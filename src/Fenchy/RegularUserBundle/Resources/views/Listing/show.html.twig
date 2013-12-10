@@ -32,7 +32,7 @@
 
         $(document).ready(function() {
             $('#description-area').tinyscrollbar();
-            $('.add-sticker').fancybox({type:'iframe'});
+            //$('.add-sticker').fancybox({type:'iframe'});
             $('#tags').tagit({
                 readOnly: true
             });
@@ -108,6 +108,8 @@
 		                {noticeId: noticeId, text: text}, 
 		            function(response){
 		                $('.commentdata').html(response.success);
+		                $('#commenttext').val('');
+		                $('#commenttext').blur();
 
 		    }, "json");    
 		}
@@ -135,7 +137,7 @@
 		{{ notice.title }}
 	</div>
 	{% if app.user.id is defined and app.user.id != notice.user.id %}
-      	<a class="blue-button add-sticker" style="float: right; margin: 20px; position: relative; z-index: 100;" href="{{ url('fenchy_create_notice_sticker', {id: notice.id}) }}">{{ 'notice.flag'|trans  }}</a>
+      	<a href="javascript:void(0);" class="add-sticker" style="float: right; margin: 20px; background: none repeat scroll 0px 0px rgb(81, 185, 212); color: rgb(255, 255, 255); font-size: 13px; z-index: 100; position: relative; padding: 0px 7px;">{{ 'notice.flag'|trans  }}</a>
     {% endif %}  
       	    
    	<div class="post-content">
@@ -169,7 +171,9 @@
 		            </div>
 		            <div class="optionsdetail" id="tab">
 			        	<a id="desc" style="border-radius: 0 15px 0 0; margin: 0;" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('desc','descdata')">{{ 'listing.show.description'|trans }}</a>
+			        	{% if initialReviews %}
 			        	<a id="review" style="border-radius: 0 15px 0 0; margin: 0;" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('review','reviewdata')">{{ 'listing.show.reviews'|trans }}</a>
+			        	{% endif %}
 			        	<!--<a id="writereview" style="border-radius: 0 15px 0 0; margin: 0;" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('writereview','writereviewdata')">{{ 'listing.show.reviews'|trans }}</a>-->
 			        	
 			        </div>
@@ -177,16 +181,22 @@
 			            <div class="descdata">		            	
 			             	{{ notice.content }}
 			            </div>
-			            <div class="reviewdata">		            	
+			            <div class="reviewdata">
+			            	{% set i=0 %}		            	
 							{% for initialReview in initialReviews %}
 				                {% if initialReview %}
 				               		<div class="data">                                      	 
 					              		<a href="{{ initialReview['author']['profileUrl'] }}">
 					               			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialReview['author']['id'] } %}
 					               		</a>
+					               		<div class="neighbor {{ reviewManagertype[i][2] }}">
+											<p>{{ reviewManagertype[i][1] }}</p>
+											<span>{{ initialReview['author']['activity'] }}</span>
+										</div> 
 					               		<p>{{ initialReview['text'] }}</p>
 					               	</div>
 				               	{% endif %}
+				               	{% set i = i+1 %}
 			                {% endfor %}
 			            </div>
 			                 {% include 'FenchyRegularUserBundle:Partials:listingReviews.html.twig' %}
@@ -198,22 +208,32 @@
  						{% if app.user.id is defined %}
 			            	<a href="javascript:void(0);" style="margin-top: 15px; position: absolute;">
 					        	{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': userLoggedIn.id } %}
-					        </a>	
-			            	<div class="descdata" style="margin-left: 34px; width: 89% !important;">
+					        </a>
+					        <div class="neighbor {{ managertypeLoggedIn[2] }}" style="margin-top: 7px;">
+								<p style="color: #FFFFFF !important; font-size: 11px; margin-left: 9px; margin-top: 5px; position: absolute;">{{ managertypeLoggedIn[1] }}</p>
+								<span style="margin-top: 13px;">{{ userLoggedIn.activity }}</span>
+							</div> 
+			            	<div class="descdata" style="margin-left: 65px; width: 83% ! important; margin-top: 10px;">
 					         	<p><input id="commenttext" style="width: 80%" type="textarea" placeholder="{{ 'regularuser.post_comment'|trans }}"/></p>
 					        </div>
 					        <input style="float: right; margin-left: 16px; margin-top: -42px; position: relative; cursor: pointer;" class="blue_button" type="button" value="POST" onclick="postComment();"/>
 					        
 					    {% endif %}
+					    {% set i = 0 %}
 						{% for initialComment in initialComments %}
 			                {% if initialComment %}
-			               		<div class="data">                                      	 
+			               		<div class="data">
 				              		<a href="{{ initialComment['author']['profileUrl'] }}">
 				               			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialComment['author']['id'] } %}
 				               		</a>
-				               		<p>{{ initialComment['text'] }}</p>
+				               		<div class="neighbor {{ commentManagertype[i][2] }}">
+											<p>{{ commentManagertype[i][1] }}</p>
+											<span>{{ initialComment['author']['activity'] }}</span>
+									</div> 
+				               		<p>{{ initialComment['text']|nl2br }}</p>
 				               	</div>
 			               	{% endif %}
+			               	{% set i = i+1 %}
 		                {% endfor %}
 		            </div>
 				</div>
@@ -225,4 +245,19 @@
     <div class="clearfix"></div>
     </div>
     </section>
+    {% if app.user.id is defined and app.user.id != notice.user.id %}
+	<div id="flagwindow" class="flagwindow">
+		<img class="iconarrow" src="{{ asset('images/icon_arrow.png') }}" alt="" />
+		{% render 'FenchyUtilBundle:Sticker:noticeSticker' with {'id': notice.id} %}
+	</div>
+	{% endif %}
+	<script type="text/javascript">
+	$(function() {
+		$('.add-sticker').click(function(event) {
+			  event.preventDefault();
+				  $('#flagwindow').slideToggle('fast', function() {
+			  });
+		});
+	});
+	</script>
 {% endblock %}

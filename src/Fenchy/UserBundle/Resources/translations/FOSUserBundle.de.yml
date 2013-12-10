@@ -1,149 +1,131 @@
-group:
-  edit:
-    submit: Gruppe ändern
-
-  show:
-    name: Gruppenname
-
-  new:
-    submit: Gruppe erstellen
-
-  flash:
-    updated: Die Gruppe wurde geändert.
-
-    created: Die Gruppe wurde erstellt.
-
-    deleted: Die Gruppe wurde gelöscht.
-"Bad credentials": Die E-Mail-Adresse und/oder das Passwort waren leider nicht korrekt.
+"Bad credentials": E-mail oder Passwort inkorrekt
 security:
   login:
-    username: "E-Mail:"
+    username: "Email:"
 
     password: "Passwort:"
 
-    remember_me: Zugangsdaten speichern
+    remember_me: Passwort speichern
 
     submit: Login
 profile:
   show:
     username: Nutzername
 
-    email: E-Mail-Adresse
+    email: E-mail
 
   edit:
-    submit: Bearbeiten
+    submit: Aktualisierung
 
   flash:
-    updated: Das Profil wurde geändert.
+    updated: Dein Profil wurde erfolgreich aktualisiert.
 change_password:
-  submit: Passwort ändern
+  submit: Passwort ändern. 
 
   flash:
-    success: Super! Das Passwort wurde geändert.
+    success: Das Passwort wurde erfolgreich geändert.
 registration:
-  check_email: An %email% wurde eine E-Mail mit einem Aktivierungslink versendet.
+  check_email: Wir haben dir eine E-mail mit dem Aktivierungslink an %email% geschickt.
 
-  confirmed: Glückwunsch %username%, dein Account wurde aktiviert.
+  confirmed: Herzlichen Glückwunsch %username%, dein Profil ist nun aktiv.
 
-  back: Zurück zur vorherigen Seite.
+  back: zurück
 
   submit: Registrieren
 
   flash:
-    user_created: Super! Dein Account wurde erstellt.
+    user_created: xxxxuser created successfully.
 
   email:
-    subject: Willkommen %username%!
+    subject: Schließe deine Registrierung ab.
 
     message:
-      1: Schließe deine Registrierung bei Fenchy ab.
+      1: Registrierung abschließen.
 
       button: Registrierung abschließen
 
       3:
-        html: "Wenn dieser Button nicht funktioniert, kopiere einfach diesen Link in die Adresszeile deines Browsers."
+        html: Wenn dieser link nicht funktioniert, kopiere ihn in deinen Browser.
 
-        txt: "Wenn dieser Button nicht funktioniert, kopiere einfach diesen Link in die Adresszeile deines Browsers."
+        txt: "Wenn dieser link nicht funktioniert, kopiere ihn in deinen Browser."
 
-      4: Du hast uns nicht gebeten, dich bei Fenchy zu registrieren? Dann ignoriere bitte diese E-Mail. Vermutlich hat jemand versehentlich deine E-Mail-Adresse verwendet.
+      4: xxxnot registered?.
 resetting:
-  password_already_requested: The password for this user has already been requested within the last 24 hours.
+  password_already_requested: xxx 24 hours .
 
-  check_email: An %email% wurde eine E-Mail versendet. Klicke einfach auf den in der E-Mail enthaltenen Link um dein Passwort zu ändern.
+  check_email: fffyyyddd.
 
   request:
-    invalid_username: Diese E-Mail-Adresse wurde bei uns nicht registriert.
+    invalid_username: ddds email not existend.
 
-    username: "E-Mail"
+    username: "E-mail"
 
-    submit: Zurücksetzen
+    submit: Reset
 
   reset:
-    submit: Senden
+    submit: zurücksetzen
 
   flash:
-    success: Super! Dein Passwort wurde geändert.
+    success: Das Passwort wurde erfolgreich geändert....zurückgesetzt?.
 
   email:
-    subject: Passwort ändern
+    subject: Passwort zurücksetzten. Xxxx
 
   message:
-    1: Hallo %username%,
+    1: Hi %username%,
 
-    2: "um dein Fenchy Passwort zu ändern, klicke einfach auf folgenden Link:"
+    2: a
 
-    3: Du hast uns nicht gebeten, dein Passwort zu ändern? Dann ignoriere bitte diese E-Mail.
+    3: b.
 
-    4: Vermutlich hat jemand versehentlich deine E-Mail-Adresse verwendet.
+    4: c.
 
-    5: Vielen Dank!
+    5: d,
 
-    6: Dein Fenchy-Team
+    6: Dein Polly & Bob team
 email:
   message:
-    help: Benötigst du Hilfe? Schreibe eine E-Mail an julia at fenchy.com
+    help: Du brauchst Hilfe? Schreibe eine E-mail an volker@pollyandbob.com
 
-    address: Fenchy GmbH, Marchlewskistr. 16, D-10243 Berlin
+    address: Polly & Bob
 layout:
   logout: Abmelden
 
-  login: Anmelden
+  login: Login
 
   register: Registrieren
 
-  logged_in_as: Angemeldet als %username%
+  logged_in_as: Eingeloggt als %username%
 form:
-  group_name: "Gruppen-Name:"
+  group_name: "Gruppen Titel:"
 
   username: "Nutzername:"
 
-  email: "E-Mail:"
-
   current_password: "Aktuelles Passwort:"
 
-  password: "Passwort:"
+  password: "Neues Passwort:"
 
-  password_confirmation: "Bitte wiederhole dein Passwort:"
+  password_confirmation: "Passwort Wiederholung:"
 
   new_password: "Neues Passwort"
 
-  new_password_confirmation: "Bitte bestätige dein neues Passwort"
+  new_password_confirmation: "Bestätigen"
 
   validation:
-    invalid_password: Das Passwort ist ungültig
+    invalid_password: Das Passwort ist ungültig.
 
-    invalid_password2: Die Bestätigung deines Passworts ist ungültig.
+    invalid_password2: Die Passwortwiederholung ist ungültig.
 
-    invalid_pass_match: Die Passwörter stimmen nicht miteinander überein.
+    invalid_pass_match: Die Passwörte stimmen nicht überein.
 
-    invalid_email: Die angegeben E-Mail-Adresse ist ungültig.
+    invalid_email: Die E-mail ist ungültig.
 invitation:
   email:
     button_name: "Akzeptieren"
 
     message:
-      1: "%username% nutzt Fenchy und möchte dich zu Fenchy einladen. Fenchy ist ein lokales Vertrauensnetzwerk, das dir hilft, dich mit deiner Nachbarschaft zu verbinden. Nutzer von Fenchy können ganz einfach Aktivitäten, Veranstaltungen oder nützliche Dinge mit ihren Nachbarn teilen."
+      1: "%username% has been using Polly & Bob and aksa you to join. Polly & Bob is a neighborhood network that connects you with your neighborhood. It helps you finding the right people, their events, services and useful goods near you."
 
-      2: Wenn du keine weiteren Nachrichten von Fenchy erhalten möchtest, kannst du dich hier
+      2: Wenn du keine E-mails mehr von Polly & Bob bekommen möchtest, kannst du dich hier 
 
       3: abmelden.

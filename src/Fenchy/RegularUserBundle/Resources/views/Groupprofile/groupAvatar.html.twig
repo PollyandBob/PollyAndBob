@@ -68,16 +68,16 @@
                     </div>
                     <div class="clearfix"></div>
                     
-                    <div class="about-details">
+                    <div class="about-details" align="center">
                     	<span>{{ usergroup.groupname }}</span><br>
-                        <span>{% set varStack = displayUser.location | split(',') %}
+                        <span>{% set varStack = usergroup.location | split(',') %}
                     	{{ varStack[0] }}</span>
                     </div>
                     <div class="clearfix"></div>
                 </div>
                <div class="right">                	
                 		<a href="javascript:void(0);" class="">
-                		{% if(usergroup.user.id == displayUser.id) %}
+                		{% if(usergroup.user.id == displayUser.id or adminmember==1 ) %}
                 			{{ 'regularuser.you_are_admin'|trans }}
                 		{% elseif(groupMember) %}
                 			{{ 'regularuser.you_are_member'|trans }}

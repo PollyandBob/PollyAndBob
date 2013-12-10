@@ -1,12 +1,13 @@
 {# empty Twig template #}
     <section id="toplinks">
        		<div class="left">	
-             <a href="{{path('fenchy_frontend_indexv2')}}"><img width="61" src="{{ absolute(asset('images/logo.png')) }}" alt="Polly&Bob"/></a>
+             <!-- <a href="{{path('fenchy_frontend_indexv2')}}"><img width="61" src="{{ absolute(asset('images/logo.png')) }}" alt="Polly&Bob"/></a>-->
+             <a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis signup"><img width="61" src="{{ absolute(asset('images/logo.png')) }}" alt="Polly&Bob"/></a>
             </div>
             <div class="right">
                 {% if not is_granted('ROLE_USER') %}
                 <ul>
-                	<li id="login">
+                	<li id="login"><!-- changed Id of li -->
                 		<a href="#" class="login">{{'frontend.sign_in'|trans}}</a>
                 		{% if not is_granted('ROLE_USER') %}
 		                <div class="loginwindow">
@@ -36,6 +37,7 @@
 {#                 </ul>#}
                 {% else %}
                     {% render 'UserBundle:Widgets:userPanel' %}
+                    
                 {% endif %}
 {#                 <aside>#}
 {#                     <div class="button green-button create-listing">#}

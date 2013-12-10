@@ -120,4 +120,86 @@ class UserRegularRepository extends EntityRepository
                 ->getQuery()
                 ->getOneOrNullResult();
     }
+    
+    public function getManagerType(User $user)
+    {
+    	
+    	$users = $this->createQueryBuilder('ru')
+		    	->select('ru, u')
+		    	->join('ru.user', 'u')
+		    	->getQuery()
+                ->getResult();
+    	
+    	$location = $user->getLocation();
+    	$lat = $location->getLongitude();
+    	$log = $location->getLatitude();
+    	 
+    	$users = array();
+    	$distanceArray = array();
+    	$count = 0;
+    	if($users)
+    	{
+    		foreach ($users as $u)
+    		{
+    			$location = $u->getLocation();
+    			$lat2 = $location->getLongitude();
+    			$log2 = $location->getLatitude();
+    	
+    			$theta = $log - $log2;
+    			// Find the Great Circle distance
+    			$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+    			$distance = $distance * 60 * 1.1515;
+    			$distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+    	
+    			if($u->getId() != $user->getId())
+    			{
+    				if($distance < 30000 && $distance > 0)
+    				{
+    					$count++;
+    				}
+    			}
+    		}   		
+    	}
+    	
+    	$managertype = "";
+    	$managertype_alpha = " ";
+    	$classColor = "red";
+    	
+    	if($count < 500 && $user->getActivity() < 400 && $user->getManagertype()!=1)
+    	{
+    		$managertype = "pioneer";
+    		$managertype_alpha = " ";
+    		$classColor = "violet";
+    	}
+    	else if($user->getActivity() >= 400 && $user->getActivity() < 1000)
+    	{
+    		$managertype = "community_m";
+    		$managertype_alpha = "C";
+    		$classColor = "green";
+    	}
+    	elseif($user->getActivity() >= 1000)
+    	{
+    		$managertype = "neighbor";
+    		$managertype_alpha = "N";
+    		$classColor = "orange";
+    	}
+    	elseif($user->getManagerType()==1)
+    	{
+    		$managertype = "house_m";
+    		$managertype_alpha = "H";
+    		$classColor = "blue";
+    	}
+    	else
+    	{
+    		$managertype = "";
+    		$managertype_alpha = " ";
+    		$classColor = "red";
+    	}
+    	$managertype_array = array();
+    	$managertype_array[0] = $managertype;
+    	$managertype_array[1] = $managertype_alpha;
+    	$managertype_array[2] = $classColor;
+    	
+    	return $managertype_array;
+    }
 }

@@ -45,6 +45,11 @@ class IdentityVerification
 	private $status;
 	
 	/**
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	private $activitypoint;
+	
+	/**
 	 * @var DateTime
 	 *
 	 * @ORM\Column(type="datetime", nullable=true)
@@ -157,5 +162,28 @@ class IdentityVerification
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set activitypoint
+     *
+     * @param integer $activitypoint
+     * @return IdentityVerification
+     */
+    public function setActivitypoint($activitypoint)
+    {
+        $this->activitypoint = $activitypoint;
+    
+        return $this;
+    }
+
+    /**
+     * Get activitypoint
+     *
+     * @return integer 
+     */
+    public function getActivitypoint()
+    {
+        return $this->activitypoint;
     }
 }

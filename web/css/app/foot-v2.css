@@ -97,8 +97,8 @@ footer.main .social-lang ul li.tt a:hover {
     transition: none;
 }
 li.active #lang-menu-chosen {
-    background-color: #E14F45;
-    /*background-image: url(/images/site/globe_icon.png);
+    /*background-color: #E14F45;
+    background-image: url(/images/site/globe_icon.png);
     background-repeat: no-repeat;
     background-position: 13px 6px;*/    
     -webkit-border-radius: 0 0 3px 3px;
@@ -106,7 +106,7 @@ li.active #lang-menu-chosen {
     border-radius: 0 0 3px 3px;
    	position: relative;    
     width: 82px;
-   
+    background: #333333;
 }
 .ie8 li #lang-menu-chosen {
     /*background-color: rgba(14,119,119,0);
@@ -125,20 +125,19 @@ li.active #lang-menu-chosen {
     color: #ffffff;
 }
 #lang-menu-wrapper {
-    -webkit-box-shadow: 0px 0px 3px rgba(2, 2, 2, 0.4);
-    -moz-box-shadow:    0px 0px 3px rgba(2, 2, 2, 0.4);
-    box-shadow:         0px 0px 3px rgba(2, 2, 2, 0.4);
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    background: none repeat scroll 0 0 #E14F45;
-    border-radius: 3px;
+    -webkit-box-shadow: 0px 0px 0px rgba(2, 2, 2, 0.4);
+    -moz-box-shadow:    0px 0px 0px rgba(2, 2, 2, 0.4);
+    box-shadow:         0px 0px 0px rgba(2, 2, 2, 0.4);
+    background: none repeat scroll 0 0 #333;
     display: none;
+    color: #51B9D4;
     position: absolute;
     width: 80px;
-    padding: 0px 18px 0 15px;
+    padding: 6px 18px 0 15px;
     margin-left: 879px;
-    margin-top: -45px;
+    margin-top: -24px;
     behavior: url(/plugins/pie.php);
+    left: 190px !important;
 }
 div.social-lang li.active a:hover,
 div.social-lang li.active, 
@@ -169,7 +168,7 @@ div.social-lang li.active i{
     -moz-border-radius: 3px 3px 3px 3px;    
     behavior: url(/plugins/pie.php);
     border-radius: 3px 3px 3px 3px;
-    color: #FFFFFF;
+    color: #51B9D4;
     display: block;
     padding: 7px 5px 10px 25px;
     width: 81px;
@@ -177,7 +176,8 @@ div.social-lang li.active i{
 }
 
 #lang-menu-wrapper li a:hover {
-    background: #51B9D4;
+    /*background: #51B9D4;*/
     -pie-background: #51B9D4;
+    color: #FFFFFF !important;
     behavior: url(/plugins/pie.php);
 }

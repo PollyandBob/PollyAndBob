@@ -175,8 +175,13 @@ class ProfileController extends Controller
     }
 
     public function chooseLanguageAction($locale) {
-        $rresponse = new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
-
+        //$rresponse = new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
+	    if ($this->get('session')->has('currenturl')) {
+	    	$rresponse = new RedirectResponse(($this->get('session')->get('currenturl')));
+		}
+		else {
+			$rresponse = new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
+		} 
         if ( in_array($locale, array( 'pl', 'en', 'de' ))) {
             $this->get('session')->set('locale',$locale);
             if ($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {

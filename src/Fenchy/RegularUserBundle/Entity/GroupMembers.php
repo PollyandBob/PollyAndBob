@@ -43,6 +43,28 @@ class GroupMembers
     private $neighbor;
     
     /**
+     * @ORM\Column(name="admin" , type="integer", nullable=true)
+     * 
+     */
+    public $admin;
+    
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $created_at;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    	$this->admin = false;
+    	$this->created_at   = new \DateTime();
+    }
+    
+    /**
      * @return integer
      */
     public function getId() {
@@ -59,6 +81,16 @@ class GroupMembers
     	$this->id = $id;
     
     	return $this;
+    }
+    
+    public function setAdmin($true)
+    {
+    	return $this->admin = $true;	
+    }
+    
+    public function getAdmin()
+    {
+    	return $this->admin;
     }
     
     /**
@@ -103,4 +135,27 @@ class GroupMembers
     	return $this;
     }
     
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return GroupMembers
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
 }

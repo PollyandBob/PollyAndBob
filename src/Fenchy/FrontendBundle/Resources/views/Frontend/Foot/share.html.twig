@@ -1,0 +1,145 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+     <script type="text/javascript"> 
+
+     	$(document).ready(function()
+    	{
+        	$('#fenchy_regularuserbundle_sharehodertype_street').css('width', '250px');
+     		$('#fenchy_regularuserbundle_sharehodertype_price').val('50 €');
+     		$('#fenchy_regularuserbundle_sharehodertype_price').attr('readonly','readonly');
+     		$('#fenchy_regularuserbundle_sharehodertype_totalamount').attr('readonly','readonly');
+     		var done = '{{ done }}';     		
+     		if(done == 'Done')
+     		{
+         		$('#GetShare').click();
+     		}
+    	});
+		$(function(){
+			
+			  $('#fenchy_regularuserbundle_sharehodertype_share').blur(function(){
+				var item = $('#fenchy_regularuserbundle_sharehodertype_share').val();
+
+				if(item <1 || item > 1000)
+				{
+					alert('1 to max. 1000');
+				}
+				var price = $('#fenchy_regularuserbundle_sharehodertype_price').val();
+					$('#fenchy_regularuserbundle_sharehodertype_totalamount').val((item*50)+" €");								   
+			  });			 
+
+			  $("#fenchy_regularuserbundle_sharehodertype_price").keydown(function(event) {
+			        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+			           	return;
+			        } else {
+			            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+			                event.preventDefault();
+			            }
+			        }
+			    });
+
+			  $("#fenchy_regularuserbundle_sharehodertype_share").keydown(function(event) {
+			        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+			           	return;
+			        } else {
+			            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+			                event.preventDefault();
+			            }
+			        }
+			    });
+
+			  var $birthdate = $('#fenchy_regularuserbundle_sharehodertype_birthday');
+	            
+	            $birthdate.datepicker({
+	                dateFormat: 'dd.mm.yy',
+	                stepMinute: 5, 
+	                minuteMax: 55,
+	                changeYear: true,
+	                yearRange: 'c-30:c+10'
+	            });
+			  
+			});
+    </script>
+    
+{% endblock %}
+
+{% block content %}
+
+	
+               
+            <div class="getshare">
+            	<div class="title">Form: sign shares</div>
+                <p>By this formular you will become member of the board of neighbors and by supporting Polly &amp; Bob with a loan.</p>
+                <div class="clearfix"></div>
+                <form action="{{ path('fenchy_frontend_share') }}" name="share" method="post" {{ form_enctype(form) }}>
+						
+								
+                	<label>Name*</label>
+                    <div class="clearfix"></div>
+                    {{ form_widget(form.firstname) }}
+                    {{ form_widget(form.surname) }}
+                    <div class="clearfix"></div>
+                	<label>Address*</label>
+                	<div class="clearfix"></div>
+                    {{ form_widget(form.street) }}
+                    <div class="clearfix"></div><br>
+                   	{{ form_widget(form.city) }}
+                    {{ form_widget(form.postalcode) }}
+                    <div class="clearfix"></div><br>
+                    {{ form_widget(form.country) }}
+                    <div class="clearfix"></div>
+                	<label>Date of Birth*</label>
+                    <div class="clearfix"></div>
+                    {{ form_widget(form.birthday) }}
+                    <div class="clearfix"></div>
+                	<label>Email*</label>
+                    <div class="clearfix"></div>
+                    {{ form_widget(form.email) }}
+                    <div class="clearfix"></div><br><br>
+                    <p>how many shares do you want to sign?*</p>
+                    <div class="clearfix"></div>
+                    <div class="formula">
+                    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <td>{{ form_widget(form.share) }}</td>
+                            <td rowspan="2" style="font-size:11px; padding:0 20px;">X</td>
+                            <td>{{ form_widget(form.price) }}</td>
+                            <td rowspan="2" style="font-size:15px; padding:0 20px;">=</td>
+                            <td>{{ form_widget(form.totalamount) }}</td>
+                          </tr>
+                          <tr>
+                            <td>* 1 to max. 1000</td>
+                            <td>price od one share</td>
+                            <td>total price</td>
+                          </tr>
+                        </table>
+                    </div>
+                    <p class="sharedescription">One share has the value of € 50. One Neighbor can sign a maximum of 1.000 shares, because we want to avoid a too big accumulation of votes and dependency on big investors. We use the German form of a Partiarisches Nachrangsdarlehen because that is the only reasonable way to include many neighbors on a big scale.</p>
+                    <div class="clearfix"></div>
+                    <div class="instructions">
+                       {{ form_widget(form.terms) }}
+                        <p>I confirm that i have read and agree to the <a target=_blank href="/downloads/PollyAndBobPartarischesNachrangsdarlehen.pdf">contract</a> and the <a target=_blank href="/downloads/Widerrufsbelehrung.pdf">cancelation</a> instructions.</p>
+                        <div class="clearfix"></div>
+                        <input type="submit" class="blue_button" value="{{ 'btn.send'|trans }}" style="margin-top: 10px;"/>
+                    </div>
+                </form>
+            </div>
+    <a id="GetShare" href="#dialog45" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+    <section id="boxes2">
+		<div id="dialog45" class="window">
+		   	<div class="big_popup">
+		      	<div class="big_popupclose"><a href="" class="close"></a></div>
+				<div id="messageForm">
+					<p>Thanks for Investing in us.</p>
+				</div>
+			</div>
+			<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+		</div>
+		<div id="mask"></div>
+	</section>
+{% endblock %}

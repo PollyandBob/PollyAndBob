@@ -38,4 +38,15 @@ class GroupMembersRepository extends EntityRepository
 		->getQuery()
 		->getResult();
 	}
+	
+	public function findAllAdministrators($groupId)
+	{
+		return $this->createQueryBuilder('um')
+		->where('um.current = :current')
+		->setParameter('current', $groupId)
+		->andWhere('um.admin = :admin')
+		->setParameter('admin', true)
+		->getQuery()
+		->getResult();
+	}
 }

@@ -2,6 +2,8 @@
 
 namespace Fenchy\MessageBundle\Entity;
 
+use Doctrine\Tests\DBAL\Types\IntegerTest;
+
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -151,6 +153,12 @@ class Message
      */
     private $next;
     
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="fromgroup", type="integer", nullable=true)
+     */
+    private $fromgroup;
              
     /**
      * Constructor
@@ -287,6 +295,28 @@ class Message
     public function isRead()
     {
         return $this->read;
+    }
+    
+    /**
+     * Get fromgroup
+     *
+     * @return integer
+     */
+    public function getFromgroup()
+    {
+    	return $this->fromgroup;
+    }
+    
+    /**
+     * Get fromgroup
+     *
+     * @return integer
+     */
+    public function setFromgroup($id)
+    {
+    	$this->fromgroup = $id;
+    	
+    	return $this->fromgroup;
     }
     
     /**

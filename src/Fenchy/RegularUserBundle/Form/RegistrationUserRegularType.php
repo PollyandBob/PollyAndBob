@@ -14,6 +14,7 @@ class RegistrationUserRegularType extends AbstractType
     {
         $builder
             ->add('firstname', NULL, array('label' => 'regularuser.firstname', 'attr' => array('placeholder' => 'regularuser.firstname'), 'invalid_message' => 'regularuser.validation.invalid__firstname'))
+            ->add('postcode', NULL, array('label' => 'regularuser.postcode', 'attr' => array('placeholder' => 'regularuser.postcode'), 'invalid_message' => 'regularuser.validation.invalid__postcode'))
         ;
     }
 

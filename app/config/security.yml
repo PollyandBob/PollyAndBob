@@ -85,6 +85,7 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/user/, role: ROLE_USER }
         - { path: ^/user/settings, role: ROLE_USER }
         - { path: ^/user/create_listing, role: ROLE_USER }
         - { path: ^/user/myprofile, role: ROLE_USER }
@@ -92,9 +93,12 @@ security:
         - { path: ^/user/myneighbors, role: ROLE_USER }
         - { path: ^/user/mycommunitypoints, role: ROLE_USER }
         - { path: ^/user/mylocation, role: ROLE_USER }
+        - { path: ^/user/yourlocation, role: ROLE_USER }
         - { path: ^/user/verifylocation, role: ROLE_USER }
         - { path: ^/user/locationverification, role: ROLE_USER }
         - { path: ^/user/listing/, role: ROLE_USER }
+        - { path: ^/user/postcomment, role: ROLE_USER }
+        - { path: ^/user/postcommenttogroup, role: ROLE_USER }
         - { path: ^/user/filterusers, role: ROLE_USER }
         - { path: ^/user/otherprofile, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/aboutotherchoice, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -102,11 +106,18 @@ security:
         - { path: ^/user/othercommunitypoints, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/otherlistingsreviews, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/otherfilterusers, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/gallery/upload/, role: ROLE_USER }
+        - { path: ^/user/invitetolisting, role: ROLE_USER }
         - { path: ^/user/addneighbors, role: ROLE_USER }
+        - { path: ^/user/addneighborrequest, role: ROLE_USER }
         - { path: ^/user/creategroup, role: ROLE_USER }
         - { path: ^/user/groupmembers, role: ROLE_USER }
         - { path: ^/user/groupsettings, role: ROLE_USER }
+        - { path: ^/user/groupmessages, role: ROLE_USER }
         - { path: ^/user/groupinfo, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/grouplistingsreviews, role: ROLE_USER }
+        - { path: ^/user/groupnotifications, role: ROLE_USER }
+        - { path: ^/user/deletegroup, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/joingroup, role: ROLE_USER }
         - { path: ^/user/leavegroup, role: ROLE_USER }
         - { path: ^/user/chooselang/, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -115,7 +126,9 @@ security:
         - { path: ^/user/writereview, role: ROLE_USER }
         - { path: ^/user/sendmsgform, role: ROLE_USER }
         - { path: ^/user/sendmsgtogroupform, role: ROLE_USER }
-        - { path: ^/user/, role: ROLE_FULL_USER }
+        - { path: ^/user/sendrequest, role: ROLE_USER }
+        - { path: ^/user/storesession, role: ROLE_USER }
+        - { path: ^/gallery/upload/, role: ROLE_USER }
         - { path: ^/businessuser/, role: ROLE_BUSINESSUSER }
         - { path: /.*, role: [IS_AUTHENTICATED_ANONYMOUSLY] }
         

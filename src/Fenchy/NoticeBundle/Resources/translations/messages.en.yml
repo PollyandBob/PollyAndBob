@@ -29,21 +29,27 @@ notice:
   
   price_pieces: Price & Pieces
   
-  price_hours: Price & Hours
+  price_hours: Price / Hours
 
   price: Price
   
-  piece: pieces
+  piece: Pieces
   
   flag: FLAG
   
-  spot: spots
+  spot: Spots
   
   perspot: Per Spot
   
   perhour: Per Hour
     
   perpiece: Per Piece
+  
+  invite: Invite
+  
+  contact_request: Contact Request
+  
+  contact: Contact
   
   category:
     help: Services/Help
@@ -152,6 +158,8 @@ notice:
   other_from: Other Listings from
 
   other_from_title: Other Listings of
+  
+  what_other_person: what do you want the other person to do?
 euro: €
 dollar: $
     

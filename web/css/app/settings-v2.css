@@ -85,12 +85,13 @@
     margin-top: 10px;
     padding: 0 20px;
     background-color: #ffffff;
-    border: 2px solid rgba(158,158,158,0.3);
-    -webkit-border-radius: 6px;
+    border: 1px solid rgba(158,158,158,0.3);
+    /*-webkit-border-radius: 6px;
     -moz-border-radius: 6px;
-    border-radius: 6px;
+    border-radius: 6px;*/
     position: relative;
     behavior: url(/plugins/pie.php);
+    min-height: 170px;
 }
 .ie8 .form-box-wrapper {
     border: 2px solid #dadada;

@@ -77,6 +77,14 @@ class Payment
 	private $card_no;
 	
 	/**
+	 * @var string $cvv_code
+	 *
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 *
+	 */
+	private $cvv_code;
+	
+	/**
 	 * @var string $card_holder
 	 *
 	 * @ORM\Column(type="string", length=255, nullable=true)
@@ -432,5 +440,28 @@ class Payment
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set cvv_code
+     *
+     * @param string $cvvCode
+     * @return Payment
+     */
+    public function setCvvCode($cvvCode)
+    {
+        $this->cvv_code = $cvvCode;
+    
+        return $this;
+    }
+
+    /**
+     * Get cvv_code
+     *
+     * @return string 
+     */
+    public function getCvvCode()
+    {
+        return $this->cvv_code;
     }
 }

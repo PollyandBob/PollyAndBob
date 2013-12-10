@@ -1,20 +1,4 @@
-group:
-  edit:
-    submit: Update group
-
-  show:
-    name: Group name
-
-  new:
-    submit: Create group
-
-  flash:
-    updated: The group has been updated
-
-    created: The group has been created
-
-    deleted: The group has been deleted
-"Bad credentials": Email or password were not correct
+"Bad credentials": Email or Password incorrect
 security:
   login:
     username: "Email:"
@@ -34,23 +18,23 @@ profile:
     submit: Update
 
   flash:
-    updated: The profile has been updated
+    updated: The profile has been successfully updated.
 change_password:
   submit: Change password
 
   flash:
-    success: The password has been changed
+    success: The password has been changed successfully.
 registration:
-  check_email: An email has been sent to %email%. It contains an activation link you must click to activate your account.
+  check_email: We sent you an email to %email%. It contains you activation link for activation.
 
-  confirmed: Congrats %username%, your account is now activated.
+  confirmed: Congrats %username%, your account is now active.
 
   back: Back to the originating page.
 
   submit: Sign up
 
   flash:
-    user_created: The user has been created successfully
+    user_created: The user has been created successfully.
 
   email:
     subject: Complete your registration
@@ -58,7 +42,7 @@ registration:
     message:
       1: Complete your registration.
 
-      button: Complete registration
+      button: Complete registration.
 
       3:
         html: If this button doesn't work, please copy the following link and paste it into your browser.
@@ -82,7 +66,7 @@ resetting:
     submit: Submit
 
   flash:
-    success: The password has been reset successfully
+    success: The password has been reset successfully.
 
   email:
     subject: Reset Password
@@ -90,20 +74,20 @@ resetting:
   message:
     1: Hi %username%,
 
-    2: "To change your Fenchy password, please click on the following link:"
+    2: "To change your Polly & Bob password, please click on the following link:"
 
-    3: You did not ask for changing your Fenchy password? Please ignore this mail.
+    3: You did not ask for changing your Polly & Bob password? Please ignore this mail.
 
     4: Probably somebody used your e-mail address accidentally.
 
     5: Thank you,
 
-    6: Your Fenchy team
+    6: Your Polly & Bob team
 email:
   message:
-    help: Need help? Email us at julia@fenchy.com
+    help: Need help? Email us at volker@pollyandbob.com
 
-    address: Fenchy GmbH, Marchlewskistr. 16, D-10243 Berlin
+    address: Polly & Bob
 layout:
   logout: Logout
 
@@ -116,8 +100,6 @@ form:
   group_name: "Group name:"
 
   username: "Username:"
-
-  email: "Email:"
 
   current_password: "Current Password:"
 
@@ -142,8 +124,8 @@ invitation:
     button_name: "Accept"
 
     message:
-      1: "%username% has been using Fenchy and wants you to join. Fenchy is a local network that connects you with your neighborhood. It helps you finding the right people, their events and the useful goods near you."
+      1: "%username% has been using Polly & Bob and aksa you to join. Polly & Bob is a neighborhood network that connects you with your neighborhood. It helps you finding the right people, their events, services and useful goods near you."
 
-      2: If you prefer not to receive emails like this from Fenchy, you may
+      2: If you prefer not to receive emails like this from Polly & Bob, you may
 
       3: unsubscribe.

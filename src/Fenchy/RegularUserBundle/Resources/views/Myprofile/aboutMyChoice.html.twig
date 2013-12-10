@@ -32,7 +32,7 @@
 	
 	{% include 'FenchyRegularUserBundle:Myprofile:menu.html.twig' %}
 	<div class="member">{{ 'member_since' | trans|upper }}
-   		{{ displayUser.createdAt|date("m.d.Y") }}
+   		{{ displayUser.createdAt|date("d.m.Y") }}
    	</div>
    	 <style>
    	 .about_input
@@ -46,7 +46,35 @@
     	height: 60px;
     	padding: 3px;
     	width: 750px;
-   	 }
+   	 }   	
+	.about_input label{ 
+    	display: none;
+	}
+	.halfleft {
+	    min-height: 100px;
+	    width: 46.8% !important;
+	}
+	.halfright {
+	    min-height: 100px;
+	    width: 46.8% !important;
+	}
+	#fenchy_regularuserbundle_useraboutsettingstype_gender label
+	{
+		display: inline-block !important;
+		margin-left: 5px;
+    	margin-right: 5px;
+    	color: #000000;
+	    font-family: code_boldregular;
+	    font-size: 12px;
+	    letter-spacing: 1px;
+	}
+	.input-element input[type="text"], .input-element input[type="radio"] { 
+    	border: 1px solid #C8C8C8;
+    	border-radius: 4px 4px 4px 4px;
+    	height: 20px;
+    	padding: 3px;
+    	width:85px;
+	}
    	 .likedata .about_input ul.tagit, .ui-helper-hidden-accessible
    	 {
    	 	width:342px;
@@ -78,6 +106,16 @@
             $('#fenchy_regularuserbundle_useraboutsettingstype_notshowninfo').tagit({
             	allowSpaces: true
         	});
+
+            var $birthdate = $('#fenchy_regularuserbundle_useraboutsettingstype_birthday');
+            
+            $birthdate.datepicker({
+                dateFormat: 'dd.mm.yy', 
+                stepMinute: 5, 
+                minuteMax: 55,
+                changeYear: true,
+                yearRange: 'c-20:c+20'
+            });
 
     	});
     </script>
@@ -119,7 +157,7 @@
 	                            	{% set varStack = displayUser.regularuser.mylike | split(',') %}
 									{% for value in varStack %}
 								       {% if value %}
-											<li><a href="#">{{ value }}</a></li>
+											<li><a href="javascript:void(0)">{{ value }}</a></li>
 									   {% endif %}
 								    {% endfor %}
 	                        	</div>
@@ -139,7 +177,7 @@
                             		{% set varStack = displayUser.regularuser.hotplaces | split(',') %}
 									{% for value in varStack %}
 								       {% if value %}
-											<li><a href="#">{{ value }}</a></li>
+											<li><a href="javascript:void(0)">{{ value }}</a></li>
 									   {% endif %}
 								    {% endfor %}
 	                        	</div>
@@ -155,18 +193,17 @@
                     	<div class="title">{{ 'regularuser.not_shown_information'|trans|upper }}</div>
                         <div class="clearfix"></div>
                         <div class="likedata">
-							<ul>
-                            	<!-- <li><a href="#">First Name</a></li> -->
-                            	<div class="about_show">
-                            		{% set varStack = displayUser.regularuser.notshowninfo | split(',') %}
-									{% for value in varStack %}
-								       {% if value %}
-											<li><a href="#">{{ value }}</a></li>
-									   {% endif %}
-								    {% endfor %}
+							<ul>                           		                        	
+	                        	<div class="about_show">
+	                        		{% if displayUser.regularuser.lastname != "" %} <li><a href="javascript:void(0)"> {{ displayUser.regularuser.lastname }} </a></li> {% endif %}
+	                        		{% if displayUser.regularuser.birthday != "" %}<li><a href="javascript:void(0)"> {{ displayUser.regularuser.birthday|date('d.m.Y') }}</a></li> {% endif %}
+	                        		{% if displayUser.regularuser.gender != "" %}
+	                        		<li><a href="javascript:void(0)">{%  if displayUser.regularuser.gender == 2 %} {{ 'regularuser.female'|trans }} {% elseif displayUser.regularuser.gender == 1 %}{{ 'regularuser.male'|trans }} {% endif %}</a></li>{% endif %}
 	                        	</div>
-	                        	<div class="about_input">
-									{{ form_row(form.notshowninfo) }}
+	                        	<div class="about_input">									
+									<li>{{ form_row(form.lastname) }}</li>
+									<li>{{ form_row(form.birthday) }}</li>
+									<li>{{ form_row(form.gender) }}</li>
 	                            </div>
                             </ul>
                         </div>
@@ -182,7 +219,7 @@
                             		{% set varStack = displayUser.regularuser.languages | split(',') %}
 									{% for value in varStack %}
 								       {% if value %}
-											<li><a href="#">{{ value }}</a></li>
+											<li><a href="javascript:void(0)">{{ value }}</a></li>
 									   {% endif %}
 								    {% endfor %}
 	                        	</div>

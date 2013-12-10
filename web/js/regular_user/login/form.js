@@ -64,7 +64,7 @@ $(document).ready(function() {
     });
 
 
-    $.blockUI.defaults.css = {};
+    //$.blockUI.defaults.css = {};
 
     $("#user-account-login-signup, .sign-up-btn").click(function(event) {
 

@@ -30,6 +30,14 @@ fenchy_admin_identity_switch:
     pattern: /identity/switch
     defaults: { _controller: FenchyAdminBundle:Default:identitySwitch }
 
+fenchy_admin_location:
+    pattern: /location/
+    defaults: { _controller: FenchyAdminBundle:Default:location }
+
+fenchy_admin_location_switch:
+    pattern: /location/switch
+    defaults: { _controller: FenchyAdminBundle:Default:locationSwitch }
+    
 fenchy_admin_notice_add_to_dashboard:
     pattern: /notices/add-to-dashboard/{id}
     defaults: { _controller: FenchyAdminBundle:Default:addToDashboard }

@@ -33,7 +33,7 @@ user:
 
   user_with_confirmation_token_not_exist: Użytkownik z tokenem %s% nie istnieje
 
-  your_facebook_account_already_connected: Twoje konto Facebook było wcześniej podłączone do innego konta Fenchy.
+  your_facebook_account_already_connected: Twoje konto Facebook było wcześniej podłączone do innego konta Polly & Bob.
 
   facebook_connected: Facebook podłączony
 
@@ -44,26 +44,26 @@ user:
   facebook_timeline_disconnected: Odłączono od tablicy Facebooka
 
   twitter_user_exists:
-    0: W Fenchy istnieje już konto związane z Twoim kontem na Twitterze, lecz jest od niego odłączone.
+    0: W Polly & Bob istnieje już konto związane z Twoim kontem na Twitterze, lecz jest od niego odłączone.
 
-    1: Jeśli chcesz połączyć swoje konto w Fenchy z kontem na Twitterze,
+    1: Jeśli chcesz połączyć swoje konto w Polly & Bob z kontem na Twitterze,
 
-    2: musisz zalogować się do Fenchy nazwą użytkownika i hasłem i przejść do Ustawienia->Połącz.
+    2: musisz zalogować się do Polly & Bob nazwą użytkownika i hasłem i przejść do Ustawienia->Połącz.
 
-    3: Możesz także stworzyć nowe konto w Fenchy z użyciem obecnego konta Twitter, lecz w tym celu musisz podać nowy adres e-mail
+    3: Możesz także stworzyć nowe konto w Polly & Bob z użyciem obecnego konta Twitter, lecz w tym celu musisz podać nowy adres e-mail
 
     4: oraz nazwę użytkownika
 
-  some_fb_data_invalid_for_fenchy: Prawdopodobnie niektóre dane z Facebooka są nieprawidłowe dla Fenchy.
+  some_fb_data_invalid_for_fenchy: Prawdopodobnie niektóre dane z Facebooka są nieprawidłowe dla Polly & Bob.
 
   facebook_user_exists:
-    0: W Fenchy istnieje już konto związane z twoim profilem na Facebooku, lecz jest od niego odłączone
+    0: W Polly & Bob istnieje już konto związane z twoim profilem na Facebooku, lecz jest od niego odłączone
 
-    1: Jeśli chcesz połączyć swoje konto w Fenchy z kontem na Facebooku,
+    1: Jeśli chcesz połączyć swoje konto w Polly & Bob z kontem na Facebooku,
 
-    2: musisz zalogować się do Fenchy nazwą użytkownika i hasłem i przejść do Ustawienia->Połącz.
+    2: musisz zalogować się do Polly & Bob nazwą użytkownika i hasłem i przejść do Ustawienia->Połącz.
 
-    3: Możesz także stworzyć nowe konto w Fenchy z użyciem obecnego konta Facebook, lecz w tym celu musisz podać nowy adres e-mail
+    3: Możesz także stworzyć nowe konto w Polly & Bob z użyciem obecnego konta Facebook, lecz w tym celu musisz podać nowy adres e-mail
 
     4: oraz nazwę użytkownika.
 

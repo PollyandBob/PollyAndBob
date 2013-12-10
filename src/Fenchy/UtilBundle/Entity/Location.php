@@ -2,6 +2,8 @@
 
 namespace Fenchy\UtilBundle\Entity;
 
+use Fenchy\RegularUserBundle\Entity\UserGroup;
+
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -62,6 +64,12 @@ class Location {
     private $user;
     
     /**
+     * @var UserGroup $usergroup;
+     * @ORM\OneToOne(targetEntity="Fenchy\RegularUserBundle\Entity\UserGroup", inversedBy="location")
+     */
+    private $usergroup;
+    
+    /**
      * @var Notice $notice; 
      * @ORM\OneToOne(targetEntity="Fenchy\NoticeBundle\Entity\Notice", inversedBy="location")
      */
@@ -73,6 +81,7 @@ class Location {
         
         $this->id       = NULL;
         $this->user     = NULL;
+        $this->usergroup= NULL;
         $this->notice   = NULL;
         $this->printable = NULL;
     }
@@ -191,6 +200,28 @@ class Location {
     public function getUser() {
         
         return $this->user;
+    }
+    
+    /**
+     * Set UserGroup
+     * @param UserGroup $usergroup
+     * @return Location
+     */
+    public function setUserGroup(UserGroup $usergroup) {
+    
+    	$this->usergroup = $usergroup;
+    
+    	return $this;
+    }
+    
+    
+    /**
+     * Get UserGroup
+     * @return UserGroup
+     */
+    public function getUserGroup() {
+    
+    	return $this->usergroup;
     }
     
     /**

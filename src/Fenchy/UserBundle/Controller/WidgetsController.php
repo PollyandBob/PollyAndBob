@@ -23,13 +23,17 @@ class WidgetsController extends Controller {
         
         //user's full name
         $name = $user_regular->getFirstName() . " " . $user_regular->getLastName();
-       
+        $em = $this->getDoctrine()->getEntityManager();
         //count requests
         $req_repo = $this->getDoctrine()->getEntityManager()->getRepository("FenchyNoticeBundle:Request");
         
+        $repo = $em->getRepository('FenchyNoticeBundle:Notice');
+        $listings = $repo->getUserNotices($user);
+        
+        
         if($user instanceof \Fenchy\UserBundle\Entity\User) {
-            $req_count = $req_repo->countUnreadUsersRequests($user);
-            $my_req_count = $req_repo->countUnreadUsersStatusRequests($user);
+            $req_count = $req_repo->countUnreadUsersRequests($user, $listings);
+            $my_req_count = $req_repo->countUnreadUsersStatusRequests($user,$listings);
         } else {
             $req_count = 0;
         }
@@ -42,6 +46,9 @@ class WidgetsController extends Controller {
         {
         	$alertmsg =  false;
         }
+        $managertype = $em->getRepository('FenchyRegularUserBundle:UserRegular')->getManagerType($user);
+        
+        
         
         return $this->render("UserBundle:Widgets:userPanel.html.twig", array(
             'name' => $name,
@@ -49,6 +56,8 @@ class WidgetsController extends Controller {
             'req_unread_count' => $req_count,
         	'my_req_count' =>$my_req_count,
         	'alertmsg' =>  $alertmsg,
+        	'managertype' => $managertype[0],
+        	'location'=> $user->getLocation()
         ));
     }
     

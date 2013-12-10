@@ -35,9 +35,8 @@ class NoticeListingType extends AbstractType
                                
             ->add('currency', 'choice', array(
                     		'choices'   => array(
-                    			'currency'=>'Currency',						       	 	
-					        	'dollar' => 'Dollar',
-					        	'euro'   => 'Euro',
+					        	'Euro'   => 'Euro',
+                    			'Dollar' => 'Dollar',
 					    ),
                     ))            
             ->add(
@@ -158,7 +157,7 @@ class NoticeListingType extends AbstractType
                     ))
         			->add('default_setting', 'checkbox', array(
         					'label' => 'listing.create.default_setting',
-        					'required'  => true,
+        					'required'  => false,
         			));
         }
         
@@ -192,44 +191,44 @@ class NoticeListingType extends AbstractType
 	        		$form['start_date']->addError(new FormError('required'));	        	
 	        	}
 	        	
-	        	if (!$form['start_time']->getData() && !$form['end_time']->getData() && !$form['start_time_arrange']->getData()) {
-	        		$form['start_time_arrange']->addError(new FormError('Enter either time or check checkbox'));
+// 	        	if (!$form['start_time']->getData() && !$form['end_time']->getData() && !$form['start_time_arrange']->getData()) {
+// 	        		$form['start_time_arrange']->addError(new FormError('Enter either time or check checkbox'));
 	        	
-	        	}
-	        	if ($form['start_time']->getData() && $form['end_time']->getData() && $form['start_time_arrange']->getData()) {
-	        		$form['start_time_arrange']->addError(new FormError('Enter either time or check checkbox'));
-	        	}
+// 	        	}
+// 	        	if ($form['start_time']->getData() && $form['end_time']->getData() && $form['start_time_arrange']->getData()) {
+// 	        		$form['start_time_arrange']->addError(new FormError('Enter either time or check checkbox'));
+// 	        	}
 	        	
-        		if ($form['start_time']->getData() && !$form['end_time']->getData()) {
-	        		$form['start_time_arrange']->addError(new FormError('Enter both time or check checkbox'));
+//         		if ($form['start_time']->getData() && !$form['end_time']->getData()) {
+// 	        		$form['start_time_arrange']->addError(new FormError('Enter both time or check checkbox'));
 
-	        	}
-	        	if (!$form['start_time']->getData() && $form['end_time']->getData()) {
-	        		$form['start_time_arrange']->addError(new FormError('Enter both time or check checkbox'));
+// 	        	}
+// 	        	if (!$form['start_time']->getData() && $form['end_time']->getData()) {
+// 	        		$form['start_time_arrange']->addError(new FormError('Enter both time or check checkbox'));
         	
-	        	}
+// 	        	}
 	        	
-	        	if ($form['start_date']->getData()!= "" && !$form['date_arrange']->getData())
-	        	{
-	        		$todays_date = date("d-m-Y");
+// 	        	if ($form['start_date']->getData()!= "" && !$form['date_arrange']->getData())
+// 	        	{
+// 	        		$todays_date = date("d-m-Y");
 	        		
-	        		$date = $form['start_date']->getData()->format('d-m-Y');
+// 	        		$date = $form['start_date']->getData()->format('d-m-Y');
 	        		
-	        		if($date < $todays_date)
-	        		{
-	        			$form['start_date']->addError(new FormError('Must greater then today'));
-	        		}
-	        	}
-	        	if ($form['start_date']->getData() != "" && $form['end_date']->getData()!= "" && !$form['end_date_arrange']->getData())
-	        	{
-	        		$start_date = $form['start_date']->getData()->format('d-m-Y');
-	        		$end_date = $form['end_date']->getData()->format('d-m-Y');
+// 	        		if(strtotime($date) < strtotime($todays_date))
+// 	        		{
+// 	        			$form['start_date']->addError(new FormError('Must greater then today'));
+// 	        		}
+// 	        	}
+// 	        	if ($form['start_date']->getData() != "" && $form['end_date']->getData()!= "" && !$form['end_date_arrange']->getData())
+// 	        	{
+// 	        		$start_date = $form['start_date']->getData()->format('d-m-Y');
+// 	        		$end_date = $form['end_date']->getData()->format('d-m-Y');
 	        	
-	        		if($start_date > $end_date)
-	        		{
-	        			$form['end_date']->addError(new FormError('Must greater then start date'));
-	        		}
-	        	}
+// 	        		if(strtotime($start_date) > strtotime($end_date))
+// 	        		{
+// 	        			$form['end_date']->addError(new FormError('Must greater then start date'));
+// 	        		}
+// 	        	}
 // 	        	if($form['start_date']->getData() == "" && $form['end_date']->getData()!="")
 // 	        	{
 // 	        		$form['end_date']->addError(new FormError('Must enter start date then you can enter end date'));
@@ -245,6 +244,32 @@ class NoticeListingType extends AbstractType
 // 	        		$form['start_date']->addError(new FormError('Must enter date then you can enter time'));
 // 	        	}
         	} 
+        	
+//         	if($this->type->isDateAvailable() && ($this->type == 'offerevents' || $this->type == 'events'))
+//         	{
+//         		if ($form['start_date']->getData()!= "")
+//         		{
+//         			$todays_date = date("d-m-Y");
+        			 
+//         			$date = $form['start_date']->getData()->format('d-m-Y');
+        			 
+//         			if(strtotime($date) < strtotime($todays_date))
+//         			{
+//         				$form['start_date']->addError(new FormError('Must greater then today'));
+//         			}
+//         		}
+//         		if ($form['start_date']->getData() != "" )
+//         		{
+//         			$start_date = $form['start_date']->getData()->format('d-m-Y');
+//         			$end_date = $form['end_date']->getData()->format('d-m-Y');
+        		
+//         			if(strtotime($start_date) > strtotime($end_date))
+//         			{
+//         				$form['end_date']->addError(new FormError('Must greater then start date'));
+//         			}
+//         		}
+        		
+//         	}
         	
         	if($this->type=='events' || $this->type=='help' || $this->type=='offerhelp' || $this->type=='others' || $this->type=='offerothers' ||  $this->type=='neighbours' ||  $this->type=='groups')
         	{
@@ -335,6 +360,15 @@ class NoticeListingType extends AbstractType
         		if ($form['price']->getData() && $form['free']->getData())
         		{
         			$form['price']->addError(new FormError('Either enter price or check checkbox'));
+        		}
+        		
+        		if (!$form['default_setting']->getData() && !$form['free']->getData())
+        		{
+        			$form['default_setting']->addError(new FormError('Either check free or check default setting'));
+        		}
+        		if ($form['default_setting']->getData() && $form['free']->getData())
+        		{
+        			$form['default_setting']->addError(new FormError('Either check free or check default setting'));
         		}
         	}
         	

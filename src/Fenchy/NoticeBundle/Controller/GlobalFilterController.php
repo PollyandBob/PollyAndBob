@@ -11,17 +11,139 @@ use Fenchy\RegularUserBundle\Entity\UserGroup;
 
 class GlobalFilterController extends Controller
 {
-    public function indexV2Action()
+    public function indexV2Action($slug = null)
     {
-    	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+    	$em = $this->getDoctrine()->getManager();
+    	$managertype1 = array();
     	
+    	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+    	$usergroups = array();
+    	ini_set('memory_limit', "912M");
+    	$userSearchedTypes = array();
+    	if($userLoggedIn instanceof User)
+    	{
+    		$userSearchedTypes = explode(',', $userLoggedIn->getTypesID());
+    	}
+    	$neighbours = array();
+    	// Start Not Logged User's Search area
+    	if (!($userLoggedIn instanceof User))
+    	{
+    		if($slug=='search')
+    		{
+    			$i=0;
+    			$searchWord = $this->getRequest()->get('search');
+    			$resultArray = $em->getRepository('FenchyNoticeBundle:Notice')->getSearchResult($searchWord);
+    			$listing  = $resultArray[0];
+    			$usergroups = $resultArray[1];
+    			$searchedNeighbours =  $this->searchNeighboursNotLogged($searchWord);
+    			
+    			$neighbours = $searchedNeighbours[0];
+    			$managertype = array();
+    			$i = 0;
+    			if($neighbours)
+    			{
+    				foreach ($neighbours as $neighbour)
+    				{
+    					$managertype[$i] = $em
+    					->getRepository('FenchyRegularUserBundle:UserRegular')
+    					->getManagerType($neighbour);
+    					$i++;
+    				}
+    			}
+    			if($listing)
+    			{
+	    			foreach ($listing as $list)
+	    			{
+	    				$managertype1[$i] = $em
+	    				->getRepository('FenchyRegularUserBundle:UserRegular')
+	    				->getManagerType($list->getUser());
+	    				$i++;
+	    			}
+    			}
+    		}
+    		
+    		$listingCount = count($listing)+count($usergroups)+count($neighbours);
+    		$types = $em->getRepository('FenchyNoticeBundle:Type')->getAllWithPropertiesFirst();
+    		$filterService = $this->get('listfilter');
+    		$emptyFilter = $returnFilter = $filterService->getFilter();
+    		
+    		$noticeRepo = $this->getDoctrine()->getEntityManager()->getRepository('FenchyNoticeBundle:Notice');
+    		
+    		$startArray =  $noticeRepo->getFirstRecord();
+    		$endArray =  $noticeRepo->getLastRecord();
+    		
+    		$start = strtotime($startArray[0]->getCreatedAt()->format('Y-m-d H:i:s'));
+    		if($endArray[0]->getStartDate())
+    		{
+    			$end = strtotime($endArray[0]->getStartDate()->format('Y-m-d H:i:s'));
+    		}
+    		else
+    		{
+    			if($endArray[1]->getStartDate())
+    			{
+    				$end = strtotime($endArray[1]->getStartDate()->format('Y-m-d H:i:s'));
+    			}
+    			else
+    			{
+    				$end = strtotime($endArray[1]->getCreatedAt()->format('Y-m-d H:i:s'));
+    			}
+    			 
+    		}
+    		
+    		$starttime = time();
+    		$endtime = strtotime("+1 month");
+    		$daterange = $starttime.','.$endtime;
+    		
+    		return $this->render('FenchyNoticeBundle:GlobalFilter:indexV3.html.twig',
+    				array('locale'=>$this->getRequest()->getLocale(),
+    						'listingsPagination'=>$this->container->getParameter('listings_pagination'),
+    						'notices' => $listing,
+    						'managertype1' => $managertype1,
+    						'noticeCount' => $listingCount,
+    						'registered'=> false,
+    						'types'=>$types,
+    						'daterange' => $daterange,
+    						'currdate' => $starttime,    						
+    						'slider_startDate' => $start,
+    						'slider_endDate' => $end,
+    						'filterEmptyCat'=>$emptyFilter['categories'],
+    						'filterEmptyPD'=>$emptyFilter['postDate'],
+    						'filterLastUrl' => $this->get('session')->get('lastFilterUrl'),
+    						'filterDistanceSliderMin'=>$this->container->getParameter('filter_min_distance'),
+    						'filterDistanceSliderMax'=>$this->container->getParameter('filter_max_distance'),
+    						'filterDistanceSliderDefault'=>$this->container->getParameter('distance_slider_default'),
+    						'filterDistanceSliderSnap'=>$this->container->getParameter('distance_slider_snap'),
+    						'filterDistanceSliderMinDate'=>$this->container->getParameter('filter_min_distanceDate'),
+    						'filterDistanceSliderMaxDate'=>$this->container->getParameter('filter_max_distanceDate'),
+    						'filterDistanceSliderDefaultDate'=>$this->container->getParameter('distance_slider_defaultDate'),
+    						'filterDistanceSliderSnapDate'=>$this->container->getParameter('distance_slider_snapDate'),
+    						'keyword' => $this->getRequest()->get('keyword'),
+    						'usergroups' => $usergroups,
+    						'neighbours' => $neighbours,
+    						'managertype' => $managertype,
+    						'listingInWideRange' => null,
+    						'usergroupsInWideRange' => null,
+    						'listing2WordSearch' => null,
+    						'usergroups2WordSearch' => null
+    						
+    				));
+    		//return $this->redirect($this->generateUrl('fenchy_frontend_indexv2'));
+    	}
+    	// End Not Logged User's Search area
+    	
+    	// Start Logged User's Search area
+    	if($userLoggedIn instanceof User && $userLoggedIn->getLocation() == "")
+    	{
+    		return $this->redirect($this->generateUrl('fenchy_regular_user_user_your_location'));
+    	}
     	$displayUser = $userLoggedIn;
+    	$usergroups = array();
     	$origin = str_replace(" ", "", $displayUser->getLocation());
         $filterService = $this->get('listfilter');
         $emptyFilter = $returnFilter = $filterService->getFilter();
         $noticeRepo = $this->getDoctrine()->getEntityManager()->getRepository('FenchyNoticeBundle:Notice');
         
-        $em = $this->getDoctrine()->getManager();
+        
         
         $types = $em->getRepository('FenchyNoticeBundle:Type')->getAllWithPropertiesFirst();
         $arr_types = $this->getRequest()->get('ids');
@@ -30,7 +152,61 @@ class GlobalFilterController extends Controller
         $when = $this->getRequest()->get('when');
         $now = $this->getRequest()->get('now');
         $str = $this->getRequest()->get('keyword');
-        
+        $cookie = $this->getRequest()->get('cookies');
+        $offergroups = $this->getRequest()->get('offergroups');
+        		
+        		// Searched with selected red Options 
+		        if($cookie == 1 && !empty($arr_types))
+		        {
+		        	$typids = array();
+		        	$i = 0;
+		        	foreach($arr_types as $v)
+		        	{
+		        		$typids[] = $arr_types[$i];
+		        		$i++;
+		        	}
+		        	$comma_typids = implode(',', $typids);
+		        	
+		        	$users = $this->getDoctrine()->getEntityManager()->getRepository('UserBundle:User')->findAllWithStickers($emptyFilter);
+		        	foreach ($users as $user)
+					{
+						if ($user->getId() == $displayUser->getId())
+						{
+							$user->setTypesID($comma_typids);
+							$em->persist($user);
+							$em->flush();
+						}
+					}
+		        	
+		        }// Searched with selected all Blue Options 
+		        else if ($cookie == 1 && empty($arr_types))
+		        {
+		        	
+		        	$users = $this->getDoctrine()->getEntityManager()->getRepository('UserBundle:User')->findAllWithStickers($emptyFilter);
+		        	foreach ($users as $user)
+		        	{
+		        		if ($user->getId() == $displayUser->getId())
+		        		{
+		        			$user->setTypesID(null);
+		        			$em->persist($user);
+		        			$em->flush();
+		        		}
+		        	}
+		        }
+		        else if($cookie == 0 && !empty($arr_types))
+		        {
+		        	$users = $this->getDoctrine()->getEntityManager()->getRepository('UserBundle:User')->findAllWithStickers($emptyFilter);
+		        	foreach ($users as $user)
+		        	{
+		        		if ($user->getId() == $displayUser->getId())
+		        		{
+		        			$user->setTypesID(null);
+		        			$em->persist($user);
+		        			$em->flush();
+		        		}
+		        	}
+		        }
+		        
         if($str)
         {
         	$keyword = $this->getRequest()->get('keyword');
@@ -39,26 +215,220 @@ class GlobalFilterController extends Controller
         {
         	$keyword = $this->getRequest()->get('phrs');
         }
-        $listing = $noticeRepo->getFullDetailedList($emptyFilter,$arr_types,$sortby,$aroundyou,$when,$now,$keyword);
-        
-        if($aroundyou)
-        {	
-        	$notices = array();
-        	foreach ($listing as $list)
+        $searchWord ="";
+        $findNeighbours ="";
+        $find = $this->getRequest()->get('find');
+        $findNeighbor = $this->getRequest()->get('findNeighbor');
+        // Searched with keyword on top of Textbox
+        if($slug=='search' && $find == null)
+        {
+        	$searchWord = $this->getRequest()->get('search');
+        	$result2 = $em->getRepository('FenchyNoticeBundle:Notice')->getSearchResult($searchWord);
+        	$listing = $result2[0];
+        	
+        	$location = $userLoggedIn->getLocation();
+        	$lat = $location->getLongitude();
+        	$log = $location->getLatitude();
+        	 
+        	$usergroups2 = $result2[1];
+        	if($usergroups2)
+        	{	
+	        	foreach ($usergroups2 as $usergroup)
+	        	{
+	        		$location = $usergroup->getLocation();
+	        		$lat2 = $location->getLongitude();
+	        		$log2 = $location->getLatitude();
+	        		 
+	        		$theta = $log - $log2;
+	        		// Find the Great Circle distance
+	        		$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+	        		$distance = $distance * 60 * 1.1515;
+	        		$distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+	        		 
+	        		if($distance < 30000 && $distance > 0)
+	        		{
+	        			$usergroups[] = $usergroup;
+	        			$distanceArray[] = $distance;
+	        		}
+	        	}
+        	}
+        }
+        else if($slug=='search' && ($find=='neighbors' || $findNeighbor==1))
+        {
+        	$findNeighbours =  $this->findNeighbours($find,$aroundyou,$when,$now);
+        	if($findNeighbor==1)
         	{
-        		$destination = str_replace(" ", "", $list->getLocation());
+        		$resultArray = $noticeRepo->getFullDetailedList($emptyFilter,$arr_types,$sortby,$aroundyou,$when,$now,$keyword,$userSearchedTypes);
+        		$listing = $resultArray[0];
+        		 
+        		$location = $userLoggedIn->getLocation();
+        		$lat = $location->getLongitude();
+        		$log = $location->getLatitude();
+        		if(in_array(8,$arr_types))
+        		{	
+        			$usergroups2 = $resultArray[1];
+        		}
+        		else
+        		{ 
+        			$usergroups2 = array(); 
+        		}
+        		if($usergroups2)
+        		{
+        			foreach ($usergroups2 as $usergroup)
+        			{
+        				$location = $usergroup->getLocation();
+        				$lat2 = $location->getLongitude();
+        				$log2 = $location->getLatitude();
         		
-        		$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
-        		$data = file_get_contents($url);
-        		//$data = utf8_decode($data);
-        		$obj = json_decode($data);
+        				$theta = $log - $log2;
+        				// Find the Great Circle distance
+        				$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+        				$distance = $distance * 60 * 1.1515;
+        				$distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
         		
-        		//echo($obj->rows[0]->elements[0]->distance->text); //km
-        		//echo($obj->rows[0]->elements[0]->distance->value); // meters
-        		$mindist = $this->container->getParameter('filter_min_distance_user');// minimum distance
-        		$maxdist = $this->container->getParameter('filter_max_distance_user');// maximum distance
+        				$mindist2 = $this->container->getParameter('filter_min_distance_user');// minimum distance
+        				$maxdist2 = $this->container->getParameter('filter_max_distance_user');// maximum distance
+        				 
+        				if($aroundyou)
+        				{
+        					$dist = $aroundyou;
+        				}
+        				else
+        				{
+        					$dist = 30000; // slider distance
+        				}
+        				 
+        				if($distance > $mindist2 && $distance < $maxdist2 && $distance <= $dist)
+        				{
+        					$usergroups[] = $usergroup;
+        					$distanceArray[] = $distance;
+        				}
+        			}
         		
-        		
+        		}        		
+        	}else
+        	{
+        		$listing = array();
+        	}
+        	
+        }
+        // Main Filtering with search tools
+        else {
+        	$resultArray = $noticeRepo->getFullDetailedList($emptyFilter,$arr_types,$sortby,$aroundyou,$when,$now,$keyword,$userSearchedTypes);
+        	$listing = $resultArray[0];
+        	
+        	$location = $userLoggedIn->getLocation();
+        	$lat = $location->getLongitude();
+        	$log = $location->getLatitude();
+        	
+        	$usergroups2 = $resultArray[1];
+        	
+        	if($usergroups2)
+        	{	 
+	        	foreach ($usergroups2 as $usergroup)
+	        	{
+	        		$location = $usergroup->getLocation();
+	        		$lat2 = $location->getLongitude();
+	        		$log2 = $location->getLatitude();
+	        	
+	        		$theta = $log - $log2;
+	        		// Find the Great Circle distance
+	        		$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+	        		$distance = $distance * 60 * 1.1515;
+	        		$distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+	        	
+	        		$mindist2 = $this->container->getParameter('filter_min_distance_user');// minimum distance
+	        		$maxdist2 = $this->container->getParameter('filter_max_distance_user');// maximum distance
+	        		
+	        		if($aroundyou)
+	        		{
+	        			$dist = $aroundyou;
+	        		}
+	        		else
+	        		{
+	        			$dist = 30000; // slider distance
+	        		}
+	        		
+	        			if($distance > $mindist2 && $distance < $maxdist2 && $distance <= $dist)
+	        			{
+	        				$usergroups[] = $usergroup;
+	        				$distanceArray[] = $distance;
+	        			}
+	        	}
+	        	
+        	}	
+        	
+        	
+           }
+        	$i = 0;
+        	$notices = array();
+        	if($listing)
+        	{	
+	        	foreach ($listing as $list)
+	        	{
+	        	 	$lat = $list->getLocation()->getLatitude();
+	        		$log = $list->getLocation()->getLongitude();
+	        		
+	        		$lat2 = $displayUser->getLocation()->getLatitude();
+	        		$log2 = $displayUser->getLocation()->getLongitude();
+	        		
+	        		$theta = $log - $log2;
+	        		// Find the Great Circle distance
+	        		$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+	        		$distance = $distance * 60 * 1.1515;
+	        		$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+	        		
+	        		$mindist = $this->container->getParameter('filter_min_distance_user');// minimum distance
+	        		$maxdist = $this->container->getParameter('filter_max_distance_user');// maximum distance
+	        		
+	        		
+	        		if($aroundyou)
+	        		{
+	        			$dist = $aroundyou;
+	        		}
+	        		else
+	        		{
+	        			$dist = 30000; // slider distance
+	        		}
+	        		
+	        		if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
+	        		{
+	        			$managertype1[$i] = $em->getRepository('FenchyRegularUserBundle:UserRegular')->getManagerType($list->getUser());
+	
+	        			$i++;
+	        			$notices[] = $list;
+	        		}
+	        		
+	        	  
+	        	}
+        	}
+       
+        
+        
+        $listing2 = $notices;
+       
+        
+        $startArray =  $noticeRepo->getFirstRecord();
+        
+    	$findLastNotices =  $noticeRepo->getLastRecord();
+        $endArray = array();
+        foreach ($findLastNotices as $findLastNotice)
+        {
+        	$lat = $findLastNotice->getLocation()->getLatitude();
+        	$log = $findLastNotice->getLocation()->getLongitude();
+        	
+        	$lat2 = $displayUser->getLocation()->getLatitude();
+        	$log2 = $displayUser->getLocation()->getLongitude();
+        	
+        	$theta = $log - $log2;
+        	// Find the Great Circle distance
+        	$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+        	$distance = $distance * 60 * 1.1515;
+        	$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+        	
+        	$mindist = $this->container->getParameter('filter_min_distance_user');// minimum distance
+        	$maxdist = $this->container->getParameter('filter_max_distance_user');// maximum distance
+        	
         		if($aroundyou)
         		{
         			$dist = $aroundyou;
@@ -68,50 +438,120 @@ class GlobalFilterController extends Controller
         			$dist = 30000; // slider distance
         		}
         		
-        		$gmap_distance =  $obj->rows[0]->elements[0]->distance->value; // location with gmap api distance
-        		
         		if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
         		{
-        			$notices[] = $list;
+        			$endArray[] = $findLastNotice;
         		}
-        		
-        	}
-        }
-        
-        if($aroundyou)
-        {
-        	$listing2 = $notices;
-        }
-        else
-        {
-        	$listing2 = $listing;
-        }
-        
-        $startArray =  $noticeRepo->getFirstRecord();
-        $endArray =  $noticeRepo->getLastRecord();
-        
-        $start = strtotime($startArray[0]->getCreatedAt()->format('Y-m-d H:i:s'));
-        if($endArray[0]->getStartDate())
-        {
-        	$end = strtotime($endArray[0]->getStartDate()->format('Y-m-d H:i:s'));
-        }
-        else
-        {
-        	if($endArray[1]->getStartDate())
-        	{
-        		$end = strtotime($endArray[1]->getStartDate()->format('Y-m-d H:i:s'));
-        	}
-        	else
-        	{
-        		$end = strtotime($endArray[1]->getCreatedAt()->format('Y-m-d H:i:s'));
-        	}
         	
         }
-        $listingCount = count($listing2);
+        $start = strtotime($startArray[0]->getCreatedAt()->format('Y-m-d H:i:s'));
+        $end = "";
+        if($endArray)
+        {
+	        if($endArray[0]->getStartDate())
+	        {
+	        	$end = strtotime($endArray[0]->getStartDate()->format('Y-m-d H:i:s'));
+	        }
+	        else
+	        {
+	        	if($endArray[1]->getStartDate())
+	        	{
+	        		$end = strtotime($endArray[1]->getStartDate()->format('Y-m-d H:i:s'));
+	        	}
+	        	else
+	        	{
+	        		$end = strtotime($endArray[1]->getCreatedAt()->format('Y-m-d H:i:s'));
+	        	}
+	        	
+	        }
+        }  
+        
         $starttime = time();
         $endtime = strtotime("+1 month");
         $daterange = $starttime.','.$endtime;
-       
+        if($end=='' || $end <= $starttime)
+        {
+        	$end = $endtime;
+        }
+        
+        if($findNeighbours)
+        {
+        	$searchedNeighbours =  $findNeighbours;
+        	$listingCount = count($searchedNeighbours[0]);
+        }
+        else
+        {
+        	$searchedNeighbours =  $this->searchNeighbours($searchWord,$aroundyou,$when,$now);
+        }
+        
+        // added by jignesh on 9-12-2013
+        if(empty($arr_types) && !empty($userSearchedTypes[0]))
+        {
+        	//echo "sad";
+        	$arr_types = $userSearchedTypes; 
+        }	
+        //end	
+        	
+        if(empty($arr_types))
+        {
+        	$neighbours = $searchedNeighbours[0];
+        }
+        else if(in_array(1,$arr_types))
+        {
+        	$neighbours = $searchedNeighbours[0];
+        }
+        
+        $listingCount = count($listing2)+count($usergroups)+count($neighbours);
+        $managertype = array();
+       	$i = 0;
+       	if($neighbours)
+       	{
+	        foreach ($neighbours as $neighbour)
+	        {
+	        	$managertype[$i] = $em
+		        	->getRepository('FenchyRegularUserBundle:UserRegular')
+		        	->getManagerType($neighbour);        	
+	        	$i++;       	
+	        }
+       	}
+       	$listingInWideRange="";
+       	$usergroupsInWideRange="";
+       	if($slug == 'search' && !$listing2)
+       	{
+       		$result2 = $em->getRepository('FenchyNoticeBundle:Notice')->getSearchResult($searchWord);
+       		$listingInWideRange = $result2[0];
+       		$i=0;
+       		if($listingInWideRange)
+       		{
+	       		foreach ($listingInWideRange as $listInWideRange)
+	       		{
+	       			$managertype1[$i++] = $em->getRepository('FenchyRegularUserBundle:UserRegular')->getManagerType($listInWideRange->getUser());
+	       		}
+       		}
+       		$usergroupsInWideRange = $result2[1];
+       		$listingCount = count($listingInWideRange)+count($usergroupsInWideRange)+count($neighbours);
+       	}
+       	
+       	$listing2WordSearch="";
+       	$usergroups2WordSearch="";
+       	if($slug == 'search' && !$listing2 && !$listingInWideRange)
+       	{
+       		$result2 = $em->getRepository('FenchyNoticeBundle:Notice')->getSearchResult(substr($searchWord,0,2),true);
+       		$listing2WordSearch = $result2[0];
+       		$i=0;
+       		if($listing2WordSearch)
+       		{
+	       		foreach ($listing2WordSearch as $list2WordSearch)
+	       		{
+	       			$managertype1[$i++] = $em->getRepository('FenchyRegularUserBundle:UserRegular')->getManagerType($list2WordSearch->getUser());
+	       		}
+       		}
+       		
+       		$usergroups2WordSearch = $result2[1];
+       		$listingCount = count($listing2WordSearch)+count($usergroups2WordSearch)+count($neighbours);
+       	}
+       	
+       	
         return $this->render('FenchyNoticeBundle:GlobalFilter:indexV2.html.twig',
             array('locale'=>$this->getRequest()->getLocale(),
                   'listingsPagination'=>$this->container->getParameter('listings_pagination'),
@@ -129,13 +569,26 @@ class GlobalFilterController extends Controller
             	  'notices' => $listing2,
             	  'noticeCount' => $listingCount,
             	  'types' => $types,
+            	  'userSearchedTypes' => $userSearchedTypes,	
             	  'daterange' => $daterange,
             	  'currdate' => $starttime,
             	  'displayUser' => $displayUser,
             	  'slider_startDate' => $start,
             	  'slider_endDate' => $end,
-            	  'keyword'=> $keyword
+            	  'keyword'=> $keyword,
+            	  'neighbours' => $neighbours,
+            	  'distance' => $searchedNeighbours[1],
+            	  'managertype' => $managertype,
+            	  'managertype1' => $managertype1,
+            	  'registered'=> true,
+            	  'findNeighbors' => $find,
+            	  'usergroups' => $usergroups,	
+            	  'listingInWideRange' => $listingInWideRange,
+            	  'usergroupsInWideRange' => $usergroupsInWideRange,
+            	  'listing2WordSearch' => $listing2WordSearch,
+            	  'usergroups2WordSearch' => $usergroups2WordSearch	
                 ));
+        // End Logged User's Search area
     }
     
     public function generateCodeAction($userId)
@@ -147,7 +600,8 @@ class GlobalFilterController extends Controller
     	if($result)
     	{
     		$avatar = $result->getWebPath();
-    			
+    		if($avatar == "")
+    			$avatar = 'images/default_profile_picture.png';
     	}
     	else
     	{
@@ -158,7 +612,27 @@ class GlobalFilterController extends Controller
     			array('avatar'=> $avatar));
     }
     
-    public function noticeDistanceCodeAction($noticeLoc)
+    public function generateCodeGroupImageAction($userId)
+    {
+    	$document = new Document();
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($userId);
+    	 
+    	if($result)
+    	{
+    		$avatar = $result->getWebPath();
+    		 
+    	}
+    	else
+    	{
+    		$avatar = 'images/default_profile_picture.png';
+    	}
+    	 
+    	return $this->render('FenchyNoticeBundle:PartialsV2:avatar.html.twig',
+    			array('avatar'=> $avatar));
+    }
+    
+    public function noticeDistanceCodeAction($noticeLocLat, $noticeLocLon)
     {
     	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
     	
@@ -166,23 +640,29 @@ class GlobalFilterController extends Controller
     		return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
     	
     	$displayUser = $userLoggedIn;
-    	$origin = str_replace(" ", "", $displayUser->getLocation());
-    	$destination = str_replace(" ", "", $noticeLoc);
-    	    	
-    	$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
-    	$data = file_get_contents($url);
-    	//$data = utf8_decode($data);
-    	$obj = json_decode($data);
     	
-    	$gmap_distance =  $obj->rows[0]->elements[0]->distance->value; // location with gmap api distance
-    	$gmap_distance_km =  ($obj->rows[0]->elements[0]->distance->value)/1000 ; // location with gmap api distance
+    	$lat = $noticeLocLat;
+    	$log = $noticeLocLon;
+    	
+    	$lat2 = $displayUser->getLocation()->getLatitude();
+    	$log2 = $displayUser->getLocation()->getLongitude();
+    	
+    	$theta = $log - $log2;
+    	// Find the Great Circle distance
+    	$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+    	$distance = $distance * 60 * 1.1515;
+    	$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+    	
+    	$gmap_distance_km =  $gmap_distance/1000 ; // location with gmap api distance
+    	
     	$gmap_distance_km = floor($gmap_distance_km);
+    	
     	return $this->render('FenchyNoticeBundle:PartialsV2:distance.html.twig',
     			array('distance'=> $gmap_distance,
     				  'distance_km' => $gmap_distance_km));
     }
     
-    public function noticeDistanceClassCodeAction($noticeLoc)
+    public function noticeDistanceClassCodeAction($noticeLocLat, $noticeLocLon)
     {
     	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
     	 
@@ -190,16 +670,64 @@ class GlobalFilterController extends Controller
     		return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
     	 
     	$displayUser = $userLoggedIn;
-    	$origin = str_replace(" ", "", $displayUser->getLocation());
-    	$destination = str_replace(" ", "", $noticeLoc);
-    
-    	$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
-    	$data = file_get_contents($url);
-    	//$data = utf8_decode($data);
-    	$obj = json_decode($data);
+    	
+    	
+    	$lat = $noticeLocLat;
+    	$log = $noticeLocLon;
     	 
-    	$gmap_distance =  $obj->rows[0]->elements[0]->distance->value; // location with gmap api distance
-    	$gmap_distance_km =  ($obj->rows[0]->elements[0]->distance->value)/1000 ; // location with gmap api distance
+    	$lat2 = $displayUser->getLocation()->getLatitude();
+    	$log2 = $displayUser->getLocation()->getLongitude();
+    	 
+    	$theta = $log - $log2;
+    	// Find the Great Circle distance
+    	$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+    	$distance = $distance * 60 * 1.1515;
+    	$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+    
+//     	$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
+//     	$data = file_get_contents($url);
+//     	//$data = utf8_decode($data);
+//     	$obj = json_decode($data);
+	    	
+    	
+    	$gmap_distance_km =  $gmap_distance/1000 ; // location with gmap api distance
+    	
+    	$gmap_distance_km = floor($gmap_distance_km);
+    	return $this->render('FenchyNoticeBundle:PartialsV2:distanceClass.html.twig',
+    			array('distance'=> $gmap_distance,
+    					'distance_km' => $gmap_distance_km));
+    }
+    
+    public function neighborDistanceClassCodeAction($neighbourLocLat, $neighbourLocLon)
+    {
+    	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+    
+    	if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
+    		return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+    
+    	$displayUser = $userLoggedIn;
+    	 
+    	 
+    	$lat = $neighbourLocLat;
+    	$log = $neighbourLocLon;
+    
+    	$lat2 = $displayUser->getLocation()->getLatitude();
+    	$log2 = $displayUser->getLocation()->getLongitude();
+    
+    	$theta = $log - $log2;
+    	// Find the Great Circle distance
+    	$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+    	$distance = $distance * 60 * 1.1515;
+    	$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+    
+    	//     	$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
+    	//     	$data = file_get_contents($url);
+    	//     	//$data = utf8_decode($data);
+    	//     	$obj = json_decode($data);
+    
+    	 
+    	$gmap_distance_km =  $gmap_distance/1000 ; // location with gmap api distance
+    	 
     	$gmap_distance_km = floor($gmap_distance_km);
     	return $this->render('FenchyNoticeBundle:PartialsV2:distanceClass.html.twig',
     			array('distance'=> $gmap_distance,
@@ -242,8 +770,10 @@ class GlobalFilterController extends Controller
 			{
 				$neighbors = $neighbor->getId();
 			}
-		  if(!$neighbors)
+			
+		  if($neighbors)
 		  {
+		  	
 			$document = new Document();
 			$em = $this->getDoctrine()->getEntityManager();
 			$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
@@ -265,10 +795,22 @@ class GlobalFilterController extends Controller
 				
 			if($user->getLocation()!="" && $userid!=$currentuid)
 			{
-				$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
-				$data = file_get_contents($url);
-				//$data = utf8_decode($data);
-				$obj = json_decode($data);
+				$lat = $user->getLocation()->getLatitude();
+				$log = $user->getLocation()->getLongitude();
+				
+				$lat2 = $displayUser->getLocation()->getLatitude();
+				$log2 = $displayUser->getLocation()->getLongitude();
+				
+				$theta = $log - $log2;
+				// Find the Great Circle distance
+				$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+				$distance = $distance * 60 * 1.1515;
+				$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+				
+// 				$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
+// 				$data = file_get_contents($url);
+// 				//$data = utf8_decode($data);
+// 				$obj = json_decode($data);
 	
 				
 				$mindist = $this->container->getParameter('filter_min_distance_user');// minimum distance
@@ -287,8 +829,8 @@ class GlobalFilterController extends Controller
 				// 				}
 	
 				$dist = 30000; // Default distance
-	
-				$gmap_distance =  $obj->rows[0]->elements[0]->distance->value; // location with gmap api distance
+// 				print_r($obj->error_message == 'You have exceeded your daily request quota for this API.');
+// 				exit;
 				
 				if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
 				{
@@ -328,8 +870,7 @@ class GlobalFilterController extends Controller
 		}
     	 
     	return $this->render('FenchyNoticeBundle:PartialsV2:myneighbors.html.twig',
-    			array('avatar'=> $avatar,
-   					  'displayUser'		=> $displayUser,
+    			array('displayUser'		=> $displayUser,
 				 	  'users2'			=> $users2));
     }
     
@@ -392,11 +933,22 @@ class GlobalFilterController extends Controller
     
     		if($user->getLocation()!="" && $userid!=$currentuid)
     		{
-    			$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
-    			$data = file_get_contents($url);
-    			//$data = utf8_decode($data);
-    			$obj = json_decode($data);
-    
+    			$lat = $user->getLocation()->getLatitude();
+    			$log = $user->getLocation()->getLongitude();
+    			
+    			$lat2 = $displayUser->getLocation()->getLatitude();
+    			$log2 = $displayUser->getLocation()->getLongitude();
+    			
+    			$theta = $log - $log2;
+    			// Find the Great Circle distance
+    			$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+    			$distance = $distance * 60 * 1.1515;
+    			$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+    			
+//     			$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
+//     			$data = file_get_contents($url);
+//     			//$data = utf8_decode($data);
+//     			$obj = json_decode($data);
     
     			$mindist = $this->container->getParameter('filter_min_distance_user');// minimum distance
     			$maxdist = $this->container->getParameter('filter_max_distance_user');// maximum distance
@@ -414,9 +966,7 @@ class GlobalFilterController extends Controller
     				// 				}
     
     				$dist = 30000; // Default distance
-    
-    				$gmap_distance =  $obj->rows[0]->elements[0]->distance->value; // location with gmap api distance
-    
+        
     				if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
     				{
     					// Added By jignesh for Manager type
@@ -459,6 +1009,133 @@ class GlobalFilterController extends Controller
     						'users2'			=> $users2));
     	}
 
+    	
+    	public function inviteneighborstolistingAction($userId, $noticeId=null)
+    	{
+    		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+    	
+    		if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
+    			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+    	
+    		$displayUser = $userLoggedIn;
+    		$filterService = $this->get('listfilter');
+    		$emptyFilter = $returnFilter = $filterService->getFilter();
+    		//Get Users info
+    		$users = $this->getDoctrine()
+    		->getEntityManager()
+    		->getRepository('UserBundle:User')
+    		->findAllWithStickers($emptyFilter);
+    	
+    		$origin = str_replace(" ", "", $displayUser->getLocation());
+    		$currentuid = $displayUser->getId();
+    		$request = $this->getRequest();
+    	
+    		$filterdata = "";
+    		$users2 = array();
+    		foreach ($users as $user) {
+    	
+    			//$avatar = $user->getRegularUser()->getAvatar(false);
+    			$em = $this->getDoctrine()->getEntityManager();
+    			$neighbor = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findById($currentuid,$user->getId());
+    			if(!$neighbor)
+    			{
+    				$neighbor = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findById($user->getId(),$currentuid);
+    			}
+    			$neighbors = '';
+    			if($neighbor)
+    			{
+    				$neighbors = $neighbor->getId();
+    			}
+    			if($neighbors)
+    			{
+    				$document = new Document();
+    				$em = $this->getDoctrine()->getEntityManager();
+    				$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
+    	
+    				if($result)
+    				{
+    					$avatar = $result->getWebPath();
+    	
+    				}
+    				else
+    				{
+    					$avatar = 'images/default_profile_picture.png';
+    				}
+    				 
+    				$firstname= $user->getRegularUser()->getFirstname();
+    				$destination = str_replace(" ", "", $user->getLocation());
+    				$userid= $user->getId();
+    	
+    	
+    				if($user->getLocation()!="" && $userid!=$currentuid)
+    				{
+    					$lat = $user->getLocation()->getLatitude();
+    					$log = $user->getLocation()->getLongitude();
+    					
+    					$lat2 = $displayUser->getLocation()->getLatitude();
+    					$log2 = $displayUser->getLocation()->getLongitude();
+    					
+    					$theta = $log - $log2;
+    					// Find the Great Circle distance
+    					$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+    					$distance = $distance * 60 * 1.1515;
+    					$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+    					
+//     					$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
+//     					$data = file_get_contents($url);
+//     					//$data = utf8_decode($data);
+//     					$obj = json_decode($data);
+    	
+    	
+    					$mindist = $this->container->getParameter('filter_min_distance_user');// minimum distance
+    					$maxdist = $this->container->getParameter('filter_max_distance_user');// maximum distance
+    	
+    							$dist = 30000; // Default distance
+    	
+    							if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
+    							{
+    								// Added By jignesh for Manager type
+    	
+    								if($user->getActivity() >= 400 && $user->getActivity() < 1000)
+    								{
+    									$managertype = "Community Manager";
+    									$managertype_alpha = "C";
+    									$classColor = "green";
+    								}
+    								elseif($user->getActivity() >= 1000)
+    								{
+    									$managertype = "Neighborhood Manager";
+    									$managertype_alpha = "N";
+    									$classColor = "orange";
+    								}
+    								elseif($user->getManagerType()==1)
+    								{
+    									$managertype = "House Manager";
+    									$managertype_alpha = "H";
+    									$classColor = "blue";
+    								}
+    								else
+    								{
+    									$managertype = "";
+    									$managertype_alpha = " ";
+    									$classColor = "red";
+    								}
+    								// Added By jignesh for Manager type
+    								$user->setTwitterUsername($avatar);
+    								$users2[] = $user;
+    	
+    							}
+    				}
+    			}
+    		}
+    	
+    		return $this->render('FenchyNoticeBundle:GlobalFilter:inviteneighborstolisting.html.twig',
+    				array('displayUser'	=> $displayUser,
+    						'users2'	=> $users2,
+    						'noticeId' => $noticeId
+    		));
+    	}
+    	 
     public function detailsV2Action()
     { 
         return $this->render('FenchyNoticeBundle:GlobalFilter:detailsV2.html.twig',
@@ -535,5 +1212,224 @@ class GlobalFilterController extends Controller
             $response->headers->set('Content-Type', 'application/json');
             return $response;
         }
+    }
+    
+    public function listAction() {
+    
+    	$request = $this->get('request');
+    	if ( $request->getMethod() == 'POST' ) {
+    		$filterService = $this->get('listfilter');
+    
+    		$clientFilter = json_decode($request->getContent(), TRUE);
+    		if ( array_key_exists('toGoUrl', $clientFilter) ) {
+    			$this->get('session')->set('lastFilterUrl', $clientFilter['toGoUrl']);
+    		}
+    
+    		$filterService->buildValidateFilter($clientFilter);
+    		$currentUser = $this->get('security.context')->getToken()->getUser();
+    
+    		if ( $currentUser instanceof \Fenchy\UserBundle\Entity\User )
+    			$filterService->setCurrentUser($currentUser);
+    
+    		$returnFilter = $filterService->getFilter();
+    		$knn = $this->container->getParameter('not_found_suggestions');
+    
+    		$returnData = $filterService->getList();
+    		$returnDataCnt = $filterService->count;
+    
+    		if ( $returnDataCnt == 0)
+    			$returnData = $filterService->getListKNN( $knn );
+    
+    		$response = new Response(json_encode(array(
+    				'filter' => $returnFilter,
+    				'notices' => $returnData,
+    				'noticesCount' => $returnDataCnt
+    		)));
+    		$response->headers->set('Content-Type', 'application/json');
+    		return $response;
+    	}
+    }    
+    
+    public function searchNeighboursNotLogged($searchWord)
+    {
+    	
+    	if($searchWord)
+    	{
+    		$users = $this->getDoctrine()
+    		->getEntityManager()
+    		->getRepository('UserBundle:User')
+    		->searchUser($searchWord);
+    	}
+    	else
+    	{
+    		$filterService = $this->get('listfilter');
+    		$emptyFilter = $returnFilter = $filterService->getFilter();
+    	
+    		$users = $this->getDoctrine()
+    		->getEntityManager()
+    		->getRepository('UserBundle:User')
+    		->findAllWithStickers($emptyFilter);
+    	}
+    	 
+    	
+    	if($users)
+    	{
+    		$result[0] = $users;
+    		return $result;
+    	}
+    	$result[0] = null;
+    	return $result;
+    }
+    
+    public function searchNeighbours($searchWord,$aroundyou,$when=null,$now=null)
+    {
+    	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+    	
+    	if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
+    		return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+    	
+    	$location = $userLoggedIn->getLocation();
+    	$lat = $location->getLongitude();
+    	$log = $location->getLatitude();    	
+
+    	if($searchWord)
+    	{
+    		$users = $this->getDoctrine()
+    		->getEntityManager()
+    		->getRepository('UserBundle:User')
+    		->searchUser($searchWord);
+    	}
+    	else if($when!='' || $now!='')
+    	{
+    		$filterService = $this->get('listfilter');
+    		$emptyFilter = $returnFilter = $filterService->getFilter();
+    		$users = $this->getDoctrine()
+    		->getEntityManager()
+    		->getRepository('UserBundle:User')
+    		->findAllWithStickersWithDate($emptyFilter,$when,$now);
+    	}
+    	else
+    	{
+    		$filterService = $this->get('listfilter');
+    		$emptyFilter = $returnFilter = $filterService->getFilter();
+    		
+    		$users = $this->getDoctrine()
+    		->getEntityManager()
+    		->getRepository('UserBundle:User')
+    	   	->findAllWithStickers($emptyFilter);
+    	}
+    	
+    	$users2 = array();
+    	$distanceArray = array();
+    	if($users)
+    	{
+    		foreach ($users as $user)
+    		{
+				$location = $user->getLocation();
+				$lat2 = $location->getLongitude();
+				$log2 = $location->getLatitude();		
+				
+				$theta = $log - $log2;
+				// Find the Great Circle distance
+				$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+				$distance = $distance * 60 * 1.1515;
+				$distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+				
+				if($aroundyou)
+				{
+					$dist = $aroundyou;
+				}
+				else
+				{
+					$dist = 30000; // slider distance
+				}
+				
+				if($user->getId() != $userLoggedIn->getId())
+				{
+					if($distance <= $dist && $distance > 0)
+					{
+							$users2[] = $user;
+						$distanceArray[] = $distance;
+					}
+				}
+    		}
+    		$result[0] = $users2;
+    		$result[1] = $distanceArray;
+    		return $result;
+    	}
+    		$result[0] = null;
+    		$result[1] = null;
+    	return $result;
+    }
+    
+    
+    public function findNeighbours($searchWord,$aroundyou=null,$when=null,$now=null)
+    {
+    	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+    	 
+    	if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
+    		return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+    	 
+    	$location = $userLoggedIn->getLocation();
+    	$lat = $location->getLongitude();
+    	$log = $location->getLatitude();
+    
+    	if($when!='' || $now!='')
+    	{
+    		$filterService = $this->get('listfilter');
+    		$emptyFilter = $returnFilter = $filterService->getFilter();
+    		$users = $this->getDoctrine()
+    		->getEntityManager()
+    		->getRepository('UserBundle:User')
+    		->findAllWithStickersWithDate($emptyFilter,$when,$now);
+    	}
+    	else
+    	{	
+    	$users = $this->getDoctrine()
+    	->getEntityManager()
+    	->getRepository('UserBundle:User')
+    	->searchUserNeighbors($searchWord);
+    	}
+    	 
+    	$users2 = array();
+    	$distanceArray = array();
+    	if($users)
+    	{
+    		foreach ($users as $user)
+    		{
+    			$location = $user->getLocation();
+    			$lat2 = $location->getLongitude();
+    			$log2 = $location->getLatitude();
+    
+    			$theta = $log - $log2;
+    			// Find the Great Circle distance
+    			$distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+    			$distance = $distance * 60 * 1.1515;
+    			$distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+    
+    			if($user->getId() != $userLoggedIn->getId())
+    			{
+    				if($aroundyou)
+    				{
+    					$maxD = $aroundyou;
+    				}
+    				else 
+    				{
+    					$maxD = 30000;
+    				}
+    				if($distance < $maxD && $distance > 0)
+    				{
+    					$users2[] = $user;
+    					$distanceArray[] = $distance;
+    				}
+    			}
+    		}
+    		$result[0] = $users2;
+    		$result[1] = $distanceArray;
+    		return $result;
+    	}
+    	$result[0] = null;
+    	$result[1] = null;
+    	return $result;
     }
 }

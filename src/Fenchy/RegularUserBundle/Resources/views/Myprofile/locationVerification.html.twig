@@ -13,20 +13,24 @@
 			<div class="mycommunitypoints">
 				<h4>{{ 'regularuser.location_verification'|trans|upper }}</h4>
 				<div class="form-box-wrapper">									
-					<h2>{{ 'regularuser.enter_password'|trans|upper }}</h2>
+					<h2 style="text-align: left;">{{ 'regularuser.enter_password'|trans|upper }}</h2>
 					<div class="row input-wrapper">
 						<div class="input-element">					
 							<input type="text" id="pass" placeholder="PASSWORD"></input>
 						</div>
 					</div>
 					<div class="clearfix">
-						<div id="buttons" class="button grey-button pull-left" style="float: right;">
+						<div id="buttons" class="button pull-right">
 							<a class="blue_button" value="ok" onClick="verifyLocation()">OK</a>
 						</div>
-					</div>			
+					</div><div class="clearfix"></div>
 				</div>
+				
 			</div>
-	
+		<div class="clearfix"></div>
+	   	<div class="bgbottom">
+			<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
+		</div>
 	<script type="text/javascript">
 		function verifyLocation(){
 			var pass = $('#pass').val();

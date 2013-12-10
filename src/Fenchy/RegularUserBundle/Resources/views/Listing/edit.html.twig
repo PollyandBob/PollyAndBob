@@ -39,7 +39,179 @@
                 document.getElementById('location_gapi'),
                 landingPageViewModel );
            
-                
+
+            $("#fenchy_noticebundle_noticetype_price").keydown(function(event) {
+            	if($('#fenchy_noticebundle_noticetype_free').is(':checked'))
+               	{
+                   	alert('You marked it free'); 
+               	}
+		        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+		           	return;
+		        } else {
+		            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+		                event.preventDefault();
+		            }
+		        }
+		    });
+
+            $("#fenchy_noticebundle_noticetype_pieces").keydown(function(event) {
+            	if($('#fenchy_noticebundle_noticetype_one_piece').is(':checked'))
+              	{
+                  	alert('You marked only one piece'); 
+              	}
+		        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+		           	return;
+		        } else {
+		            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+		                event.preventDefault();
+		            }
+		        }
+		    });
+		    
+            $("#fenchy_noticebundle_noticetype_spot").keydown(function(event) {
+            	if($('#fenchy_noticebundle_noticetype_unlimited').is(':checked'))
+              	{
+                  	alert('You marked unlimited'); 
+              	}
+		        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+		           	return;
+		        } else {
+		            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+		                event.preventDefault();
+		            }
+		        }
+		    });
+            
+
+            $('#fenchy_noticebundle_noticetype_type_value_2_value_0').click(function()
+        	{
+        	   if($('#fenchy_noticebundle_noticetype_free').is(':checked') || $('#fenchy_noticebundle_noticetype_type_value_2_value_5').is(':checked'))
+        	   {
+        		   alert('you marked it free');
+        			   $('#fenchy_noticebundle_noticetype_type_value_2_value_0').prop( "checked", false );
+        	   }	
+        	});
+            $('#fenchy_noticebundle_noticetype_type_value_5_value_0').prop('checked','checked');
+            $('#fenchy_noticebundle_noticetype_type_value_5_value_0').click(function()
+            {
+            	$('#fenchy_noticebundle_noticetype_type_value_5_value_0').prop('checked','checked');
+            });
+
+            $('#fenchy_noticebundle_noticetype_type_value_8_value_0').prop('checked','checked');
+            $('#fenchy_noticebundle_noticetype_type_value_8_value_0').click(function()
+            {
+            	$('#fenchy_noticebundle_noticetype_type_value_8_value_0').prop('checked','checked');
+            });
+            
+            $('#fenchy_noticebundle_noticetype_default_setting').click(function()
+           	{
+               	$('#fenchy_noticebundle_noticetype_default_setting').prop( "checked", true );
+               	
+            });
+
+            $('#fenchy_noticebundle_noticetype_type_value_2_value_5').click(function()
+            {                
+            	if($('#fenchy_noticebundle_noticetype_type_value_2_value_5').is(':checked'))
+            	{             	
+        			$('#fenchy_noticebundle_noticetype_price').attr('readonly','readonly');
+        			$('#fenchy_noticebundle_noticetype_price').val('');
+            	}
+            	else
+            	{
+            		$('#fenchy_noticebundle_noticetype_price').removeAttr('readonly');
+            	}
+            });
+
+            $('#fenchy_noticebundle_noticetype_free').click(function()
+            {                
+              	if($('#fenchy_noticebundle_noticetype_free').is(':checked'))
+               	{             	
+            		$('#fenchy_noticebundle_noticetype_price').attr('readonly','readonly');
+            		$('#fenchy_noticebundle_noticetype_price').val('');
+               	}
+               	else
+               	{
+               		$('#fenchy_noticebundle_noticetype_price').removeAttr('readonly');
+               	}
+	        });
+
+            $('#fenchy_noticebundle_noticetype_one_piece').click(function()
+            {                
+              	if($('#fenchy_noticebundle_noticetype_one_piece').is(':checked'))
+              	{             	
+              		$('#fenchy_noticebundle_noticetype_pieces').attr('readonly','readonly');
+             		$('#fenchy_noticebundle_noticetype_pieces').val('');
+               	}
+               	else
+               	{
+               		$('#fenchy_noticebundle_noticetype_pieces').removeAttr('readonly');
+               	}
+        	});
+
+            $('#fenchy_noticebundle_noticetype_unlimited').click(function()
+            {                
+              	if($('#fenchy_noticebundle_noticetype_unlimited').is(':checked'))
+              	{             	
+              		$('#fenchy_noticebundle_noticetype_spot').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_spot').val('');
+               	}
+               	else
+              	{
+              		$('#fenchy_noticebundle_noticetype_spot').removeAttr('readonly');
+              	}
+           });
+
+            $('#fenchy_noticebundle_noticetype_location_arrange').click(function()
+           	{                
+              	if($('#fenchy_noticebundle_noticetype_location_arrange').is(':checked'))
+              	{             	
+               		$('#location_gapi').attr('readonly','readonly');
+               		$('#location_gapi').val('');
+               	}
+              	else
+               	{
+               		$('#location_gapi').removeAttr('readonly');
+               	}
+            });
+            
+            $('#fenchy_noticebundle_noticetype_date_arrange').click(function()
+	      	{               	                            
+            	if($('#fenchy_noticebundle_noticetype_date_arrange').is(':checked'))
+              	{             	
+            		$('#fenchy_noticebundle_noticetype_start_date').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_start_date').val('');
+               		$('#fenchy_noticebundle_noticetype_start_date').datepicker('disable');
+               		$('#fenchy_noticebundle_noticetype_end_date').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_end_date').val('');
+               		$('#fenchy_noticebundle_noticetype_end_date').datepicker('disable');
+               	}
+              	else
+              	{
+               		$('#fenchy_noticebundle_noticetype_start_date').removeAttr('readonly');
+               		$('#fenchy_noticebundle_noticetype_end_date').removeAttr('readonly');
+               		$('#fenchy_noticebundle_noticetype_start_date').datepicker('enable');
+               		$('#fenchy_noticebundle_noticetype_end_date').datepicker('enable');
+               	}            	
+            });
+            $('#fenchy_noticebundle_noticetype_start_time_arrange').click(function()
+            {                
+              	if($('#fenchy_noticebundle_noticetype_start_time_arrange').is(':checked'))
+               	{             	
+               		$('#fenchy_noticebundle_noticetype_start_time').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_start_time').val('');
+               		$('#fenchy_noticebundle_noticetype_start_time').timepicker('disable');
+               		$('#fenchy_noticebundle_noticetype_end_time').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_end_time').val('');
+               		$('#fenchy_noticebundle_noticetype_end_time').timepicker('disable');
+               	}
+               	else
+               	{
+               		$('#fenchy_noticebundle_noticetype_start_time').removeAttr('readonly');
+               		$('#fenchy_noticebundle_noticetype_end_time').removeAttr('readonly');
+               		$('#fenchy_noticebundle_noticetype_start_time').timepicker('enable');
+               		$('#fenchy_noticebundle_noticetype_end_time').timepicker('enable');
+               	}
+            });               
         });
         
     </script>
@@ -206,7 +378,7 @@
 	          	<div class="createlistingdata halfleft">
 	          		<h4>{{ 'notice.action'|trans|upper }}</h4>
 	          		<div class="createlistingdetail">
-	          			<p>what do you want the other person to do?</p>
+	          			<p>{{ 'notice.what_other_person'|trans }}</p>
 	          			<div class="clearfix"></div>
 	          			<div class="actioncheck">
                          	<div class="checkboxaction">
@@ -252,8 +424,11 @@
 										{{ form_row(form.pieces) }}
                                 	<div class="checkbox">
 										{{ form_row(form.one_piece) }}
-                                	</div>                                
-                                	<a href="javascript:void(0);" class="blue_button">learn more about payment settings</a>
+                                	</div>
+                                	<div class="checkbox">
+                            			{{ form_row(form.default_setting) }}
+                            		</div>                                
+                                	<!--  <a href="javascript:void(0);" class="blue_button">learn more about payment settings</a>-->
                                 </div>
                            {% endif %}
                            </div>
@@ -286,8 +461,11 @@
                                 	{{ form_row(form.spot) }}
                                 	<div class="checkbox">
                                 		{{ form_row(form.unlimited) }}
-                                	</div>                                
-                                	<a href="javascript:void(0);" class="blue_button">learn more about payment settings</a>
+                                	</div>
+                                	<div class="checkbox">
+                            			{{ form_row(form.default_setting) }}
+                            		</div>                                
+                                	<!-- <a href="javascript:void(0);" class="blue_button">learn more about payment settings</a>-->
                                 </div>
                             </div>
                         </div>
@@ -311,7 +489,10 @@
                                     </div>
                             	</div> 
                             	<div class="right">
-                            		<a href="javascript:void(0);" class="blue_button">learn more about payment settings</a>
+                            		<div class="checkbox">
+                            			{{ form_row(form.default_setting) }}
+                            		</div>
+                            		<!-- <a href="javascript:void(0);" class="blue_button">learn more about payment settings</a>-->
                             	</div>                            	
                             </div>
                         </div>
@@ -332,7 +513,7 @@
 	            	<a id="back" class="about_edit" href="{{ path('fenchy_regular_user_listing_manage') }}">
 	                	{{ 'regularuser.back'|trans|upper }}
 	                </a>
-	           	   	<input type="submit" id="continue" value="{{ 'regularuser.continue'|trans|upper }}"/>
+	           	   	<input type="submit" id="continue" value="{{ 'btn.send'|trans|upper }}"/>
 	            </div>
 	    	</div>
 	    	</div>

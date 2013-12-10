@@ -1,16 +1,10 @@
 {# commonly used search bar #}
 
-		<form id="sb-form" action="{{ path('fenchy_notice_indexv2') }}">
-				<input id="search" type="text" autocomplete="off" onFocus="myFocus(this);" onBlur="myBlur(this);" value="{{ 'frontend.placeholder_what'|trans }}"
-                   data-bind="jqAutocomplete: { autoFocus: false }, 
-                              jqAutocompleteSource: fenSuggestionsArr, 
-                              jqAutocompleteQuery: fenRetrieveSuggestions,
-                              jqAutocompleteValue: fcPhrase,
-                              jqAutocompleteAppendTo: '#sb-form',
-                              event: {'keypress': inputPressEnter },    value: fcPhrase, valueUpdate:'afterkeydown'       " />
+		<form id="sb-form" action="{{ path('fenchy_notice_indexv2',{'slug':'search'}) }}" method="post">
+				<input name="search" id="search" type="text" value="{{ app.request.get('search') }}" autocomplete="off" placeholder="{{ 'frontend.placeholder_what'|trans }}"/>
                 
                 <!-- <input id="location" type="text" data-bind="value: fcGFormattedAddress" onFocus="myFocus(this);" onBlur="myBlur(this);" value="{{ 'frontend.placeholder_where'|trans }}" style="width:120px;" /> -->
-                <button type="submit" onclick="selectedOptions(this);" onkeypress="selectedOptions(this);" ></button>
+                <button type="submit"></button>
                 
         </form>
             

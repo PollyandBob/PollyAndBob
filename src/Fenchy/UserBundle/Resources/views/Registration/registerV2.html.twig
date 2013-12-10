@@ -9,6 +9,7 @@
 		<div class="form-error" style="padding-left: 14px;">
 		    {{form_errors(form) }}
             {{form_errors(form.user_regular.firstname)}}
+            {{form_errors(form.user_regular.postcode)}}
             {{form_errors(form.email)}}
             {{form_errors(form.plainPassword.first)}}
             {{form_errors(form.plainPassword.second)}}
@@ -17,6 +18,8 @@
 						<img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
 		</div>       
                 {{ form_widget(form.user_regular.firstname) }}
+                
+                {{ form_widget(form.user_regular.postcode) }}
             
                 {{ form_widget(form.email) }}
             

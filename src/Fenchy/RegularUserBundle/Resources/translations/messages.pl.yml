@@ -45,7 +45,7 @@ regularuser:
 
   email: Email
 
-  invite: Zaproś do Fenchy
+  invite: Zaproś do Polly & Bob
 
   join_to_fenchy: Dołącz do fenchy.com
 
@@ -328,7 +328,7 @@ regularuser:
 
   not_shown_publicy: Twój adres nie będzie pokazywany publicznie
 
-  start_fenchy: Rozpocznij z Fenchy
+  start_fenchy: Rozpocznij z Polly & Bob
 
   locationpopup:
     required_confirmation_message: Kliknij link aktywacyjny wysłany na podany adres E-mail aby aktywować konto.
@@ -356,7 +356,7 @@ regularuser:
 
     publish_facebook: publikuj posty na Facebooku
 
-    invite_facebook: Zaproś swoich znajomych do korzystania z Fenchy !
+    invite_facebook: Zaproś swoich znajomych do korzystania z Polly & Bob !
 
   additional_info: Dodatkowe Informacje
 
@@ -421,11 +421,11 @@ emailchange:
     change_aborted: Anulowano zmianę adresu e-mail.
 
   email:
-    subject: Zmiana adresu e-mail w Fenchy
+    subject: Zmiana adresu e-mail w Polly & Bob
 
     1: Witaj %username%,
 
-    2: Aby zmienić adres e-mail swojego konta w Fenchy prosimy kliknąć w poniższy link:
+    2: Aby zmienić adres e-mail swojego konta w Polly & Bob prosimy kliknąć w poniższy link:
 
     3: Zmień adres e-mail.
 
@@ -441,7 +441,7 @@ emailchange:
 
     10: Dziękujemy,
 
-    11: Zespół Fenchy
+    11: Zespół Polly & Bob
 
     5: Aby anulować zmianę adresu e-mail prosimy klinąć poniższy link:
 help: Help

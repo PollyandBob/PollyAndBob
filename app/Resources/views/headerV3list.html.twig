@@ -4,6 +4,7 @@
     height: 100px;
     width: 172px;
 }
+
 .loginwindow button {
     float: left;
     margin-left: 17px;
@@ -25,22 +26,26 @@
             {% if not is_granted('ROLE_USER') %}
                 <ul class="normal_user">
                 	<li id="login">
-                		<a href="#" class="login" style="margin-top: -20px;">{{'frontend.sign_in'|trans}}</a>
-                		<div class="loginwindow" style="margin-top: -20px;">
+                		<a href="#" class="login" style="margin-top: 20px;">{{'frontend.sign_in'|trans}}</a>
+                		<div class="loginwindow" style="margin-top: 0px;">
 		                    <img class="iconarrow" src="{{ asset('images/icon_arrow.png') }}" alt="" />
 		                    {% render "UserBundle:Security:login" %}
 		                </div>             
 		            </li>
 		            <li>
-		            	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis signup" style="margin-top: -20px;">{{'frontend.sign_up'|trans}}</a>
+		            	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis signup" style="margin-top: 20px;">{{'frontend.sign_up'|trans}}</a>
 		            </li>
                 	<!-- <li><a href="#dialog1" name="modal" id="vzoom_1944" class="zoomthis login">{{'frontend.sign_in'|trans}}</a></li>
                     <li><a href="#dialog1" name="modal" id="vzoom_1944" class="zoomthis signup">{{'frontend.sign_up'|trans}}</a></li>-->
                 </ul>
                 {% else %}
                     {% render 'UserBundle:Widgets:userPanel' %}
+                    <div class="righ_to_right" >
+            			<a href="{{ path('fenchy_regular_user_user_myprofile_aboutmychoice') }}"><span>{{ app.user.regularuser.firstname }}</span></a>
+            			&nbsp;<a href="{{ path('fenchy_notice_indexv2') }}"><span>{{ 'main.home'|trans }}</span></a>
+            		</div>
                 {% endif %}
-            
+            	
             </div>
         </section>
     </header>
@@ -49,7 +54,7 @@
 <!-- 
     <header class="main" data-role="header">
         <div id="top-menu-container" class="container clearfix">
-            <h1><a href="{{path('fenchy_notice_indexv2')}}"><img width="61" src="{{ absolute(asset('images/logo.png')) }}" alt="Fenchy"/></a></h1>
+            <h1><a href="{{path('fenchy_notice_indexv2')}}"><img width="61" src="{{ absolute(asset('images/logo.png')) }}" alt="Polly & Bob"/></a></h1>
             <div id="user-account-nav" class="pull-right">
                 {% if not is_granted('ROLE_USER') %}
                 <ul id="user-account-login">                    

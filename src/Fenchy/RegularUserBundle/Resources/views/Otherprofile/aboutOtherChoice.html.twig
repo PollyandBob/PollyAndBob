@@ -31,7 +31,7 @@
 	
 	{% include 'FenchyRegularUserBundle:Otherprofile:othermenu.html.twig' %}
 	<div class="member">{{ 'member_since' | trans|upper }}
-   		{{ displayUser.createdAt|date("m.d.Y") }}
+   		{{ displayUser.createdAt|date("d.m.Y") }}
    	</div>
    	 <style>
    	 .about_input
@@ -110,7 +110,7 @@
 			                            	{% set varStack = displayUser.regularuser.mylike | split(',') %}
 											{% for value in varStack %}
 												{% if value %}
-										       		<li><a href="#">{{ value }}</a></li>
+										       		<li><a href="javascript:void(0)">{{ value }}</a></li>
 										        {% endif %}
 										    {% endfor %}
 			                        	</div>
@@ -128,7 +128,7 @@
 		                            		{% set varStack = displayUser.regularuser.hotplaces | split(',') %}
 											{% for value in varStack %}
 										       {% if value %}
-										       		<li><a href="#">{{ value }}</a></li>
+										       		<li><a href="javascript:void(0)">{{ value }}</a></li>
 										        {% endif %}
 										    {% endfor %}
 			                        	</div>
@@ -148,7 +148,7 @@
 		                            		{% set varStack = displayUser.regularuser.languages | split(',') %}
 											{% for value in varStack %}
 										       {% if value %}
-										       		<li><a href="#">{{ value }}</a></li>
+										       		<li><a href="javascript:void(0)">{{ value }}</a></li>
 										        {% endif %}
 										    {% endfor %}
 			                        	</div>

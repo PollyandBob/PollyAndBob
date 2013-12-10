@@ -1,0 +1,6 @@
+<nav>
+	<ul>
+       	<li><a {% if app.request.get('_route') == 'fenchy_regular_user_user_groupprofile_groupnotifications' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_groupnotifications',{'groupId': groupId }) }}">{{ 'listing.my_grouplisting' |trans|upper}}</a></li>
+      	<li><a {% if app.request.get('_route') == 'fenchy_regular_user_user_groupprofile_groupnotifications_requests' %} class="selected"" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_groupnotifications_requests',{'groupId': groupId }) }}">{{ 'listing.my_grouprequest'|trans|upper }}</a></li>   
+    </ul>
+</nav>

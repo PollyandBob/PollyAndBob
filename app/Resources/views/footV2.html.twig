@@ -4,15 +4,23 @@
         
 	        <div class="wrapper">
 	        	<ul>
-					<li><a href="http://www.blog.pollyandbob.com" target="_blank">{{ 'frontend.footer.blog.title'|trans }}</a></li>            
+	        		<li><a href="http://www.blog.pollyandbob.com" target="_blank">{{ 'frontend.footer.blog.title'|trans }}</a></li>
+	        		<li><a href="{{ path('fenchy_frontend_boardofneigbor') }}">{{ 'frontend.footer.board_of_neighbours'|trans|upper }}</a></li>
+	        		<!-- <li><a href="{{ path('fenchy_frontend_investinus') }}">{{ 'frontend.footer.invest_in_us'|trans|upper }}</a></li>-->
+	        		<li><a href="{{ path('fenchy_frontend_joinus') }}">{{ 'frontend.footer.join_us'|trans|upper }}</a></li>
+	        		<li><a href="{{ path('fenchy_frontend_aboutandimprint') }}">{{ 'frontend.footer.about_imprint'|trans|upper }}</a></li>
+				
+				<!--<li><a href="http://www.blog.pollyandbob.com" target="_blank">{{ 'frontend.footer.blog.title'|trans }}</a></li>            
 	                <li><a href="http://blog.pollyandbob.com/story/" target="_blank">{{ 'frontend.footer.story.title'|trans }}</a></li>
 	                <li><a href="http://blog.pollyandbob.com/what-we-want/" target="_blank">{{ 'frontend.footer.what.title'|trans }}</a></li>
 	                <li><a href="http://blog.pollyandbob.com//get-shares/" target="_blank">{{ 'frontend.footer.shares.title'|trans }}</a></li>
 	                <li><a href="http://blog.pollyandbob.com/first-crowd/" target="_blank">{{ 'frontend.footer.firstcrowd.title'|trans }}</a></li>
 	                <li><a href="http://blog.pollyandbob.com/about/" target="_blank">{{ 'frontend.footer.about.title'|trans }}</a></li>
 	                <li><a href="http://blog.pollyandbob.com/imprint/" target="_blank">{{ 'main.imprint'|trans }}</a></li>
+	           -->
 	            	<!--<li><a target="_blank" class="nomargin" href="https://www.facebook.com/pages/PollyBob/180213475475729?fref=ts">
 	            	<img src="{{ asset ('images/btn_fblike.png') }}" alt=""></a></li>-->
+	            	
 	        	</ul>
 	        	
 	        	<div class="social-lang">
@@ -39,27 +47,42 @@
                 <div id="lang-menu-wrapper">
                     <ul>
                         {% if app.request.locale != 'en' %}
+                        {{  app.session.set('currenturl',app.request.uri) }}
                             <li class="en-flag">
                                 <a href="{{ path('fenchy_regular_user_chooselang', {'locale': 'en'}) }}"><strong>{{ 'frontend.english'|trans}}</strong></a>
                             </li>
                         {% endif %}
                             
-                        {% if app.request.locale != 'de' %}                            
+                        {% if app.request.locale != 'de' %}
+                        {{  app.session.set('currenturl',app.request.uri) }}
                         <li class="de-flag">
                             <a href="{{ path('fenchy_regular_user_chooselang', {'locale': 'de'}) }}"><strong>{{ 'frontend.deutsch'|trans}}</strong></a>
                         </li>
                         {% endif %}
                         
+                        {% if app.request.locale != 'pl' %}
+                        {{  app.session.set('currenturl',app.request.uri) }}
+                        <li class="pl-flag">
+                            <a href=""></a>
+                        </li>
+                        {% endif %}
+                              
+                        
+                        <!--
                         {% if app.request.locale != 'pl' %}                        
                         <li class="pl-flag">
                             <a href="{{ path('fenchy_regular_user_chooselang', {'locale': 'pl'}) }}"><strong>{{ 'frontend.polski'|trans}}</strong></a>
                         </li>
-                        {% endif %}                        
+                        {% endif %}
+                        -->                        
                         
                     </ul>
                 </div>                    
-                    
+                 
             </div>
+            
+            
+            
 	        </div>
             
        		      
@@ -129,6 +152,40 @@
     </footer>
     <!-- main -->
     
+   
+    <section id="boxes2">
+        <div id="dialog37" class="window">
+            <div class="big_popup">
+                <div class="big_popupclose"><a href="" class="close"></a></div>
+                <!-- Your custom code here -->
+                <div class="forgotpassword_popup">
+                    <div class="title">Forgot Password</div>
+                    <div class="clearfix"></div>
+                    {% if app.request.get('invalid_username') %}
+                    <script type="text/javascript">
+                    $(window).load(function() {
+						$('.forgotpassword').click();
+					});
+                    </script>
+                    <p style="font-family: mathletebulky; letter-spacing: 1px; color: red; width: 100%; font-size: 16px;">{{ 'resetting.request.invalid_username'|trans({'%username%': app.request.get('invalid_username')}, 'FOSUserBundle') }}</p>
+                    {% endif %}
+                <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">    
+                    <input type="email" placeholder="Email" id="username" name="username" required="required" />
+                    <div class="clearfix"></div>
+                    <a href="{{ path('fenchy_frontend_indexv2') }}" class="blue_button">Login</a>
+                    <input type="submit" class="blue_button right" id="continue" value="{{ 'resetting.request.submit'|trans({}, 'FOSUserBundle') }}"/>
+                </form>
+                
+                </div>
+                <!-- Your custom code end -->
+            </div>
+            <img class="popup_bottom" src="{{ asset('images/popup_bottom.png') }}" alt="" />
+        </div>
+        <div id="mask"></div>
+    </section>
+    <script>
+    //alert('test');
+    </script>
     {% if not app.user %}
     <div id="signup-wrapper" class="loginform">
         

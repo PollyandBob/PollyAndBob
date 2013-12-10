@@ -43,6 +43,21 @@ class Neighbors
     private $neighbor;
     
     /**
+     * @var DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $created_at;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    	$this->created_at   = new \DateTime();
+    }
+    
+    /**
      * @return integer
      */
     public function getId() {
@@ -103,4 +118,27 @@ class Neighbors
     	return $this;
     }
     
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Neighbors
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
 }

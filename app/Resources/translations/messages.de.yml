@@ -1,0 +1,72 @@
+main:
+  title_suffix: Polly & Bob
+  this_field_is_required: Feld benötigt
+  about_us: xx
+  jobs: xx
+  advertising: xx
+  terms: xx
+  privacy: xx
+  imprint: xx
+  languages: xx
+  interested: Interessiert?
+  join_interest: Schreibe dich in die Newsletter List und bleibe auf dem laufenden. 
+  about_pb: Über Polly & Bob
+  what_can_i_do: Was kann ich auf Polly & Bob tun?
+  first_blue_popup_desc: Polly & Bob ist ein Nachbarschaftsnetzwerk. Wir wollen das Zusammenleben in der Nachbarschaft verbessern. Besser miteinander. Mehr füreinander. Weniger online. Mehr offline. 
+  take_time_enrich: Nimm dir die Zeit. Bereichere dein Leben. 
+  first_popup_link: Was kann ich auf Polly & Bob tun?
+  you_can_do: Unzählige Möglickeiten auf Polly & Bob.
+  find_something: Finde etwas
+  offer_some: Biete etwas
+  in_neighborhood: in der Nachbarschaft
+  to_neighborhood: in der Nachbarschaft
+  find_neighbors: Finde Nachbarn!
+  connect_neighbors: Polly & Bob verbindet dich mit deiner Nachbarschaft.
+  you_need_chess: Brauchst du einen Schachpartner?
+  you_need_like: Oder einen Tandem-Partner?
+  you_need_people_xy: Du suchst interessante Leute in deiner Gegend?
+  we_need_your_location: Gib bitte deinen Standort ein, damit wir die Suche in deiner Gegend starten können.
+  save_location_form_msg: xxxs
+  back: zurück
+schema:
+# related to "db schema"  
+  events: Veranstaltungen
+  help: Hilfe
+  goods: Sachen
+  others: Andere
+  for: für
+  when: Zeitpunkt
+  what: Was
+  direction: b
+  to_swap: b
+  to_lend: b
+  to_use: b
+  to_give_away: b
+  these_days: bb b
+  today: b
+  date: b
+  sports: b
+  party: b
+  arts: Arts
+  music: b
+  other: b
+  offer: b
+  need: b
+  contact: b
+  men: b b
+  women: b b
+  male: b
+  female: b
+  emails_when_someone_sends_you_a_message: b
+  emails_when_someone_sends_you_a_request: b
+  emails_when_someone_edits_a_request: b
+  emails_when_someone_transfers_currency: b
+  emails_when_someone_sends_you_a_contact_request: b
+  emails_when_someone_writes_a_review_about_you: b
+  never: b
+  immediately: b
+  daily: b
+  create:
+    events: b b
+    need: b b
+    offer: b b  

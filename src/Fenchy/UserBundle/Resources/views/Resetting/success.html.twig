@@ -1,15 +1,29 @@
 {% extends "UserBundle::layout.html.twig" %}
 
 {% block content_inner %}
-    <div class="password-reset-message">
-    <div class="password-changed-msg">
-        {{'user.password_changed_msg'|trans}} <a href="{{ path('fenchy_frontend_homepage') }}">{{'user.password_changed_link_msg'|trans}}</a>
-        </div>
-        {% if not app.user %}
-            <div id="password-changed-login">
-                <span>{{'user.password_changed_alternative'|trans}}</span>
-                <a href="{{ path('fenchy_user_login') }}"><input type="button" value="{{'user.sign_in'|trans}}" /></a>
-            </div>
-        {% endif %}
+<section style="margin-top: 12px;" id="contentinner">
+	<div class="wrapper">  
+	<div class="mycommunitypoints">	    
+		<h4>    
+			{{'user.password_changed_msg'|trans}}
+		</h4>	
+	    {% if not app.user %}			
+			<div>
+				<a class="blue_button" href="{{ path('fenchy_frontend_indexv2') }}">{{'user.sign_in'|trans}}</a>
+			</div>
+		{% else %}
+				   
+			<div> 
+		  		<a class="blue_button" href="{{ path('fenchy_notice_indexv2') }}">{{'user.password_changed_link_msg'|trans}}</a>
+			</div>
+		{% endif %}
+		
+		
+    </div> 
+    	<div class="clearfix"></div>
+	   	<div class="bgbottom">
+			<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
+		</div>   
     </div>
+</section>    
 {% endblock %}

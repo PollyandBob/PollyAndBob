@@ -8,7 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Fenchy\GalleryBundle\Entity\Gallery;
 use Fenchy\UserBundle\Entity\User,
     Fenchy\UtilBundle\Entity\Location,
-    Fenchy\UtilBundle\Entity\Sticker;
+    Fenchy\UtilBundle\Entity\Sticker,
+	Fenchy\RegularUserBundle\Entity\UserGroup;
 
 use Gedmo\Mapping\Annotation as Gedmo; // gedmo annotations
 
@@ -102,6 +103,14 @@ class Notice
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
+    
+    /**
+     * @var UserGroup
+     *
+     * @ORM\ManyToOne(targetEntity="Fenchy\RegularUserBundle\Entity\UserGroup", inversedBy="notices")
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
+     */
+    private $usergroup;
     
     /**
      * @var Gallery
@@ -312,6 +321,13 @@ class Notice
      */
     protected $dictionaries;
 	
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $completed = false;
+    
+    
     public function __construct() {
         
         $this->values       = new ArrayCollection();
@@ -464,6 +480,21 @@ class Notice
         $this->user = $user->addNotice($this);
         
         return $this;
+    }
+    
+    /**
+     * @return UserGroup
+     */
+    public function getUserGroup() {
+    
+    	return $this->usergroup;
+    }
+    
+    public function setUserGroup(UserGroup $usergroup) {
+    
+    	$this->usergroup = $usergroup;
+    
+    	return $this;
     }
     
     /**
@@ -1471,4 +1502,27 @@ class Notice
     {
         return $this->default_setting;
     }
+
+    /**
+     * Set completed
+     *
+     * @param boolean $completed
+     * @return Notice
+     */
+    public function setCompleted($completed)
+    {
+        $this->completed = $completed;
+    
+        return $this;
+    }
+
+    /**
+     * Get completed
+     *
+     * @return boolean 
+     */
+    public function getCompleted()
+    {
+        return $this->completed;
+    }    
 }

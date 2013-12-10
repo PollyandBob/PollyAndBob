@@ -1,0 +1,17 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}	
+</script>
+{% endblock %}
+       
+{% block content %}
+	{% if locale == 'de'%}
+        {% include 'FenchyFrontendBundle:Frontend/Foot:investinus-de.html.twig' %}
+    {% elseif locale == 'en' %}
+    	{% include 'FenchyFrontendBundle:Frontend/Foot:investinus-en.html.twig' %}
+	{% endif %}
+{% endblock %}

@@ -23,7 +23,8 @@
         "friendsofsymfony/user-bundle": "1.3.0",
         "friendsofsymfony/twitter-bundle": "*",
         "friendsofsymfony/facebook-bundle": "dev-master",
-        "punkave/symfony2-file-uploader-bundle": "*"
+        "punkave/symfony2-file-uploader-bundle": "*",
+        "paymill/paymill": "v3.0.0"
     },
     "scripts": {
         "post-install-cmd": [

@@ -10,6 +10,8 @@ use Fenchy\RegularUserBundle\Entity\Document;
 
 use Fenchy\UserBundle\Entity\NotificationGroupInterval;
 use Fenchy\UserBundle\Entity\NotificationQueue;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class MessageController extends Controller
 {
@@ -20,7 +22,7 @@ class MessageController extends Controller
     public function indexAction($type)
     {
     	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
-    	
+    	ini_set('memory_limit', "912M");
     	$request = $this->getRequest();
     	
         if($this->getRequest()->get('_format') == 'json') {
@@ -41,12 +43,24 @@ class MessageController extends Controller
         } else {
             $messages = $this->get('fenchy.messenger')->findReceivedMessages($type);
         }
-      
+      	
+        $userMessages = array();
+        foreach ($messages as $message)
+        {
+        	if($message->getUsergroup()== null and $message->getFromgroup()== null)
+        	{
+        		$userMessages[] = $message;
+        	}
+        	if($message->getUsergroup() != null and $message->getFromgroup() != null)
+        	{
+        		$userMessages[] = $message;
+        	}
+        }
         
         $messagesToNeighbors = $this->messagesToNeighbors($userLoggedIn->getId());
         
         return array(
-            'messages' => $messages,
+            'messages' => $userMessages,
             'type' => null === $type ? 'all' : $type,
         	'displayUser' => $userLoggedIn,
         	'messagesToNeighbors'=>$messagesToNeighbors
@@ -161,6 +175,7 @@ class MessageController extends Controller
      */
     public function viewAction($id, $read = true)
     {
+    	ini_set('memory_limit', "912M");
     	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
     	
         $messenger = $this->get('fenchy.messenger');
@@ -185,6 +200,18 @@ class MessageController extends Controller
         	$messagesLeft = $this->get('fenchy.messenger')->findReceivedMessages($type);
         }
         
+        $userMessages = array();
+        foreach ($messagesLeft as $message)
+        {
+       		if($message->getUsergroup()== null and $message->getFromgroup()== null)
+        	{
+        		$userMessages[] = $message;
+        	}
+        	if($message->getUsergroup() != null and $message->getFromgroup() != null)
+        	{
+        		$userMessages[] = $message;
+        	}
+        }
         
         $messagesToNeighbors = $this->messagesToNeighbors($userLoggedIn->getId());
         
@@ -197,7 +224,7 @@ class MessageController extends Controller
 
         return array(
             'messages' => $messages,
-        	'messagesLeft' => $messagesLeft,	
+        	'messagesLeft' => $userMessages,	
             'form' => $form
         );
     }
@@ -256,6 +283,45 @@ class MessageController extends Controller
                                                                             'id' => $prev_id,
                                                                             'read' => false
                                                                         ));
+    }
+    	
+    /**
+     * Send Message In Group
+     */
+    public function sendByGroupAction($groupId,$prev_id)
+    {
+    	$messenger = $this->get('fenchy.messenger');
+    	$em = $this->getDoctrine()->getEntityManager();
+    	
+    	if (null !== $prev_id) {
+    		$messenger->findLastById($prev_id, false);
+    	}
+    	$request = $this->getRequest();
+    	
+    	$user = $this->get('security.context')->getToken()->getUser();
+    	$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
+    	
+    	
+    	$form = $messenger->createForm();
+    	
+    	if ($form->isValid()) {
+    		$message = $messenger->send();
+    		if ( $this->container->getParameter('notifications_enabled'))
+    			$this->messageNotification($message, $user);
+    		$this->get('session')->setFlash('positive', 'regularuser.message.sent');
+    		if (null === $prev_id) {
+    			return $this->redirect($this->generateUrl('fenchy_regular_user_user_groupprofile_groupmessages', array('groupId' => $groupId)));
+    		}
+    		return $this->redirect($this->generateUrl('fenchy_regular_user_user_groupprofile_groupmessages_view', array('groupId' => $groupId, 'id' => $prev_id)));
+    	}
+    
+    	if (null === $prev_id) {
+    		return $this->forward('FenchyRegularUserBundle:Message:new', array('id' => $messenger->getReceiver()));
+    	}
+    	return $this->forward('FenchyRegularUserBundle:Message:view', array(
+    			'id' => $prev_id,
+    			'read' => false
+    	));
     }
     
     public function sendMessageAction($prev_id)
@@ -475,6 +541,19 @@ class MessageController extends Controller
                 $message_notification = true;
         }
         
+        $em = $this->getDoctrine()->getEntityManager();
+        $result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($sender->getId());
+         
+        if($result)
+        {
+        	$avatar = $result->getWebPath();
+        	if($avatar == "")
+        		$avatar = 'images/default_profile_picture.png';
+        }
+        else
+        {
+        	$avatar = 'images/default_profile_picture.png';
+        }
         if ( $message_notification ) {
         
             $interval = $receiver->getNotificationGroupIntervals()->first();
@@ -505,7 +584,8 @@ class MessageController extends Controller
                     ->setBodyHtml($this->renderView('FenchyMessageBundle:Notifications:messageEmailHTML.html.twig', 
                         array(
                             'sender' => $sender,
-                            'message' => $message
+                            'message' => $message,
+                        	'avatar'=>$avatar
                         )))
                     ->setBodyPlain($this->renderView('FenchyMessageBundle:Notifications:messageEmailPlain.html.twig',
                         array('sender' => $sender,
@@ -521,7 +601,9 @@ class MessageController extends Controller
                     ->setSubject( $this->get('translator')->trans('message.notification.email.subject', array('%username%' => $sender->getRegularUser()->getFirstname())))
                     ->setBody($this->renderView('FenchyMessageBundle:Notifications:messageEmailHTML.html.twig',
                         array('sender' => $sender,
-                            'message' => $message)),
+                            'message' => $message,
+                        	'avatar' => $avatar
+                )),
                         'text/html')
                     ->addPart($this->renderView('FenchyMessageBundle:Notifications:messageEmailPlain.html.twig',
                         array('sender' => $sender,

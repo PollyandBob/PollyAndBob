@@ -90,7 +90,7 @@ resetting:
   message:
     1: Witaj %username%,
 
-    2: "Aby zmienić swoje hasło na Fenchy, prosimy kliknąć poniższy link:"
+    2: "Aby zmienić swoje hasło na Polly & Bob, prosimy kliknąć poniższy link:"
 
     3: Jeśli nie próbowałeś zmienić hasła, prosimy zignorować tę wiadomość.
 
@@ -98,12 +98,12 @@ resetting:
 
     5: Dziękujemy,
 
-    6: Zespół Fenchy
+    6: Zespół Polly & Bob
 email:
   message:
     help: Potrzebujesz pomocy? Napisz do nas na adres julia@fenchy.com
 
-    address: Fenchy GmbH, Wühlischstr. 12, D-10245 Berlin
+    address: Polly & Bob
 layout:
   logout: Wyloguj
 
@@ -142,8 +142,8 @@ invitation:
     button_name: "Akceptuj"
 
     message:
-      1: "%username% używa Fenchy i chce abyś dołączył/a. Fenchy jest siecią społecznościową, która łączy Cię z sąsiedztwem. Pomoga znaleźć odpowidnich ludzi, wydarzenia i zasoby blisko Ciebie."
+      1: "%username% używa Polly & Bob i chce abyś dołączył/a. Polly & Bob jest siecią społecznościową, która łączy Cię z sąsiedztwem. Pomoga znaleźć odpowidnich ludzi, wydarzenia i zasoby blisko Ciebie."
 
-      2: Jeśli nie chcesz dostawać więcej podobnych wiadomości od Fenchy, możesz
+      2: Jeśli nie chcesz dostawać więcej podobnych wiadomości od Polly & Bob, możesz
 
       3: wypisać się.

@@ -9,18 +9,22 @@ use Fenchy\NoticeBundle\Entity\Notice,
 
 class ReputationCounter
 {
-    protected $noticePoints         = 1;//
-    protected $gotReviewPoints      = 1;//
+    protected $noticePoints         = 2;//
+    protected $gotReviewPoints      = 2;//
     protected $reviewPoints         = 1;//
     protected $facebookPoints       = 5;//
     protected $contactPoints        = 1;//
     protected $aboutMePercent       = 0.25;//
+    protected $hotplacesPercent		= 0.15;
+    protected $myLikePercent			= 0.25;
     protected $firstPicturePercent  = 0.25;//
     protected $nextPicturePercent   = 0.0;//
+    protected $profilePicturePercent  = 0.25;//
+    protected $coverPicturePercent   = 0.10;//
     protected $nextPictureLimit     = 0;//
     protected $genderPercent        = 0.25;//
     protected $linkPercent          = 0.00;
-    protected $languagesPercent     = 0.25;
+    protected $languagesPercent     = 0.10;
     protected $profilePoints        = 20;
     
     const TYPE_NOTICE   = 'notice';
@@ -31,7 +35,7 @@ class ReputationCounter
     const TYPE_FRIEND   = 'friend';
     
     public function __construct(
-            $notice, 
+           	$notice, 
             $gotReview, 
             $review, 
             $fb, 
@@ -46,8 +50,8 @@ class ReputationCounter
             $profile
             )
     {
-        $this->noticePoints     = $notice;
-        $this->gotReviewPoints  = $gotReview;
+        //$this->noticePoints     = $notice;
+        //$this->gotReviewPoints  = $gotReview;
         $this->reviewPoints     = $review;
         $this->facebookPoints   = $fb;
         $this->contactPoints    = $contact;
@@ -70,7 +74,7 @@ class ReputationCounter
      * @param User $entity
      */
     public function update(User $entity, $type = NULL) {
-        
+        echo "jkj";
         if($type === NULL || $type === self::TYPE_FB) {
             if(NULL === $entity->getPrevFacebookId() && $entity->getFacebookId()) {
                 $entity->addActivity($this->facebookPoints);
@@ -82,10 +86,11 @@ class ReputationCounter
         }
         
         if($type === NULL || $type === self::TYPE_PROFILE) {
-            $entity->addActivity($this->countProfilePoints($entity->getRegularUser()));
-        
+        	echo $this->countProfilePoint($entity->getRegularUser());
+            $entity->addActivity($this->countProfilePoint($entity->getRegularUser()));
+        echo "dd";
             if (NULL !== $entity->getRegularUser()->getGallery()) {
-                $entity->addActivity($this->getGalleryPointsChange($entity->getRegularUser()->getGallery()));
+                //$entity->addActivity($this->getGalleryPointsChange($entity->getRegularUser()->getGallery()));
             }
         }
         
@@ -175,6 +180,31 @@ class ReputationCounter
     }
     
     /**
+     * Counts quantity of points that should be added or removed from user in case
+     * of changes in his profile.
+     * @param \Fenchy\RegularUserBundle\Entity\UserRegular $ru
+     * @return Integer
+     */
+    private function countProfilePoint(UserRegular $ru) {
+    
+    	$points = 0;
+    
+    	$params = array(
+    			'aboutMe',
+    			'myLike',
+    			'hotplaces',    			
+    	);
+    
+    	foreach ($params as $param) {
+    		//            echo '* '.$param.': '.($this->getChange($param, $ru) * $this->getPoints($param)).'<br>';
+    		$points += $this->getChange($param, $ru) * $this->getPoints($param);
+    	}
+    	//        exit;
+    	return $points;
+    	echo $points; exit;
+    }
+    
+    /**
      * Checked if user changed parameter. Returns 1 if parameter has been set
      * from NULL, -1 if parameter has been set from NULL to some value
      * and 0 othervise (NULL to NULL or val to val).
@@ -223,12 +253,11 @@ class ReputationCounter
         $points['facebook'] = $user->getFacebookId() ? $this->facebookPoints : 0;
         $points['contacts'] = $user->getRegularUser()->getMyFriends()->count() * $this->contactPoints;
         $points['profilePercent'] = $this->aboutMePercent * ($user->getRegularUser()->getAboutMe() ? 1 : 0) +
-                    $this->genderPercent * ($user->getRegularUser()->getGender() ? 1 : 0) +
-                    $this->linkPercent * ($user->getRegularUser()->getLink() ? 1 : 0) +
-                    $this->languagesPercent * ($user->getRegularUser()->getLanguages() ? 1 : 0) +
-                    $this->getGalleryPercent($user->getRegularUser()->getGallery()->getImagesQuantity());
+				        $this->myLikePercent * ($user->getRegularUser()->getMylike() ? 1 : 0) +
+				        $this->hotplacesPercent * ($user->getRegularUser()->getHotplaces() ? 1 : 0);
+
         $points['profile'] = $this->profilePoints * $points['profilePercent'];
-        $points['profilePercent'] = ($points['profilePercent'] * 100).'%';
+        //$points['profilePercent'] = ($points['profilePercent'] * 100).'%';
         
         return $points;
     }

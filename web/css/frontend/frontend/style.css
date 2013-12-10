@@ -239,6 +239,7 @@ input, textarea { color: #333333; }
 header .normal_user {
     left: 18px;
     position: relative;
+    margin-top: -15px !important;
 }
 
 header .normal_user li {
@@ -286,6 +287,8 @@ header .normal_user li .signup {
 	color:#fff;
 	margin-top:10px;
 	display:inline-block;
+	position: relative;
+    z-index: 45;
 }
 
 /*================= SLIDERCONTENT ======================*/
@@ -360,6 +363,17 @@ header .normal_user li .signup {
 	cursor:pointer;
 	border:none;
 }
+#slidercontent #sb-form a.name1 {
+    background: url("/images/icon_search.png") no-repeat scroll 0 0 transparent;
+    border: medium none;
+    cursor: pointer;
+    height: 25px;
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    width: 25px;
+    padding: 0;
+}
 
 /*================= CONTENT ======================*/
 #content {
@@ -382,7 +396,6 @@ header .normal_user li .signup {
 }
 .nopadding {
 	padding:0 !important;
-	margin-top: -60px;
 }
 .eventcontent {
 	width:188px;
@@ -450,7 +463,7 @@ header .normal_user li .signup {
 	color:#444 !important;
 }
 .four {
-	width:330px;
+	width:332px;
 	margin-right:70px;
 	font-size:50px;
 	letter-spacing:7px !important;
@@ -480,7 +493,7 @@ header .normal_user li .signup {
 	color:#444 !important;
 }
 .eight {
-	width:175px;
+	width:176px;
 	margin-right:180px;
 	font-size:60px;
 	margin-left:160px;
@@ -583,8 +596,12 @@ header .right .loginwindow2 ul li
 {
     float: left;
     clear: both;
+}
+
+header .right .loginwindow2
+{
+    border: 1px solid #CCCCCC;
 }  
-  
 .mailcount {
 	background: none repeat scroll 0 0 #E14E44;
     border-radius: 6px 6px 6px 6px;
@@ -615,6 +632,11 @@ header .right ul {
 	float:left;
 	margin-top:5px;
 	margin-left:10px;
+}
+header .right ul {
+    float: left;
+    margin-left: 10px;
+    margin-top: 5px;
 }
 header form {
 	float:left;
@@ -653,6 +675,7 @@ header button {
 	width:100%;
 	margin-top:60px;
 	margin-bottom:30px;
+	min-height: 399px;
 }
 .createlinks {
 	float:right; 
@@ -763,6 +786,9 @@ header .right select {
 	text-align:center;
 	z-index: 19;
 }
+.violet {
+	background:violet;
+}
 .orange {
 	background:#f77b00;
 }
@@ -773,7 +799,7 @@ header .right select {
 	background:#008dd7;
 }
 .red {
-    background: #ff0000;
+    background: red;
 }
 .redcolor {
 	color:#e14f45 !important;
@@ -789,11 +815,11 @@ header .right select {
 }
 .profile .about-details {
 	color: #FFFFFF;
-	display: inline-block;
+	/*display: inline-block;*/
 	font-family: code_boldregular;
 	font-size: 11px;
 	letter-spacing: 0.5px;
-	margin-left: 28px;
+	margin-left: 10px;
 	margin-top: 5px;
 	padding: 2px 5px;
 	position: relative;
@@ -801,7 +827,7 @@ header .right select {
 	z-index: 15;
 }
 .profile .about-details span {
-	float:left;
+	/*float:left;*/
 	background:#000;
 	padding:2px 5px 1px 5px;
 	width:auto;
@@ -849,6 +875,18 @@ nav {
 	margin-top:10px;
 	margin-bottom:18px;
 }
+
+.myneighbors
+{
+    position: relative;
+}
+.myneighbors nav {
+    float: right;
+    left: 800px;
+    margin-top: 25px;
+    position: absolute;
+}
+
 nav li {
 	float:left;
 	margin-right:3px;
@@ -858,7 +896,7 @@ nav li a {
 	font-size:12px;
 	color:#fff;
 	background:#51b9d4;
-	width:136px;
+	width:130px;
 	display:inline-block;
 	text-align:center;
 	letter-spacing:1px;
@@ -870,6 +908,9 @@ nav li a b {
 .paddingset {
 	padding:4px 0 3px 0;
 }
+.paddingset_groupsetting {
+    padding: 11px 0 9.5px;
+}
 nav li a:hover, nav li a.selected {
 	background:#e14f45;
 }
@@ -877,13 +918,13 @@ nav li a:hover b {
 	color:#fff;
 }
 .member {
-	float:right; 
-	font-family:code_boldregular;
-	font-size:11px;
-	color:#000;
-	letter-spacing:1px;
-	margin-top:12px;
-	width: 184px;
+    color: #000000;
+    float: right;
+    font-family: code_boldregular;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-top: 12px;
+    width: 190px;
 }
 .member .inner-tooltip{
      display:none;
@@ -979,14 +1020,16 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	display:inline-block;
 	margin-bottom:22px;
 }
-.likedata li {
-	float:left;
+.likedata li {	
+	float: left;
+	margin-bottom: 10px;
 	margin-right:10px;
 }
 .likedata li a {
 	font-family:code_boldregular;
 	font-size:12px;
 	color:#fff;
+	cursor: default;
 	background:#e14f45;
 	padding:2px 4px 1px 4px;
 	letter-spacing:1px;
@@ -1100,6 +1143,56 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	padding:14px 0;
 }
 
+#boxes2 #dialog51 p {
+	font-family:code_boldregular;
+	color:#000;
+	font-size:15px; 
+	padding-top:10px;
+	letter-spacing:2px;
+	line-height: 20px;
+	width:90%;
+	margin-top:20px;
+	margin-bottom: 30px;
+}
+#boxes2 #dialog51 form {	
+	margin-top:20px;
+	margin-right:58px;
+}
+
+#boxes2 #dialog51 textarea {
+	border: 1px solid #CCCCCC;
+    font-family:code_boldregular;
+    color:#000;   	
+    font-size: 12px;
+    letter-spacing: 2px;
+    line-height: 20px;
+    margin-bottom: 11px;
+    padding: 5px;
+    float: left;
+}
+#boxes2 #dialog51 input[type="text"] {
+	border: 1px solid #CCCCCC;
+	font-family:code_boldregular;
+    color:#000;   	
+    font-size: 12px;
+    letter-spacing: 2px;
+    line-height: 20px;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+#boxes2 #dialog51 button {
+	width:50px;
+	height:27px;
+	margin-left:10px;
+	cursor:pointer;
+	background:#51b9d4;
+	border:0;
+	color:#fff;
+	padding-bottom: 5px;
+	float: right;
+}
+
 /*================================================= MY LOCATION =============================================*/
 .mylocation {
 	float:left;
@@ -1156,6 +1249,57 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	 width: 940px;
 	 height:490px;
 }
+
+#boxes2 #dialog46 p {
+	font-family:code_boldregular;
+	color:#000;
+	font-size:15px; 
+	padding-top:10px;
+	letter-spacing:2px;
+	line-height: 20px;
+	width:90%;
+	margin-top:20px;
+	margin-bottom: 30px;
+}
+#boxes2 #dialog46 form {	
+	margin-top:20px;
+	margin-right:58px;
+}
+
+#boxes2 #dialog46 textarea {
+	border: 1px solid #CCCCCC;
+    font-family:code_boldregular;
+    color:#000;   	
+    font-size: 12px;
+    letter-spacing: 2px;
+    line-height: 20px;
+    margin-bottom: 11px;
+    padding: 5px;
+    float: left;
+}
+#boxes2 #dialog46 input[type="text"] {
+	border: 1px solid #CCCCCC;
+	font-family:code_boldregular;
+    color:#000;   	
+    font-size: 12px;
+    letter-spacing: 2px;
+    line-height: 20px;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+#boxes2 #dialog46 button {
+	width:50px;
+	height:27px;
+	margin-left:10px;
+	cursor:pointer;
+	background:#51b9d4;
+	border:0;
+	color:#fff;
+	padding-bottom: 5px;
+	float: right;
+}
+
 /*================================================= LISTING FEEDS =============================================*/
 .around {
 	float:right;	
@@ -1310,8 +1454,13 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	font-family:code_boldregular;
 	font-size:13px;
 	color:#000;
+	height: 32px;
 	line-height:15px;
 	margin-top:3px;
+	overflow: hidden;
+}
+.feedsdetail .right p:hover {
+	overflow-y:scroll;
 }
 .feedsdetail .otherdetail {
 	color:#e14e44;
@@ -1391,6 +1540,17 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	position:absolute;
 	right:-9px;
 	top:0;
+}
+
+.feeds2 .leftimg .groupImage
+{
+    border-radius:50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    -khtml-border-radius:50%;
+    width: 135px;
+    height: 135px;
+
 }
 
 /*================================================= OTHER PROFILE PAGES =============================================*/
@@ -1543,14 +1703,15 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	background:#fff;
 	padding:30px 15px 0;
 	position:absolute;
-	z-index:5;
+	z-index:99;
 	border-top:1px solid #ccc;
 	top:29px;
 	left:-37px;
 	display:none;
 }
 #reviewdetail {
-	left:-170px !important;	
+	left:-170px !important;
+	z-index: 99;	
 }
 #reviewdetail img, #commentdetail img {
 	border-radius: 50% 50% 50% 50%;
@@ -1608,7 +1769,7 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	color:#000;
 	letter-spacing:1px;
 }
-#group-profile .leftside .aboutdata, #group-profile .leftside textarea {
+#group-profile .leftside .aboutdata {
 	width:96.5%;
 	margin:10px 0 20px 0;
 	border:1px solid #ccc;
@@ -1618,9 +1779,22 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	position:relative;
 	min-height:80px;
 }
-#group-profile .leftside textarea {
-	height:94px;
+#group-profile .leftside textarea
+{
+    border: 1px solid #CCCCCC;
+    line-height: 15px;
+    margin: 10px 0 20px;
+    min-height: 65px;
+    padding: 1.5% 1.5% 6.5% 1.7%;
+    position: relative;
+    resize: none;
+    width: 96.5%;
 }
+
+#group-profile .leftside textarea {
+    height:65px;
+}
+
 #group-profile .leftside .aboutdata p {
     color: #000000;
     font-family: code_boldregular;
@@ -1630,10 +1804,14 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 .administratorimg {
 	margin-top:10px;	
 }
+
+    
 .administratorimg img {
-	width:80px;
-	height:80px;
-	margin-right:5px;
+	float: left;
+    height: 80px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    width: 80px;
 	border-radius:50%;
 	-moz-border-radius:50%;
     -webkit-border-radius:50%;
@@ -1786,6 +1964,7 @@ footer {
 	width:100%;
 	background:url(/images/bg_footer.png) repeat-x;
 	float:left;
+	position: relative;
 }
 footer li {
 	float:left;
@@ -1943,7 +2122,7 @@ footer li a.nomargin {
 	font-family:code_boldregular;
 	color:#000;
 	font-size:12px;
-	width:48%;
+	width:100%;
 	letter-spacing:1px;
 	line-height:15px;
 }
@@ -2059,12 +2238,35 @@ footer li a.nomargin {
 	line-height: 20px;
 	width:90%;
 	margin-top:20px;
+	margin-bottom: 30px;
 }
-#boxes2 #dialog8 form {
-	float:right;
+#boxes2 #dialog8 form {	
 	margin-top:20px;
 	margin-right:58px;
 }
+
+#boxes2 #dialog8 textarea {
+	border: 1px solid #CCCCCC;
+    font-family:code_boldregular;
+    color:#000;   	
+    font-size: 12px;
+    letter-spacing: 2px;
+    line-height: 20px;
+    margin-bottom: 11px;
+    padding: 5px;
+    float: left;
+}
+#boxes2 #dialog8 input[type="text"] {
+	border: 1px solid #CCCCCC;
+	font-family:code_boldregular;
+    color:#000;   	
+    font-size: 12px;
+    letter-spacing: 2px;
+    line-height: 20px;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
 #boxes2 #dialog8 button {
 	width:50px;
 	height:27px;
@@ -2073,6 +2275,8 @@ footer li a.nomargin {
 	background:#51b9d4;
 	border:0;
 	color:#fff;
+	padding-bottom: 5px;
+	float: right;
 }
 
 #boxes2 #dialog9 p {
@@ -2092,15 +2296,18 @@ footer li a.nomargin {
 }
 
 #boxes2 #dialog9 form a {
-    width:65px;
-	height:27px;	
+    background: none repeat scroll 0 0 #51B9D4;
+    border: 0 none;
+    color: #FFFFFF;
+    cursor: pointer;
     float: left;
+    font-family: code_boldregular;
+    font-size: 13px;
     margin-left: 465px;
-    cursor:pointer;
     margin-top: 45px;
-    background:#51b9d4;
-	border:0;
-	color:#fff;	
+    padding: 7px 0;
+    text-align: center;
+    width: 65px;
 }
 
 #boxes2 #dialog9 form input {
@@ -2129,10 +2336,12 @@ footer li a.nomargin {
 }
 
 #boxes2 #dialog10 .title {
-	font-family:mathletebulky;
-	color:#51b9d4;
-	font-size:55px;
-	letter-spacing:2px;
+    color: #51B9D4;
+    font-family: mathletebulky;
+    font-size: 40px;
+    letter-spacing: 1px;
+    padding-bottom: 27px;
+    padding-top: 18px;
 }
 #dialog10 input[type="text"], #dialog10 input[type="email"],#dialog10 input[type="password"] {
 	border:1px solid #999;
@@ -2144,6 +2353,7 @@ footer li a.nomargin {
 	font-family:code_boldregular;
 	color:#333;
 	letter-spacing:1px;
+	margin-left: 0px;
 }
 #dialog10 input[type="button"] {
 	background: #51B9D4;
@@ -2165,35 +2375,43 @@ footer li a.nomargin {
     letter-spacing: 1px;
     list-style: disc outside none;
 }
-
+.form-box-wrapper .error ul li {
+    color: red;
+    font-family: code_boldregular;
+    font-size: 12px;
+    font-weight: normal;
+    letter-spacing: 1px;
+    list-style: disc outside none;
+}
 .wrapper-demo {
-	margin-top:30px	
+    margin-top:30px 
 }
 .wrapper-demo span {
-	letter-spacing:1px;
-	cursor:pointer;
-	color:#51b9d4;
-	width:70px;
-	padding-right:20px;
-	background:url(/images/icon_arrow_blue.png) 55px 2px no-repeat;
+    float:left;
+    width:85px;
+    letter-spacing:1px;
+    cursor:pointer;
+    color:#51b9d4;
+    background:#262b29 url(../images/icon_arrow_blue.png) 70px 2px no-repeat;
 }
 .wrapper-dropdown-3 {
     position: relative;
-	font-family:code_boldregular;
-	font-size:12px;
+    font-family:code_boldregular;
+    font-size:12px;
     color: #fff;
 }
 .wrapper-dropdown-3 .dropdown li {
-	width:100%;
+    padding:0 0 0 10px !important
 }
 .wrapper-dropdown-3 .dropdown {
   /* Size & position */
     position: absolute;
-    top: -83px;
-    left: 0;
+    top: -145px;
+    left: -15px;
+    padding-top:8px;
 
     /* Styles */
-    background:#e14f45;
+    background:#262b29;
     font-weight: normal;
     -webkit-transition: all 0.5s ease-in;
     -moz-transition: all 0.5s ease-in;
@@ -2205,14 +2423,14 @@ footer li a.nomargin {
     /* Hiding */
     opacity: 0;
     pointer-events: none;
-	min-width:73px;
+    min-width:105px;
 }
 .wrapper-dropdown-3 .dropdown li a {
-	width:83%;
+    width:83%;
     display: inline-block;
     padding:7% 9%;
     text-decoration: none;
-    color: #fff;
+    color: #51b9d4;
     -webkit-transition: all 0.3s ease-out;
     -moz-transition: all 0.3s ease-out;
     -ms-transition: all 0.3s ease-out;
@@ -2224,12 +2442,15 @@ footer li a.nomargin {
     color: inherit;
 }
 .wrapper-dropdown-3 .dropdown li:hover a {
-    background: #51b9d4;
 }
 .wrapper-dropdown-3.active .dropdown {
     opacity: 1;
     pointer-events: auto;
 }
+.wrapper-demo .active span {
+    background:#262b29 url(../images/icon_uparrow_blue.png) 70px 2px no-repeat !important;
+}
+
 /* No CSS3 support */
 .no-opacity       .wrapper-dropdown-3 .dropdown,
 .no-pointerevents .wrapper-dropdown-3 .dropdown {
@@ -2356,16 +2577,15 @@ footer li a.nomargin {
 	width: 220px;
 }
 .checkboxaction label {
-	/*float: left;
+	display: inline-table;
     font-family: code_boldregular;
     font-size: 10px;
+    left: 15px;
     letter-spacing: 0.5px;
-    margin-left: 80px;
-    margin-top: -7px;*/
-    font-family: code_boldregular;
-    font-size: 10px;
-    letter-spacing: 0.5px;
-    margin-left: 78px;   
+    margin-left: 85px;
+    position: relative;
+    top: -2px;
+    width: 175px;
 }
 .checkboxaction input[type="checkbox"] {
 	/*float: left;
@@ -2376,8 +2596,9 @@ footer li a.nomargin {
     display: block;
     float: left;
     font-size: 10px;
-    margin-left: 42px;
-    position: absolute;
+    margin-bottom: -20px;
+    margin-left: 71px;
+    position: relative;
 }
 
 .location .checkbox {
@@ -2423,7 +2644,7 @@ footer li a.nomargin {
 }
 .price-textbox input[type="text"] {
 	float:left;
-	width:30px;
+	width:75px;
 	padding:2px 0;
 	color:#51b9d4;
 	font-size:10px;
@@ -2432,7 +2653,7 @@ footer li a.nomargin {
 .price-spots select {
 	float:left;
 	margin-top:5px;
-	margin-left:10px;
+	margin-left:2px;
 	font-size:10px;
 }
 .createlistingdetail .price-spots .right {
@@ -2441,7 +2662,7 @@ footer li a.nomargin {
 .createlistingdetail .price-spots .right .blue_button {
 	font-size:11px;
 	padding:1px 3px 0;
-	margin-top:4px;
+	margin-top:15px;
 	margin-left: 0px;
 }
 .createlistingdetail .price-spots .right input[type="text"] {
@@ -2594,7 +2815,7 @@ footer li a.nomargin {
     -khtml-border-radius:50%;
     
 }
-.feedsdetail .feeds2 .leftimg img 
+.feedsdetail .neighb .leftimg img 
 {
     height:134px !important;
     width: 134px !important;
@@ -2681,7 +2902,7 @@ footer li a.nomargin {
 .options #reviewdetail .blue_button
 {
     float: right;
-    margin: 13px 7px 9px 10px;
+    margin: 13px 3px 5px 0;
 }  
 /*================================================= CREATE LISTING PAGES =============================================*/
 .red_button_desc {
@@ -2772,7 +2993,61 @@ footer li a.nomargin {
 
 .noticedata .reviewdata .data p{
 	color: #000000;
-	margin: -17px 0 25px 35px;
+	margin: -30px 0 25px 65px;
+}
+.noticedata .reviewdata .data .neighbor {
+ 	border-radius: 50% 50% 50% 50%;
+    color: #FFFFFF;
+    font-family: code_boldregular;
+    font-size: 23px;
+    height: 25px;
+    left: 250px;
+    letter-spacing: 1px;
+    margin-top: -50px;
+    position: absolute;
+    text-align: center;
+    width: 25px;
+    z-index: 19;
+}
+.noticedata .reviewdata .data .neighbor p{
+	color: #FFFFFF !important;
+    font-size: 11px;
+    margin-left: 9px;
+    margin-top: 5px;
+    position: absolute;
+}
+.noticedata .reviewdata .data .neighbor span{
+	left: 5px;
+    margin-top: 13px;
+    position: absolute;
+    font-size: 12px;
+}
+.noticedata .commentdata .neighbor {
+ 	border-radius: 50% 50% 50% 50%;
+    color: #FFFFFF;
+    font-family: code_boldregular;
+    font-size: 23px;
+    height: 25px;
+    left: 250px;
+    letter-spacing: 1px;
+    margin-top: -50px;
+    position: absolute;
+    text-align: center;
+    width: 25px;
+    z-index: 19;
+}
+.noticedata .commentdata .neighbor span{
+	font-size: 12px;
+    left: 5px;
+    margin-top: 12px;
+    position: absolute;
+}
+.noticedata .commentdata .data .neighbor p{
+	color: #FFFFFF !important;
+    font-size: 11px;
+    margin-left: 9px;
+    margin-top: 5px;
+    position: absolute;
 }
 .noticedata .writereviewdata .data p{
 	color: #000000;
@@ -2802,17 +3077,17 @@ footer li a.nomargin {
 }
 .noticedata .commentdata .data p{
 	color: #000000;
-	margin: -17px 0 25px 35px;
+	margin: -30px 0 25px 65px;
 }
 .commentdata img {
     border-radius: 50% 50% 50% 50%;
-    height: 23px;
-    width: 23px;
+    height: 45px;
+    width: 45px;
 }
 .reviewdata img {
     border-radius: 50% 50% 50% 50%;
-    height: 23px;
-    width: 23px;
+    height: 45px;
+    width: 45px;
 }
 .noticedata .about-details {
     border: 1px solid #CCCCCC;
@@ -2867,6 +3142,8 @@ footer li a.nomargin {
     letter-spacing: 1px;
     color: #000000;
     line-height: 1.8;
+    margin-bottom: 2px;   
+    text-align: left;
 }
 
 .rightparts .right .profile {	
@@ -2933,7 +3210,7 @@ footer li a.nomargin {
     color: #FFFFFF;
     font-size: 11px;
     font-weight: bold;
-    margin-left: 121px;
+    margin-left: 116px;
     position: absolute;
     text-align: center;
     top: 177px;
@@ -2945,12 +3222,36 @@ footer li a.nomargin {
     color: #FFFFFF;
     font-size: 11px;
     font-weight: bold;
-    margin-left: 261px;
+    margin-left: 248px;
     position: absolute;
     text-align: center;
     top: 177px;
     width: 12px;
 }
+.groupnoti_block .mylistingcount {
+    background: none repeat scroll 0 0 #E14E44;
+    border-radius: 6px 6px 6px 6px;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: bold;
+    margin-left: 118px;
+    position: absolute;
+    text-align: center;
+    top: 481px;
+    width: 12px;
+}
+.groupnoti_block .myrequestcount {
+    background: none repeat scroll 0 0 #E14E44;
+    border-radius: 6px 6px 6px 6px;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: bold;
+    margin-left: 251px;
+    position: absolute;
+    text-align: center;
+    top: 480px;
+    width: 12px;
+}    
 /*======================================= SEND MESSAGE ==============================*/
 .message-title a {
     color: #000000;
@@ -2977,7 +3278,7 @@ footer li a.nomargin {
     font-size: 12px;
     letter-spacing: 2px;
     line-height: 20px;
-    margin-left: -203px;
+    margin-left: -205px;
     margin-top: 46px;
     padding: 5px;
     float: left;
@@ -3003,6 +3304,15 @@ footer li a.nomargin {
     width: 350px;
 }
 
+#boxes2 #dialog49 p {
+	font-family:code_boldregular;
+    color:#000;
+    font-size:15px;
+    padding: 25px 75px 25px 20px;
+    letter-spacing:2px;
+    line-height: 20px;
+    width: 350px;
+}
 /*======================================= REQUEST MANAGEMENT ==============================*/
 #boxes2 #dialog35 p {
     color: #000000;
@@ -3075,9 +3385,9 @@ footer li a.nomargin {
     border: 0 none;
     color: #FFFFFF;
     cursor: pointer;
-    float: inherit;
-    height: 29px;
-    margin: 25px -235px 25px 273px;
+    float: inherit;        
+    height: 28px;   
+    margin: 26px -197px 25px 221px;    
     text-align: center;
     padding: 5px;
     font-family: code_boldregular;
@@ -3107,10 +3417,15 @@ footer li a.nomargin {
 	color: #000000;
     font-family: code_boldregular;
     font-size: 13px;
+    height: 60px;
     line-height: 15px;
     margin-bottom: 20px;
     margin-top: -3px;
     width: 240px;
+    overflow: hidden;
+}
+.feedsdetail .rightrequest p:hover {
+	overflow-y:scroll;
 }
 .status a {
 	float:left;
@@ -3302,6 +3617,7 @@ invite_checkbox {
 	width:55px;
 	height:55px;
 	margin-right:15px;
+	border-radius: 50% 50% 50% 50%;
 }
 .invite_single .left .invite_checkbox {
 	float:left;
@@ -3322,7 +3638,7 @@ invite_checkbox {
 	letter-spacing:1px;
 	margin-bottom:10px;
 }
-.invite_another input[type="text"] {
+.invite_another input[type="text"], .invite_another input[type="email"] {
 	float:left;
 	color:#000;
 	font-family:code_boldregular;
@@ -3330,7 +3646,7 @@ invite_checkbox {
 	letter-spacing:1px;
 	border:1px solid #ccc;
 	height:20px;
-	width:195px;
+	width:205px;
 	padding-left:5px;
 }
 .invite_another a {
@@ -3460,7 +3776,10 @@ invite_checkbox {
 .paymentdetails a {
     color:#e14f45;
 }
-.paymentdetails a:hover, a.selected {
+.paymentdetails a:hover {
+    background:#e14f45;
+}
+.paymentdetails a:selected {
     background:#e14f45;
 }
 .paymentdetails a:hover {
@@ -3475,8 +3794,12 @@ invite_checkbox {
     margin-right: 110px;
     padding: 10px 10px 0 10px;
 }
-.payment .forminfo ul li input {
-    color: #000000;
+.payment .forminfo li {
+   display: inline-block;
+}
+.payment .forminfo ul li input[type="text"] {
+	border-bottom: 1px solid #51B9D4;
+    color: #51B9D4;
     font-family: code_boldregular;
     font-size: 11px;
     letter-spacing: 1px;
@@ -3486,9 +3809,20 @@ invite_checkbox {
     width: 130px;
     /*background-color: #CCCCCC;*/
 }
+.payment .forminfo ul li input[type="checkbox"] {	
+    margin-left: 10px;
+    margin-right: 45px;   
+    width: 130px;
+    -webkit-margin-end: -10px;
+	-webkit-margin-start: -50px;
+    /*background-color: #CCCCCC;*/
+}
 .payment .forminfo ul li select {
     background-color: #FFFFFF;
-    border: 0 none;
+    border-bottom: 1px solid #51B9D4;
+    border-top: 0 none;
+    border-left: 0 none;
+    border-right: 0 none;
     color: #51B9D4;
     font-family: code_boldregular;
     font-size: 11px;
@@ -3556,6 +3890,110 @@ invite_checkbox {
     letter-spacing:2px;
     line-height: 20px;
 }
+
+#boxes2 #dialog111 p {
+    font-family:code_boldregular;
+    color:#000;
+    font-size:15px;
+    padding: 25px 75px 25px 20px;
+    letter-spacing:2px;
+    line-height: 20px;
+}
+
+#boxes2 #dialog50 p {
+    font-family:code_boldregular;
+    color:#000;
+    font-size:15px;
+    padding: 25px 75px 25px 20px;
+    letter-spacing:2px;
+    line-height: 20px;
+}
+#boxes2 #dialog50 input[type="text"] {
+    border-bottom: 1px solid #51B9D4;
+    color: #000000;
+    float: left;
+    font-family: code_boldregular;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-left: 30px;
+    margin-top: 2px;
+    padding: 24px 5px 1px 0;
+    width: 350px;
+}
+#boxes2 #dialog50 input[type="submit"] {
+   margin-top: 21px;
+   
+}
+/*======================================= ACCOUNT SETTINGS ==============================*/
+
+.accountsetting {
+    background: none repeat scroll 0 0 #FFFFFF;
+    float: left;
+    padding: 10px 15px 40px;
+    width: 940px;
+}
+.accountsetting h2 {
+    color: #000000;
+    font-family: mathletebulky;
+    font-size: 35px;
+    letter-spacing: 1px;
+    line-height: 56px;
+    margin-left: 1px;
+    text-align: left;
+}
+.accountsetting .form-box {
+    background-color: #FFFFFF;
+    border: 2px solid rgba(158, 158, 158, 0.3);
+    /*border-radius: 6px 6px 6px 6px;*/
+    margin-top: 10px;
+    padding: 10px 20px 28px;
+    position: relative;
+}
+.accountsetting label {
+	display: none;
+}
+.accountsetting input[type="text"], .accountsetting input[type="email"], .accountsetting input[type="password"] {
+	border-bottom: 1px solid #51B9D4;
+    color: #51B9D4;
+    font-family: code_boldregular;
+    font-size: 11px;
+    letter-spacing: 1px;
+    line-height: 1.5;
+    margin: 0px 45px 40px 30px;
+    width: 130px;
+}
+.accountsetting input[type="radio"]  {
+	border: 1px solid #51B9D4;
+    color: #51B9D4;
+    font-family: code_boldregular;
+    font-size: 11px;
+    letter-spacing: 1px;
+    line-height: 1.5;
+    margin-right: 5px;
+    width: 15px;
+    height: 15px;
+    appearance:none;
+    background: transparent;
+}
+.accountsetting p {
+    color: #000000;
+    font-family: code_boldregular;
+    font-size: 12px;
+    letter-spacing: 1px;
+    line-height: 1.5;
+    padding-bottom: 15px;
+}
+.accountdetails input[type="submit"] {
+    margin-left: 355px;
+    position: absolute;
+    top: 45px;
+    padding: 1px 3px;
+    text-align: center;
+}
+.accountdetails input[type="submit"]:hover {
+    background:#e14f45;
+}
+
 
 /*============== MESAGE ================*/
 .message {
@@ -3690,7 +4128,7 @@ invite_checkbox {
 	overflow:hidden;
 	position:absolute;
 	left:0;
-	bottom:-26px;	
+	bottom:-22px;	
 }
 
 /*================ GET SHARE =================*/
@@ -3722,14 +4160,14 @@ invite_checkbox {
 .getshare form label {
 	margin:20px 0;	
 }
-.getshare form input[type="text"] {
+.getshare form input[type="text"], .getshare input[type="number"], .getshare input[type="email"] {
 	float:left;
 	font-family:code_boldregular;
 	font-size:10px;
 	color:#000;
     letter-spacing: 1px;
 	width:110px;
-	border-top:1px solid #a8dcea;
+	border-bottom:1px solid #a8dcea;
 	margin-right:30px;
 	padding-top:3px;
 }
@@ -3741,7 +4179,7 @@ invite_checkbox {
 	text-align:center;
 	letter-spacing:0.5px;
 }
-.formula input[type="text"] {
+.formula input[type="text"], .formula input[type="number"] {
 	color:#51b9d4 !important;
 }
 .eur {
@@ -3751,7 +4189,7 @@ invite_checkbox {
 	margin-bottom:3px;
 	border-bottom:1px solid #999;
 }
-.formula input[type="text"] {
+.formula input[type="text"], .formula input[type="number"] {
 	margin:0 0 3px 0 !important;
 	padding-bottom:3px;
 	text-align:center;
@@ -3779,4 +4217,226 @@ invite_checkbox {
 }
 .no_members {
     display: none;
+}
+
+/*==================== PAGE NOT FOUND ===================*/
+.error_page {
+    width:100%; 
+    background:#fff;
+    padding:100px 0;
+}
+.error_content {
+    width:445px;
+    margin:0 auto;
+    text-align:center;
+    letter-spacing:3px;
+}
+.error_page .wrong {
+    font-size:50px;
+    color:#444;
+    font-family:mathletebulky;
+}
+.error_page .notfound {
+    font-size:100px;
+    color:#444;
+    font-family:mathletebulky;
+    margin-top:30px;
+}
+.error_page .error {
+    font-size:65px;
+    color:#444;
+    font-family:mathletebulky;
+    margin:15px 0 25px 0;
+}
+.error_content .blue_button {
+    float:none;
+}
+
+/*==================== Forgot password ===================*/
+#boxes2 #dialog37 {
+    top:150px !important;
+    left:360px !important;
+}
+#dialog37 {
+    width:560px !important;
+    padding:80px 30px 25px 30px;
+    background:#fff none !important;
+}
+#boxes2 #dialog37 .title, #boxes2 #dialog36 .title {
+    font-family:mathletebulky;
+    color:#333;
+    font-size:40px;
+    letter-spacing:2px;
+    text-align:center;
+    margin-bottom:20px;
+}
+#boxes2 #dialog37 input[type='email'] {
+    width:200px;
+    border:1px solid #ccc;
+    padding:3px 0 3px 5px;
+    font-size:10px;
+    font-family:code_boldregular;
+    letter-spacing:0.5px;
+    margin:0 0 30px 35px;
+}
+.forgotpassword_popup {
+    width:52%;
+    margin:0 auto 50px;
+}
+
+/*=================== PROFILE AND COVER IMAGE POPUP ===================*/
+#dialog36 {
+    width:810px !important;
+    padding:80px 80px 30px 80px;
+    background:#fff none !important;
+}
+#boxes2 #dialog36 {
+    top:80px !important;
+    left:187px !important;
+}
+.profileimage label, .coverimage label {
+	display: none;
+}
+.profileandcover_image {
+    width:100%; 
+    background:#fff;
+}
+.profileandcover_image .profileimage {
+    float:left;
+    width:175px;
+    text-align:center;
+}
+.profileandcover_image .profileimage img {
+    width:174px;
+    height:174px;
+    margin-bottom:30px;
+    text-align:center;
+}
+.profileandcover_image .coverimage {
+    float:right;
+    width:456px;
+}
+.profileandcover_image .coverimage img {
+    height:173px;
+    margin-bottom:30px;
+    text-align:center;
+}
+.profileandcover_image .blue_button {
+    padding:2px 5px 1px;
+}
+.coverimage_buttons {
+    margin:0 auto;
+    width:175px;
+}
+/********************** FLAG *************************/
+.flagwindow {
+	background: none repeat scroll 0 0 #FFFFFF;
+    display: none;
+    left: 790px;
+    padding: 7px 10px;
+    position: absolute;
+    top: 225px;
+    width: 326px;
+    z-index: 99;
+}
+.flagwindow .iconarrow {
+	left: 320px;
+    position: absolute;
+    top: -9px;
+}
+.userflagwindow {
+	background: none repeat scroll 0 0 #FFFFFF;
+    display: none;
+    left: 763px;
+    padding: 1px 10px;
+    position: absolute;
+    top: 130px;
+    width: 326px;
+    z-index: 9999;
+}
+.userflagwindow .iconarrow {
+	left: 15px;
+    position: absolute;
+    top: -9px;
+}
+
+.ui-tooltips-neighbor,.ui-tooltip
+{
+    background: #51b9d4 !important; 
+    color: #FFFFFF !important;
+    font-size:10px;
+    font-family:code_boldregular !important;
+    text-align:center;
+}
+
+.tooltip-red
+{
+    background-color: #51b9d4;
+    color: #FFFFFF;
+    padding:10px 10px 10px 10px;
+    font-weight:bold;
+    z-index:100;
+}
+
+.tooltip-blue
+{
+    background-color: #5555FF;
+    color: #FFFFFF;
+    font-size:13px;
+    font-family:verdana;
+    border:solid 2px #0000FF;
+    z-index:100;
+}
+
+.tooltip_container {
+    width: 250px;
+}
+
+/* Steve's Tooltip */
+.tooltip_steve {
+    color: #000;
+    font-size: 10px;
+    font-family: Verdana, Arial, Helvetica;
+    background-color: #b3cddc;
+    border: 1px solid #7a9db9;
+    z-index: 100;
+}
+
+
+
+/* Caption Text */
+.tooltip_caption {
+    /*color: #fff;*/
+    font-family: "Lucida Sans", Tahoma, Verdana;
+    font-size: 12px;
+    color: #fff;
+    font-weight: bold;
+    background-color: #7a9db9;
+    padding : 2px;
+}
+
+/* Close Link (x) */
+a.tooltip_close,a:hover.tooltip_close {
+    color: #000;
+    text-decoration: none;
+    font-size: 10px;
+    font-family: Verdana, Arial, Helvetica;
+    font-weight: bold;
+    float: right;
+    margin-top: -15px;
+    margin-right :3px;
+}
+
+/* Tooltip Links */
+a.tooltip {
+    color: #2364a8;
+    font-size: 10px;
+} a:hover.tooltip {
+    text-decoration: none;  
+}
+
+
+#filter-distance-slider .ui-state-focus 
+{
+    border:none !important;
 }

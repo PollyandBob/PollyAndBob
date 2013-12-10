@@ -51,6 +51,16 @@ class Document
      */
     private $file2;
     
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $cropX;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $cropY;
+    
  
     public function getAbsolutePath()
     {
@@ -128,6 +138,25 @@ class Document
     	return $this->file;
     }
     
+    public function setCropX($cropX)
+    {
+    	return $this->cropX = $cropX;
+    }
+    
+    public function getCropX()
+    {
+    	return $this->cropX;
+    }
+    
+    public function setCropY($cropY)
+    {
+    	return $this->cropY = $cropY;
+    }
+    
+    public function getCropY()
+    {
+    	return $this->cropY;
+    }
     /**
      * Sets file2.
      *

@@ -1,0 +1,16 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}	
+{% endblock %}
+       
+{% block content %}
+	{% if locale == 'de'%}
+        {% include 'FenchyFrontendBundle:Frontend/Foot:joinus-de.html.twig' %}
+    {% elseif locale == 'en' %}
+    	{% include 'FenchyFrontendBundle:Frontend/Foot:joinus-en.html.twig' %}
+	{% endif %}
+{% endblock %}

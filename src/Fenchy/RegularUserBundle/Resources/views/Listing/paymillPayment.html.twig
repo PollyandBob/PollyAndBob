@@ -1,0 +1,71 @@
+{% extends 'FenchyGalleryBundle::galleryShowBase.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+  		var PAYMILL_PUBLIC_KEY = '30065385155a4987fda304f31c22575c';
+	</script>
+<script type="text/javascript" src="https://bridge.paymill.com/"></script>
+<script type="text/javascript" >
+$(document).ready(function() {
+	try {
+		paymill.createToken({
+	 	 	number:         '4111111111111111',
+	  		exp_month:      '02',
+	  		exp_year:       '2020',
+	  		cvc:            '111',
+	  		amount_int:     '20',
+			currency:       'USD',
+	  		cardholder:     'Bhumi'
+		},
+		paymillResponseHandler);
+	} catch(e) {
+    	logResponse(e.message);
+	}
+});
+
+function paymillResponseHandler(error, result) {
+    if (error) {
+      // Displays the error above the form
+      alert(error.apierror);
+    } else {
+      //var form = $("#payment-form");
+      // Output token
+      var token = result.token;
+      alert ('token'+ token);
+
+      var url = "{{ path('fenchy_regular_user_paymillpayment') }}";
+		$.ajax({
+			url : url,
+			type : "post",
+			data : {
+				'token': token,
+				},
+			beforeSend : function() {				
+			},
+			success : function(response) {
+				alert(response);
+			},
+			error : function() {
+				alert('Something went wrong!');
+			},
+			complete : function() {					
+			}
+		});
+    }
+}
+
+function logResponse(res) {
+     // create console.log to avoid errors in old IE browsers
+     if (!window.console) console = {log:function(){}};
+
+     console.log(res);
+     if(PAYMILL_TEST_MODE)
+         $('.debug').text(res);
+}
+</script>
+{% endblock %}
+{% block content %}
+<div class="debug">
+</div>
+{% endblock %}

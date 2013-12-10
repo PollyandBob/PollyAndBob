@@ -1,24 +1,24 @@
 message:
-  receiver: Empfänger:
+  receiver: Receiver:
 
-  title: Betreff:
+  title: Titel  
 
-  content: Deine Nachricht:
+  content: Nachricht verfassen
 
-  reply: Antworte
-
-  welcome:
-    title: Willkommen bei Fenchy!
-
-    content: Hallo %firstname%,  Ich bin Matthias und einer der Gr?â??nder von Fenchy. Mit Fenchy wollen wir dir die einfachste M?â?Âglichkeit bieten, dich mit deiner Nachbarschaft zu verbinden.  Hier noch 3 Punkte, die uns wichtig sind:1. Du geh?â?Ârst zu den ersten Nutzern von Fenchy. Wir werden Fenchy in den n?â?ñchsten Wochen und Monaten permanent verbessern und erweitern. Wenn du m?â?Âchtest, kannst du Anmerkungen oder Feedback direkt an mich senden.  2. Du kannst Fenchy ganz einfach mit deinen Freunden vor Ort nutzen. Klicke auf deine ?ó?Ç?£Kontakte?ó?Ç?Ø, um sie zu Fenchy einzuladen.  3. Um das Beste aus Fenchy herauszuholen, kannst du unter ?ó?Ç?£Einstellungen?ó?Ç?Ø oben rechts deine Profilinformationen vervollst?â?ñndigen.  Vielen Dank f?â??r deine Registrierung und willkommen bei Fenchy!  Matthias
+  reply: Antwort schreiben
 
   deleted_user:
-    firstname: Dieser Account wurde gelöscht.
+    firstname: Dieses Profil wurde gelöscht.
 
   notification:
     email:
-      subject: Neue Nachrich von %username%
+      subject: Neue Nachricht von %username%
 
-      body: Du hast eine neue Nachricht auf Fenchy erhalten.
+      body: Du hast eine neue Nachricht von Polly & Bob.
 
-      follow_link: Diese Konversation auf Fenchy ansehen.
+      follow_link: Schau dir die gesamte Konversation auf Polly & Bob an.
+  req_notification:
+    email:
+      subject: Neue anfordern von %username%
+      
+      body: Du hast eine neue anfordern von Polly & Bob.

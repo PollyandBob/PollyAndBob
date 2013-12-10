@@ -2,6 +2,8 @@
 
 namespace Fenchy\NoticeBundle\Entity;
 
+use Fenchy\RegularUserBundle\Entity\UserGroup;
+
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -73,6 +75,14 @@ class Comment
      * @ORM\JoinColumn(name="notice_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $aboutNotice;
+    
+    /**
+     * @var UserGroup
+     *
+     * @ORM\ManyToOne(targetEntity="Fenchy\RegularUserBundle\Entity\UserGroup", inversedBy="comments")
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    private $aboutUserGroup;
     
     /**
      * @var User
@@ -252,6 +262,27 @@ class Comment
         $this->aboutNotice = $notice;
         
         return $this;
+    }
+    
+    /**
+     * Get About UserGroup.
+     * @return UserGroup
+     */
+    public function getAboutUserGroup() {
+    
+    	return $this->aboutUserGroup;
+    }
+    
+    /**
+     * Set About UserGroup.
+     * @param \Fenchy\RegularUserBundle\Entity\UserGroup $usergroup
+     * @return \Fenchy\NoticeBundle\Entity\Comment
+     */
+    public function setAboutUserGroup(UserGroup $usergroup) {
+    
+    	$this->aboutUserGroup = $usergroup;
+    
+    	return $this;
     }
     
     /**

@@ -1,8 +1,11 @@
+
+php_value upload_max_filesize 64M
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
     #<IfModule mod_vhost_alias.c>
-    #    RewriteBase /
+        RewriteBase /
     #</IfModule>
 
     RewriteCond %{REQUEST_FILENAME} !-f

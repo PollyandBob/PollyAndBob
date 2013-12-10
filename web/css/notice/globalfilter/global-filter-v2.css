@@ -1,5 +1,7 @@
 @charset "utf-8";
-
+h3.no_find_newsfeeds{
+	width: 600px !important;
+}
 .sidebar .group {
     padding-bottom: 14px;
 }
@@ -371,24 +373,24 @@
 
 
 #filter-distance-slider {
-    border-radius: 0;
-    border: 0;
-    margin: 25px 11px 9px 0;
-    height: 3px;
+    background: none repeat scroll 0 0 #000000;
+    border: 0 none;
+    border-radius: 0 0 0 0;
     font-size: 1em;
-    width: 184px;
-    background: #000000;
+    height: 3px;
+    margin: 25px -8px 9px;
+    width: 190px;
 }
 
 .myneighbours #filter-distance-slider {
-    border-radius: 0;
-    border: 0;
-    margin: 20px 11px 9px 0;
-    height: 3px;
-    font-size: 1em;
-    width: 251px;
-    background: #000000;
+    background: none repeat scroll 0 0 #000000;
+    border: 0 none;
+    border-radius: 0 0 0 0;
     display: inline-block !important;
+    font-size: 1em;
+    height: 3px;
+    margin: 20px 0 9px -4px;
+    width: 240px;
 }
 
 
@@ -423,13 +425,21 @@
 }
 #filter-distance-slider .ui-slider-handle {
     background: url(/images/icon_slider.png) no-repeat;
-    top: -10px;
+    top: -12px;
     text-align: center;
     cursor: pointer;
     width: 21px;
     height: 22px;
     border: none;
+    margin-left: -8px !important;
+    margin-top: 3px !important;
 }
+
+.member #filter-distance-slider .ui-slider-handle
+{
+    margin-left: -10.5px !important;
+}
+
 .when_date #slider-range a.ui-slider-handle
 {
     background: url("/images/icon_slider2.png") no-repeat scroll 0 0 transparent;
@@ -437,8 +447,10 @@
     cursor: pointer;
     height: 22px;
     text-align: center;
-    top: -7px;
+    top: -8px;
     width: 21px;
+    margin-left: -13px !important;
+    margin-top: 1px !important;
 }
 
 .when_date #slider-range a:last-child
@@ -448,20 +460,22 @@
     cursor: pointer;
     height: 22px;
     text-align: center;
-    top: -7px;
+    top: -8px;
     width: 21px;
+    margin-left: -6px !important;
+    margin-top: 1px !important;
 }
 
 .when_date #slider-range
 {
     background: none repeat scroll 0 0 #000000;
-    border: 0 none;
+    /*border: 1px solid red;*/
     border-radius: 0 0 0 0;
     display: inline-block !important;
     font-size: 1em;
     height: 3px;
-    margin: 20px 11px 9px 0;
-    width: 251px;
+    margin: 20px 11px 9px 3px;
+    width: 244px;
 }
 
 .when_date .ui-widget-header {
@@ -509,6 +523,11 @@
     margin-bottom: 1px;
     opacity: 1 !important;
     padding: 0 5px !important;
+}
+
+#slider-range > a.ui-slider-handle:last-of-type .inner-tooltip
+{
+    top:18px !important;
 }
 .myneighbours .inner-tooltip .tooltip-value
 {

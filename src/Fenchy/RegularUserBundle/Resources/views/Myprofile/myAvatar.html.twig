@@ -9,6 +9,77 @@
     <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />    
     <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('css/gallery/punkave/editSmall.css') }}" type="text/css" />
+    <style>
+    	#form_file {
+    		display: none;
+    	}
+    	#form_file2 {
+    		display: none;
+    	} 
+    	
+		#placeholder {
+		display: block;
+		height: 123px;
+		width: 455px;
+		margin: 0 auto;
+		position: relative;
+		padding: 0 0 81px;
+		}
+		.placeholder {
+		display: block;
+		height: 262px;
+		width: 970px;
+		margin: 0 auto;
+		position: relative;
+		}
+		
+		.crop_me
+		{
+			display: block !important;
+		}
+		#placeholder img {
+		margin: auto;
+		display: block;
+		height: auto;
+    	position: absolute;
+    	width: 100%;
+		}
+		
+		.jwc_controls .dragger {
+		    background: url("https://fbstatic-a.akamaihd.net/rsrc.php/v2/yl/r/Zi4SfiYNyqJ.png") no-repeat scroll 9px 8px rgba(84, 97, 133, 0.4);
+		    border-radius: 2px 2px 2px 2px;
+		    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12) inset;
+		    color: #FFFFFF;
+		    display: inline;
+		    font-family: mathletebulky;
+    		font-size: 17px;
+		    padding: 4px 9px 6px 24px;
+		    letter-spacing: 1px;
+		}
+		._6_f {
+		max-width: 275px;
+		display: inline-block;
+		}
+		._8_2 {
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-size: 24px;
+		line-height: 30px;
+		font-weight: bold;
+		display: inline-block;
+		padding-right: 30px;
+		}
+		._8_2, .alternate {
+		color: #FFF;
+		text-rendering: optimizelegibility;
+		text-shadow: 0 0 3px rgba(0,0,0,0.8);
+		}
+		.alternate {
+		font-size: 20px;
+		font-weight: normal;
+		white-space: nowrap;
+		color: #fff;
+		}   	
+	</style>
 {% endblock %}
         
 {% block javascripts %}    
@@ -21,6 +92,7 @@
     <script type="text/javascript" src="{{ asset('plugins/tapmodo-Jcrop-1902fbc/js/jquery.Jcrop.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/gallery/punkave/editSmall.js') }}"></script>
     <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jWindowCrop.js') }}"></script>
     <script type="text/javascript">
 		function verifyYourIdentity()
 		{
@@ -90,8 +162,55 @@
 		    	Test2.UpdatePreview(this);
 		    });
 
-		    
-		    
+		    $("#FormFileBrowse1").click(function(){
+		    	   $("#form_file").click();
+		    });
+
+		    $("#FormFileBrowse2").click(function(){
+		    	   $("#form_file2").click();
+		    });
+
+		    $('.crop_me').jWindowCrop({
+				targetWidth: 455, //Width of facebook cover division
+				targetHeight: 123, //Height of cover division
+				loadingText: 'Your Cover is uploading....',
+				onChange: function(result) {
+					var strcropX = $(this).css('left');
+					var strcropY = $(this).css('top');
+					strcropX = strcropX.replace(/px/g, '');
+					strcropX = strcropX.replace(/-/g, '');
+					strcropY = strcropY.replace(/px/g, '');
+					strcropY = strcropY.replace(/-/g, '');	
+					$('#form_cropX').val(strcropX);
+					$('#form_cropY').val(strcropY);
+					/*console.log("separation from left- "+result.cropX);
+					console.log("separation from left- "+result.cropY);
+					console.log("width- "+result.cropW-455);
+					console.log("Height- "+result.cropH-123);*/
+				}
+			});
+			
+		    $('.crop_me2').jWindowCrop({
+				targetWidth: 970, //Width of facebook cover division
+				targetHeight: 262, //Height of cover division
+				loadingText: 'Your Cover is uploading....',
+				onChange: function(result) {
+					/*console.log("separation from left- "+result.cropX);
+					console.log("separation from left- "+result.cropY);
+					console.log("width- "+result.cropW-970);
+					console.log("Height- "+result.cropH-262);*/
+					//alert(result.cropY);
+					
+				}
+			});
+			var newCropY = 2.13 * {{ cropY }};
+			newCropY = Math.ceil(newCropY);
+		    $('.crop_me2').css('left',{{ cropX }}+'px');
+		    $('.crop_me2').css('top',-newCropY+'px');
+		    $('.crop_me').css('left',{{ cropX }}+'px');
+		    $('.crop_me').css('top',-{{ cropY }}+'px');
+
+		    $('.placeholder').find('.jwc_controls').empty();
 		});		
 	</script>
 {% endblock %}
@@ -99,11 +218,13 @@
 {% block content %}
 	<div class="profile">
 				<div class="profile_bak" >
-				{%  if coverpath %}
-					<img alt="" width="970" height="262" src="{{ absolute(asset(coverpath)) }}">
-				{% else %}
-						<img alt="" src="{{ absolute(asset('images/bg_profileheader.png')) }}">
-				{% endif %}
+					<div class="placeholder">
+						{%  if coverpath %}
+							<img alt="" width="970" class="crop_me2" src="{{ absolute(asset(coverpath)) }}">
+						{% else %}
+								<img alt="" src="{{ absolute(asset('images/bg_profileheader.png')) }}">
+						{% endif %}
+					</div>
 				</div>
                 <div class="left">
                     <div class="persen">
@@ -112,20 +233,19 @@
 					{% else %}
 					<img alt="" src="{{ absolute(asset('images/default_profile_picture.png')) }}">
 					{% endif %}
-                    	
                         <div class="persenname">
-                        	<p>{{ displayUser.name }}</p>
-                            <a href="#dialog27" name="modal" id="vzoom_1944" class="zoomthis">Edit</a>
+                        	<p>{{ displayUser.regularuser.firstname|truncate(12) }}</p>
+                            <a href="#dialog36" name="modal" id="vzoom_1944" class="zoomthis">Edit</a>
 						</div>
-                        <div class="neighbor {{ classColor }}">
-                        	<p>{{ managertype_alpha }}</p>
+                        <div class="neighbor {{ managertype[2] }}">
+                        	<p>{{ managertype[1] }}</p>
                             <span>{{ displayUser.activity }}</span>
 						</div>		                            
                     </div>
                     <div class="clearfix"></div>
-                    <div class="about-details">
+                    <div class="about-details" align="center">
                     	{% if managertype %}
-                    	<span>{{ managertype }}</span>
+                    	<span>{{ ('otherprofile.'~managertype[0])|trans }}</span>
                     	{% endif %}<br>
                         <span>
                         {% set varStack = displayUser.location | split(',') %}
@@ -170,71 +290,96 @@
     	        	<div class="ajax_loader_info" style="display: none; padding: 0 0 0 217px;;">
      					<img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
 					</div>   
-        		</div>    
+        		</div>
+        		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
     		</div>    
     	<div id="mask"></div>
     </section>
     <section id="boxes2">
-    <div id="dialog8" class="window"> 
+    <div id="dialog8" class="window" style="height: auto;"> 
         <div class="big_popup">
             <div class="big_popupclose"><a href="" class="close"></a></div>
             
 				{% if verified %}
             		<p>{{ 'regularuser.verified_location_message'|trans|upper }}</p>            								   	        		
     	        {% else %}
-					<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>			
-            		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
-						<button>{{ 'regularuser.ok'|trans|upper }}</button>
-    	        	</form>
+    	        	{% if verifyLocation %}
+    		        		<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>			
+		            		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
+			            		<input type="text" id="firstname" name="firstname" readonly="readonly" value="{{ displayUser.regularuser.name }}"/><br/>
+			            		<input type="text" id="lastname" name="lastname" text="{{ displayUser.regularuser.lastname }}" placeholder="{{ 'regularuser.lastname'|trans  }}"/><br/>
+			            		<textarea id="address" name="address" readonly="readonly">{{ displayUser.location.location }}</textarea><br/>
+			            		<textarea id="additionaladdress" name="additionaladdress" placeholder="{{ 'regularuser.additional_address'|trans  }}"></textarea><br/>
+			           			<input type="text" id="pincode" name="pincode" placeholder="{{ 'regularuser.postcode1'|trans }}"/><br/>
+								<button type="submit"> {{ 'regularuser.ok'|trans|upper }}</button>
+		    	        	</form>
+						{% else %}							
+		    	        	<p>{{ 'regularuser.verifing_location_message'|trans|upper }}</p>
+    	        	{% endif %}
     	        {% endif %}
-        </div>    
+        </div> 
+        <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">   
     </div>    
     <div id="mask"></div>
     </section>
      <section id="boxes2">
-            <div id="dialog27" class="window"> 
+            <div id="dialog36" class="window"> 
                 <div class="big_popup">
                     <div class="big_popupclose"><a href="" class="close"></a></div>
                     <!-- Your custom code here -->
                     
 					{# {% render "FenchyRegularUserBundle:settings:basic" %} #}
 					
-					<h4>Profile Image</h4>
-					<br>
-					<br>
-		
-						<form action="{{ path('fenchy_regular_user_settings_image') }}" method="post" {{ form_enctype(form3) }}>
-						 <div class="row profile_picture">   
-						    
-   							 {{ form_row(form3.file) }}
-   							<img src="{{ asset(profilepath) }}" class="form_file" alt="" width="128" height="128" />
-   							 {{ form_row(form3.user_id) }}
-						 </div>  
-						 <div style="display:none;">{{ form_rest(form3) }}</div>
-						<div class="clearfix">
-						    <input type="submit" class="blue_button" style="float: right;margin-right: 17px;" value="Save" />
-						</div>
-						</form>
-				<br>
-				<h4>Cover Image</h4>
-					<br>
-					<br>		
-						<form action="{{ path('fenchy_regular_user_settings_image') }}" method="post" {{ form_enctype(form4) }}>
-						 <div class="row profile_picture">  
-						  
-						     {{ form_row(form4.file2) }}
-   							 <img src="{{ asset(coverpath) }}" class="form_file2" alt="" width="128" height="128" />
-   							 {{ form_row(form4.user_id) }}
-						 </div>  
-						 <div style="display:none;">{{ form_rest(form4) }}</div>
-						<div class="clearfix">
-						    <input type="submit" class="blue_button" style="float: right;margin-right: 17px;" value="Save" />
-						</div>
-						</form>
+					{# <div id="placeholder">#}
+					{# 	<img id="target3" class="crop_me" alt="" src="http://www.pollyandbob.jv/uploads/coverimages/1386580193_lalbaugcharaja2008.jpg" /> #}
+					{# </div>#}
 					
-					
-                    <!-- Your custom code end -->
+					<div class="profileandcover_image">
+						<div class="profileimage">
+	                    	<div class="title">Profile Image</div>
+	                        <div class="clearfix"></div>
+	                        <form action="{{ path('fenchy_regular_user_settings_image') }}" method="post" {{ form_enctype(form3) }}>
+	                         	{{ form_row(form3.file) }}
+	                         	{% if profilepath =="" %}
+	                         		<img src="{{ asset('images/profileimage.png') }}" class="form_file" alt="" width="128" height="128" style="border-radius: 50% 50% 50% 50%" />
+	                         	{% else %}
+	                         		<img src="{{ asset(profilepath) }}" class="form_file" alt="" width="128" height="128" style="border-radius: 50% 50% 50% 50%"/>
+	                         	{% endif %}
+	   							{{ form_row(form3.user_id) }}
+	   							<div style="display:none;">{{ form_rest(form3) }}</div>
+	   							<a id="FormFileBrowse1" href="#" class="blue_button">Select</a>
+	   							<input type="submit" class="blue_button" style="float: right;margin-right: 17px;" value="Upload" />
+	   						</form>                        
+	                        <div class="clearfix"></div>                                            
+	                    </div>
+						
+						<div class="coverimage">
+	                    	<div class="title">Cover Image</div>
+	                        <div class="clearfix"></div>
+	                        <form action="{{ path('fenchy_regular_user_settings_image') }}" method="post" {{ form_enctype(form4) }}>
+								<div id="placeholder">
+	   							{{ form_row(form4.file2) }}
+	                         	{% if coverpath =="" %}
+	                         		<img src="{{ asset('images/coverimage.png') }}" class="form_file2" alt="" width="455"/>
+	                         	{% else %}
+	                         		<img src="{{ asset(coverpath) }}" class="form_file2 crop_me" alt="" width="455" />
+	                         	{% endif %}
+	                         	</div>
+	 							{{ form_row(form4.user_id) }}
+	 							{{ form_row(form4.cropX) }}
+	 							{{ form_row(form4.cropY) }}
+	 							<div style="display:none;">{{ form_rest(form4) }}</div>
+	   							<div class="clearfix"></div>
+	                        		<div class="coverimage_buttons">
+	                        			<a id="FormFileBrowse2" href="#" class="blue_button">Select</a>                        
+	   									<input type="submit" class="blue_button" style="float: right;margin-right: 17px;" value="Upload" />
+	   								</div>
+	   						</form>
+	                    </div>
                 </div>
+               	<!-- Your custom code end -->
+                </div>
+                <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
             </div>
             <div id="mask"></div>
     	</section>  

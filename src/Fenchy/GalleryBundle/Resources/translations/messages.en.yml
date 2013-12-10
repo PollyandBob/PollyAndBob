@@ -5,6 +5,6 @@ gallery:
 
   change: Change
 
-  file_too_big_choose_smaller: Sorry, this file is too big! Please choose a smaller image.
+  file_too_big_choose_smaller: Sorry, this file is too big! Please choose a smaller image with less than 5MB.
 
-  file_should_have_jpeg_png: File should have jpeg or png format
+  file_should_have_jpeg_png: File should have jpeg or png format.

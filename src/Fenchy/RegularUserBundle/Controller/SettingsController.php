@@ -437,7 +437,17 @@ class SettingsController extends Controller {
     	if (!$document) {
     		$document = new Document();
     	}
-    	
+    	echo $this->getRequest()->get('file'); 
+    	if($document->getWebPath() == '')
+    	{
+    		$user->addActivity('5');
+    		$em->persist($user);
+    	}
+    	if($document->getWebPath2() == '')
+    	{
+    		$user->addActivity('2');
+    		$em->persist($user);
+    	}
     	$form3 = $this->createFormBuilder($document)
     	->add('user_id','hidden', array(
     			'data' => $user->getId(),))
@@ -447,8 +457,10 @@ class SettingsController extends Controller {
     	$form4 = $this->createFormBuilder($document)
     	->add('user_id','hidden', array(
     			'data' => $user->getId(),))
-    			->add('file2',null,array('label' => 'settings.general.cover_photo'))
-    			->getForm();
+    	->add('cropX','hidden')
+    	->add('cropY','hidden')
+    	->add('file2',null,array('label' => 'settings.general.cover_photo'))
+    	->getForm();
     	    	
     	if ($this->getRequest()->isMethod('POST')) {
     		$form3->bindRequest($this->getRequest());
@@ -456,14 +468,27 @@ class SettingsController extends Controller {
     		$user_id= $this->getRequest()->get('user_id');
     		$file = $this->getRequest()->get('file');
     		$file2 = $this->getRequest()->get('file2');
-    		 
+    		
     		 
     		if ($form3->isValid() or $form4->isValid()) {
     	
     			$document->upload();
     			$document->uploadcover();
     	
+    			$document->setCropX($form4->get('cropX')->getData());
+    			$document->setCropY($form4->get('cropY')->getData());
+    			
     			$em->persist($document);
+    			if($document->getWebPath()=="")
+    			{
+    				$user->setActivity($user->getActivity()-5);
+    				$em->persist($user);
+    			}
+    			if($document->getWebPath2()=="")
+    			{
+    				$user->setActivity($user->getActivity()-2);
+    				$em->persist($user);
+    			}
     			$em->flush();
     	
     			return $this->redirect($this->generateUrl('fenchy_regular_user_user_myprofile_aboutmychoice'));
@@ -613,6 +638,7 @@ class SettingsController extends Controller {
         
         $form1 = $this->container->get('fos_user.change_password.form');      
        
+        $form5 = $this->createDeleteForm($user->getId());
         
         $verified = $this->getDoctrine()
         			->getRepository('UserBundle:LocationVerification')->getStatus($user);
@@ -629,6 +655,7 @@ class SettingsController extends Controller {
         $data['form2'] = $form2->createView();
         $data['form3'] = $form3->createView();
         $data['form4'] = $form4->createView();
+        $data['form5'] = $form5->createView();
         $data['verified'] =  $verified;
         $data['identity'] =  $identity;
         $data['verifyIdentity'] =  $verify_identity;
@@ -649,8 +676,9 @@ class SettingsController extends Controller {
     	$formHandler = $this->container->get('fos_user.change_password.form.handler');
     	
     	$process = $formHandler->process($user);
+    	$data_saved = $this->get('translator')->trans('regularuser.change_pass_success');
     	if ($process) {
-    		$this->get('session')->setFlash('positive', 'change_password.flash.success');
+    		$this->get('session')->setFlash('positive', $data_saved);
     	}
     	
     	return $this->redirect($this->generateUrl('fenchy_regular_user_settings_account'));
@@ -683,9 +711,9 @@ class SettingsController extends Controller {
                                     ->trans('user.account_deleted')
                         );
 
-                $this->get('session')->set('gallery', array(1 => '', 2 => '', 3 => ''));
+                //$this->get('session')->set('gallery', array(1 => '', 2 => '', 3 => ''));
                 
-                return $this->redirect($this->generateUrl('fenchy_regular_user_settings_account'));
+                return $this->redirect($this->generateUrl('fenchy_regular_user_settings_basic'));
             }
 
             $this->get('session')->setFlash(
@@ -751,8 +779,8 @@ class SettingsController extends Controller {
         }
       
         $data['form'] = $form->createView();
-       
-        return $this->render('FenchyRegularUserBundle:Settings:notifications.html.twig', $data);
+        return $this->redirect($this->generateUrl('fenchy_regular_user_settings_account'));
+        //return $this->render('FenchyRegularUserBundle:Settings:notifications.html.twig', $data);
     }
     
     
@@ -843,7 +871,8 @@ class SettingsController extends Controller {
     	return $this->render('FenchyRegularUserBundle:Settings:payment.html.twig',array(
     			'user' => $user,
     			'payment' => $payment,
-    			'noticeType'=> $noticeType
+    			'noticeType'=> $noticeType,
+    			'groupId'=> $this->getRequest()->get('groupId')
     	));
     }
     
@@ -861,6 +890,7 @@ class SettingsController extends Controller {
     	$paypal_email = $request->get('paypal_email')?$request->get('paypal_email'):null;
     	$card_type = $request->get('card_type')?$request->get('card_type'):null;
     	$card_no = $request->get('card_no')?$request->get('card_no'):null;
+    	$cvv_code = $request->get('cvv_code')?$request->get('cvv_code'):null;
     	$card_holder = $request->get('card_holder')?$request->get('card_holder'):null;
     	$end_month = $request->get('end_month')? $request->get('end_month'):null;
     	$end_year = $request->get('end_year')?$request->get('end_year'):null;
@@ -881,7 +911,12 @@ class SettingsController extends Controller {
     	if(!$payment)
     	{
     		$payment = new \Fenchy\UserBundle\Entity\Payment();
-    	}    	
+    	} 
+
+    	$key = '!p@a#b$o';
+    	if($cvv_code)
+    		$cvv_code = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key), $cvv_code, MCRYPT_MODE_CBC, md5(md5($key))));
+   		
     	$payment->setUser($user);
     	$payment->setAccountHolder($account_holder);
     	$payment->setAccountNo($account_no);
@@ -889,6 +924,7 @@ class SettingsController extends Controller {
     	$payment->setPaypalEmail($paypal_email);
     	$payment->setCardType($card_type);
     	$payment->setCardNo($card_no);
+    	$payment->setCvvCode($cvv_code);
     	$payment->setCardHolder($card_holder);
     	$payment->setEndMonth($end_month);
     	$payment->setEndYear($end_year);
@@ -902,14 +938,22 @@ class SettingsController extends Controller {
 	    		$typeindex = 1;
 	    	if($payment->getType() == 'paypal')
 	    		$typeindex = 2;
-	    	if($payment->getType() == 'paypal')
+	    	if($payment->getType() == 'credit')
 	    		$typeindex = 3;
 	    		
 	    	$str ='<div class="paymentdetails">';
 	    	$str.= '<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm('.$typeindex.')">';
 	    	$str .=	$this->get('translator')->trans('payment.change').'</a>';
 	    	$str .= '<a class="payment-button" href="javascript:void(0);" onclick="deletePaymentSetting('.$payment->getId().')">';
-	    	$str .=	$this->get('translator')->trans('payment.delete').'</a></div>';
+	    	$str .=	$this->get('translator')->trans('payment.delete').'</a>';
+	    	$str .= '<div class="changeSettingButton">';
+			$str .= '<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm(\'1\')">';
+			$str .= $this->get('translator')->trans('payment.direct_debit').'</a>';
+			$str .= '<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm(\'2\')">';
+			$str .= $this->get('translator')->trans('payment.paypal').'</a>';
+			$str .= '<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm(\'3\')">';
+			$str .= $this->get('translator')->trans('payment.credit_card').'</a>';
+	    	$str .= '</div></div>';
 	
 	    	echo $str;
 	    	exit;

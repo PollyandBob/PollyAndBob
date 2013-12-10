@@ -1,16 +1,16 @@
 util:
   relative:
-    now: Jetzt
+    now: jetzt
 
-    just_now: Vor weniger als einer Minute
+    just_now: vor weniger als einer Minute
 
-    a_minute_ago: Vor einer Minute
+    a_minute_ago: vor einer Minute
 
-    x_minutes_ago: '{0,1}Vor einer Minute|[2,Inf]Vor %number% Minuten'
+    x_minutes_ago: '{0,1} vor einer Minute |[2,Inf]Vor%number% Minuten'
 
-    an_hour_ago: Vor einer Stunde
+    an_hour_ago: vor einer Stunde
 
-    x_hours_ago: '{0,1}Vor einer Stunde|[2,Inf]Vor %number% Stunden'
+    x_hours_ago: '{0,1}vor einer Stunde|[2,Inf]Vor%number% Stunden'
 
     today: Heute
 
@@ -18,19 +18,19 @@ util:
 
     x_days_ago: '{0,1}Gestern|[2,Inf]Vor %number% Tagen'
 
-    x_weeks_ago: '{0,1}vor einer Woche|[2,Inf]Vor %number% Wochen'
+    x_weeks_ago: '{0,1} vor einer Woche|[2,Inf]Vor %number% Wochen'
 
     last_month: Letzten Monat
 
     in_a_minute: In einer Minute
 
-    in_x_minutes: '{0,1}In einer Minute|[2,Inf]In %number% Minuten'
+    in_x_minutes: '{0,1} In einer Minute|[2,Inf]In %number% Minuten'
 
     in_an_hour: In einer Stunde
 
     in_x_hours: '{0,1}In einer Stunde|[2,Inf]In %number% Stunden'
 
-    tomorrow: Morgen
+    tomorrow: Gestern 
 
     monday: Montag
 
@@ -48,25 +48,29 @@ util:
 
     next_week: Nächste Woche
 
-    in_x_weeks: '{0,1}N?ñchste Woche|[2,Inf]In %number% Wochen'
+    in_x_weeks: '{0,1}Nächste|[2,Inf]In %number% wochen'
 
     next_month: Nächsten Monat
-btn:
-  continue: Weiter
 
-  back: Zurück
+    flag: Flag
+    
+    why: Why do you want to flag this?
+btn:
+  continue: weiter
+
+  back: zurück
 
   ok: OK
 
-  cancel: Abbrechen
+  cancel: beenden
 
-  save: Speichern
+  save: speichern
 
   confirm: Bestätigen
 
   login: Login
 
-  send: Versenden
+  send: Senden
 
   delete: Löschen
 
@@ -74,27 +78,29 @@ btn:
 
   no: Nein
 
-  edit: Bearbeiten
+  edit: Ändern
 
   send_message: Nachricht senden
-harass: hat mich oder einen Freund von mir benötigst.
-spam: hat gespammed oder betrogen.
-commercial: hat kommerzielle Inhalte veröffentlicht.
-forbidden: hat sexuelle, politische oder religiöse Inhalte veröffentlicht.
-behaviour: hat sich gewaltätig öder schädlich verhalten verhalten.
+harass: Gewalt gegen Person oder eine Gruppe
+spam: Spam
+commercial: Kommerziele Inhalte
+forbidden: Pornographie, Gewalt oder Naktheit
+behaviour: Eigentumsrecht missachtet
+notpollynbob: Nicht Polly & Bob Style
+other_type: Sonstige
 sticker:
-  added_title: Dein Bericht wurde versendet.
+  added_title: Deine Meldung ist bei uns angekommen.
 
   reasons: Gründe
 
-  description: Zusätzliche Kommentare
+  description: weitere Bemerkungen
 male: männlich
 female: weiblich
 or: oder
-load_more: Mehr laden
-never: Niemals
-immediately: Sofort
-daily: Täglich
-positive: Positiv
-negative: Negativ
+load_more: mehr
+never: niemals
+immediately: unverzüglich
+daily: täglich
+positive: x
+negative: x
 review_type: 

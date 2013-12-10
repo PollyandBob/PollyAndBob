@@ -97,6 +97,7 @@ jQuery(document).ready(function() {
     jQuery('.make_listing').click(function (e) {
 		//Cancel the link behavior
 		e.preventDefault();
+		jQuery('#dialog4').hide();
 		jQuery('#dialog5').hide();
 		jQuery('#dialog6').hide();
 		jQuery('#dialog11').hide();

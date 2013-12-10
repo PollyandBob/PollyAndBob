@@ -2,11 +2,11 @@
 .loginwindow2 {
     background: none repeat scroll 0 0 #FFFFFF;
     display: none;
-    right: 0;
-    padding: 7px 10px;
+    padding: 7px 0 7px 10px;
     position: absolute;
+    right: 0;
     top: 30px;
-    width: 130px;
+    width: 150px;
     z-index: 999;
 }
 .loginwindow2 .iconarrow {
@@ -31,6 +31,15 @@
 </style>
                 <ul>
                     <li>
+                    {% if location == "" %}
+                    	<a class="myprofilelink1" href="javascript:void(0)">
+	                    	<img alt="" src="{{ absolute(asset('images/icon_home.png')) }}">
+				            {% set countInv = countInvitations() %}
+				            {% if req_unread_count or countInv or my_req_count%}
+				                <div class="requestcount">{{req_unread_count+countInv+my_req_count}}</div>
+				            {% endif %}
+	                    </a>
+                    {% else %}
 	                    <a href="{{ path('fenchy_regular_user_listing_manage') }}">
 	                    	<img alt="" src="{{ absolute(asset('images/icon_home.png')) }}">
 				            {% set countInv = countInvitations() %}
@@ -38,6 +47,7 @@
 				                <div class="requestcount">{{req_unread_count+countInv+my_req_count}}</div>
 				            {% endif %}
 	                    </a>
+	                {% endif %}
  					</li>
                     <li>
 				        <a href="#" class="wrapper-badge">
@@ -46,21 +56,33 @@
 				                <div class="mailcount">{{count}}</div>
 				            {% endif %}
 				        </a>
-				        <a href="{{ path('fenchy_regular_user_messages_index') }}">
-                    		<img alt="" src="{{ absolute(asset('images/icon_message.png')) }}">
-                    	</a>
+				        {% if location == "" %}
+				       	 	<a class="myprofilelink1" href="javascript:void(0)">
+	                    		<img alt="" src="{{ absolute(asset('images/icon_message.png')) }}">
+	                    	</a>
+				        {% else %}
+					        <a href="{{ path('fenchy_regular_user_messages_index') }}">
+	                    		<img alt="" src="{{ absolute(asset('images/icon_message.png')) }}">
+	                    	</a>
+	                   	{% endif %}
                     </li>
                     <li>
+                    	{% if location == "" %}
                     	<a class="myprofilelink" href="javascript:void(0)">
                     		<img alt="" src="{{ absolute(asset('images/icon_login.png')) }}">
                     	</a>
+                    	{% else %}
+                    	<a class="myprofilelink" href="javascript:void(0)">
+                    		<img alt="" src="{{ absolute(asset('images/icon_login.png')) }}">
+                    	</a>
+                    	{% endif %}
                     	<div class="loginwindow2">
 		                    <img class="iconarrow" src="{{ asset('images/icon_arrow.png') }}" alt="" />
 		                    <ul>
-		                    
-		                    	<li>
+		                    {% if location != "" %}
+		                    	<!-- <li>
 		                    		<a href="{{ path('fenchy_notice_indexv2') }}">{{ 'frontend.newsfeeds'|trans }}</a>
-		                    	</li>
+		                    	</li>-->
 		                    	<li>
 		                    		<a href="{{ path('fenchy_regular_user_user_myprofile_aboutmychoice') }}">{{ 'frontend.myprofile'|trans }}</a>
 		                    	</li>
@@ -69,13 +91,13 @@
 		                    	</li>
 		                    	
 		                    	<br>
-		                    	{% if alertmsg %}
+		                    	{% if alertmsg or managertype == 'pioneer'%}
        							<li><a {% if app.request.get('_route') == 'fenchy_regular_user_user_groupprofile_creategroup' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_notice_create2',{'typename' : 'offergroups'}) }}" >
        								{{ 'frontend.create_group'|trans }}</a>
        							</li>
        							{% endif %}
        						    {% render "FenchyNoticeBundle:GlobalFilter:myGroupsCode" with { 'userId': app.user.id } %}
-       							
+    						{% endif %}
        							<li><a {% if app.request.get('_route') == 'fos_user_security_logout' %} class="selected" {% endif %} href="{{ path('fos_user_security_logout') }}" >
        								{{ 'frontend.log_out'|trans }}</a>
        							</li>

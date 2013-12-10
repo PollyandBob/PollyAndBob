@@ -70,7 +70,7 @@ ko.bindingHandlers.jqAutocomplete = {
         options.appendTo = appendTo;
 
         //initialize autocomplete
-        $(element).autocomplete(options);
+        //$(element).autocomplete(options);
     },
     update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
        var allBindings = allBindingsAccessor(),

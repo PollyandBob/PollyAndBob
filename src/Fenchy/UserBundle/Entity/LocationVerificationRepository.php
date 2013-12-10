@@ -13,6 +13,35 @@ use Fenchy\UserBundle\Entity\User;
  */
 class LocationVerificationRepository extends EntityRepository
 {
+	public function getFullDetailedList($filter = NULL)
+	{
+		if(!($filter instanceof \Fenchy\AdminBundle\Entity\LocationVerificationFilter))
+		{
+			return $this->createQueryBuilder('i')
+			->getQuery()
+			->getResult();
+		}
+		$query = $this->createQueryBuilder('i');
+	
+	
+	
+		if($filter->username) {
+			$query->where('i.username like :username')
+			->setParameter('username', '%'.$filter->username.'%');
+				
+		}
+	
+		if($filter->status) {
+			$query->andWhere('i.status like :status')
+			->setParameter('status', '%'.$filter->status.'%');
+		}
+	
+		return $query->orderBy('i.'.$filter->sort, $filter->order)
+		->getQuery()
+		->getResult();
+	}
+	
+	
 	public function getStatus(User $user)
 	{
 		$query = $this->createQueryBuilder('l')
@@ -33,5 +62,21 @@ class LocationVerificationRepository extends EntityRepository
 			$verified = false;
 		}
 		return $verified;
+	}
+	
+	public function getVerifylocation(User $user)
+	{
+		$query = $this->createQueryBuilder('l')
+			->where('l.user = :user')
+			->setParameter('user', $user->getId())
+			->getQuery();
+		$location_entity = $query->getOneOrNullResult();
+	
+		$verify_location = false;
+		if(!$location_entity)
+		{
+			$verify_location = true;
+		}
+		return $verify_location;
 	}
 }
