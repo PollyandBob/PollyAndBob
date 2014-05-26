@@ -1,0 +1,78 @@
+{% block subject %}
+    {% autoescape false %}
+    {{ 'registration.email.subject'|trans({'%username%': user.regularuser.firstname, '%confirmationUrl%': confirmationUrl}, 'FOSUserBundle') }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_text %}{% autoescape false %}
+{{ 'registration.email.message.1'|trans({}, 'FOSUserBundle') }}
+
+{{ 'registration.email.message.3.txt'|trans({}, 'FOSUserBundle') }}
+{{ confirmationUrl }}
+
+{{ 'registration.email.message.4'|trans({}, 'FOSUserBundle') }}
+
+{{ 'registration.email.message.address'|trans({}, 'FOSUserBundle') }}
+{% endautoescape %}{% endblock %}
+
+{% block body_html %}
+<html>
+    <body style="font-family: MYRIADPRO-REGULAR, sans-serif;">
+        <table style="border: 1px #000 solid; width: 100%; border-collapse: collapse;">
+            <tr style="
+                height: 61px;
+                background-color: #000000;
+                border: 3px #000000 solid;
+                background-image: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(1,1,1,0.1) 100%); /* FF3.6+ */
+                background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(1,1,1,0.1))); /* Chrome,Safari4+ */
+                background-image: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(1,1,1,0.1) 100%); /* Chrome10+,Safari5.1+ */
+                background-image: -o-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(1,1,1,0.1) 100%); /* Opera 11.10+ */
+                background-image: -ms-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(1,1,1,0.1) 100%); /* IE10+ */
+                background-image: linear-gradient(to top, rgba(1,1,1,0.1) 0%, rgba(255,255,255,0) 100%); /* W3C */    
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1affffff', endColorstr='#1a010101',GradientType=0 );
+                ">
+				<td style="padding: 12px 0 5px 20px">
+                <img src="{{absolute(asset('images/logo.png'))}}" height="94px" alt="Polly&Bob" />
+				</td>
+            </tr>
+            <tr style="
+                border: 3px #000 solid;
+                border-top: none;
+                ">
+				<td style="padding: 20px;">
+				
+				<p>
+				Wir melden uns, wenn wir soweit sind, dich in die Neue Nachbarschaft von Polly & Bob aufzunehmen.
+				In der Zwischenzeit, freue dich auf unser nächstes Event in Friedrichshain, dem Running Dinner am 7.12.2013. 
+				</p>
+				<p>Liebe Grüße,</p>
+				
+				<p>Volker und das Team von Polly & Bob</p>
+				<br>
+				
+				<p>
+				We’ll be in touch when we’re ready for you to join your neighborhood community on Polly & Bob.
+				In the meantime, enjoy our next event in Friedrichshain: the big running dinner December 7th.
+				</p>
+				<p>Love,</p>
+				
+				<p>Volker and the team from Polly & Bob</p>
+				<br>
+				<h2>Running Dinner (Deutsch)</h2>
+				<p>Nachbarn öffnen ihre Küche für andere Nachbarn und kochen jeweils für 6 Personen. In einer netten Athmosphäre lernst du entspannt 12 neue Nachbarn kennen. Bei ihnen zu Hause und bei dir zu Hause. Es gibt 3 Gänge: Vorspeise, Hauptgang und Dessert. Zu jedem Gang findet sich eine neue Zusammensetzung.  Bei einem Gang bist du mit deinem Kochpartner der Gastgeber, bei zwei anderen Gängen seit ihr zu Gast. Vorspeise 19:00 Uhr, Hauptgang 21:00 Uhr,  Dessert 23:00 Uhr. Danach: Comming Together Party.
+				<br> <h3>Hier ist die Anmeldung: http://goo.gl/qpVBcn</h3></p>
+				</p>
+				<br>
+				
+				<h2>Running Dinner (English)</h2>
+				<p>Neighbors open their kitchen for other neighbors and cook for 6 people. Get to know 12 new neighbors in a lovely athmosphere at their places and at your place. Three courses: starter, main, dessert. On each course you find new people. You will host and prepare one course with your cooking partner and be guests on the other courses. We have a starter at 7pm, main course 9pm, desert 11pm. Afterwards we come together on our aftershowparty.
+				<br> <h3>Register here: http://goo.gl/qpVBcn </h3></p>
+				</p>
+				
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
+
+{% endblock %}

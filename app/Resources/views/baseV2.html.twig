@@ -255,7 +255,8 @@
 		        <section id="slidercontent">
 		            <div class="text1">{{ 'frontend.take_the_time'|trans }}</div>
 		            <!-- <a href="{{path('fenchy_frontend_indexv2')}}"><img src="{{ absolute(asset('images/logo.png')) }}" alt="" /></a>-->
-		            <a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis signup"><img src="{{ absolute(asset('images/logo.png')) }}" alt="" /></a>
+{#		            <a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis signup"><img src="{{ absolute(asset('images/logo.png')) }}" alt="" /></a>#}
+                            <a href="javascript:void(0);" class="signup"><img src="{{ absolute(asset('images/logo.png')) }}" alt="" /></a>
 		            <div class="text2">{{ 'frontend.enrich_your_life'|trans }}</div>
 		            <div class="clearfix"></div>
 		            <h2>{{ 'frontend.welcome_to_neighborhood'|trans }}</h2>
@@ -372,34 +373,58 @@
                 <div class="big_popup">
                     <div class="big_popupclose"><a href="" class="close"></a></div>
                     <!-- Your custom code here -->
-                    <a href="#" class="whatcan">You can do a lot on Polly &amp; Bob</a>
+                    <a href="#" class="whatcan">{{ 'front.you_can_do_a_lot'|trans }}</a>
                     <div class="clearfix"></div>
                     <div class="candolot">
                         <div class="left">
-                            <h4>Find Something<br><span>in the neighborhood</span></h4>
+                            <h4>{{ 'front.find_some_thing'|trans }}<br>{% if app.request.locale=='en' %}<span>In the neighborhood</span>{% endif %}</h4>
                             <div class="clearfix"></div>
-                            <a href="#dialog6" name="modal" id="vzoom_1944" class="zoomthis">Neighbors</a>
-                            <a href="#dialog11" name="modal" id="vzoom_1944" class="zoomthis">Groups</a>
-                            <a href="#dialog12" name="modal" id="vzoom_1944" class="zoomthis">Help</a>
-                            <a href="#dialog13" name="modal" id="vzoom_1944" class="zoomthis">Goods</a>
-                            <a href="#dialog14" name="modal" id="vzoom_1944" class="zoomthis">Service</a>
-                            <a href="#dialog15" name="modal" id="vzoom_1944" class="zoomthis">Events</a>
-                            <a style="padding:5px 10px; float:right; margin-right:18px;" href="#dialog16" name="modal" id="vzoom_1944" class="zoomthis">Something Else</a>
+                            <a href="#dialog6" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.neighbors'|trans }}</a>
+                            <a href="#dialog11" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.groups'|trans }}</a>
+                            <a href="#dialog12" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.help'|trans }}</a>
+                            <a href="#dialog13" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.goods'|trans }}</a>
+                            <a href="#dialog14" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.service'|trans }}</a>
+                            {% if app.request.locale=='en' %}
+                                <a href="#dialog15" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.events'|trans }}</a>
+                            {% elseif app.request.locale=='de' %}
+                                <a href="#dialog15" name="modal" id="vzoom_1944" class="zoomthis" style="padding: 5px 10px;">{{ 'front.events'|trans }}</a>
+                            {% else %}
+                                <a href="#dialog15" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.events'|trans }}</a>
+                            {% endif %}
+                            {% if app.request.locale=='en' %}
+                                <a style="padding:5px 10px; float:right; margin-right:18px;" href="#dialog16" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.something_else'|trans }}</a>
+                            {% elseif app.request.locale=='de' %}
+                                <a style="float:right; margin-right:18px;" href="#dialog16" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.something_else'|trans }}</a>
+                            {% else %}
+                                <a style="padding:5px 10px; float:right; margin-right:18px;" href="#dialog16" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.something_else'|trans }}</a>
+                            {% endif %}
                         </div>                        
                         <div class="right">
-                            <h4>Offer Something<br><span>to the neighborhood</span></h4>
+                            <h4>{{ 'front.offer_something'|trans }}<br>{% if app.request.locale=='en' %}<span>To the neighborhood</span>{% endif %}</h4>
                             <div class="clearfix"></div>
-                            <a href="#dialog17" name="modal" id="vzoom_1944" class="zoomthis">Groups</a>
-                            <a href="#dialog18" name="modal" id="vzoom_1944" class="zoomthis">Yourself</a>
-                            <a href="#dialog19" name="modal" id="vzoom_1944" class="zoomthis">Goods</a>
-                            <a href="#dialog20" name="modal" id="vzoom_1944" class="zoomthis">Help</a>
-                            <a href="#dialog21" name="modal" id="vzoom_1944" class="zoomthis">Events</a>
-                            <a href="#dialog22" name="modal" id="vzoom_1944" class="zoomthis">Service</a>
-                            <a style="padding:5px 10px;" href="#dialog23" name="modal" id="vzoom_1944" class="zoomthis">Something Else</a>
+                            <a href="#dialog17" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.groups'|trans }}</a>
+                            <a href="#dialog18" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.yourself'|trans }}</a>
+                            <a href="#dialog19" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.goods'|trans }}</a>
+                            <a href="#dialog20" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.help'|trans }}</a>
+                            {% if app.request.locale=='en' %}
+                                <a href="#dialog21" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.events'|trans }}</a>
+                            {% elseif app.request.locale=='de' %}
+                                <a href="#dialog21" name="modal" id="vzoom_1944" class="zoomthis" style="padding: 5px 10px;">{{ 'front.events'|trans }}</a>
+                            {% else %}
+                                <a href="#dialog21" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.events'|trans }}</a>
+                            {% endif %}
+                            <a href="#dialog22" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.service'|trans }}</a>
+                            {% if app.request.locale=='en' %}
+                                <a style="padding:5px 10px;" href="#dialog23" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.something_else'|trans }}</a>
+                            {% elseif app.request.locale=='de' %}
+                                <a href="#dialog23" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.something_else'|trans }}</a>
+                            {% else %}
+                                <a style="padding:5px 10px;" href="#dialog23" name="modal" id="vzoom_1944" class="zoomthis">{{ 'front.something_else'|trans }}</a>
+                            {% endif %}
                         </div>                        
                     </div>
                     <div class="clearfix"></div>
-                    <p class="left">Polly &amp; Bob connects you to your neigborhood</p>
+                    <p class="left">{{ 'front.connects_you_to_your_neighborhood'|trans }}</p>
 {#                     <p class="right">Take the time. Enrich your life.</p>#}
                     <!-- Your custom code end -->
                 </div>
@@ -412,21 +437,22 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Find Neighbors!</h4>
+                        <h4>{{ 'front.find_neighbors'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p class="text1">You need a chess player?</p>
+                        <p class="text1">{{ 'front.you_need_a_chess_player'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text2">You need people like you?</p>
+                        <p class="text2">{{ 'front.you_need_people_like_you'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text3">You want to meet people for xy?</p>
+                        <p class="text3">{{ 'front.you_want_to_meet_people_for_xy'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javascript:void(0);"  class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
 <!--                    
                     <form name="">
@@ -445,21 +471,22 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Find Groups!</h4>
+                        <h4>{{ 'front.find_groups'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p>You need a running group?</p>
+                        <p>{{ 'front.you_need_running_group'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text1">You want to meet people regularly to a certain topic?</p>
+                        <p class="text1">{{ 'front.you_want_to_meet_people_regularly_to_certain_topic'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p>You want to discuss local political stuff with neighbors?</p>
+                        <p>{{ 'front.you_want_to_discuss_local_political_stuff_with_neighbors'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javascript:void(0);" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
                     <!-- Your custom code end -->
                 </div>
@@ -472,21 +499,22 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Find Help!</h4>
+                        <h4>{{ 'front.find_help'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p>You need a help to solve your computer problem?</p>
+                        <p>{{ 'front.you_need_help_to_solve_your_computer_problem'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text1">You want to point your corrider and need a helping hand?</p>
+                        <p class="text1">{{ 'front.you_want_to_paint_your_corridor_and_need_helping_hand'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p>You someone to sit your dog?</p>
+                        <p>{{ 'front.you_need_somenoe_to_sit_your_dog'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javacript:void(0);" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
                     <!-- Your custom code end -->
                 </div>
@@ -499,21 +527,22 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Find Goods!</h4>
+                        <h4>{{ 'front.find_goods'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p class="text1">You need a certain CD?</p>
+                        <p class="text1">{{ 'front.you_need_certain_good'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text3">You need a car for the weekend?</p>
+                        <p class="text3">{{ 'front.you_need_car_for_weekend'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p>You need a certain tool?</p>
+                        <p>{{ 'front.you_need_certain_tool'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javascript:void(0);" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
                     <!-- Your custom code end -->
                 </div>
@@ -526,21 +555,22 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Find Services!</h4>
+                        <h4>{{ 'front.find_services'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p class="text1">You need a reliable babysitter for tonight?</p>
+                        <p class="text1">{{ 'front.you_need_reliable_babysitter_tonight'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text3">You need some guys for your move for small money?</p>
+                        <p class="text3">{{ 'front.you_need_some_guys_for_your_move_for_small_money'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p>You need any service and want something reliable person from the neighborhood?</p>
+                        <p>{{ 'front.you_need_any_service_and_want_somebody_reliable_from_the_neighborhood'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javascript:void(0);" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
                     <!-- Your custom code end -->
                 </div>
@@ -553,23 +583,24 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Find Events!</h4>
+                        <h4>{{ 'front.find_events'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p class="text1">Where is the next neighborhood meetup?</p>
+                        <p class="text1">{{ 'front.where_is_the_next_neighborhood_meetup'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text2">What is going on around me?</p>
+                        <p class="text2">{{ 'front.what_is_going_on_around_me'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p  class="text3">What is the next football game taking place?</p>
+                        <p  class="text3">{{ 'front.what_is_the_next_football_game_taking_place'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text1">Where can meet neighbors easily?</p>
+                        <p class="text1">{{ 'front.where_can_meet_neighbors_easily'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javascript:void(0);" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
                     <!-- Your custom code end -->
                 </div>
@@ -582,21 +613,22 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Find something else!</h4>
+                        <h4>{{ 'front.find_something_else'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p class="text1">You have lost your keys?</p>
+                        <p class="text1">{{ 'front.you_have_lost_your_keys'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text3">You want to find the best currywurst in your neighborhood?</p>
+                        <p class="text3">{{ 'front.you_want_to_find_the_best_currywurst_in_your_neighborhood'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p>You are in need of anything that dose not fit into help, service, goods, neighbors or groups?</p>
+                        <p>{{ 'front.you_are_in_need_of_anything'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javascript:void(0);" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
                     <!-- Your custom code end -->
                 </div>
@@ -609,19 +641,20 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Offer Groups</h4>
+                        <h4>{{ 'front.offer_groups'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p class="text1">You want to gather people in a group to a certain topic.</p>
+                        <p class="text1">{{ 'front.you_want_to_gather_people_in_group_to_certain_topic'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text3">You want to share news with certain neighbors?</p>
+                        <p class="text3">{{ 'front.you_want_to_share_news_with_certain_neighbors'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javascript:void(0);" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
                     <!-- Your custom code end -->
                 </div>
@@ -634,21 +667,22 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Offer Yourself</h4>
+                        <h4>{{ 'front.offer_yourself'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p class="text1">You want to offer some services?</p>
+                        <p class="text1">{{ 'front.you_want_to_offer_services'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text2">You want to offer help?</p>
+                        <p class="text2">{{ 'front.you_want_to_offer_help'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text3">You want to offer goods?</p>
+                        <p class="text3">{{ 'front.you_want_to_offer_goods'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javascript:void(0);" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
                     <!-- Your custom code end -->
                 </div>
@@ -661,23 +695,24 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Offer Goods?</h4>
+                        <h4>{{ 'front.offer_Goods'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p>You want to lend your car to neighbors on paid bases?</p>
+                        <p>{{ 'front.you_want_to_lend_your_car_to_neighbord_on_paid_bases'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text1">You want to lend your drilling machine to neighbors for free?</p>
+                        <p class="text1">{{ 'front.you_want_to_lend_your_drilling_machine_to_neighbors_for_free'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p>You want to give away some CD's or Music for free?</p>
+                        <p>{{ 'front.you_want_to_give_away_some_cd_or_music_for_free'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text1">You want to swap clothes?</p>
+                        <p class="text1">{{ 'front.you_want_to_swap_clothes'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javascript:void(0);" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
                     <!-- Your custom code end -->
                 </div>
@@ -690,21 +725,22 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Offer Help?</h4>
+                        <h4>{{ 'front.offer_help'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p>You are a native english speaker and like to help out a neighbor?</p>
+                        <p>{{ 'front.you_are_native_english_speaker_and_like_to_help_out_neighbor'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text1">You like dogs and like to offer dog sitting, because you can't have your own?</p>
+                        <p class="text1">{{ 'front.you_like_dogs_and_like_to_offer_dog_sitting_because_you_cant_have_your_own'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p>You are an expert in xy and like to offer a hand if needed?</p>
+                        <p>{{ 'front.you_are_expert_in_xy_and_like_to_offer_hand_if_needed'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javascript:void(0);" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
                     <!-- Your custom code end -->
                 </div>
@@ -717,21 +753,22 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Offer Events</h4>
+                        <h4>{{ 'front.offer_events'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p>You want to organize an event with neighbors?</p>
+                        <p>{{ 'front.you_want_to_organize_event_with_neighbors'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text3">You want to invite some people for dinner?</p>
+                        <p class="text3">{{ 'front.you_want_to_invite_some_people_for_dinner'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p  class="text1">You want to make a barbeque and invite some neighbors?</p>
+                        <p  class="text1">{{ 'front.you_want_to_make_barbecue_in_the_neighborhood'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javascript:void(0);" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
                     <!-- Your custom code end -->
                 </div>
@@ -744,21 +781,22 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Offer Service?</h4>
+                        <h4>{{ 'front.offer_service'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p class="text1">You want to earn some money on a talent, that you have?</p>
+                        <p class="text1">{{ 'front.you_want_to_earn_some_money_on_talent_that_you_have'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p class="text3">You are a babysitter and want to over your services here for money?</p>
+                        <p class="text3">{{ 'front.you_are_babysitter_and_want_to_offer_your_services_here_for_money'|trans }}</p>
                         <div class="clearfix"></div>
-                        <p>You want to offer a paid service to neighbors?</p>
+                        <p>{{ 'front.you_want_to_offer_paid_service_to_neighbors'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javascript:void(0);" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
                     <!-- Your custom code end -->
                 </div>
@@ -771,17 +809,18 @@
                     <div class="big_popupclose"><a href="" class="close1"></a></div>
                     <!-- Your custom code here -->
                     <div class="innerpopups">
-                        <h4>Offer something else?</h4>
+                        <h4>{{ 'front.offer_something_else'|trans }}</h4>
                         <div class="clearfix"></div>
-                        <p>You want to offer anything that does no fit into help, service, goods, neighbors or groups?</p>
+                        <p>{{ 'front.you_want_to_offer_anything'|trans }}</p>
                         <div class="clearfix"></div>
                         {% if app.user %}
-                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">Make a Listing</a>
+                        	<a href="{{ path('fenchy_notice_indexv2') }}" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% else %}
-                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">Make a Listing</a>
+{#                        	<a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis whatcan make_listing">{{ 'front.make_listing'|trans }}</a>#}
+                                <a href="javascript:void(0);" class="whatcan">{{ 'front.make_listing'|trans }}</a>
                         {% endif %}
                         <div class="clearfix"></div>
-                        <span>Polly &amp; Bob connects you to your neighborhood</span>
+                        <span>{{ 'front.connects_you_to_your_neighborhood'|trans }}</span>
                     </div>
                     <!-- Your custom code end -->
                 </div>
@@ -871,7 +910,7 @@ if (!jqueryLoaded) {
 }
 var script = document.createElement('script');
 script.type = 'text/javascript';
-script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
+//script.src = 'http://downloads.mailchimp.com/js/jquery.form-n-validate.js';
 head.appendChild(script);
 var err_style = '';
 try{

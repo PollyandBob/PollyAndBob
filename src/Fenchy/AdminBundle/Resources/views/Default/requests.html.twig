@@ -1,0 +1,143 @@
+{% extends 'FenchyAdminBundle::layout.html.twig' %}
+{% form_theme filter '::filterForm.html.twig' %}
+{% block admincontent %}
+ 
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+             <tr>
+                    <td align="center">
+                        <form action="{{ path('fenchy_admin_requests') }}" method="post" {{ form_enctype(filter) }}>
+                        <table width="100%" border="1" cellspacing="0" cellpadding="0" class="searchuser">
+                        <tr>
+                            <td width="60">{{ form_label(filter.text) }}:</td>
+                            <td width="150">{{ form_widget(filter.text) }}</td>
+                            <td width="75">{{ form_label(filter.author) }}:</td>
+                            <td width="150">{{ form_widget(filter.author) }}</td>
+                            <td width="90">{{ form_label(filter.receiver) }}:</td>
+                            <td width="150">{{ form_widget(filter.receiver) }}</td>
+                            <td width="70">{{ form_label(filter.target) }}:</td>
+                            <td width="150">{{ form_widget(filter.target) }}</td>
+                            <td width="60">{{ form_label(filter.sort) }}</td>
+                            <td width="130">{{ form_widget(filter.sort) }}</td>
+                            <td width="90">{{ form_label(filter.order) }}</td>
+                            <td width="110">{{ form_widget(filter.order) }}</td>
+                            <td width="100"><input type="submit" value="Search" class="searchoptions"/></td>
+                            <td>&nbsp;</td>
+                            {{ form_rest(filter) }}
+                      </tr>
+                      </table>
+                      </form>
+                    </td>
+              </tr>
+        </table>
+    
+    <div class="clearfix"></div>
+    <div class="sTableWrapper">
+    <table class="sTable" id="userlist" cellpadding="0" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th class="head0" width="5%" align="center">ID</th>
+                <th class="head1" width="20%">Title</th>
+                <th class="head0" width="20%">Text</th>
+                <th class="head1" width="10%">Status</th>
+                <th class="head0" width="20%">Created at</th>
+                <th class="head1" width="20%">Author</th>
+                <th class="head0" width="20%">Target User</th>
+                <th class="head1" width="20%">actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in pagination %}
+                <tr class="has-subrow">
+                    <td class="con0" width="5%" align="center">{{ request.id }}</td>
+                    <td class="con1" width="20%">{{ request.title }}</td>
+                    <td class="con0" width="20%">{{ request.text }}</td>
+                    <td class="con1" width="10%">{{ request.status }}</td>
+                    <td class="con0" width="20%">{{ request.createdAt|date('Y-m-d H:i') }}</td>
+                    <td class="con1" width="20%">{{ request.author }}</td>
+                    <td class="con0" width="20%">{{ request.aboutuser }}</td>
+                    <td class="con1" width="20%">
+                        <!--<a href="{{ url('fenchy_admin_request', {id: request.id}) }}" style="color:black">Edit</a> <br>-->
+                        <a href="{{ url('fenchy_admin_request_delete', {id : request.id}) }}" onclick="return confirm('Are you sure you want to delete this Request?');" style="color:black">Delete</a>
+                    </td>
+                </tr>
+                <tr class="subrow displayNone">
+                    <td>&nbsp;</td>
+                    <td colspan="7">
+                        <table>
+                            <tbody>
+                                {% if request.aboutNotice %}
+                                <tr class="has-subrow"><td>Target Notice: </td></tr>
+                                <tr class="subrow displayNone">
+                                    <td>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                            {{ request.aboutNotice.id }}: 
+                                                            {{ request.aboutNotice.title }}<br/>
+                                                            <p>{{ request.aboutNotice.content }}</p>
+                                                        
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                <tr class="has-subrow"><td>Additional Information</td></tr>
+                                <tr class="subrow displayNone">
+                                    <td>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th class="head0" width="10%">Requester Read Status</th>
+                                                    <th class="head1" width="10%">Receiver Read Status</th>
+                                                    <th class="head0" width="10%">Piece/Spot</th>
+                                                    <th class="head1" width="10%">Price</th>
+                                                    <th class="head0" width="10%">Propose Price</th>
+                                                    <th class="head1" width="10%">Total Price</th>
+                                                    <th class="head0" width="10%">Currency</th>
+                                                    <th class="head1" width="10%">Swap Msg</th>
+                                                    <th class="head0" width="10%">Start Date</th>
+                                                    <th class="head1" width="10%">Start Time</th>
+                                                    <th class="head0" width="10%">End Date</th>
+                                                    <th class="head1" width="10%">End Time</th>
+                                                    <th class="head0" width="10%">User Group</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                        <td class="con0" width="10%">{% if request.isRead %} True {% else %} False {% endif %}</td>
+                                                        <td class="con1" width="10%">{% if request.isReadStatus %} True {% else %} False {% endif %}</td>
+                                                        <td class="con0" width="10%">{{ request.pieceSpot }}</td>
+                                                        <td class="con1" width="10%">{{ request.price }}</td>
+                                                        <td class="con0" width="10%">{{ request.proposePrice }}</td>
+                                                        <td class="con1" width="10%">{{ request.TotalPrice }}</td>
+                                                        <td class="con0" width="10%">{{ request.currency }}</td>
+                                                        <td class="con1" width="10%">{{ request.swapmsg }}</td>
+                                                        <td class="con0" width="10%">{{ request.startDate|date('d-m-Y') }}</td>
+                                                        <td class="con1" width="10%">{{ request.startTime|date('H:m') }}</td>
+                                                        <td class="con0" width="10%">{{ request.endDate|date('d-m-Y') }}</td>
+                                                        <td class="con1" width="10%">{{ request.endTime|date('H:m') }}</td>                                                       
+                                                        <td class="con0" width="10%"> {% if request.aboutUserGroup %}{{ request.aboutUserGroup.user }} &nbsp;{{ request.aboutUserGroup.groupname}}{% endif %}
+                                                    </tr></td>
+                                                        
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+        <div class="sTableOptions">
+            <div class="pagination pgright">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+{% endblock %}
+    

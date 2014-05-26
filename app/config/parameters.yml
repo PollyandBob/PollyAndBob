@@ -13,7 +13,7 @@ parameters:
     mailer_encryption: ssl
     mailer_auth_mode: login
     from_email: test@huskerit.com
-    from_name: 'PollyAndBob'
+    from_name: 'Polly & Bob'
     locale: en
     secret: 3fdd10f551014c353d06f419e23f2aff36
     database_path: null
@@ -51,10 +51,10 @@ parameters:
     profile_link_percent: 0
     profile_languages_percent: 0.25
     profile_total_points: 20
-    filter_min_distance: 100
+    filter_min_distance: 0
     filter_min_distanceDate: 100
-    filter_min_distance_user: 200
-    filter_min_distance_myneighbors: 200
+    filter_min_distance_user: 0
+    filter_min_distance_myneighbors: 0
     filter_max_distance: 30000
     filter_max_distanceDate: 30000
     filter_max_distance_user: 30000
@@ -75,3 +75,5 @@ parameters:
     distance_slider_snap_user: 100
     listings_pagination: 10
     not_found_suggestions: 5
+    pagination_limit: 10
+    session_max_idle_time: 1800

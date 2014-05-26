@@ -1,0 +1,192 @@
+<script type="text/javascript">
+function logout()
+{
+	$.post('{{path('fenchy_set_logout_status')}}',
+            {}, 
+        function(response){
+            	window.location.replace('{{ app.request.getSchemeAndHttpHost() }}{{ path('fos_user_security_logout') }}');                	          
+		}, "json"); 
+} 
+</script>
+<style>
+.loginwindow2 {
+    background: none repeat scroll 0 0 #FFFFFF;
+    display: none;
+    padding: 7px 0 7px 10px;
+    position: absolute;
+    right: 0;
+    top: 30px;
+    width: 150px;
+    z-index: 999;
+}
+.loginwindow2 .iconarrow {
+	position:absolute;
+	top:-9px;
+	right:2px;
+}
+.loginwindow2 ul {
+	margin-left:0 !important;
+	margin-top:0 !important;	
+	
+}
+.loginwindow2 li {
+	margin-left:0 !important;
+}
+.loginwindow2 li a {
+    color: #000000 !important;
+    font-family: code_boldregular;
+    font-size: 12px !important;
+    letter-spacing: 1px;
+}
+</style>
+                <ul>
+                    <li>
+                    {% if location == "" %}
+                    	<a class="myprofilelink1" href="javascript:void(0)">
+	                    	<img alt="" src="{{ absolute(asset('images/icon_home.png')) }}">
+				            {% set countInv = countInvitations() %}
+				            {% if req_unread_count or countInv or my_req_count%}
+				                <div class="requestcount">{{req_unread_count+countInv+my_req_count}}</div>
+				            {% endif %}
+	                    </a>
+                    {% else %}
+	                    <a href="{{ path('fenchy_regular_user_listing_manage') }}">
+	                    	<img alt="" src="{{ absolute(asset('images/icon_home.png')) }}">
+				            {% set countInv = countInvitations() %}
+				            {% if req_unread_count or countInv or my_req_count%}
+				                <div class="requestcount">{{req_unread_count+countInv+my_req_count}}</div>
+				            {% endif %}
+	                    </a>
+	                {% endif %}
+ 					</li>
+                    <li>
+				        <a href="#" class="wrapper-badge">
+				            {% set count = countUnread() %}
+				            {% if count > 0 %}
+				                <div class="mailcount">{{count}}</div>
+                                            {% else %}
+                                                <div class="mailcount" style="display: none;"></div>
+				            {% endif %}
+				        </a>
+				        {% if location == "" %}
+				       	 	<a class="myprofilelink1" href="javascript:void(0)">
+	                    		<img alt="" src="{{ absolute(asset('images/icon_message.png')) }}">
+	                    	</a>
+				        {% else %}
+					        <a href="{{ path('fenchy_regular_user_messages_index') }}">
+	                    		<img alt="" src="{{ absolute(asset('images/icon_message.png')) }}">
+	                    	</a>
+	                   	{% endif %}
+                    </li>
+                    <li>
+                    	{% if location == "" %}
+                    	<a class="myprofilelink" href="javascript:void(0)">
+                    		<img alt="" src="{{ absolute(asset('images/icon_login.png')) }}">
+                    	</a>
+                    	{% else %}
+                    	<a class="myprofilelink" href="javascript:void(0)">
+                    		<img alt="" src="{{ absolute(asset('images/icon_login.png')) }}">
+                    	</a>
+                    	{% endif %}
+                    	<div class="loginwindow2">
+		                    <img class="iconarrow" src="{{ asset('images/icon_arrow.png') }}" alt="" />
+		                    <ul>
+		                    {% if location != "" %}
+		                    	<!-- <li>
+		                    		<a href="{{ path('fenchy_notice_indexv2') }}">{{ 'frontend.newsfeeds'|trans }}</a>
+		                    	</li>-->
+		                    	<li>
+		                    		<a href="{{ path('fenchy_regular_user_user_myprofile_aboutmychoice') }}">{{ 'frontend.myprofile'|trans }}</a>
+		                    	</li>
+		                    	<li>
+		                    		<a href="{{ path('fenchy_regular_user_settings_account') }}">{{ 'frontend.mysettings'|trans }}</a>
+		                    	</li>
+		                    	
+		                    	<br>
+		                    	{% if alertmsg or managertype == 'pioneer'%}
+       							<li><a {% if app.request.get('_route') == 'fenchy_regular_user_user_groupprofile_creategroup' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_notice_create2',{'typename' : 'offergroups'}) }}" >
+       								{{ 'frontend.create_group'|trans }}</a>
+       							</li>
+       							{% endif %}
+       						    {% render "FenchyNoticeBundle:GlobalFilter:myGroupsCode" with { 'userId': app.user.id } %}
+    						{% endif %}
+       							<li><a {% if app.request.get('_route') == 'fos_user_security_logout' %} class="selected" {% endif %} onclick="logout()" style="cursor: pointer;" >
+       								{{ 'frontend.log_out'|trans }}</a>
+       							</li>
+		                </div>
+                    </li>
+                </ul>
+
+<!-- 
+<ul id="user-account-item" class="pull-right">
+    <li class="top-icons home">
+        <a href="{{ path('fenchy_regular_user_user_profilev2') }}">
+            {% set countInv = countInvitations() %}
+            {% if req_unread_count or countInv %}
+                <span class="badge">{{req_unread_count+countInv}}</span>
+            {% endif %}
+            <i class="icon-home"></i>                                        
+        </a>
+    </li>
+    <li class="top-icons">
+        <a href="#" class="wrapper-badge">
+            {% set count = countUnread() %}
+            {% if count > 0 %}
+                <span class="badge">{{count}}</span>
+            {% endif %}
+        </a>
+        <a href="{{ path('fenchy_regular_user_messages_index') }}">
+            <i class="icon-envelope"></i>                                        
+        </a>
+
+    </li>
+    <li id="user-account-login-menu">
+        <div>
+            <a href="#">
+                <span class="image-container vsmall-avatar">
+                    <img src="{{ absolute(asset(thumb)) }}" alt=""/>                        
+                </span>                            
+                <strong>{{name}}</strong>
+                <i class="icon-caret-down"></i>
+                <i class="icon-caret-up"></i>
+            </a>
+            <ul id="user-account-login-menu-wrapper">
+                {% if is_granted('ROLE_FULL_USER') %}
+                <li>
+                    <a href="{{path('fenchy_regular_user_listing_manage')}}">
+                        <strong>{{ 'frontend.manage_listings'|trans }}</strong>
+                    </a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="{{ path('fenchy_regular_user_user_profilev2') }}">
+                        <strong>{{ 'frontend.my_profile'|trans }}</strong>
+                    </a>
+                </li>          
+                <li>
+                    <a href="{{ path('fenchy_regular_user_user_myprofile_main') }}">
+                        <strong>{{ 'frontend.my_profile'|trans }}</strong>
+                    </a>
+                </li>    
+                <li>
+                    <a href="{{ path('fenchy_regular_user_settings_basic') }}">
+                        <strong>{{ 'frontend.settings'|trans }}</strong>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('fos_user_security_logout') }}">
+                        <strong>{{ 'frontend.log_out'|trans }}</strong>
+                    </a>
+                </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                <li>
+                    <a href="{{ path('fenchy_admin_notices') }}">
+                        <strong>{{ 'frontend.admin'|trans }}</strong>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>                
+    </li>
+</ul>
+ -->

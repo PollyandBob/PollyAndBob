@@ -23,6 +23,8 @@ notice:
   
   location: Standort
   
+  place: benutzen
+  
   action: Aktion
   
   price_spots: Preis & Plätze
@@ -49,7 +51,23 @@ notice:
   
   contact_request: Kontakt Anfragen
   
+  group_request: Gruppe Anfragen
+  
   contact: Kontakt
+  
+  you_take_part: You take part
+  
+  you_requested: You Requested
+  
+  closed_group: geschlossenen Ortsgruppe
+    
+  open_group: öffnen Gruppe
+  
+  event_wanted: Event wollte
+  
+  event_hosted: Event Angebot
+  
+  message_from: Nachricht von
   
   category:
     help: Dienste/Hilfe
@@ -99,6 +117,8 @@ notice:
     
     propose_price: Einen Preis vorschlagen.
     
+    propose_location: Einen Standort vorschlagen.
+    
     borrow_bring: Ausleihen und zurückbringen.
     
     use_it: Bei mir benutzen.
@@ -108,7 +128,7 @@ notice:
     take_free: Geschenkt nehmen.
     
   filter:
-    filters: Deine Ausgewählten Optionen. 
+    filters: Deine Ausgewählten Optionen
 
     user: Nutzer
 

@@ -24,7 +24,12 @@
         "friendsofsymfony/twitter-bundle": "*",
         "friendsofsymfony/facebook-bundle": "dev-master",
         "punkave/symfony2-file-uploader-bundle": "*",
-        "paymill/paymill": "v3.0.0"
+        "paymill/paymill": "v3.0.0",
+        "cunningsoft/chat-bundle": "0.4.*@dev",
+		"knplabs/knp-time-bundle": "dev-master",
+                "knplabs/knp-paginator-bundle": "dev-master",
+                "paypal/adaptivepayments-sdk-php": "v2.5.106",
+		"paypal/merchant-sdk-php": "v2.5.106"
     },
     "scripts": {
         "post-install-cmd": [

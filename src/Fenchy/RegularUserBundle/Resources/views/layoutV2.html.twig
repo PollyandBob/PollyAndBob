@@ -1,5 +1,31 @@
 {% extends '::baseV3.html.twig' %}
 
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript" src="{{ asset('js/jWindowCrop.js') }}"></script>
+    <script type="text/javascript">
+            $(document).ready(function() {
+		
+		    $('.crop_me3').jWindowCrop({
+				targetWidth: 970, //Width of facebook cover division
+				targetHeight: 326, //Height of cover division
+				loadingText: '',
+				onChange: function(result) {
+					var strcropX = $(this).css('left');
+					var strcropY = $(this).css('top');
+					strcropX = strcropX.replace(/px/g, '');
+					strcropX = strcropX.replace(/-/g, '');
+					strcropY = strcropY.replace(/px/g, '');
+					strcropY = strcropY.replace(/-/g, '');
+				}
+			});
+			
+		    $('.placeholder').find('.jwc_controls').empty();
+	      
+		});
+   </script> 
+{% endblock %}
+   
 {% block header %}
     {% include '::headerV3.html.twig' %}
 {% endblock %}

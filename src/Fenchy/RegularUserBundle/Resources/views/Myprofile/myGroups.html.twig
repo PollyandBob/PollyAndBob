@@ -1,0 +1,77 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('plugins/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/moment-js/moment.min.js') }}"> </script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-slider.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/global-filter-view-model.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ absolute(asset('js/global-filter-widgets.js')) }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.tinyscrollbar.js') }}"></script>
+    
+    {# any view specific JS scripts for this view #}
+{% endblock %}
+
+{% block content %}	
+	{% render 'FenchyRegularUserBundle:Myprofile:myAvatar' %}
+	{% include 'FenchyRegularUserBundle:Myprofile:menu.html.twig' %}
+	
+	<style>
+	#filter-distance-slider .ui-state-hover
+	{
+		border:none !important;
+	}
+	</style>
+	
+   	
+			
+			<div class="myneighbors">
+				<div id="no_neighbours" style="display: none; padding: 18px 0px 0px 230px;position: absolute;"><h4>{{ 'regularuser.message.no_neighbors'|trans }}</h4></div>
+				<div class="ajax_loader_info" style="display: none; padding: 118px 0px 0px 438px;">
+						<img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
+				</div>
+				<div class="filters_data">
+				{% if usergroups %}
+				{% set i=0 %}
+                                        
+				{% for usergroup in usergroups %}
+		                <div class="persen">
+                                    <a href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo',{ 'groupId' : usergroup.id}) }}" class="my_neighbour">
+		                    {% if usergroup.path %}
+                                    <img src="/{{ usergroup.webpath }}" alt="" />
+                                    {% else %}
+				    <img alt="" src="{{ absolute(asset('images/default_profile_picture.png')) }}">
+				    {% endif %}
+		                    {# <div class="neighbor {{ managertype[i][2] }}">
+		                        <p>{{ managertype[i][1] }}</p>
+		                        <span>{{ usergroup.activity }}</span>
+		                    </div> #}
+                                    <div class="persenname"> <!--id="mygroup_id" -->
+		                        <p>{{ usergroup.groupname|truncate(12) }}</p>
+                                    </div> 
+		                    </a>
+                                       
+		                </div>
+		                {% set i= i+1 %}
+		         {% endfor %}
+		         {% else %}
+			         <div id="no_neighbours_onload" style="padding: 18px 0px 0px 230px;position: absolute;"><h4>{{ 'regularuser.message.no_groups'|trans }}</h4></div>
+			     {% endif %}
+		         
+		         </div>
+		         
+         
+         	</div>
+         	
+            <div class="clearfix"></div>
+            <div class="bgbottom">
+            	<img src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}" alt="" />
+            </div>    	
+   	
+
+{% endblock %}

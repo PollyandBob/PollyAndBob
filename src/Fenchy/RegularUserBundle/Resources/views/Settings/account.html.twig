@@ -25,11 +25,11 @@
     <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
     <style>
  	   .row.input-wrapper input {    		
-    		width: 95px;
+    		width: 134px;
 		}
 		.row.input-wrapper1 input {
     		
-    		width: 95px;
+    		width: 130px;
 		}
 		.row.input-wrapper {
 		    margin-left: 167px;
@@ -74,7 +74,7 @@
 			        	{{ form_row(form1.new.first, {'attr': {'placeholder': 'account.new_pass'|trans } }) }}
 			        </div>
 			        <div class="row input-wrapper" style="top: 115px;">
-			            {{ form_row(form1.new.second,{'attr': {'placeholder': 'account.new_pass'|trans } }) }}
+			            {{ form_row(form1.new.second,{'attr': {'placeholder': 'account.confirm_pass'|trans } }) }}
 			        </div>
 			        <div style="display:none;">
 			        	{{form_rest(form1)}}
@@ -114,12 +114,11 @@
                 		<div class="row list-row">
                 		{% set i=0 %}
 			                {% for child in form2.notifications %}
-			                	{% if i<2 %}
-                                <li>
-			                        {{ form_widget(child) }} <p style="margin-left: 31px; margin-top: -19px; padding-bottom: 0; width: 200px;">{{ ( 'account.msg' ~ i ) | trans }}</p>
-                                </li>
-                                {% endif %}
-                                {% set i = i+1 %}
+                                            {%if child.name== '1' or child.name=='2'%}
+                                                <div class="checkbox"> {{ form_widget(child) }}  {{ form_errors(child) }} <label style="display: block;">{{ ( 'account.msg' ~ i ) | trans }}</label></div>
+                                                 {% set i = i+1 %}
+                                            {%endif%}
+                                       
 			                {% endfor %}
         	            </div>                                    
                      </ul>
@@ -127,7 +126,7 @@
 			               {{ form_widget(form2) }}
                     </div>
                     <div class="accountdetails">
-                         <input type="submit" class="blue_button" style="margin: 70px 0px 80px 360px;" id="continue" value="{{ 'regularuser.change'|trans }}"/>
+                         <input type="submit" class="blue_button" style="margin: 32px 0 80px 425px;" id="continue" value="{{ 'regularuser.change'|trans }}"/>
                     </div>                            
             	                                   
 			</form>
@@ -137,8 +136,12 @@
         <div class="form-box" style="padding-bottom: 0px;">    		
             <p>{{'regularuser.delete_your_account'|trans}} </p> <a href="#dialog9" name="modal" id="vzoom_1944" class="zoomthis blue_button" style="float: right; margin-right: 480px; margin-top: -32px;">Now!</a>
     	</div>
-	</div>     
-     	<section id="boxes2">
+	</div> 
+         <div class="clearfix"></div>
+            <div class="bgbottom">
+            	<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
+            </div>
+     	{#<section id="boxes2">
 		    <div id="dialog8" class="window"> 
 		        <div class="big_popup">
 		            <div class="big_popupclose"><a href="" class="close"></a></div>
@@ -151,7 +154,8 @@
 								<button>{{ 'regularuser.ok'|trans|upper }}</button>
 		    	        	</form>
 		    	        {% endif %}
-		        </div>    
+		        </div> 
+                        <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
 		    </div>    
 		    <div id="mask"></div>
    		</section>
@@ -170,10 +174,11 @@
 								<p>{{ 'regularuser.verifing_identity_message'|trans|upper }}</p>
 							{% endif %}
 	    	        	{% endif %}
-	        		</div>    
+	        		</div>
+                    <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
 	    		</div>    
 	    	<div id="mask"></div>
-	    </section>
+	    </section>#}
     	<section id="boxes2">
     		<div id="dialog9" class="window"> 
     	    	<div class="big_popup">

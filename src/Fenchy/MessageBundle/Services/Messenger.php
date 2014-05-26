@@ -147,6 +147,32 @@ class Messenger {
     }
     
     /**
+     * Sets user's messages as read in this thread
+     * @param Message $message 
+     */
+    public function setAsReadByGroupMember(Message $message, $usergroup)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        while (null !== $message && !$message->isRead()) {
+            if($message->getUsergroup())
+            {                
+                if ($message->getUsergroup()->getId() == $usergroup) {
+                    $message->setRead(true);
+                    $em->persist($message);
+                }
+            }
+//            else {
+//                if ($message->getFromgroup()->getUser() === $this->getUser()) {
+//                    $message->setRead(true);
+//                    $em->persist($message);
+//                }
+//            }
+            $message = $message->getPrev();
+        }
+        $em->flush();
+    }
+    
+    /**
      * Sets all messages as read
      */
     public function readAll()
@@ -224,6 +250,33 @@ class Messenger {
         return $this->setMessage($message);
     }
     
+     /**
+     * Finds last message from thread
+     * @param type $id
+     * @param bool $read
+     * @return type
+     * @throws NotFoundHttpException 
+     */
+    public function findLastByIdGroup($id, $read = true, $usergroup)
+    {
+        $repo = $this->container->get('doctrine.orm.entity_manager')->getRepository('FenchyMessageBundle:Message');
+        $message = $repo->findLastByIdGroup($id, $this->getUser(), $usergroup);
+       
+        if (null === $message) {
+            throw new NotFoundHttpException('Message not found!');
+        }
+        if ($read) $this->setAsReadByGroupMember($message,$usergroup);
+        
+        if ($message->getSystem() || $message->getReceiver() == NULL || $message->getSender() == NULL) {
+            $this->message = $message;
+
+        } else {
+            $this->message = $this->createReply($message);
+        }
+        
+        return $this->setMessage($message);
+    }
+    
     /**
      * Clones message and sets data for reply
      * @param \Fenchy\MessageBundle\Entity\Message $message
@@ -233,17 +286,34 @@ class Messenger {
     {
     	$request = $request = $this->container->get('request');
     	$groupId = "";
-    	$groupId=$request->get('groupId');
-    	
-    	$reply = clone $message;
-        $reply->setFirst($message->getFirst())
-                ->setPrev($message)
-                ->unsetSenderDeletedAt()
-                ->unsetReceiverDeletedAt()
-        		->setFromgroup($groupId);
-        // Check if switch sender and receiver
-        if ($message->getReceiver() === $this->getUser()) {
-            $reply->setReceiver($message->getSender());
+    	$groupId= $request->get('groupId');
+        $group = null;
+        if($groupId!='')
+            $group = $this->container->get('doctrine.orm.entity_manager')->getRepository('FenchyRegularUserBundle:UserGroup')->find($groupId);
+        if($group)
+        {
+            $reply = clone $message;
+            $reply->setFirst($message->getFirst())
+                    ->setPrev($message)
+                    ->unsetSenderDeletedAt()
+                    ->unsetReceiverDeletedAt()
+                    ->setFromgroup($group);
+            // Check if switch sender and receiver
+            if ($message->getReceiver() === $this->getUser()) {
+                $reply->setReceiver($message->getSender());
+            }
+        }
+        else
+        {
+            $reply = clone $message;
+            $reply->setFirst($message->getFirst())
+                    ->setPrev($message)
+                    ->unsetSenderDeletedAt()
+                    ->unsetReceiverDeletedAt();                   
+            // Check if switch sender and receiver
+            if ($message->getReceiver() === $this->getUser()) {
+                $reply->setReceiver($message->getSender());
+            } 
         }
         return $reply;
     }
@@ -295,10 +365,10 @@ class Messenger {
         return $this->setMessages($em->getRepository('FenchyMessageBundle:Message')->findReceivedMessages($this->getUser(), $type, $ids));
     }
     
-    public function findReceivedMessagesOfGroup($type = null, $ids = array(),$user)
+    public function findReceivedMessagesOfGroup($type = null, $ids = array(), \Fenchy\RegularUserBundle\Entity\UserGroup $usergroup)
     {
     	$em = $this->container->get('doctrine.orm.entity_manager');
-    	return $this->setMessages($em->getRepository('FenchyMessageBundle:Message')->findReceivedMessages($user, $type, $ids));
+    	return $this->setMessages($em->getRepository('FenchyMessageBundle:Message')->findReceivedMessagesGroup($usergroup, $type, $ids));
     }
     
     /**
@@ -467,25 +537,38 @@ class Messenger {
         $em = $this->container->get('doctrine.orm.entity_manager');
         $messages = $em->getRepository('FenchyMessageBundle:Message')->findBySenderOrReceiver($this->user);
 
+        foreach ($messages as $message)
+        {
+            if($message->getFirst()->getId() != $message->getId())
+            {
+                $em->persist($message->unsetFirstMsg());
+            }
+            $em->persist($message->unsetNextMsg());
+            $em->persist($message->unsetPrevMsg());
+            $em->flush();
+        }
         foreach($messages as $message) {
 
-            if($message->getSender() == NULL) {
-                if($message->getReceiver()->getId() === $this->user->getId()) {
-                    $em->remove($message); // remove if sender and receiver has been deleted
-                }
-            } elseif($message->getReceiver() == NULL) {
+           
+//            if($message->getSender() == NULL) {
+//                if($message->getReceiver()->getId() === $this->user->getId()) {                    
+//                    $em->remove($message); // remove if sender and receiver has been deleted
+//                }
+//            } elseif($message->getReceiver() == NULL) {
+//                if($message->getSender()->getId() == $this->user->getId()) {                    
+//                    $em->remove($message); // remove if sender and receiver has been deleted
+//                }
+//            } else {
                 if($message->getSender()->getId() == $this->user->getId()) {
-                    $em->remove($message); // remove if sender and receiver has been deleted
-                }
-            } else {
-                if($message->getSender()->getId() == $this->user->getId()) {
-                    $em->persist($message->unsetSender()); // unset sender if he is going to be deleted
+                     
+                     $em->remove($message); // unset sender if he is going to be deleted
+                    
                 }
                 
                 if($message->getReceiver()->getId() == $this->user->getId()) {
-                    $em->persist($message->unsetReceiver()); // unset receiver if he is going to be deleted
+                    $em->remove($message);// unset receiver if he is going to be deleted
                 }
-            }
+            //}
         }
         
         // We have to flush twice to avoid situation where same message is from/to user
@@ -493,6 +576,60 @@ class Messenger {
         $em->flush();
         
         $messages = $em->getRepository('FenchyMessageBundle:Message')->findAboutUserNotices($this->user);
+
+        foreach ($messages as $message) {
+
+            $em->persist($message->unsetNotice()); // release relation by unset message about notice
+        }
+
+        $em->flush();
+        
+    }
+    
+    public function deleteUserMessage($id) {
+        
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $user = $em->getRepository('UserBundle:User')->find($id);
+        $messages = $em->getRepository('FenchyMessageBundle:Message')->findBySenderOrReceiver($user);
+
+        foreach ($messages as $message)
+        {
+            if($message->getFirst()->getId() != $message->getId())
+            {
+                $em->persist($message->unsetFirstMsg());
+            }
+            
+            $em->persist($message->unsetNextMsg());
+            $em->persist($message->unsetPrevMsg());
+            $em->flush();
+        }
+        foreach($messages as $message) {
+
+//            if($message->getSender() == NULL) {
+//                if($message->getReceiver()->getId() === $id) {
+//                    $em->remove($message); // remove if sender and receiver has been deleted
+//                }
+//            } elseif($message->getReceiver() == NULL) {
+//                if($message->getSender()->getId() == $id) {
+//                    $em->remove($message); // remove if sender and receiver has been deleted
+//                }
+//            } else {
+                if($message->getSender()->getId() == $id) {
+                    $em->persist($message->unsetSender()); // unset sender if he is going to be deleted
+                }
+                
+                if($message->getReceiver()->getId() == $id) {
+                    $em->persist($message->unsetReceiver()); // unset receiver if he is going to be deleted
+                }
+//            }
+        }
+        
+        // We have to flush twice to avoid situation where same message is from/to user
+        // and about user notice.
+        $em->flush();
+        
+        
+        $messages = $em->getRepository('FenchyMessageBundle:Message')->findAboutUserNotices($user);
 
         foreach ($messages as $message) {
 

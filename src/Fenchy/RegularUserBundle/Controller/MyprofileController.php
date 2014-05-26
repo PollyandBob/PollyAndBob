@@ -44,14 +44,14 @@ class MyprofileController extends Controller
 		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
 				
 		if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
-			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
 		$displayUser = $userLoggedIn;		
 		
 		$user = $this->get('security.context')->getToken()->getUser();
 	
 		if (!($user instanceof User)) 
 		{
-			return $this->redirect($this->generateUrl('fos_user_security_login'));
+			return $this->redirect($this->generateUrl('fenchy_frontend_indexv2'));
 		}
 	
 		$user_regular = $user->getRegularUser();
@@ -70,6 +70,10 @@ class MyprofileController extends Controller
 	
 				$regular_user = $form->getData();
 	
+                                if($regular_user->getBirthday())
+                                $regular_user->setUserAge($regular_user->getBirthday()->diff(new \DateTime('this year'))->format('%y'));
+                                else
+                                    $regular_user->setUserAge(NULL);
 				$data_saved = $this->get('translator')->trans('settings.flash.data_saved');
 				$this->get('session')->setFlash('positive', $data_saved);
 	
@@ -102,7 +106,7 @@ class MyprofileController extends Controller
 			$userOther = $em->getRepository('UserBundle:User')->getAllData( $userId );
 		
 			if ( ! $userOther instanceof \Fenchy\UserBundle\Entity\User )
-				return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+				return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
 			$displayUser = $userOther;
 			$usersOwnProfile = 0;
 		}
@@ -110,7 +114,7 @@ class MyprofileController extends Controller
 		{
 			
 			if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
-				return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+				return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
 			$displayUser = $userLoggedIn;
 			$usersOwnProfile = 1;
 		}
@@ -138,10 +142,8 @@ class MyprofileController extends Controller
 		$form3 = $this->createFormBuilder($document)
 		->add('user_id','hidden', array(
 				'data' => $userLoggedIn->getId(),))
-				->add('file',null,array('label' => 'settings.general.profile_photo'))
-				->getForm();
-		$form4 = $this->createFormBuilder($document)
-		->add('user_id','hidden', array(
+                ->add('file',null,array('label' => 'settings.general.profile_photo'))
+                ->add('user_id','hidden', array(
 				'data' => $userLoggedIn->getId(),))
 		->add('cropX','hidden')
 		->add('cropY','hidden')
@@ -171,18 +173,16 @@ class MyprofileController extends Controller
  		
 		// Added By jignesh for Manager type
 		
-		
 		$data['locale'] = $this->getRequest()->getLocale();
-		$data['displayUser'] =  $displayUser;
-		$data['verified'] =  $verified;
-		$data['identity'] =  $identity;
+		$data['displayUser'] = $displayUser;
+		$data['verified'] = $verified;
+		$data['identity'] = $identity;
 		$data['managertype'] = $managertype;		
-		$data['verifyIdentity'] =  $verify_identity;	
-		$data['verifyLocation'] =  $verify_location;
-		$data['form3'] = 	$form3->createView();
-		$data['form4'] = 	$form4->createView();
-		$data['profilepath'] =  $proimg;
-		$data['coverpath'] =  $covrimg;
+		$data['verifyIdentity'] = $verify_identity;	
+		$data['verifyLocation'] = $verify_location;
+		$data['form3'] = $form3->createView();
+		$data['profilepath'] = $proimg;
+		$data['coverpath'] = $covrimg;
 		$data['cropX'] = $cropX;
 		$data['cropY'] = $cropY;
 		
@@ -196,7 +196,7 @@ class MyprofileController extends Controller
 		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
 	
 		if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
-			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
 	
 		$displayUser = $userLoggedIn;
 		$filterService = $this->get('listfilter');
@@ -237,15 +237,22 @@ class MyprofileController extends Controller
 			$document = new Document();
 			$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
 				
-			if($result)
-			{
-				$avatar = $result->getWebPath();
-			
-			}
-			else
-			{
-				$avatar = 'images/default_profile_picture.png';
-			}
+                        if ($result)
+                        {
+
+                            if ($result->getWebPath())
+                            {
+                                $avatar = $result->getWebPath();
+                            }
+                            else
+                            {
+                                $avatar = 'images/default_profile_picture.png';
+                            }
+                        }
+                        else
+                        {
+                            $avatar = 'images/default_profile_picture.png';
+                        }
 			
 			$firstname= $user->getRegularUser()->getFirstname();
 			$destination = str_replace(" ", "", $user->getLocation());
@@ -267,7 +274,7 @@ class MyprofileController extends Controller
 				$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
 				
 				
-				$mindist = $this->container->getParameter('filter_min_distance_user');// minimum distance
+				$mindist = 0;// minimum distance
 				$maxdist = $this->container->getParameter('filter_max_distance_user');// maximum distance
 	
 				$dist1 = $request->getUri();
@@ -283,7 +290,7 @@ class MyprofileController extends Controller
 				}	
 				
 
-				if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
+				if($gmap_distance >= $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
 				{
 					// Added By bhumi for Manager type
 		
@@ -301,7 +308,15 @@ class MyprofileController extends Controller
 	
 		}
 	
-		
+		$blockneighbors = $em->getRepository('FenchyRegularUserBundle:BlockedNeighbor')->findBlockByMe($userLoggedIn->getId());
+                $blockmanagertype = array();
+                $i=0;
+                foreach ($blockneighbors as $blockneighbor)
+                {
+                    $blockmanagertype[$i++] = $em
+                            ->getRepository('FenchyRegularUserBundle:UserRegular')
+                            ->getManagerType($blockneighbor->getBlocked());
+                }
 	
 		return $this->render('FenchyRegularUserBundle:Myprofile:myNeighbors.html.twig',
 				array(
@@ -318,7 +333,9 @@ class MyprofileController extends Controller
 						'filterDistanceSliderDefaultUser'=>$this->container->getParameter('distance_slider_default_user'),
 						'filterDistanceSliderSnapUser'=>$this->container->getParameter('distance_slider_snap_user'),
 						'filterLastUrl' => $this->get('session')->get('lastFilterUrl'),
-						'managertype' => $managertype
+						'managertype' => $managertype,
+                                                'blockneighbors' =>$blockneighbors,
+                                                'blockmanagertype' => $blockmanagertype
 				));
 	}
 	
@@ -327,7 +344,7 @@ class MyprofileController extends Controller
 		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
 	
 		if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
-			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
 	
 		$displayUser = $userLoggedIn;
 		$filterService = $this->get('listfilter');
@@ -404,7 +421,7 @@ class MyprofileController extends Controller
 	
 					//echo($obj->rows[0]->elements[0]->distance->text); //km
 					//echo($obj->rows[0]->elements[0]->distance->value); // meters
-					$mindist = $this->container->getParameter('filter_min_distance_user');// minimum distance
+					$mindist = 0;// minimum distance
 					$maxdist = $this->container->getParameter('filter_max_distance_user');// maximum distance
 	
 					$dist1 = $request->getUri();
@@ -419,7 +436,7 @@ class MyprofileController extends Controller
 						$dist = 29999; // slider distance
 					}	
 					
-					if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
+					if($gmap_distance >= $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
 					{
 						// Added By jignesh for Manager type
 	
@@ -461,7 +478,7 @@ class MyprofileController extends Controller
 		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
 	
 		if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
-			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
 	
 		$displayUser = $userLoggedIn;
 		$filterService = $this->get('listfilter');
@@ -516,7 +533,7 @@ class MyprofileController extends Controller
 				$distance = $distance * 60 * 1.1515;
 				$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
 
-				$mindist = $this->container->getParameter('filter_min_distance_user');// minimum distance
+				$mindist = 0;// minimum distance
 				$maxdist = $this->container->getParameter('filter_max_distance_user');// maximum distance
 	
 				$dist1 = $request->getUri();
@@ -531,7 +548,7 @@ class MyprofileController extends Controller
 					$dist = 30000; // slider distance
 				}
 	
-				if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
+				if($gmap_distance >= $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
 				{
 					// Added By jignesh for Manager type
 	
@@ -573,7 +590,7 @@ class MyprofileController extends Controller
 		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
 		
 		if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
-			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
 		
 		$displayUser = $userLoggedIn;
 		$filterService = $this->get('listfilter');
@@ -611,16 +628,22 @@ class MyprofileController extends Controller
 			$em = $this->getDoctrine()->getEntityManager();
 			$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
 			
-			if($result)
-			{
-				$avatar = $result->getWebPath();
-				
-			}
-			else
-			{
-				$avatar = 'images/default_profile_picture.png';
-			}
-			
+			if($result){
+
+                            if($result->getWebPath())
+                            {
+                                    $avatar = $result->getWebPath();
+                            }
+                            else
+                            {
+                                        $avatar = 'images/default_profile_picture.png';
+                            }
+                        }    
+                        else
+                        {
+                                    $avatar = 'images/default_profile_picture.png';
+                        }
+
 			$firstname= $user->getRegularUser()->getFirstname();
 			$destination = str_replace(" ", "", $user->getLocation());
 			$userid= $user->getId();
@@ -647,13 +670,13 @@ class MyprofileController extends Controller
 				
 				//echo($obj->rows[0]->elements[0]->distance->text); //km
 				//echo($obj->rows[0]->elements[0]->distance->value); // meters
-				$mindist = $this->container->getParameter('filter_min_distance_user');// minimum distance
+				$mindist = 0;// minimum distance
 				$maxdist = $this->container->getParameter('filter_max_distance_user');// maximum distance
 				 
 				$dist = $request->query->get('dist'); // slider distance
 				
 				
-				if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
+				if($gmap_distance >= $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
 				{		
 					// Added By bhumi for Manager type
 		
@@ -699,12 +722,71 @@ class MyprofileController extends Controller
 						'filterLastUrl' => $this->get('session')->get('lastFilterUrl')
 				));
 	}
-	public function myCommunityPointsAction()
+	
+        
+        public function myGroupsAction()
+	{
+		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+                $em = $this->getDoctrine()->getEntityManager();
+		if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
+			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
+	
+		$displayUser = $userLoggedIn;
+		$filterService = $this->get('listfilter');
+		$emptyFilter = $returnFilter = $filterService->getFilter();
+		//Get Users info
+		$resultArray = $em->getRepository('FenchyNoticeBundle:Notice')->getAllUserGroups();
+                
+                $origin = str_replace(" ", "", $displayUser->getLocation());
+		$currentuid = $displayUser->getId();
+		$request = $this->getRequest();
+	
+		$filterdata = "";
+		$users2 = array();
+		$managertype = array();
+		$i = 0;
+                $usergroups = array();
+		foreach ($resultArray as $usergroup) 
+		{
+                    $groupMember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($usergroup->getId(), $userLoggedIn->getId());
+                    if ($groupMember)
+                    {
+                        $usergroups[] = $usergroup;
+                    }
+                    if($usergroup->getUser() == $userLoggedIn)
+                    {
+                        $usergroups[] = $usergroup;
+                    }
+		}
+	
+		
+	
+		return $this->render('FenchyRegularUserBundle:Myprofile:myGroups.html.twig',
+				array(
+						'locale'            => $this->getRequest()->getLocale(),
+						'displayUser'		=> $displayUser,
+						'usergroups'		=> $usergroups,
+						'filterdata'		=> $filterdata,
+						'listingsPagination'=>$this->container->getParameter('listings_pagination'),
+						'filterEmptyCat'=>$emptyFilter['categories'],
+						'filterEmptyPD'=>$emptyFilter['postDate'],
+						'filterDistanceSliderMinUser'=>$this->container->getParameter('filter_min_distance_user'),
+						'filterDistanceSliderMaxUser'=>$this->container->getParameter('filter_max_distance_user'),
+						'filterDistanceSliderDefaultUser'=>$this->container->getParameter('distance_slider_default_user'),
+						'filterDistanceSliderSnapUser'=>$this->container->getParameter('distance_slider_snap_user'),
+						'filterLastUrl' => $this->get('session')->get('lastFilterUrl'),
+						'managertype' => $managertype
+				));
+	}
+        
+        
+        
+        public function myCommunityPointsAction()
 	{
 		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
 				
 		if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
-			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
 		$displayUser = $userLoggedIn;
 
 		$em = $this->getDoctrine()->getManager();
@@ -764,6 +846,7 @@ class MyprofileController extends Controller
 		}
 		$reputationPoints['profile'] = $reputationPoints['profilePercent'] * 20;
 		$reputationPoints['profilePercent'] = ($reputationPoints['profilePercent'] *100) .'%';
+                $inviteFriendPoint  = $em->getRepository('UserBundle:TellFriend')->getPoint($userLoggedIn);
 		
 		return $this->render('FenchyRegularUserBundle:Myprofile:myCommunityPoints.html.twig',
 				array(
@@ -776,7 +859,8 @@ class MyprofileController extends Controller
 						'myNeighbourCount' => $this->myNeighborsCount(),
 						'neighbourServed' => $neighbourServed,
 						'completedAcitivities' => $completedAcitivities,
-						'verifyLocation' => $verify_location
+						'verifyLocation' => $verify_location,
+                                                'inviteFriendPoint' => $inviteFriendPoint
 				));
 	}
 	public function myLocationAction()
@@ -784,7 +868,7 @@ class MyprofileController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 
         if (!($user instanceof User)) {
-            return $this->redirect($this->generateUrl('fos_user_security_login'));
+            return $this->redirect($this->generateUrl('fenchy_frontend_indexv2'));
         }
         
         $request = $this->getRequest();
@@ -793,7 +877,7 @@ class MyprofileController extends Controller
       
         $form = $this->createForm(new UserLocationType(), $user);		
 
-		if ('POST' == $request->getMethod())
+	if ('POST' == $request->getMethod())
         {
             $form->bindRequest($request);
             
@@ -835,12 +919,48 @@ class MyprofileController extends Controller
                     	)
         			);	
 	}
+        
+        public function tellAFriendsAction()
+        {
+            $request = $this->getRequest();
+            $friends_email = $request->get('friends_email1');
+            $displayUser = $this->get('security.context')->getToken()->getUser();           
+            $value = 0;
+            // invite another friends by email
+            $data = array(
+                            'sender' => $displayUser,
+                            'user' => $displayUser,
+                            'requester' => base64_encode($displayUser->getId())
+                            );
+
+            if (!empty($friends_email))
+            {
+                    foreach ($friends_email as $key => $receiverEmail)
+                    {
+                            if($receiverEmail != "")
+                            {
+                                    $emailNotification = \Swift_Message::newInstance()->setFrom($this->container->getParameter('from_email'), $this->container->getParameter('from_name'))->setTo($receiverEmail)->setSubject($this->get('translator')->trans('regularuser.message.subject_for_invitefriendsby_mail'))->setBody($this->renderView('FenchyRegularUserBundle:Notifications:inviteFriendsByEmailHTML.html.twig', $data), 'text/html');
+                                    //->addPart($this->renderView('FenchyRegularUserBundle:Notifications:reviewEmailPlain.html.twig', $data), 'text/plain');
+                                    $mailer = $this->get('mailer');
+                                    $mailer->send($emailNotification);
+                                    $value = 1;
+                            }
+                    }
+            }
+            
+            return $this->render(
+                    'FenchyRegularUserBundle:Myprofile:tellAFriends.html.twig', array(
+                    	'displayUser' => $displayUser,
+                        'success'     => $value,
+                    	));	  
+        }
+        
 	public function verifyLocationAction()
 	{
 		
 		$user = $this->get('security.context')->getToken()->getUser();
 		if (!($user instanceof User)) {
-			return $this->redirect($this->generateUrl('fos_user_security_login'));
+			return $this->redirect($this->generateUrl('fenchy_frontend_indexv2'));
 		}
 		
 		$em = $this->getDoctrine()->getEntityManager();
@@ -861,51 +981,21 @@ class MyprofileController extends Controller
 		$location = $query->getOneOrNullResult();
 		$firstname = $this->getRequest()->get('firstname');
 		$lastname = $this->getRequest()->get('lastname');
-		$address = $this->getRequest()->get('address');
-		$additionaladdress = $this->getRequest()->get('additionaladdress');
-		$pincode = $this->getRequest()->get('pincode');		
-		
+		$address = $this->getRequest()->get('street');
+		$additionaladdress = $this->getRequest()->get('additional_address');
+                $city = $this->getRequest()->get('city');
+                $district = $this->getRequest()->get('district');
+                $state = $this->getRequest()->get('state');
+                $country = $this->getRequest()->get('country');
+		$pincode = $this->getRequest()->get('postcode');
+                
+		$FullAddress = $this->getRequest()->get('FullAddress');	
+                $FullAddress_latitude = $this->getRequest()->get('FullAddress_latitude');	
+                $FullAddress_longitude = $this->getRequest()->get('FullAddress_longitude');	
+                
 		echo $firstname."<br>".$lastname."<br>".$address."<br>".$additionaladdress."<br>".$pincode;
-		
-		if($location)
-		{
-			if(strcasecmp($location->getStatus(), 'verified') !=0)
-			{
-				$message = \Swift_Message::newInstance()
-					->setSubject('Location Verification')
-					->setFrom($this->container->getParameter('from_email'))
-					->setTo($user->getEmail())
-					->setBody($this->renderView(
-							'FenchyRegularUserBundle:Myprofile:verifyLocation.html.twig',
-							array('password' => $password)))
-					->setContentType("text/html");
-				$this->get('mailer')->send($message);
 				
-				$message1 = \Swift_Message::newInstance()
-				->setSubject('Location Verification Request')
-				->setFrom($this->container->getParameter('from_email'))
-				->setTo($this->container->getParameter('from_email'))
-				->setBody($this->renderView(
-						'FenchyRegularUserBundle:Myprofile:adminLocationMailTemplate.html.twig',
-						array('password' => $password, 'user'=> $user->getRegularUser()->getName())))
-						->setContentType("text/html");
-				$this->get('mailer')->send($message1);
-				
-				$location->setStatus('Requested');
-				$location->setPassword($password);
-				$location->setUsername($user->getRegularUser()->getFirstname());
-				$location->setLastname($lastname);
-				$location->setAddress($user->getLocation()->getLocation());
-				$location->setAdditionalAddress($additionaladdress);
-				$location->setPincode($pincode);
-				$em->persist($location);
-				$em->flush();				
-			}
-			else 
-				$verified = true;
-			
-		}
-		else 
+		if(!$location) 
 		{			
 			$location = new \Fenchy\UserBundle\Entity\LocationVerification();
 			$location->setPassword($password);
@@ -913,10 +1003,44 @@ class MyprofileController extends Controller
 			$location->setUsername($user->getRegularUser()->getFirstname());
 			$location->setStatus('Requested');
 			$location->setLastname($lastname);
-			$location->setAddress($user->getLocation()->getLocation());
+			$location->setAddress($address);
 			$location->setAdditionalAddress($additionaladdress);
+                        $location->setCity($city);
+                        $location->setDistrict($district);
+                        $location->setState($state);
+                        $location->setCountry($country);
 			$location->setPincode($pincode);
 			$em->persist($location);
+                        
+                        $UserLocation = $user->getLocation();
+                        $UserLocation->setLocation(implode(',', explode(' ', $FullAddress)));
+                        $UserLocation->setLatitude($FullAddress_latitude);
+                        $UserLocation->setLongitude($FullAddress_longitude);
+                        $UserLocation->setStreetNumber($address);
+                        $temp = explode(',', $additionaladdress);
+                        if(sizeof($temp)>1)
+                        {
+                            $UserLocation->setRoute($temp[0]);
+                            $UserLocation->setSublocality($temp[1]);
+                        }
+                        else if(sizeof($temp)>0)
+                        {
+                            $UserLocation->setSublocality($temp[0]);
+                            $UserLocation->setRoute(NULL);
+                        }
+                        else
+                        {
+                            $UserLocation->setSublocality(NULL);
+                            $UserLocation->setRoute(NULL);
+                        }
+                        $UserLocation->setLocality($city);
+                        $UserLocation->setAdministrativeAreaLevel2($district);
+                        $UserLocation->setAdministrativeAreaLevel1($state);
+                        $UserLocation->setCountry($country);
+                        $UserLocation->setPostalCode($pincode);
+                            
+                        $em->persist($UserLocation);
+                        
 			$em->flush();
 			$message = \Swift_Message::newInstance()
 				->setSubject('Location Verification')
@@ -947,7 +1071,7 @@ class MyprofileController extends Controller
 		
 		$user = $this->get('security.context')->getToken()->getUser();
 		if (!($user instanceof User)) {
-			return $this->redirect($this->generateUrl('fos_user_security_login'));
+			return $this->redirect($this->generateUrl('fenchy_frontend_indexv2'));
 		}
 		
 		$em = $this->getDoctrine()->getEntityManager();
@@ -971,7 +1095,7 @@ class MyprofileController extends Controller
 				if(strcmp($request->get('pass'),$location->getPassword()) == 0)
 				{
 					$location->setStatus('Verified');
-					if(!$location->getActivitypoint())
+					if($location->getActivitypoint()==0)
 					{
 						$location->setActivitypoint(100);
 						$user->addActivity(100);
@@ -1048,7 +1172,7 @@ class MyprofileController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 	
 		if (!($user instanceof User)) {
-			return $this->redirect($this->generateUrl('fos_user_security_login'));
+			return $this->redirect($this->generateUrl('fenchy_frontend_indexv2'));
 		}
 	
 		$request = $this->getRequest();
@@ -1102,7 +1226,7 @@ class MyprofileController extends Controller
 		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
 	
 		if ( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User )
-			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_homepage'));
+			return new RedirectResponse($this->container->get('router')->generate('fenchy_frontend_indexv2'));
 	
 		$displayUser = $userLoggedIn;
 		$filterService = $this->get('listfilter');
@@ -1153,7 +1277,7 @@ class MyprofileController extends Controller
 					$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
 	
 	
-					$mindist = $this->container->getParameter('filter_min_distance_user');// minimum distance
+					$mindist = 0;// minimum distance
 					$maxdist = $this->container->getParameter('filter_max_distance_user');// maximum distance
 	
 					$dist1 = $request->getUri();
@@ -1168,7 +1292,7 @@ class MyprofileController extends Controller
 						$dist = 30000; // slider distance
 					}	
 	
-					if($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
+					if($gmap_distance >= $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
 					{				
 						$i++;	
 					}
@@ -1178,4 +1302,155 @@ class MyprofileController extends Controller
 		}
 		return $i;
 	}
+        public function setAsLogoutAction()
+        {
+            $user = $this->get('security.context')->getToken()->getUser();
+            if($user)
+            {
+                $user->setIsLogin(false);
+                $this->getDoctrine()->getEntityManager()->persist($user);
+                $this->getDoctrine()->getEntityManager()->flush($user);
+            }
+            return new Response();
+        }
+        public function checkUserLoginAction()
+        {
+            $userLoggedIn = $this->get('security.context')->getToken()->getUser();
+            if( ! $userLoggedIn instanceof \Fenchy\UserBundle\Entity\User)
+            {
+                echo 'none';
+                exit;
+            }
+            
+            $id = $this->getRequest()->get('user');
+            $user = $this->getDoctrine()->getRepository('UserBundle:User')->find($id);
+            
+            
+            $datetime1= $userLoggedIn->getLastActive()->format('Y-m-d H:i:s');
+            $datetime2= $user->getLastActive()->format('Y-m-d H:i:s');
+           
+            $diff =  round((strtotime($datetime1) - strtotime($datetime2)) / 60,2);           
+            
+            if($diff<=0.3)
+            {
+                $user->setIsLogin(true);
+                $this->getDoctrine()->getEntityManager()->persist($user);
+                $this->getDoctrine()->getEntityManager()->flush($user);
+                echo "true";
+            }
+            else
+            {
+                $user->setIsLogin(false);
+                $this->getDoctrine()->getEntityManager()->persist($user);
+                $this->getDoctrine()->getEntityManager()->flush($user);
+                
+               echo 'false';
+            }
+            exit;
+        }
+        public function updateChatCountAction()
+        {
+            $user = $this->get('security.context')->getToken()->getUser();
+            if($user)
+            {
+                $user->setLastActive(new \DateTime());
+                $this->getDoctrine()->getEntityManager()->persist($user);
+                $this->getDoctrine()->getEntityManager()->flush($user);
+            }
+             
+            $request = $this->getRequest();
+            $id = $request->get('user');
+            
+            //$count = $this->get('fenchy.messenger')->countUnread();
+            $count = $this->getDoctrine()->getEntityManager()->getRepository('FenchyMessageBundle:Message')->countHeader($this->getUser());
+            $chats = $this->getDoctrine()->getRepository('CunningsoftChatBundle:Message')->findBy(
+                    array('receiver' => $this->getUser(), 'read' => 'false')
+            );
+            
+           
+            if($id)
+            {
+                
+                if($chats)
+                {
+                    foreach($chats as $chat)
+                    {
+                        if($chat->getAuthor()->getId()== $id)
+                        {
+                            $chat->setRead(true);
+                            $this->getDoctrine()->getEntityManager()->persist($chat);
+                           
+                        }
+                    }
+                }
+                 $this->getDoctrine()->getEntityManager()->flush();
+            }
+            $count += count($chats);
+            echo $count;
+            exit;
+        }
+        
+        public function addActivityPointAction()
+        {
+            $request = $this->getRequest();
+            $requester = $request->get('requester');
+            $em = $this->getDoctrine()->getEntityManager();
+            $facebookIds = $request->get('facebookIds');
+            
+            if($requester)
+            {
+                $user = $em->getRepository('UserBundle:User')->find(base64_decode($requester));
+                
+                $tellfriend = new \Fenchy\UserBundle\Entity\TellFriend();
+                $tellfriend->setByEmail(true);
+                $tellfriend->setUser($user);
+                $em->persist($tellfriend);
+                $em->flush($tellfriend);
+                        
+                $user->addActivity(1);
+                $em->persist($user);
+                $em->flush($user);
+            }
+            if($facebookIds)
+            {
+                $userLoggedIn = $this->get('security.context')->getToken()->getUser();
+                 
+                $j=1; $flag= true;
+                for($i=0; $i< sizeof($facebookIds); $i++)
+                {
+                    $tellfriend = new \Fenchy\UserBundle\Entity\TellFriend();
+                    $tellfriend->setByEmail(false);
+                    $tellfriend->setUser($userLoggedIn);
+                    $friendExist = $em->getRepository('UserBundle:TellFriend')->checkFacebookIdExist($facebookIds[$i],$userLoggedIn);
+                    if(!$friendExist)
+                    {
+                        if(sizeof($facebookIds)%2 != 0)
+                        {
+                            if(sizeof($facebookIds) == $j)
+                            {
+                                $flag =  false;
+                                echo 'sizeof=>'.sizeof($facebookIds);
+                        echo 'flag=>'.$flag;
+                        echo 'j=>'.$j;
+                            }
+                        }
+                        if($flag)
+                        {
+                            $tellfriend->setFacebookId($facebookIds[$i]);
+                            $em->persist($tellfriend);
+                            $em->flush($tellfriend);
+                        }
+
+                        if($j%2 == 0)
+                        {
+                            $userLoggedIn->addActivity(1);
+                            $em->persist($userLoggedIn);
+                            $em->flush($userLoggedIn);
+                        }
+                        $j++;
+                    }
+                }   
+            }
+            exit;
+        }
 }

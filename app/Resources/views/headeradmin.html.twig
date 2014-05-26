@@ -1,0 +1,35 @@
+{# empty Twig template #}
+	
+        
+            <div class="left">
+                <a href="{{path('fenchy_notice_indexv2')}}"><img width="44" alt="Polly&Bob" src="{{ absolute(asset('images/logo.png')) }}"></a>
+            </div>
+            <div class="right">
+            {% block tagline_content %}
+      			{# {% include '::searchBarV3.html.twig' %} #}
+			{% endblock %}
+            
+            {% if not is_granted('ROLE_USER') %}
+                <ul class="normal_user">
+                	<li><a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis login">{{'frontend.sign_in'|trans}}</a></li>
+                    <li><a href="#dialog10" name="modal" id="vzoom_1944" class="zoomthis signup">{{'frontend.sign_up'|trans}}</a></li>
+                </ul>
+                {% else %}
+                    {# {% render 'UserBundle:Widgets:userPanel' %} #}
+                    <div class="accountinfo">
+                        <a href="{{ path('fenchy_regular_user_user_myprofile_aboutmychoice') }}">
+                                    {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': app.user.id } %}
+                                   
+                                </a>
+                   	<div class="info" >
+                             <h3>{{ app.user.regularuser.firstname }}</h3>
+            		</div>
+                        <p>
+                            <a href="{{ path('fos_user_security_logout') }}">Logout</a>
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+   
+	<div class="clearfix"></div>
+

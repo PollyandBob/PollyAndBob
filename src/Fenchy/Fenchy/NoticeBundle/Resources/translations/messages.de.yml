@@ -1,0 +1,173 @@
+notice:
+  title: Titel
+
+  content: Deine Beschreibung
+  
+  add_cover: Bild hinzufügen
+  
+  add_profile: Bild hinzufügen
+
+  no_limit: unbegrenzt
+
+  tags: Stichworte (Tags)
+  
+  tags1: Tags
+  
+  description: description
+  
+  time: Zeit
+  
+  start: Start
+  
+  end: Ende
+  
+  location: Standort
+  
+  action: Aktion
+  
+  price_spots: Preis & Plätze
+  
+  price_pieces: Preis & Anzahl
+  
+  price_hours: Preis / Stunden
+
+  price: Preis
+  
+  piece: anzahl
+  
+  flag: MELDEN
+  
+  spot: Plätze
+  
+  perspot: Pro Platz
+  
+  perhour: Pro Stunde
+    
+  perpiece: Pro Stück
+  
+  invite: einladen
+  
+  contact_request: Kontakt Anfragen
+  
+  contact: Kontakt
+  
+  closed_group: geschlossenen Ortsgruppe
+    
+  open_group: öffnen Gruppe
+  
+  event_wanted: Event wollte
+  
+  event_hosted: Event Angebot
+  
+  category:
+    help: Dienste/Hilfe
+
+    goods: Sachen
+
+    events: Veranstaltungen
+
+    others: Andere
+
+  subcategory:
+    offer: Angeboote
+
+    need: Gesuche
+
+    to_sell: Es dir verkaufen.
+    
+    to_swap: Mit dir tauschen.
+
+    to_lend: Es dir leihen.
+
+    to_use: Es dich benutzen lassen.
+
+    to_give: Es dir schenken.
+
+    sports: a
+
+    party: a
+
+    arts: a
+
+    music: a
+
+    other: a
+    
+    contact_me: Mich kontaktieren.
+    
+    propose_time_price: Zeit und Preis vorschlagen.
+    
+    reserve_spot: Einen Platz reservieren.
+    
+    take_part: Vorbeikommen und mitmachen.
+    
+    buy: Kaufen.
+    
+    buy_a_spot: Einen Platz kaufen.
+    
+    propose_price: Einen Preis vorschlagen.
+    
+    borrow_bring: Ausleihen und zurückbringen.
+    
+    use_it: Bei mir benutzen.
+    
+    swap_it: Ein Tauschangebot machen.
+
+    take_free: Geschenkt nehmen.
+    
+  filter:
+    filters: Deine Ausgewählten Optionen. 
+
+    user: Nutzer
+
+    distance: Entfernung
+
+    post_date: Ausstehende Listings
+
+    location: Ort
+
+    phrase: Was suchst du in der Nachbarschaft?
+
+    categories: Kategorien
+
+    clear: alle auswählen
+    
+    select_options: Optionen auswählen
+
+    today: x
+
+    yesterday: x
+
+    this_week: x x
+
+    last_week: x x
+
+    past_month: x x
+
+    sort:
+      rel: Relevanz
+
+      dist: Entfernung
+
+      time: Datum
+      
+    around_you: im Umkreis von
+    
+    when: Zeitspanne
+
+  x_listings: listings
+
+  sort_by: Sortieren nach
+  
+  options_around_you: Möglichkeiten in deiner Nähe
+
+  similar_title: ähnliche listings
+
+  other_from: andere Listings von
+
+  other_from_title: andere Listings von
+  
+  what_other_person: was willst du die andere Person zu tun?
+euro: €
+dollar: $
+    

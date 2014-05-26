@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>				<html lang="en" class="ie ie6 lte9 lte8 lte7">	<![endif]-->
+<!--[if IE 7]>					<html lang="en" class="ie ie7 lte9 lte8 lte7">	<![endif]-->
+<!--[if IE 8]>					<html lang="en" class="ie ie8 lte9 lte8">		<![endif]-->
+<!--[if IE 9]>					<html lang="en" class="ie ie9 lte9">			<![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->	<html lang="en">								<!--<![endif]-->
+        <head>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+            <meta charset="UTF-8">
+            <link rel="icon" href="{{ asset('favicon.ico') }}" />
+            {% block stylesheets %}
+                <link rel="stylesheet" href="{{ absolute(asset('css/frontend/font-awesome.css')) }}" type="text/css" />                
+                <link rel="stylesheet" href="{{ absolute(asset('css/app/base-v2.css')) }}" type="text/css" />
+                <link rel="stylesheet" href="{{ asset('css/app/header-v2.css') }}" type="text/css" />
+                <link rel="stylesheet" href="{{ asset('css/app/foot-v2.css') }}" type="text/css" />
+                <link rel="stylesheet" href="{{ asset('js/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" /> 
+                
+                <link rel="stylesheet" href="{{ absolute(asset('css/notice/globalfilter/global-filter-v2.css')) }}" type="text/css" />
+            	{% if not app.user %}
+                <link rel="stylesheet" href="{{ asset('css/regular_user/registration/login-v2.css') }}" type="text/css" />
+                {% else %}
+                <link rel="stylesheet" href="{{ asset('css/regular_user/profile/userprofile-v2.css') }}" type="text/css" />
+                {% endif %}  
+                
+                <!-- Add CSS -->
+			    {% if app.request.locale == 'en' %}
+						<link rel="stylesheet" href="{{ absolute(asset('css/frontend/frontend/style.css')) }}" type="text/css" />                
+	            {% elseif app.request.locale == 'de' %}
+	            		<link rel="stylesheet" href="{{ absolute(asset('css/frontend/frontend/style_de.css')) }}" type="text/css" />
+	            {% endif %}
+			    <link rel="stylesheet" href="{{ absolute(asset('css/frontend/frontend/skin.css')) }}" type="text/css" />
+			    <link rel="stylesheet" href="{{ absolute(asset('css/frontend/frontend/popup.css')) }}" type="text/css" />
+			    <link rel="stylesheet" href="{{ absolute(asset('css/frontend/frontend/nivo-slider.css')) }}" type="text/css" />
+			    <!-- Add CSS -->
+            {% endblock %}
+            {% block javascripts %}
+                {# any view specific JS scripts for this view #}                
+               	 <!-- Add js by Jigs -->
+		   		<script type="text/javascript" src="{{ asset('js/jquery-popup.js') }}"></script>
+				<script type="text/javascript" src="{{ asset('js/popup.js') }}"></script>
+				<script type="text/javascript" src="{{ asset('js/ajax-calls.js') }}"></script>
+				<script type="text/javascript" src="{{ asset('js/jquery.tooltip.js') }}"></script>
+				<!-- Add js by Jigs -->
+                <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/jquery.nicescroll.js') }}"></script>
+                
+                <!--[if lt IE 9]>
+                    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+                    <script type="text/javascript" src="{{ absolute(asset('js/respond.min.js')) }}"></script>	
+                <![endif]-->
+                <!--[if lte IE 9]>
+                    <script type="text/javascript" src="{{ asset('js/jquery.placeholder.min.js') }}"></script>
+                    <script type="text/javascript">                
+                        $(document).ready(function(){$('input, textarea').placeholder();});
+                    </script>
+                <![endif]-->
+                <script type="text/javascript" src="{{ asset('plugins/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('plugins/jquery-blockui/jquery.blockui.js') }}" ></script>
+                <script type="text/javascript" src="{{ absolute(asset('js/sript-action-v2.js')) }}"></script>
+                <script type="text/javascript" src="{{ absolute(asset('js/regular_user/profile/footer-lang-dialogv2.js')) }}"></script>
+                <script type="text/javascript" src="{{ asset('js/fancybox/jquery.fancybox-1.3.4.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/fancybox/jquery.mousewheel-3.0.4.pack.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/i18n/jquery.ui.datepicker-'~app.request.locale~'.js') }}"></script>
+                {% if not app.user %}                
+                <script type="text/javascript" src="{{ asset('js/regular_user/login/form.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/regular_user/registration/form.js') }}"></script>
+                {% else %}
+                <script type="text/javascript" src="{{ asset('js/regular_user/profile/userprofile-v2.js') }}"></script>
+                {% endif %}                
+                {% if not app.user %}
+                <script type="text/javascript">
+                function onFbInit() {
+                    $('.login-with-facebook').click(function(){
+                        FB.login(function(response) {
+
+                            if (response.authResponse) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "{{ path('fenchy_login_facebook') }}",
+                                    data: { token: response.authResponse.accessToken, facebookId: response.authResponse.userID }
+                                }).done(function( data ) {
+                                    if (null != data.url) {
+                                        window.location.replace( data.url );
+                                    } else {
+                                        alert( '{{ 'regularuser.unexpected_problem_facebook'|trans }}');
+                                    }
+                                }).fail(function( data ) {
+                                    if (null != data.responseText) {
+                                        alert( data.responseText );
+                                    } else {
+                                        alert( '{{ 'regularuser.unexpected_problem_facebook'|trans }}');
+                                    }
+                                });
+                            }
+                        }, {
+                            scope: 'email, user_birthday, user_location'
+                        });
+                        return false;
+                    });
+                }
+                
+                </script>  
+                {% endif %}
+                <script type="text/javascript">
+                    $(document).ready(function(){
+                        if($.browser.mozilla && $.browser.version < '23')    {
+                            $('.createlinks').css('background','url("/images/icon_listing.png") no-repeat scroll right 6px transparent');
+                        }
+                        // For Leftside bar the mix options error sollution
+                        $(".rightside .options .optionsdetail a:even").css('float', 'left');
+                        $(".rightside .options .optionsdetail a:odd").css('float', 'right');
+                        //$(".leftpart .options .optionsdetail a:even").css('float', 'left');
+                        //$(".leftpart .options .optionsdetail a:odd").css('float', 'right');
+                        
+                    });
+                </script>
+                <script type="text/javascript">
+                	var nice = false;
+                    $(document).ready(function(){
+                    {% if app.user and not app.user.location.location %}
+                        $("input#location").fancybox({
+                            type: 'iframe',
+                            href: '{{ path('fenchy_regular_user_settings_filllocationpopup') }}?'+Math.random(),
+                            width: 900,
+                            height: 550,
+                            centerOnScroll: true,
+                            onClosed: function(){
+                                window.location.reload();
+                            }
+                        });                        
+                        
+                    {% endif %}                 
+					
+                      nice = $(".comments-scroll").niceScroll();
+
+                      $('.myprofilelink').click(function(event) {
+						  event.preventDefault();
+						  $('.loginwindow2').slideToggle('fast', function() {
+						  });
+					  });
+
+                      $('.sortby').click(function(event) {
+						  event.preventDefault();
+						  $('.loginwindow3').slideToggle('fast', function() {
+						  });
+					  });
+				    
+	                });
+                    </script>
+                   
+                   	<script>
+						$(function() {
+							 $('.login').click(function(event) {
+								  event.preventDefault();
+								  $('.loginwindow').slideToggle('fast', function() {
+								  });
+							});
+						});
+					</script>
+                    <!-- Add Js -->
+		   			<!-- 
+				    <script type="text/javascript" src="{{ asset('js/jquery-latest.js') }}"></script>
+				    <script type="text/javascript" src="{{ asset('js/jquery.nivo.slider.js') }}"></script>
+				    <script type="text/javascript" src="{{ asset('js/jquery.jcarousel.js') }}"></script>
+				    <script type="text/javascript" src="{{ asset('js/jquery.nicescroll.js') }}"></script>
+				    <script type="text/javascript" src="{{ asset('js/default.js') }}"></script>
+				    -->
+				    <!-- Add Js -->
+                    <script>
+                    function myFocus(element) 
+	                   {
+		                   if (element.value == element.defaultValue) {
+		                   	element.value = '';
+		                   }
+	                   }
+	                   function myBlur(element) {
+		                   if (element.value == '') {
+		                   	element.value = element.defaultValue;
+		                   }
+	                   }
+                           //window.onunload = confirmExit;
+                    </script> 
+            {% endblock %}
+                
+            {% block plugins %}
+            {% endblock %}
+            <title>{% block title %}{{ 'main.title_suffix'|trans }}{% endblock %}</title>
+            <style>
+            #lang-menu-wrapper 
+            {
+            	top: 0 !important;
+            }
+            header .right {
+                margin-right: 20px !important;
+                margin-top: 20px  !important;
+            }
+            .righ_to_right
+            {
+                float: right;
+		    font-family: code_boldregular !important;
+		    font-size: 13px !important;
+		    letter-spacing: 1px !important;
+		    margin-top:3px !important;
+		    position: relative !important;
+		    right: -3px !important;
+            }
+            header .right li {
+                margin-left: 14px !important;
+            }
+            .righ_to_right a span{ color:white;}
+            </style>
+    </head>
+    <body>
+           
+                {% block header %}
+                    {% include '::headerV3list.html.twig' %}
+                {% endblock %}
+                {% block body %}
+                    {% block tagline_content %}
+
+                    {% endblock %}
+            <section id="contentinner">
+        		<div class="wrapper"> 
+                            <div class="persendata" style="height: 450px;">
+                                <div style='text-align: center;'>
+                                    <h4 style="font-size: 42px; padding: 85px 111px 15px 324px;">{{ 'front.something_worng'|trans }}</h4>
+                                    <h4 style="font-size: 70px; padding: 0 170px 10px 280px; letter-spacing: 8px;">{{ 'front.page_not_found'|trans }}</h4>
+                                    <h4 style="font-size: 50px; padding: 0 0 10px 380px; letter-spacing: 3px;">{{ 'front.error_four'|trans }}</h4>
+                                    {% if app.user %}
+                                        <a class="blue_button" href="{{ path('fenchy_notice_indexv2') }}" style='margin-left: -152px; margin-top: 80px;'>{{ 'front.back_to_home'|trans }}</a>
+                                    {% else %}
+                                        <a class="blue_button" href="{{ path('fenchy_frontend_homepage') }}" style='margin-left: -152px; margin-top: 80px;'>{{ 'front.back_to_home'|trans }}</a>
+                                    {% endif %}    
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="bgbottom" style='margin-top: -9px;'>
+                                <img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
+                            </div>
+					{% if app.request.get('_route') == 'fenchy_notice_indexv2' %}
+        		    <a href="#" class="sortby">{{ 'notice.sort_by' | trans }}</a>
+        		    <div class="loginwindow3" style="display: none;">
+		                    <img alt="" src="{{ asset('images/icon_arrow.png') }}" class="iconarrow">
+		                    {% if app.user %}
+			                    <ul>
+			                    	<li>
+			                    		<a href="javascript:void(0)" id="distance" onclick="selectedOptions(this);" >{{ 'notice.filter.sort.dist' | trans }}</a>
+			                    	</li>
+			                    	<li>
+			                    		<a href="javascript:void(0)" id="date" onclick="selectedOptions(this);">{{ 'notice.filter.sort.time' | trans }}</a>
+			                    	</li>
+			                    	<li><a href="javascript:void(0)" id="relevance" onclick="selectedOptions(this);">
+	       								{{ 'notice.filter.sort.rel' | trans }}</a>
+	       							</li>
+	       						</ul>
+       						{% else %}
+       							<ul>
+			                    	<li>
+			                    		<a href="javascript:void(0)" id="distance">{{ 'notice.filter.sort.dist' | trans }}</a>
+			                    	</li>
+			                    	<li>
+			                    		<a href="javascript:void(0)" id="date">{{ 'notice.filter.sort.time' | trans }}</a>
+			                    	</li>
+			                    	<li><a href="javascript:void(0)" id="relevance">
+	       								{{ 'notice.filter.sort.rel' | trans }}</a>
+	       							</li>
+	       						</ul>
+       						{% endif %}
+		                </div>
+        		    
+		        	<p class="around">{{ noticeCount }} {{ 'notice.options_around_you' | trans }}</p>
+        		    {% endif %}
+            		<div class="clearfix"></div>	
+        			
+                   {% block positive_msg %}
+                       {% set flash = app.session.flash('positive') %}
+                       {% if flash|length > 0 %}
+                           <div class="flash-message">
+                               <div class="flash-message-inner">
+                                   <p id="account-resume" class="alert-success"><i class="icon-ok"></i>{{ flash|trans }}</p>
+                               </div>
+                           </div>
+                       {% endif %}
+                       {% set flash = app.session.flash('positive-overlayer') %}
+                       {% if flash|length > 0 %}
+                           <div class="flash-message flash-message-overlayer">
+                               <div class="flash-message-inner">
+                                   <p id="account-resume" class="alert-success"><i class="icon-ok"></i>{{ flash|trans }}</p>
+                               </div>
+                           </div>
+                       {% endif %}                        
+                   {% endblock %}
+
+                   {% block negative_msg %}
+                       {% set flash = app.session.flash('negative') %}
+                       {% if flash|length > 0 %}
+                           <div class="flash-message">
+                               <div class="flash-message-inner">
+                                   <p id="account-resume" class="alert-error"><i class="icon-remove"></i>{{ flash|trans }}</p>
+                               </div>
+                           </div>
+                       {% endif %}
+                       {% set flash = app.session.flash('negative-overlayer') %}
+                       {% if flash|length > 0 %}
+                           <div class="flash-message flash-message-overlayer">
+                               <div class="flash-message-inner">
+                                   <p id="account-resume" class="alert-error"><i class="icon-remove"></i>{{ flash|trans }}</p>
+                               </div>
+                           </div>
+                       {% endif %}                        
+                   {% endblock %}
+
+                       {% block content %}
+
+                       {% endblock %}
+
+                   {% endblock %}
+                   
+               </div>
+            </section>
+            <section id="boxes2">
+		        <div class="window" id="dialog30" style="top: 213.5px; left: 395px; display: none;"> 
+		            <div class="big_popup">
+		                <div class="big_popupclose"><a class="close" href=""></a></div>
+		                <!-- Your custom code here -->
+		                <div class="published">
+		                    <div class="title">{{ 'request.login_require'|trans }}</div>	
+		                </div>
+		                <!-- Your custom code end -->
+		            </div>
+		            <img alt="" src="{{ asset('images/popup_bottom.png') }}" class="popup_bottom">
+		        </div>
+		        <div id="mask"></div>
+		    </section>
+		    <!-- <a href="#dialog30" class="zoomthis neighbor_success" id="vzoom_1944" name="modal">Pop-up</a>-->
+      		
+      		<section id="boxes2">
+		        <div class="window" id="dialog31" style="top: 213.5px; left: 395px; display: none;"> 
+		            <div class="big_popup">
+		                <div class="big_popupclose"><a class="close" href=""></a></div>
+		                <!-- Your custom code here -->
+		                <div class="published">
+		                    <div class="title">{{ 'regularuser.joined_group_success'|trans }}</div>	
+		                </div>
+		                <!-- Your custom code end -->
+		            </div>
+		            <img alt="" src="{{ asset('images/popup_bottom.png') }}" class="popup_bottom">
+		        </div>
+		        <div id="mask"></div>
+		    </section>
+		    <a href="#dialog31" class="zoomthis neighbor_success1" id="vzoom_1944" name="modal">Pop-up</a>
+		    
+		    <section id="boxes2">
+		        <div class="window" id="dialog32" style="top: 213.5px; left: 395px; display: none;"> 
+		            <div class="big_popup">
+		                <div class="big_popupclose"><a class="close" href=""></a></div>
+		                <!-- Your custom code here -->
+		                <div class="published">
+		                    <div class="title">{{ 'regularuser.left_group_success'|trans }}</div>	
+		                </div>
+		                <!-- Your custom code end -->
+		            </div>
+		            <img alt="" src="{{ asset('images/popup_bottom.png') }}" class="popup_bottom">
+		        </div>
+		        <div id="mask"></div>
+		    </section>
+		    <a href="#dialog32" class="zoomthis neighbor_success2" id="vzoom_1944" name="modal">Pop-up</a>
+      		
+      		
+      		<section id="boxes2">
+		        <div class="window" id="dialog33" style="top: 213.5px; left: 395px; display: none;"> 
+		            <div class="big_popup">
+		                <div class="big_popupclose"><a class="close" href=""></a></div>
+		                <!-- Your custom code here -->
+		                <div class="published">
+		                    <div class="title">{{ 'regularuser.members_removed_success'|trans }}</div>	
+		                </div>
+		                <!-- Your custom code end -->
+		            </div>
+		            <img alt="" src="{{ asset('images/popup_bottom.png') }}" class="popup_bottom">
+		        </div>
+		        <div id="mask"></div>
+		    </section>
+		    <a href="#dialog33" class="zoomthis memeber_removed_success" id="vzoom_1944" name="modal">Pop-up</a>
+      	
+	      	<section id="boxes2">
+	            <div id="dialog10" class="window"> 
+				{% if not app.user %}
+	                {% render 'UserBundle:Registration:register' %}
+	            {% endif %}
+	            </div>
+	            <div id="mask"></div>
+	    	</section>
+    		
+    		<a id="BetaVersion" href="#dialog111" name="modal" id="vzoom_1944" class="zoomthis whatcan" style="display: none;"></a>
+    		<section id="boxes2">
+			<div id="dialog111" class="window">
+			   	<div class="big_popup">
+			      	<div class="big_popupclose"><a href="" class="close"></a></div>
+					<p>
+						 We are still invite only.  We have sent you email with detail information.
+					</p>
+				</div>
+				<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -7px;">
+			</div>
+			<div id="mask"></div>
+			</section>
+    		
+            <div class="clearfix"></div>    
+            {% block foot %}
+                {% include '::footV2.html.twig' %}
+                {% if not app.user %}
+                {{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
+                {% endif %}
+            {% endblock %}
+       
+    </body>
+</html>

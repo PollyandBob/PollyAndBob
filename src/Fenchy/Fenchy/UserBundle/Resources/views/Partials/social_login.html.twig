@@ -1,0 +1,5 @@
+{{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
+<div class="tw_fb_logins">
+    <a href="{{ path ('connect_twitter')}}" class="twitter"><span class="firstletter">t</span> | {{ 'user.sign_in_with_twitter'|trans }} </a>
+    <a href="" id="facebook-login" class="facebook"><span class="firstletter">f</span> | {{ 'user.sign_in_with_facebook'|trans }}</a>
+</div>

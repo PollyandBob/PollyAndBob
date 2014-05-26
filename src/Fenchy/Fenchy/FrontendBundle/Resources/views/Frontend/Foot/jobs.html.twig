@@ -1,0 +1,93 @@
+{% extends 'FenchyFrontendBundle::static.html.twig' %}
+
+{% block content_static %}
+                            <div class="intro">
+                                <hgroup>
+                                    <h1>{{'frontend.jobs.header_1'|trans}}</h1>
+                                    <h2>{{'frontend.jobs.header_2'|trans}}</h2>
+                                </hgroup>                                                               
+                            </div>
+                            <div id="fenchy-values">
+                                <section class="clearfix">
+                                    <div class="col-l">
+                                        <p>{{'frontend.jobs.1.par_1'|trans}}</p>
+                                        <p>{{'frontend.jobs.1.par_2'|trans}}</p>
+
+                                    </div>
+                                    <div class="col-r">
+                                        <img src="{{asset('images/careers/putourusersfirst.jpg')}}"/>                                        
+                                    </div>
+                                </section>
+                                <section class="clearfix">
+                                    <div class="col-l">
+                                        <img src="{{asset('images/careers/bebold.jpg')}}"/>
+                                    </div>
+                                    <div class="col-r">                                        
+                                        
+
+                                        <p>{{'frontend.jobs.2.par_1_1'|trans}}<br />
+                                        {{'frontend.jobs.2.par_1_2'|trans}}</p>
+                                        <p>{{'frontend.jobs.2.par_2'|trans}}</p>                                        
+                                        
+                                        
+                                    </div>
+                                </section>
+                                <section class="clearfix">
+                                    <div class="col-l">
+                                        
+                                        
+                                        <p>{{'frontend.jobs.3.par_1'|trans}}</p>
+                                        
+                                    </div>
+                                    <div class="col-r">
+                                        <img src="{{asset('images/careers/beopen.jpg')}}"/>                                        
+                                    </div>
+                                </section>
+                                <section class="clearfix">
+                                    <div class="col-l">
+                                        <img src="{{asset('images/careers/behuman.jpg')}}"/>                                          
+                                    </div>
+                                    <div class="col-r">
+                                        <p>{{'frontend.jobs.4.par_1'|trans}}</p>
+                                        <p>{{'frontend.jobs.4.par_2'|trans}}</p>                                        
+                                        
+                                        
+                                    </div>
+                                </section>
+                                <section class="clearfix">
+                                    <div class="col-l">
+                                        <p>{{'frontend.jobs.5.par_1'|trans}}</p>
+                                        <p>{{'frontend.jobs.5.par_2'|trans}}</p>
+                                    </div>
+                                    <div class="col-r">
+                                        <img src="{{asset('images/careers/thinkinternational.jpg')}}"/>                                        
+                                    </div>
+                                </section>
+                            </div>
+                            <p>{{'frontend.jobs.bottom.text'|trans}}</p>
+                            <section id="current-positions" class="clearfix">
+                                <h1>{{'frontend.jobs.bottom.current_positions'|trans}}</h1>
+                                <div class="box pull-left box-engineering">
+                                    <header>
+                                        <h1>Engineering</h1>
+                                    </header>
+                                    <span class="info-by-line">Software Developer</span>
+                                    <div class="button submit">
+                                        <a href="{{path('fenchy_frontend_imprint')}}" class="wrapper">
+                                            <strong>{{'frontend.jobs.bottom.apply_now'|trans}}</strong>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="box pull-right box-product">
+                                    <header>
+                                        <h1>Product</h1>
+                                    </header>
+                                    <span class="info-by-line">Product Manager</span>
+                                    <div class="button submit">
+                                        <a href="{{path('fenchy_frontend_imprint')}}" class="wrapper">
+                                            <strong>{{'frontend.jobs.bottom.apply_now'|trans}}</strong>
+                                        </a>
+                                    </div>
+                                </div>
+                            </section>
+{% endblock %}

@@ -7,6 +7,7 @@ use Doctrine\ORM\Query\Expr;
 
 use Fenchy\AdminBundle\Entity\ReviewsFilter;
 use Fenchy\UserBundle\Entity\User;
+
 /**
  * @author Michał Nowak <mnowak@pgs-soft.com>
  */
@@ -36,52 +37,47 @@ class ReviewRepository extends EntityRepository
                     ->select('r, a, s, su, ('.$sub->getDQL().') as HIDDEN stickersQ')
                     ->join('r.author', 'a');
                     
+        $query->join('r.aboutUser', 'u');
         
-        if($filter->reported_only) {
-            $query->join('r.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
+        $query->leftJoin('r.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
                 ->leftJoin('s.reported_by', 'su');
-        } else {
-            $query->leftJoin('r.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
-                ->leftJoin('s.reported_by', 'su');
+        
+         if($filter->text) {
+            $query->where('LOWER(r.text) like :text')
+                    ->setParameter('text', strtolower('%'.$filter->text.'%'));
         }
         
         if($filter->author) {
-            $query->where('a.email like :email')
-                    ->setParameter('email', '%'.$filter->author.'%');
+            $query->andWhere('LOWER(a.email) like :email')
+                    ->setParameter('email', strtolower('%'.$filter->author.'%'));
         }
         
-        if(is_numeric($filter->type)) {
-            $query->where('r.type = :type')
-                    ->setParameter('type', $filter->type);
+        if($filter->receiver) {
+           
+            $query->andWhere('LOWER(u.email) like :email1')
+                    ->setParameter('email1', strtolower('%'.$filter->receiver.'%'));
         }
 
         if($filter->target === 'user') {
-            $query->join('r.aboutUser', 'u')
-                    ->addSelect('u');
+            $query->addSelect('u');
             
         } elseif($filter->target === 'notice') {
             $query->join('r.aboutNotice', 'n')
                     ->addSelect('n');
         }
         
-        if($filter->text) {
-            $query->where('r.text like :text')
-                    ->setParameter('text', '%'.$filter->text.'%');
-        }
+       
         
-        if($filter->created_after) {
-            $query->andWhere('r.created_at > :after')
-                    ->setParameter('after', $filter->created_after);
-        }
-        
-        if($filter->created_before) {
-            $query->andWhere('r.created_at < :before')
-                    ->setParameter('before', $filter->created_before);
-        }
-        
+                
         if($filter->sort === 'stickersQ') {
             return $query
                     ->orderBy($filter->sort, $filter->order)
+                    ->getQuery()
+                    ->getResult();
+        }
+        if($filter->sort === 'receiver') {
+            return $query
+                    ->orderBy('r.aboutUser', $filter->order)
                     ->getQuery()
                     ->getResult();
         }
@@ -218,5 +214,66 @@ class ReviewRepository extends EntityRepository
         
         
         return $query->getQuery()->getSingleScalarResult();
+    }
+    public function countReview(User $user)
+    {
+        $query = $this->createQueryBuilder('r')
+			->select('COUNT(r.id)')
+			->where('r.is_read = :read and r.aboutUser = :user')
+			->setParameters(array(
+					'read' => 'false',
+                                        'user' => $user
+			))
+			->getQuery();
+        
+        $query1 = $this->createQueryBuilder('r')
+			->select('COUNT(r.id)')
+			->where('r.is_read_status = :read and r.aboutUser = :user')
+			->setParameters(array(
+					'read' => 'false',
+                                        'user' => $user
+			))
+			->getQuery();
+	
+	
+	return $query->getSingleScalarResult() + $query1->getSingleScalarResult();
+    }
+    public function updateReviewCount(User $user)
+    {
+        $query = $this->createQueryBuilder('r')
+		->update()
+		->set('r.is_read_status', 'true')
+		->where('r.aboutUser = :user')
+		->getQuery();
+
+		$query->setParameter('user', $user);
+
+		return $query->execute();
+    }
+    public function updateReviewCount1(User $user)
+    {
+        $query = $this->createQueryBuilder('r')
+		->update()
+		->set('r.is_read', 'true')
+		->where('r.aboutUser = :user')
+		->getQuery();
+
+		$query->setParameter('user', $user);
+
+		return $query->execute();
+    }
+    public function countUnreadReviewInGroup($groupId)
+    {
+        $query = $this->createQueryBuilder('r')
+			->select('COUNT(r.id)')
+			->where('r.is_read = :read and r.aboutUserGroup = :usergroup')
+			->setParameters(array(
+					'read' => 'false',
+                                        'usergroup' => $groupId
+			))
+			->getQuery();
+	
+	
+	return $query->getSingleScalarResult();
     }
 }

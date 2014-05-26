@@ -32,8 +32,8 @@ class Message
     /**
      * @var string $title
      *
-     * @ORM\Column(name="title", type="string", length=255)
-     * @Assert\NotBlank
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     *
      */
     private $title;
 
@@ -52,6 +52,14 @@ class Message
      */
     private $read;
 
+    /**
+     * @var boolean $count
+     *
+     * @ORM\Column(name="count", type="boolean", nullable=true)
+     */
+    private $count = false;
+
+    
     /**
      * @var \DateTime $created_at
      *
@@ -154,12 +162,22 @@ class Message
     private $next;
     
     /**
-     * @var integer
+     * @var UserGroup
      *
-     * @ORM\Column(name="fromgroup", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Fenchy\RegularUserBundle\Entity\UserGroup", inversedBy="frommessages")
+     * @ORM\JoinColumn(name="fromgroup_id", referencedColumnName="id", nullable=true)
      */
+    
     private $fromgroup;
-             
+     
+     /**
+     * @var boolean $chat
+     *
+     * @ORM\Column(name="chat", type="boolean", nullable=true)
+     */
+    private $chat = false;
+
+    
     /**
      * Constructor
      */
@@ -168,6 +186,7 @@ class Message
         $this->about_user = new ArrayCollection();
         $this->about_notice = new ArrayCollection();
         $this->read = false;
+        $this->count = false;
         $this->receiver = $receiver;
         $this->first = $this;
         $this->system = false;
@@ -183,6 +202,7 @@ class Message
         $this->read = false;
         $this->sender = null;
         $this->created_at = null;
+        $this->count = false;
     }
 
     /**
@@ -298,26 +318,28 @@ class Message
     }
     
     /**
+     * Set fromgroup
+     *
+     * @param Fenchy\RegularUserBundle\Entity\UserGroup $usergroup
+     * @return Message
+     */
+    public function setFromgroup(\Fenchy\RegularUserBundle\Entity\UserGroup $fromgroup = NULL)
+    {
+    	$this->fromgroup = $fromgroup;
+    
+    	return $this;
+    }
+    
+    /**
      * Get fromgroup
      *
-     * @return integer
+     * @return Fenchy\RegularUserBundle\Entity\UserGroup
      */
     public function getFromgroup()
     {
     	return $this->fromgroup;
     }
     
-    /**
-     * Get fromgroup
-     *
-     * @return integer
-     */
-    public function setFromgroup($id)
-    {
-    	$this->fromgroup = $id;
-    	
-    	return $this->fromgroup;
-    }
     
     /**
      * Get unread
@@ -358,7 +380,7 @@ class Message
      * @param Fenchy\RegularUserBundle\Entity\UserGroup $usergroup
      * @return Message
      */
-    public function setUsergroup(\Fenchy\RegularUserBundle\Entity\UserGroup $usergroup)
+    public function setUsergroup(\Fenchy\RegularUserBundle\Entity\UserGroup $usergroup = NULL)
     {
     	$this->usergroup = $usergroup;
     
@@ -413,6 +435,32 @@ class Message
     public function unsetReceiver() {
         
         $this->receiver = NULL;
+        return $this;
+    }
+    /**
+     * @return Message This
+     */
+    public function unsetFirstMsg() {
+        
+        $this->first = NULL;
+        return $this;
+    }
+    
+    /**
+     * @return Message This
+     */
+    public function unsetNextMsg() {
+        
+        $this->next = NULL;
+        return $this;
+    }
+    
+    /**
+     * @return Message This
+     */
+    public function unsetPrevMsg() {
+        
+        $this->prev = NULL;
         return $this;
     }
     
@@ -711,5 +759,52 @@ class Message
     public function isReplyable() {
         
         return !($this->system || $this->receiver === NULL || $this->sender === NULL || $this->receiver->getId() === NULL || $this->sender->getId() === NULL);
+    }
+    
+    
+    /**
+     * Set chat
+     *
+     * @param boolean $chat
+     * @return Message
+     */
+    public function setChat($chat)
+    {
+        $this->chat = $chat;
+    
+        return $this;
+    }
+
+    /**
+     * Get chat
+     *
+     * @return boolean 
+     */
+    public function getChat()
+    {
+        return $this->chat;
+    }
+
+    /**
+     * Set count
+     *
+     * @param boolean $count
+     * @return Message
+     */
+    public function setCount($count)
+    {
+        $this->count = $count;
+    
+        return $this;
+    }
+
+    /**
+     * Get count
+     *
+     * @return boolean 
+     */
+    public function getCount()
+    {
+        return $this->count;
     }
 }

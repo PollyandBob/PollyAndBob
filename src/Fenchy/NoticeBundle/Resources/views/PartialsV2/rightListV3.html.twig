@@ -7,8 +7,9 @@
 				{% set i=0 %}
 				{% for notice in notices %}
                     
-                    <div class="newsfeeds feeds1" id="{{ notice.createdAt| date('U') }}">
+                    <div class="newsfeeds feeds1" style="{% if(notice.startDate and (notice.type.id==6 or notice.type.id==12))  %}{{ notice.startDate|date('U') }}{% else %}{{ notice.createdAt|date('U') }}{% endif %}" id="{{ notice.createdAt| date('U') }}">
                         <span class="votes" style="display:none;"> </span>
+                        <div class="searchOptionsCalc{% if notice.type.id == 12 %}6{% elseif notice.type.id == 13 %}7{% else %}{{ notice.type.id }}{% endif %}" style="display:none;"></div>
                         <div class="leftimg">
                         	<a href="{{path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')  })}}">
                         		<img width="200" height="135" alt="" src="{{ asset(notice.mainimagelanding)|replace({'square_l': "medium"})|raw }}"  onerror="imgError(this)">
@@ -16,21 +17,56 @@
                         </div>
                         <div class="rightimg"><img alt="" src="{{ asset('images/bgright_rightpart.png') }}"></div>
                         <div class="right">
-                            <h3>{{notice.title}}</h3>
+                            <h3>{{notice.title|truncate(28)|truncate(28)|replace({'...': "..."})|raw}}</h3>
                             <div class="clearfix"></div>
                             <div class="otherdetail">
+                                <div class="left" style="letter-spacing: 1px;">
+                                	{% if(notice.startDate and (notice.type.id==6 or notice.type.id==12))  %}&nbsp;&nbsp;&nbsp;&nbsp;{{ notice.startDate|date('d.m.Y') }}{% else %} &nbsp;&nbsp;&nbsp;&nbsp;{{ notice.createdAt|date('d.m.Y') }}{% endif %}
+                                </div>
                             </div>
                             <div class="clearfix"></div>
                             <p>{{ notice.content|truncate(130)|replace({'...': ". . ."})|raw }}</p>
+                            <b class="typename">
+                                {% if (notice.type.id==6) %}
+                                    {{ 'notice.event_wanted'|trans}}
+                                {% elseif (notice.type.id==12) %}
+                                    {{ 'notice.event_hosted'|trans}}
+                                {% else %}
+                                    {{ notice.type.altText|trans}}
+                                {% endif %}
+                            </b>
+                            {% if notice.usergroup %}
                             <div class="persen">
                                 <a href="javascript:void(0);" >
-								{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': notice.user.id } %}
-                                <div class="neighbor {{ managertype1[i][2] }}">
-                                    <p>{{ managertype1[i][1] }}</p>
-                                    <span>{{ notice.user.activity }}</span>
+                                        {% if notice.usergroup.path %}
+                                        <img src="/{{ notice.usergroup.webpath }}" alt="" />
+                                        {% else %}
+                                        <img alt="" src="{{ absolute(asset('images/default_profile_picture.png')) }}">
+                                        {% endif %}
+                                </a>		                            
                                 </div>
-                                </a>
-                            </div>
+                            {% else %}
+                            <div class="persen">
+                                <a href="javascript:void(0);" >
+                                        {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': notice.user.id } %}
+                                        <div class="neighbor {{ managertype1[i][2] }}">
+                                            <p>{{ managertype1[i][1] }}</p>
+                                            {% set leftpx = 6 %}
+                                            {% if notice.user.activity|length == 1 %}
+                                                {% set leftpx = 12 %}
+                                            {% elseif notice.user.activity|length == 2 %}
+                                                {% set leftpx = 8 %}
+                                            {% elseif notice.user.activity|length == 3 %}
+                                                {% set leftpx = 6 %}
+                                            {% elseif notice.user.activity|length == 4 %}
+                                                {% set leftpx = 1 %}
+                                            {% endif %}
+                                            <span style="left:{{ leftpx}}px !important;">{{ notice.user.activity }}</span>
+                                        </div>
+                                    </a>		                            
+                                </div>
+                            {% endif %}
+
                         </div>
                     </div>
                     
@@ -52,6 +88,7 @@
 					{% for usergroup in usergroups %}
 		                <div class="newsfeeds feeds2" id="{{ usergroup.createdAt| date('U') }}">
 							<span class="votes" style="display:none;"> </span>
+                                                        <div class="searchOptionsCalc2" style="display:none;"></div>
 		                    <div class="leftimg">
 		                        	<a href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', {'groupId': usergroup.id }) }}" >
 		                        		{% if usergroup.path %}
@@ -80,9 +117,15 @@
 		                        </div>
 		                        <div class="rightimg"><img alt="" src="{{ asset('images/bgright_rightpart.png') }}"></div>
 		                        <div class="right">
-		                            
+		                            <div class="redtitle">
+                                                {% if usergroup.status==1 %}
+                                                    {{ 'notice.open_group'|trans|upper }}
+                                                {% elseif usergroup.status==2  %}
+                                                    {{ 'notice.closed_group'|trans|upper }}
+                                                {% endif %}    
+                                            </div>
 		                            <a href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', {'groupId': usergroup.id }) }}" >
-		                            <h3>{{usergroup.groupname}}</h3>
+		                            <h3>{{usergroup.groupname|truncate(28)|replace({'...': "..."})|raw}}</h3>
 		                            </a>
 		                            <div class="clearfix"></div>
 		                            <div class="clearfix"></div>
@@ -98,6 +141,7 @@
                     {% for neighbour in neighbours %}
                        	<div class="newsfeeds neighb feeds2" id="{{ neighbour.createdAt| date('U') }}">
                        		<span class="votes" style="display:none;"> </span>
+                                <div class="searchOptionsCalc1" style="display:none;"></div>
                             <div class="leftimg">
                             	<div class="bg-gray"></div>
                                 <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice',{'userId': neighbour.id}) }}">
@@ -117,7 +161,7 @@
 	                                <div class="redtitle">{{ ('otherprofile.'~managertype[i][0])|trans|upper }}</div>
                                 {% endif %}
                                 <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice',{'userId': neighbour.id}) }}">
-                                	<h3>{{ neighbour.name }}</h3>
+                                	<h3>{{ neighbour.name|truncate(28)|replace({'...': "..."})|raw }}</h3>
                                 </a>
                                 <div class="clearfix"></div>
                                 <p>{{ neighbour.regularUser.aboutMe|truncate(130)|replace({'...': ". . ."})|raw }}</p>

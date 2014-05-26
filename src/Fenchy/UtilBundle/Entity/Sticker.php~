@@ -16,12 +16,12 @@ use Fenchy\UserBundle\Entity\User,
  */
 class Sticker {
     
-    const REASON_HARASS     = 0;
-    const REASON_SPAM       = 1;
-    const REASON_COMMERCIAL = 2;
-    const REASON_FORBIDDEN  = 3;
-    const REASON_BEHAVIOUR  = 4;
-    const REASON_NOTPOLLYNBOB = 5;
+	const REASON_FORBIDDEN  = 0;
+    const REASON_HARASS     = 1;
+    const REASON_BEHAVIOUR  = 2;
+    const REASON_NOTPOLLYNBOB = 3;
+    const REASON_SPAM       = 4;
+    const REASON_COMMERCIAL = 5;
     const REASON_OTHER = 6;
     
     static public $reasonMap = array(
@@ -62,6 +62,14 @@ class Sticker {
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     private $user;
+    
+    /**
+     * @var User
+     * 
+     * @ORM\ManyToOne(targetEntity="Fenchy\RegularUserBundle\Entity\UserGroup", inversedBy="stickers")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=true)
+     */
+    private $group;
     
     /**
      * @var Notice

@@ -1,0 +1,24 @@
+message:
+  receiver: Receiver:
+
+  title: Titel  
+
+  content: Nachricht verfassen
+
+  reply: Antwort schreiben
+
+  deleted_user:
+    firstname: Dieses Profil wurde gelöscht.
+
+  notification:
+    email:
+      subject: Neue Nachricht von %username%
+
+      body: Du hast eine neue Nachricht von Polly & Bob.
+
+      follow_link: Schau dir die gesamte Konversation auf Polly & Bob an.
+  req_notification:
+    email:
+      subject: Neue anfordern von %username%
+      
+      body: Du hast eine neue anfordern von Polly & Bob.

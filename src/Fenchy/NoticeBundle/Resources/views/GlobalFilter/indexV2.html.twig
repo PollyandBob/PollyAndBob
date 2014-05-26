@@ -132,25 +132,35 @@
                     }
                 });
                 
-				// Ajax call for distance event
+		// Ajax call for distance event
                 $(document).on({
-            	    "mouseup touchend": function () {
+            	    "mouseup": function () {
     					selectedOptions(this);
     				}
             	}, "#filter-distance-slider .ui-slider-handle");
 
              	// Ajax call for Date event
                 $(document).on({
-            	    "mouseup touchend": function () {
+            	    "mouseup": function () {
 						selectedOptions(this);
     				}
             	}, "#slider-range .ui-slider-handle");
             	
                 //Start added for new dateslider 
                 var startDate = '{{ slider_startDate }}'*1000;
-				var endDate = '{{ slider_endDate }}'*1000;
-				var currentTime = '{{ currdate }}'*1000;
-               
+		var endDate = '{{ slider_endDate }}'*1000;
+		var currentTime = '{{ currdate }}'*1000;
+                $('#hiddentime').val(endDate);
+                $('#hiddentime2').val(startDate);
+                $('#hiddentime3').val(currentTime);
+                var id = $('.feedsdetail').children(".newsfeeds").html();
+                if(id){
+                    //alert("It have data");
+                }
+                else
+                {
+                    $('.feedsdetail').css('height','0px');
+                }
                 
                 $( "#slider-range" ).slider({
                 	range: true,
@@ -159,7 +169,7 @@
                 	max: endDate,
                 	values: [ startDate, currentTime ],
                 	slide: function( event, ui ) {
-                		var startTimed = new Date(ui.values[ 0 ]);
+                	var startTimed = new Date(ui.values[ 0 ]);
      	            	var smonth1 = startTimed.getMonth() + 1;
      	            	var sday1 = startTimed.getDate();
      	            	var syear1 = startTimed.getFullYear();
@@ -172,11 +182,11 @@
      	            	var eyear2 = endTimed.getFullYear();
      	            	if (emonth2 < 10) emonth2 = '0' + emonth2;
      	            	if (eday2 < 10) eday2 = '0' + eday2;
-						var st = $("#slider-range > a.ui-slider-handle:first" ).css('left');
-						var lt = $("#slider-range > a.ui-slider-handle:last" ).css('left');
-						var stt = st.slice(0, -2);
-						var ltt = lt.slice(0, -2);
-						var finalStt = stt-10;
+                        var st = $("#slider-range > a.ui-slider-handle:first" ).css('left');
+                        var lt = $("#slider-range > a.ui-slider-handle:last" ).css('left');
+                        var stt = st.slice(0, -2);
+                        var ltt = lt.slice(0, -2);
+                        var finalStt = stt-10;
      	            	
      	            	$("#slider-range > a.ui-slider-handle:first" ).attr('id',ui.values[ 0 ]);
      	            	$("#slider-range > a.ui-slider-handle:last" ).attr('id',ui.values[ 1 ]);
@@ -230,9 +240,9 @@
                 	//$("#slider-range > a.ui-slider-handle:last" ).css('left', '46.4143%');
                 	$("#slider-range > a.ui-slider-handle:first" ).children('.inner-tooltip').css('left', '0px');
                 	if(endDate >= $( "#slider-range" ).slider( "values", 1 ))
-					{
-						$("#slider-range > a.ui-slider-handle:last" ).children('.inner-tooltip').css('left', '-42px');
-					}
+                        {
+                                $("#slider-range > a.ui-slider-handle:last" ).children('.inner-tooltip').css('left', '-42px');
+                        }
                 	{% if(findNeighbors == 'neighbors') %} 
                 	$('.selectoptions').css('pointer-events', 'none');
                 	$('#slider-range').css('pointer-events', 'none');
@@ -245,17 +255,25 @@
                 // End added for new dateslider 
             
         });
-			
-        
 		// apply binding here
     </script>
-    <script type="text/javascript">
+        <script type="text/javascript">
 		$(document).ready(function() {
+                        
 			$('#container > div.newsfeeds').sort(function(a,b) {
-			     return $(a).attr('id') > $(b).attr('id') ? 1 : -1;
+			     return parseInt($(a).attr('style')) < parseInt($(b).attr('style')) ? 1 : -1;
 			}).appendTo('#container');
 
 			$('#search').val('{{ app.request.get('search') }}');
+                        
+                        //Newsfeed: show amount of listings per option in option tool
+                        var id = 0;
+                        var count=0;
+                        $( "div.optionsdetail a" ).each(function() {
+                            id = $( this ).attr( "id" );
+                            count= $('div.searchOptionsCalc'+id).length;
+                            $('#span'+id).text("("+count+")");
+                        });
 		});
 	</script>
     {# any view specific JS scripts for this view #}
@@ -270,14 +288,31 @@
     	padding-left: 30px  !important;
     	padding-top: 7px  !important;
 	}
+        .typename
+        {
+            float:right;
+            font-weight: normal;
+            color:#000;
+            font-size: 12px;
+            position: relative;
+            margin-right: 0;
+            font-family: code_boldregular;
+            top:8px;
+        }
+        .feedsdetail .neighb .neighbormsg img
+        {
+            height: 135px !important;
+            width: 200px !important;
+            border-radius: 0;
+        }
 	</style>	
     {# put view specific content here #}
 			
-			<div class="leftpart">
+            <div class="leftpart">
             	{% include 'FenchyNoticeBundle:PartialsV2:leftFilterMenuV2.html.twig' %}
-			</div>
+            </div>
             <div class="rightpart">
-					{% include 'FenchyNoticeBundle:PartialsV2:rightListV2.html.twig' %}
+		{% include 'FenchyNoticeBundle:PartialsV2:rightListV2.html.twig' %}
             </div>
 
             {# set notice_id while displaying notice#}

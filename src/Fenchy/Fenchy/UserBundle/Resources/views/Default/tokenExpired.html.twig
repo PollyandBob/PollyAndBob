@@ -1,0 +1,20 @@
+{% extends "FenchyFrontendBundle::layout.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/frontend/login.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/frontend/register.css') }}" type="text/css" />
+{% endblock %}
+    
+{% block header %}
+    {% include 'FenchyFrontendBundle:Partials:headerLogo.html.twig' %}
+{% endblock %}
+    
+{% block content %}
+    <div id="addressDataRegisterForm">
+        <div class="error" >
+            {{ 'user.token_expired'|trans }}
+        </div>
+        <a class="button" style="width:20%;margin-left:360px" href="{{ path('fenchy_frontend_homepage') }}">{{ 'user.go_to_main_page'|trans }}</a>
+    </div>
+{% endblock %}

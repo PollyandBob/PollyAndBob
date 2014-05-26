@@ -1,0 +1,7 @@
+parameters:
+#    fenchy_admin.example.class: Fenchy\AdminBundle\Example
+
+services:
+#    fenchy_admin.example:
+#        class: %fenchy_admin.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

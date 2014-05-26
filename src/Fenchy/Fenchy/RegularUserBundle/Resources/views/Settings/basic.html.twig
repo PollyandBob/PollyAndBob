@@ -1,0 +1,129 @@
+{% extends 'FenchyRegularUserBundle::settings.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}    
+    <link rel="stylesheet" href="{{ asset('js/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/tapmodo-Jcrop-1902fbc/css/jquery.Jcrop.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/jquery.tagit.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/tagit.ui-zendesk.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/editSmall.css') }}" type="text/css" />
+{% endblock %}
+        
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/underscore-min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.iframe-transport.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/FileUploaderSmall.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/fancybox/jquery.fancybox-1.3.4.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/tapmodo-Jcrop-1902fbc/js/jquery.Jcrop.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/editSmall.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
+{% endblock %}
+
+{% block settings_content %}
+    {# Underscore templates for the uploader #}
+    {% include "PunkAveFileUploaderBundle:Default:templates.html.twig" %}
+<script type="text/javascript">
+    // Enable the file uploader
+    $(function() {
+        
+
+        gallery_edit.crop.init({
+            url     : '{{ path('fenchy_gallery_crop') }}',
+            punkAve : new PunkAveFileUploader({ 
+                'uploadUrl': '{{ path('fenchy_gallery_upload', { 'tmpGalleryId': gallery.id }) |  raw }}',
+                'viewUrl': '{{ ('/uploads/' ~ gallery.folder) | raw }}',
+                'el': '.file-uploader',
+                'existingFiles': {{ gallery.existingFiles | json_encode | raw }},
+                'delaySubmitWhileUploading': '.edit-form',
+                'max' : {{ max }},
+                'onImgClick' : gallery_edit.crop.takeImageToCrop
+            })
+        });
+
+               
+        $('#fenchy_regularuserbundle_userbasicsettingstype_languages').tagit({
+            availableTags: {{ languages|json_encode|raw }},
+            allowSpaces: true
+        });
+
+        
+        
+    });
+    </script>
+    
+			<form action="{{ path('fenchy_regular_user_settings_basic') }}" method="post" {{ form_enctype(form) }} class="form-settings general">
+				<input type="hidden" value="1" name="profileimage">
+                <div class="form-box-wrapper">
+                    <h2>{{ 'settings.general.name'|trans }}</h2>
+
+                    <div class="row allinone grid_5">
+                        <div class="input-wrapper">
+                            <div class="input-element">
+                                {{ form_widget(form.firstname) }}
+                            </div>
+                        </div>
+                        <div class="input-wrapper">
+                            <div class="input-element">
+                                {{ form_widget(form.lastname) }}
+                            </div>
+                        </div> 
+                    </div>                                   
+                    <div class="row allinone grid_2">
+                        <div class="custom-checkbox">
+                            {{ form_row(form.gender) }}
+                        </div>
+                        <div class="input-wrapper">
+                            <div class="input-element">
+                                {{ form_widget(form.age) }}
+                            </div>
+                        </div>
+                    </div>                                                
+                    <div class="row input-wrapper pre-tags-container">
+                        {{ form_row(form.languages) }}
+                    </div>
+                    <div class="row profile_picture">
+                        <label>{{ 'settings.general.profile_photo'|trans }}</label>
+						    {% block galleryContainer %}
+						    <div id="gallery-edit-container" class="file-uploader"></div>
+						    
+						    <div style="display:none">
+						        <div id="crop-area">
+						            <img src="" id="target" alt="" />
+						            <table class="buttons-panel">
+						                <tbody>
+						                    <tr>
+						                        <td><button id="crop-cancel" class="button gray">{{ 'btn.cancel'|trans }}</button></td>
+						                        <td><button id="crop-submit" class="button green">{{ 'btn.ok'|trans }}</button></td>
+						                    </tr>
+						                </tbody>
+						            </table>
+						        </div>
+						    </div>
+						    
+						{% endblock %}
+                    </div>
+                    
+                    
+                    <div class="row input-wrapper textarea_content">
+                        <div class="input-element">
+                            {{ form_widget(form.aboutMe) }}
+                        </div>
+                    </div>                
+                    	<div style="display:none;">{{ form_rest(form) }}</div>
+                    
+                        <div class="clearfix">
+                                <input type="submit" id="continue" class="blue_button" style="float: right;margin-right: 17px;" value="{{ 'btn.save'|trans }}"/>                                
+                        </div>
+                    
+                </div>                                
+            </form>
+    
+    
+{% endblock %}

@@ -5,7 +5,8 @@ namespace Fenchy\MessageBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
 use Fenchy\UserBundle\Entity\User,
-    Fenchy\NoticeBundle\Entity\Notice;
+    Fenchy\NoticeBundle\Entity\Notice,
+    Fenchy\RegularUserBundle\Entity\UserGroup;
 
 /**
  * MessageRepository
@@ -36,6 +37,7 @@ class MessageRepository extends EntityRepository
             case 'unread':
                 $qb->where('m.receiver = :user')
                     ->andWhere('m.receiver_deleted_at IS NULL')
+                    ->andWhere('m.usergroup IS NULL')
                     ->andWhere('m.read = FALSE');
                 break;
             case 'unreplied':
@@ -82,6 +84,67 @@ class MessageRepository extends EntityRepository
      * - send - last is send by me
      * @param \Fenchy\UserBundle\Entity\User $user
      * @param unread|unreplied|sent|about|all|null $type
+     * @return QueryBuilder
+     */
+    protected function findReceivedMessagesGroupQueryBuilder(UserGroup $usergroup, $type = null)
+    {
+        $qb = $this->createQueryBuilder('m');
+        switch ($type) {
+            case 'sent':
+                $qb->where('m.usergroup = :usergroup');
+                    //->andWhere('m.sender_deleted_at IS NULL');
+                break;
+            case 'unread':
+                $qb->where('m.fromgroup = :usergroup')
+                    //->andWhere('m.receiver_deleted_at IS NULL')
+                    ->andWhere('m.usergroup IS NOT NULL')
+                    ->andWhere('m.read = FALSE');
+                break;
+            case 'unreplied':
+                $qb->where('m.usergroup = :usergroup')
+                    //->andWhere('m.receiver_deleted_at IS NULL')
+                    ->andWhere('m.prev IS NULL');
+                break;
+            case 'about':
+                $qb->join('m.about_notice', 'n')
+                    ->where('m.receiver = :user')
+                    ->andWhere('m.receiver_deleted_at IS NULL')
+                    ->andWhere('m.receiver = n.user')
+                    // get first message - request
+                    ->andWhere('m.prev IS NULL');
+                break;
+            default: // all|null
+                $qb->where($qb->expr()->orx(
+                    $qb->expr()->andx(
+                        'm.usergroup = :usergroup'
+                        //'m.receiver_deleted_at IS NULL'
+                    ),
+                    $qb->expr()->andx(
+                        'm.fromgroup = :usergroup'
+                        //'m.sender_deleted_at IS NULL'
+                    )
+                ));
+                break;
+        }
+
+        if ('about' !== $type) {
+            //get last message from thread only
+            $qb->andWhere('m.next IS NULL');
+        }
+        $qb->setParameter('usergroup', $usergroup->getId());
+        
+        return $qb;
+    }
+    
+    
+    /**
+     * Finds messages by user with type:
+     * - all (or null) - last is send or received by me
+     * - unread - last is received by me and read = FALSE
+     * - unreplied - last is received by me and has no prev messages
+     * - send - last is send by me
+     * @param \Fenchy\UserBundle\Entity\User $user
+     * @param unread|unreplied|sent|about|all|null $type
      * @return ArrayCollection()
      */
     public function findReceivedMessages(User $user, $type = null, $ids = array())
@@ -96,6 +159,27 @@ class MessageRepository extends EntityRepository
     }
 
     /**
+     * Finds messages by usergroup with type:
+     * - all (or null) - last is send or received by me
+     * - unread - last is received by me and read = FALSE
+     * - unreplied - last is received by me and has no prev messages
+     * - send - last is send by me
+     * @param \Fenchy\UserBundle\Entity\User $user
+     * @param unread|unreplied|sent|about|all|null $type
+     * @return ArrayCollection()
+     */
+    public function findReceivedMessagesGroup(UserGroup $usergroup, $type = null, $ids = array())
+    {
+        $q = $this->findReceivedMessagesGroupQueryBuilder($usergroup, $type);
+        if(!empty($ids)) {
+            $q->andWhere($q->expr()->not($q->expr()->in('m', $ids)));
+        }
+        return $q->orderBy('m.created_at', 'DESC')
+                ->getQuery()
+                ->getResult();
+    }
+    
+    /**
      * Counts messages for user
      * @param \Fenchy\UserBundle\Entity\User $user
      * @param unread|unreplied|sent|about|all|null $type
@@ -107,6 +191,78 @@ class MessageRepository extends EntityRepository
                 ->select('count(m.id)')
                 ->getQuery()
                 ->getSingleScalarResult();
+    }
+
+    /**
+     * Counts messages for user
+     * @param \Fenchy\UserBundle\Entity\User $user
+     *
+     * @return int
+     */
+    public function countHeader(User $user)
+    {
+        return $this->createQueryBuilder('m')
+                    ->where('m.receiver = :user')
+                    ->andWhere('m.receiver_deleted_at IS NULL')
+                    ->andWhere('m.usergroup IS NULL')
+                    ->andWhere('m.count = FALSE')
+                    ->setParameter('user', $user)
+                    ->select('count(m.id)')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
+    
+     /**
+     * Counts messages for user
+     * @param \Fenchy\UserBundle\Entity\User $user
+     *
+     * @return int
+     */
+    public function countGroupHeader(UserGroup $usergroup)
+    {
+        return $this->createQueryBuilder('m')
+                    ->where('m.usergroup = :usergroup')
+                    ->andWhere('m.usergroup IS NOT NULL')
+                    ->andWhere('m.count = FALSE')
+                    ->setParameter('usergroup', $usergroup)
+                    ->select('count(m.id)')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    }
+    
+    /**
+     * Set as read messages for user
+     * @param \Fenchy\UserBundle\Entity\User $user
+     *      
+     */
+    public function updateCountHeader(User $user)
+    {               
+        return $this->createQueryBuilder('m')
+                    ->update()
+                    ->set('m.count', 'TRUE')
+                    ->where('m.receiver = :user')
+                    ->andWhere('m.receiver_deleted_at IS NULL')
+                    ->andWhere('m.usergroup IS NULL')                    
+                    ->setParameter('user', $user)                    
+                    ->getQuery()
+                    ->execute();
+    }
+    
+    /**
+     * Set as read messages for usergroup
+     * @param \Fenchy\UserBundle\Entity\User $user
+     *      
+     */
+    public function updateGroupCountHeader(UserGroup $usergroup)
+    {               
+        return $this->createQueryBuilder('m')
+                    ->update()
+                    ->set('m.count', 'TRUE')
+                    ->where('m.usergroup = :usergroup')
+                    ->andWhere('m.usergroup IS NOT NULL')                    
+                    ->setParameter('usergroup', $usergroup)                    
+                    ->getQuery()
+                    ->execute();
     }
 
     /**
@@ -204,6 +360,36 @@ class MessageRepository extends EntityRepository
     }
     
     /**
+     * Finds last message from the thread using Id
+     * @param int $id
+     * @return Message
+     */
+    public function findLastByIdGroup($id, $user, $usergroup)
+    {
+        
+        $qb = $this->createQueryBuilder('m');
+        $qb->join('FenchyMessageBundle:Message', 'm2', Expr\Join::WITH, 'm.first = m2.first')
+            ->where('m2.id = :id')
+            ->andWhere($qb->expr()->orx(
+                $qb->expr()->andx(
+                    'm.fromgroup = :usergroup',
+                    'm.receiver_deleted_at IS NULL'
+                ),
+                $qb->expr()->andx(
+                    'm.usergroup = :usergroup',
+                    'm.sender_deleted_at IS NULL'
+                )
+            ))
+            ->andWhere('m.next IS NULL')
+            ->setParameter('id', $id)
+            
+            ->setParameter('usergroup', $usergroup);
+       
+        return $qb->getQuery()
+                    ->getOneOrNullResult();
+    }
+    
+    /**
      * Finds all messages where given user is sender or reciever.
      * @uses Messenger::removeUserMessages() to remove messages without sender
      * and reciever.
@@ -243,6 +429,25 @@ class MessageRepository extends EntityRepository
         return $this->createQueryBuilder('m')
                 ->join('m.about_notice', 'n', Expr\Join::WITH, 'n = :notice')
                 ->setParameter('notice', $notice)
+                ->getQuery()
+                ->getResult();
+    }
+    
+    public function findByChat(User $user, User $receiver)
+    {
+        $compareTo = new \DateTime();
+        
+        return  $this->createQueryBuilder('m')
+		->select('m')
+		->where('m.sender = :sender')
+                ->andWhere('m.receiver = :receiver')                
+                ->orWhere('m.sender = :receiver AND m.receiver = :sender')
+                ->andWhere('m.chat= true')
+                ->andWhere('m.created_at >= :today')                
+		->setParameter('sender', $user->getId())
+                ->setParameter('receiver', $receiver->getId())
+                ->setParameter('today', $compareTo->format('Y-m-d'))
+                ->orderBy('m.id', "ASC")
                 ->getQuery()
                 ->getResult();
     }

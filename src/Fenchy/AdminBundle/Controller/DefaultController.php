@@ -3,8 +3,6 @@
 namespace Fenchy\AdminBundle\Controller;
 
 
-
-
 use Fenchy\AdminBundle\FenchyAdminBundle;
 
 use Fenchy\NoticeBundle\Form\TypeType;
@@ -17,10 +15,12 @@ use Fenchy\AdminBundle\Entity\UsersFilter,
     Fenchy\AdminBundle\Entity\NoticesFilter,
     Fenchy\AdminBundle\Form\NoticesFilterType,
     Fenchy\AdminBundle\Entity\ReviewsFilter,
+    Fenchy\AdminBundle\Entity\CommentsFilter,
     Fenchy\AdminBundle\Entity\CategoriesFilter,
     Fenchy\AdminBundle\Form\CategoriesFilterType,
 	Fenchy\NoticeBundle\Entity\Type,
     Fenchy\AdminBundle\Form\ReviewsFilterType,
+    Fenchy\AdminBundle\Form\CommentsFilterType,
     Fenchy\AdminBundle\Form\IdentityVerificationFilter,
 	Fenchy\AdminBundle\Form\IdentityVerificationFilterType,
 	Fenchy\AdminBundle\Form\LocationVerificationFilter,
@@ -30,6 +30,10 @@ use Fenchy\AdminBundle\Entity\UsersFilter,
 use	Fenchy\UserBundle\Entity\IdentityVerification;
 use	Fenchy\UserBundle\Entity\LocationVerification;
 use Symfony\Component\HttpFoundation\Response;
+use Fenchy\MessageBundle\Entity\Message;
+use Fenchy\UserBundle\Entity\User;
+use Fenchy\UserBundle\Entity\NotificationGroupInterval;
+use Fenchy\UserBundle\Entity\NotificationQueue;
 
 
 class DefaultController extends Controller
@@ -237,6 +241,10 @@ class DefaultController extends Controller
         $form = $this->createForm(new UsersFilterType(), $filter);
         
         $request = $this->getRequest();
+        $limit_per_page = $this->container->getParameter('pagination_limit');
+        $paginator  = $this->get('knp_paginator');
+        $session = $this->getRequest()->getSession();
+        
         
         if($request->isMethod('POST')) {
             
@@ -245,30 +253,52 @@ class DefaultController extends Controller
             if ($form->isValid()) {
                 
                 $users = $this->getDoctrine()
-                ->getEntityManager()
-                ->getRepository('UserBundle:User')
-                ->findAllWithStickers($filter);
+                        ->getEntityManager()
+                        ->getRepository('UserBundle:User')
+                        ->findAllWithSticker($filter);
                 
+                $session->set('userfilter',$filter);
+                $pagination = $paginator->paginate(
+                        $users,
+                        $this->get('request')->query->get('page', 1),
+                        $limit_per_page/*limit per page*/
+                    );
                 return $this->render(
                         'FenchyAdminBundle:Default:users.html.twig', 
                         array(
                             'users' => $users,
-                            'filter' => $form->createView()
+                            'filter' => $form->createView(),
+                            'pagination' => $pagination
                             )
                         );
             }
         }
         
-        $users = $this->getDoctrine()
+        if($session->get('userfilter') == null)
+        {
+            $users = $this->getDoctrine()
                 ->getEntityManager()
                 ->getRepository('UserBundle:User')
-                ->findAllWithStickers();
+                ->findAllWithSticker();
+        }
+        else {
+            $users = $this->getDoctrine()
+                ->getEntityManager()
+                ->getRepository('UserBundle:User')
+                ->findAllWithSticker($session->get('userfilter'));
+        }
         
+        $pagination = $paginator->paginate(
+                        $users,
+                        $this->get('request')->query->get('page', 1),
+                        $limit_per_page/*limit per page*/
+                    );
         return $this->render(
                 'FenchyAdminBundle:Default:users.html.twig', 
                 array(
                     'users' => $users,
-                    'filter' => $form->createView()
+                    'filter' => $form->createView(),
+                    'pagination' => $pagination
                     )
                 );
     }
@@ -414,6 +444,9 @@ class DefaultController extends Controller
         $form = $this->createForm(new NoticesFilterType(), $filter);
         
         $request = $this->getRequest();
+        $limit_per_page = $this->container->getParameter('pagination_limit');
+        $paginator  = $this->get('knp_paginator');
+        $session = $this->getRequest()->getSession();
         
         if($request->isMethod('POST')) {
             
@@ -425,25 +458,46 @@ class DefaultController extends Controller
                     ->getRepository('FenchyNoticeBundle:Notice')
                     ->getFullDetailedListAdmin($filter);
                 
+                $session->set('noticefilter',$filter);
+        
+                $pagination = $paginator->paginate(
+                        $notices,
+                        $this->get('request')->query->get('page', 1),
+                        $limit_per_page/*limit per page*/
+                    );
                 return $this->render(
                     'FenchyAdminBundle:Default:notices.html.twig',
                     array(
                         'notices'   => $notices,
-                        'filter'       => $form->createView()
+                        'filter'       => $form->createView(),
+                        'pagination' => $pagination
                     )
                 );
             }
         }
 
-        $notices = $em->getRepository('FenchyNoticeBundle:Notice')
+        if($session->get('noticefilter') == null)
+        {
+            $notices = $em->getRepository('FenchyNoticeBundle:Notice')
                 ->getFullDetailedListAdmin();
-            
-
+        }
+        else
+        {
+            $notices = $em->getRepository('FenchyNoticeBundle:Notice')
+                ->getFullDetailedListAdmin($session->get('noticefilter'));
+        }
+       
+        $pagination = $paginator->paginate(
+                        $notices,
+                        $this->get('request')->query->get('page', 1)/*page number*/,
+                        $limit_per_page/*limit per page*/
+                    );
         return $this->render(
                 'FenchyAdminBundle:Default:notices.html.twig',
                 array(
                     'notices'   => $notices,
-                    'filter'       => $form->createView()
+                    'filter'       => $form->createView(),
+                    'pagination' => $pagination
                 )
             );
     }
@@ -571,6 +625,10 @@ class DefaultController extends Controller
         $form = $this->createForm(new ReviewsFilterType(), $filter);
         
         $request = $this->getRequest();
+        $limit_per_page = $this->container->getParameter('pagination_limit');
+        $paginator  = $this->get('knp_paginator');
+        
+        $session = $this->getRequest()->getSession();
         
         if($request->isMethod('POST')) {
             
@@ -582,30 +640,48 @@ class DefaultController extends Controller
                     ->getRepository('FenchyNoticeBundle:Review')
                     ->getFullDetailedList($filter);
                 
+                
+                $session->set('dql',$filter);
+                
+                $pagination = $paginator->paginate(
+                        $reviews,
+                        $this->get('request')->query->get('page', 1),
+                        $limit_per_page/*limit per page*/
+                    );
                 return $this->render(
                     'FenchyAdminBundle:Default:reviews.html.twig',
                     array(
                         'reviews'   => $reviews,
-                        'filter'    => $form->createView()
+                        'filter'    => $form->createView(),
+                        'pagination' => $pagination
                     )
                 );
             }
         }
 
-        $reviews = $em->getRepository('FenchyNoticeBundle:Review')
+        if ($session->get('dql') == null) {
+            $reviews = $em->getRepository('FenchyNoticeBundle:Review')
                 ->getFullDetailedList();
-            
-
+        }
+        else {
+            $reviews = $em->getRepository('FenchyNoticeBundle:Review')
+                ->getFullDetailedList($session->get('dql'));
+        }
+        
+        $pagination = $paginator->paginate(
+                        $reviews,
+                        $this->get('request')->query->get('page', 1),
+                        $limit_per_page/*limit per page*/
+                    );
         return $this->render(
                 'FenchyAdminBundle:Default:reviews.html.twig',
                 array(
                     'reviews'   => $reviews,
-                    'filter'    => $form->createView()
+                    'filter'    => $form->createView(),
+                    'pagination' => $pagination
                 )
             );
     }
-    
-    
     
     public function reviewAction($id) {
         
@@ -665,6 +741,140 @@ class DefaultController extends Controller
                 );
     }
     
+    public function commentsAction() {
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $filter = new CommentsFilter();
+        
+        $form = $this->createForm(new CommentsFilterType(), $filter);
+        
+        $request = $this->getRequest();
+        $limit_per_page = $this->container->getParameter('pagination_limit');
+        $paginator  = $this->get('knp_paginator');
+        
+        $session = $this->getRequest()->getSession();
+        
+        if($request->isMethod('POST')) {
+            
+            $form->bindRequest($request);
+
+            if ($form->isValid()) {
+                
+                $comments = $em
+                    ->getRepository('FenchyNoticeBundle:Comment')
+                    ->getFullDetailedList($filter);
+                
+                
+                $session->set('commentfilter',$filter);
+                
+                $pagination = $paginator->paginate(
+                        $comments,
+                        $this->get('request')->query->get('page', 1),
+                        $limit_per_page/*limit per page*/
+                    );
+                return $this->render(
+                    'FenchyAdminBundle:Default:comments.html.twig',
+                    array(
+                        'comments'   => $comments,
+                        'filter'    => $form->createView(),
+                        'pagination' => $pagination
+                    )
+                );
+            }
+        }
+
+        if ($session->get('commentfilter') == null) {
+            $comments = $em->getRepository('FenchyNoticeBundle:Comment')
+                ->getFullDetailedList();
+        }
+        else {
+            $comments = $em->getRepository('FenchyNoticeBundle:Comment')
+                ->getFullDetailedList($session->get('commentfilter'));
+        }
+        
+        $pagination = $paginator->paginate(
+                        $comments,
+                        $this->get('request')->query->get('page', 1),
+                        $limit_per_page/*limit per page*/
+                    );
+        return $this->render(
+                'FenchyAdminBundle:Default:comments.html.twig',
+                array(
+                    'comments'   => $comments,
+                    'filter'    => $form->createView(),
+                    'pagination' => $pagination
+                )
+            );
+    }
+    
+    public function RequestsAction() {
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $filter = new \Fenchy\AdminBundle\Entity\RequestsFilter();
+        
+        $form = $this->createForm(new \Fenchy\AdminBundle\Form\RequestsFilterType(), $filter);
+        
+        $request = $this->getRequest();
+        $limit_per_page = $this->container->getParameter('pagination_limit');
+        $paginator  = $this->get('knp_paginator');
+        
+        $session = $this->getRequest()->getSession();
+        
+        if($request->isMethod('POST')) {
+            
+            $form->bindRequest($request);
+
+            if ($form->isValid()) {
+                
+                $requests = $em
+                    ->getRepository('FenchyNoticeBundle:Request')
+                    ->getFullDetailedList($filter);
+                
+                
+                $session->set('requestfilter',$filter);
+                
+                $pagination = $paginator->paginate(
+                        $requests,
+                        $this->get('request')->query->get('page', 1),
+                        $limit_per_page/*limit per page*/
+                    );
+                return $this->render(
+                    'FenchyAdminBundle:Default:requests.html.twig',
+                    array(
+                        'requests'   => $requests,
+                        'filter'    => $form->createView(),
+                        'pagination' => $pagination
+                    )
+                );
+            }
+        }
+
+        if ($session->get('requestfilter') == null) {
+            $requests = $em->getRepository('FenchyNoticeBundle:Request')
+                ->getFullDetailedList();
+        }
+        else {
+            $requests = $em->getRepository('FenchyNoticeBundle:Request')
+                ->getFullDetailedList($session->get('requestfilter'));
+        }
+        
+        $pagination = $paginator->paginate(
+                        $requests,
+                        $this->get('request')->query->get('page', 1),
+                        $limit_per_page/*limit per page*/
+                    );
+        return $this->render(
+                'FenchyAdminBundle:Default:requests.html.twig',
+                array(
+                    'requests'   => $requests,
+                    'filter'    => $form->createView(),
+                    'pagination' => $pagination
+                )
+            );
+    }
+    
     public function noticeDeleteAction ($id) {
         
         $notice = $this->getDoctrine()->getRepository('FenchyNoticeBundle:Notice')->getWithUser($id);
@@ -691,6 +901,222 @@ class DefaultController extends Controller
         return $this->redirect($this->generateUrl('fenchy_admin_notices'));
     }
     
+    public function reviewDeleteAction ($id) {
+        
+        $review = $this->getDoctrine()->getRepository('FenchyNoticeBundle:Review')->find($id);
+       
+        if(NULL === $review) {
+            $this->get('session')->setFlash(
+                        'negative', 
+                        'Review not found'
+                        );
+        }
+        else {
+            $user = $review->getAuthor();
+            $user->removeReview($review);
+            $user->setActivity($user->getActivity()-1);
+            
+            $aboutUser = $review->getAboutUser();
+            $aboutUser->setActivity($aboutUser->getActivity()-2);
+            
+            $this->getDoctrine()->getManager()->remove($review);
+            $this->getDoctrine()->getManager()->persist($user);
+            $this->getDoctrine()->getManager()->persist($aboutUser);
+            $this->getDoctrine()->getManager()->flush();
+            
+            $this->get('session')->setFlash(
+                            'positive', 
+                            'Review deleted.'
+                            );
+        }
+        
+        return $this->redirect($this->generateUrl('fenchy_admin_reviews'));
+    }
+    
+     public function requestDeleteAction ($id) {
+        
+        $request = $this->getDoctrine()->getRepository('FenchyNoticeBundle:Request')->find($id);
+       
+        if(NULL === $request) {
+            $this->get('session')->setFlash(
+                        'negative', 
+                        'Request not found'
+                        );
+        }
+        else {
+            $user = $request->getAuthor();
+            $user->removeRequest($request);
+            
+            if($request->getStatus()=='done')
+            {
+                $aboutUse = $request->getAboutUser();
+                $aboutUse->setActivity($aboutUse->getActivity()-1);
+                $this->getDoctrine()->getManager()->persist($aboutUse);
+            }
+                       
+            $this->getDoctrine()->getManager()->remove($request);
+            $this->getDoctrine()->getManager()->persist($user);
+            $this->getDoctrine()->getManager()->flush();
+            
+            $this->get('session')->setFlash(
+                            'positive', 
+                            'Request deleted.'
+                            );
+        }
+        
+        return $this->redirect($this->generateUrl('fenchy_admin_requests'));
+    }
+    
+     public function commentDeleteAction ($id) {
+        
+        $comment = $this->getDoctrine()->getRepository('FenchyNoticeBundle:Comment')->find($id);
+       
+        if(NULL === $comment) {
+            $this->get('session')->setFlash(
+                        'negative', 
+                        'Comment not found'
+                        );
+        }
+        else {
+            $user = $comment->getAuthor();
+            $user->removeComment($comment);
+            
+            $this->getDoctrine()->getManager()->remove($comment);
+            $this->getDoctrine()->getManager()->persist($user);
+            $this->getDoctrine()->getManager()->flush();
+            
+            $this->get('session')->setFlash(
+                            'positive', 
+                            'Comment deleted.'
+                            );
+        }
+        
+        return $this->redirect($this->generateUrl('fenchy_admin_comments'));
+    }
+    
+     public function userDeleteAction ($id) {
+        
+        $user = $this->getDoctrine()->getRepository('UserBundle:User')->find($id);
+       
+        if(NULL === $user) {
+            $this->get('session')->setFlash(
+                        'negative', 
+                        'User not found'
+                        );
+        }
+        else {
+            $this->get('fenchy.messenger')->deleteUserMessage($id);
+            $em = $this->getDoctrine()->getManager();
+               
+        $messages = $em->getRepository('CunningsoftChatBundle:Message')->findBySenderOrReceiver($user);
+
+        foreach($messages as $message) {
+
+            if($message->getAuthor() == NULL) {
+                if($message->getReceiver()->getId() === $id) {
+                    $em->remove($message); // remove if sender and receiver has been deleted
+                }
+            } elseif($message->getReceiver() == NULL) {
+                if($message->getAuthor()->getId() == $id) {
+                    $em->remove($message); // remove if sender and receiver has been deleted
+                }
+            } else {
+                if($message->getAuthor()->getId() == $id) {
+                    $em->remove($message); // unset sender if he is going to be deleted
+                }
+                
+                if($message->getReceiver()->getId() == $id) {
+                    $em->remove($message); // unset receiver if he is going to be deleted
+                }
+            }
+        }
+        
+        // We have to flush twice because after message remove we can remove user
+        
+        $em->flush();
+        
+            $em->remove($user);
+            $em->flush();
+            
+            $this->get('session')->setFlash(
+                            'positive', 
+                            'User deleted.'
+                            );
+        }
+        
+        return $this->redirect($this->generateUrl('fenchy_admin_users'));
+    }
+    
+    public function sendMsgAction () {
+        
+        $request = $this->getRequest();
+        $ids = $request->get('ids');
+        foreach ($ids as $id)
+        {        
+            $user = $this->getDoctrine()->getRepository('UserBundle:User')->find($id);
+        
+            $messenger = $this->get('fenchy.messenger');
+        
+            if (null != $user && $user != $this->getUser())
+            {
+     		$messenger = $this->get('fenchy.messenger');
+    		$messageObject = new Message();
+    		
+    		$messenger->setReceiver($user);
+                
+                $content = '';
+    		//$content = $this->get('translator')->trans('regularuser.message.message_part', array(
+    					//'%username%' => $user->getRegularUser()->getFirstname()));
+    		
+                $content .= $request->get('content');
+                $messageObject->setTitle($request->get('title'));
+    	
+    		$messageObject->setContent($content);
+    	
+    		$messageObject->setSender($this->getUser());
+    		$messageObject->setReceiver($user);
+    	
+    		$message = $messenger->send($messageObject);
+    	
+    		if ($this->container->getParameter('notifications_enabled')) $this->messageNotification($message,$this->getUser());
+    	
+            }
+        }
+    	return new Response();
+    }
+    
+    
+    public function flagDeleteAction ($id, $type) {
+        
+        $flag = $this->getDoctrine()->getRepository('FenchyUtilBundle:Sticker')->find($id);
+       
+        if(NULL === $flag) {
+            $this->get('session')->setFlash(
+                        'negative', 
+                        'Flag not found'
+                        );
+        }
+        else {
+           
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($flag);
+            $em->flush();
+            
+            $this->get('session')->setFlash(
+                            'positive', 
+                            'Flag deleted.'
+                            );
+        }
+        if($type == 'notice')
+        {
+            return $this->redirect($this->generateUrl('fenchy_admin_notices'));
+        }
+        else
+        {
+            return $this->redirect($this->generateUrl('fenchy_admin_users'));
+        }
+    }
+    
     public function identityAction () {
     
     	$em = $this->getDoctrine()->getManager();
@@ -700,7 +1126,10 @@ class DefaultController extends Controller
     	$form = $this->createForm(new \Fenchy\AdminBundle\Form\IdentityVerificationFilterType(), $filter);
     
     	$request = $this->getRequest();
-    
+        $limit_per_page = $this->container->getParameter('pagination_limit');
+        $paginator = $this->get('knp_paginator');
+        $session = $this->getRequest()->getSession();
+        
     	if($request->isMethod('POST')) 
     	{
     		$form->bindRequest($request);
@@ -711,24 +1140,49 @@ class DefaultController extends Controller
     					->getRepository('UserBundle:IdentityVerification')
     					->getFullDetailedList($filter);   		
     			
+                        $session->set('identityfilter',$filter);
+                
+                        $pagination = $paginator->paginate(
+                                        $identities,
+                                        $this->get('request')->query->get('page', 1),
+                                        $limit_per_page/*limit per page*/
+                                    );
+                
     			return $this->render(
     					'FenchyAdminBundle:Default:identity.html.twig',
     					array(
     							'identities'	=> $identities,    							
-    							'filter'    => $form->createView()
+    							'filter'    => $form->createView(),
+                                                        'pagination' => $pagination
     					));
     		}
     	}
     
-		$identities = $em
+        
+        if ($session->get('identityfilter') == null) {
+            $identities = $em
     		->getRepository('UserBundle:IdentityVerification')
-    		->getFullDetailedList($filter);
+    		->getFullDetailedList();
+        }
+        else 
+        {
+           $identities = $em
+    		->getRepository('UserBundle:IdentityVerification')
+    		->getFullDetailedList($session->get('identityfilter'));
+        }
+        
+	$pagination = $paginator->paginate(
+                        $identities,
+                        $this->get('request')->query->get('page', 1),
+                        $limit_per_page/*limit per page*/
+                      );	
 
     	return $this->render(
     			'FenchyAdminBundle:Default:identity.html.twig',
     			array(  
     					'identities'	=> $identities,
-    					'filter'       => $form->createView()
+    					'filter'       => $form->createView(),
+                                        'pagination' => $pagination
     			)
     	);
     }
@@ -756,14 +1210,16 @@ class DefaultController extends Controller
     	  
     	if(strcasecmp($identity->getStatus(),'Verified')==0) {
     		$identity->setStatus('Requested');
+                $identity->setActivitypoint(0);
+    		$identity->getUser()->setActivity($identity->getUser()->getActivity() - 200);
     	}
     	else {
     		$identity->setStatus('Verified');
-    		if(!$identity->getActivitypoint())
+    		if($identity->getActivitypoint()==0)
     		{
-    			$identity->setActivitypoint(100);
-    			$user->addActivity(100);
-    			$em->persist($user);
+    			$identity->setActivitypoint(200);
+    			$identity->getUser()->addActivity(200);
+    			//$em->persist($user);
     		}
     	}
     	$em->persist($identity);
@@ -786,6 +1242,10 @@ class DefaultController extends Controller
     
     	$request = $this->getRequest();
     
+        $limit_per_page = $this->container->getParameter('pagination_limit');
+        $paginator = $this->get('knp_paginator');
+        $session = $this->getRequest()->getSession();
+        
     	if($request->isMethod('POST'))
     	{
     		$form->bindRequest($request);
@@ -796,24 +1256,46 @@ class DefaultController extends Controller
     			->getRepository('UserBundle:LocationVerification')
     			->getFullDetailedList($filter);
     			 
-    			return $this->render(
-    					'FenchyAdminBundle:Default:location.html.twig',
+                        $session->set('locationfilter',$filter);
+                
+                        $pagination = $paginator->paginate(
+                                        $locations,
+                                        $this->get('request')->query->get('page', 1),
+                                        $limit_per_page/*limit per page*/
+                                    );
+                        
+    			return $this->render('FenchyAdminBundle:Default:location.html.twig',
     					array(
     							'locations'	=> $locations,
-    							'filter'    => $form->createView()
+    							'filter'    => $form->createView(),
+                                                        'pagination' => $pagination
     					));
     		}
     	}
     
-    	$locations = $em
-    	->getRepository('UserBundle:LocationVerification')
-    	->getFullDetailedList($filter);
+        if($session->get('locationfilter') == null)
+        {
+            $locations = $em
+                ->getRepository('UserBundle:LocationVerification')
+                ->getFullDetailedList();
+        }
+        else
+        {
+            $locations = $em
+                ->getRepository('UserBundle:LocationVerification')
+                ->getFullDetailedList($session->get('locationfilter'));
+        }
     
-    	return $this->render(
-    			'FenchyAdminBundle:Default:location.html.twig',
+        $pagination = $paginator->paginate(
+                                        $locations,
+                                        $this->get('request')->query->get('page', 1),
+                                        $limit_per_page/*limit per page*/
+                                    );
+    	return $this->render('FenchyAdminBundle:Default:location.html.twig',
     			array(
     					'locations'	=> $locations,
-    					'filter'       => $form->createView()
+    					'filter'       => $form->createView(),
+                                        'pagination' => $pagination
     			)
     	);
     }
@@ -823,34 +1305,228 @@ class DefaultController extends Controller
     	$id = $this->getRequest()->get('id');
     	$status = $this->getRequest()->get('status');
     
-    	if(!$id) {
-    		$this->createNotFoundException();
-    	}
-    
-    	if(!$status) {
-    		$this->createNotFoundException();
-    	}
-    
+//    	if(!$id) {
+//    		$this->createNotFoundException();
+//    	}
+//    
+//    	if(!$status) {
+//    		$this->createNotFoundException();
+//    	}
+//    
     	$em = $this->getDoctrine()->getManager();
     	$location = $em->getRepository('UserBundle:LocationVerification')->find($id);
-    
-    	if(!$location) {
-    		$this->createNotFoundException();
-    	}
-    	 
-    	if(strcasecmp($location->getStatus(),'Verified')==0) {
-    		$location->setStatus('Requested');
-    	}
-    	else {
-    		$location->setStatus('Verified');
-    	}
-    	$em->persist($location);
-    	$em->flush();
+//    
+//    	if(!$location) {
+//    		$this->createNotFoundException();
+//    	}
+//    	 
+//    	if(strcasecmp($location->getStatus(),'Verified')==0) {
+//    		$location->setStatus('Requested');
+//                $location->setActivitypoint(0);
+//    		$location->getUser()->setActivity($location->getUser()->getActivity() - 100);
+//    	}
+//    	else {
+//    		$location->setStatus('Verified');
+//                if($location->getActivitypoint()==0)
+//    		{
+//                    $location->setActivitypoint(100);
+//                    $location->getUser()->addActivity(100);
+//                }
+//    	}
+//    	$em->persist($location);
+//    	$em->flush();
     
     	$str = json_encode(array(
     			'status' => $location->getStatus(),
     			'id'        => $location->getId()
     	));
     	return new Response($str);
+    }
+    
+    protected function messageNotification(Message $message, User $sender)
+    {
+    	$receiver = $message->getReceiver();
+    
+    	$notifications = $receiver->getNotifications();
+    	$niterator = $notifications->getIterator();
+    
+    	$message_notification = false;
+    	foreach ($niterator as $onen)
+    	{
+    		if ($onen->getName() == 'message') $message_notification = true;
+    	}
+    
+    	$em = $this->getDoctrine()->getEntityManager();
+    	$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($sender->getId());
+    	 
+    	if($result)
+    	{
+    		$avatar = $result->getWebPath();
+    		if($avatar == "")
+    			$avatar = 'images/default_profile_picture.png';
+    	}
+    	else
+    	{
+    		$avatar = 'images/default_profile_picture.png';
+    	}
+    	if ($message_notification)
+    	{
+    
+    		$interval = $receiver->getNotificationGroupIntervals()->first();
+    		if ($interval != null)
+    			$interval_val = $interval->getInterval();
+    		else $interval_val = null;
+    
+    		if ($interval_val === NotificationGroupInterval::INTERVAL_DAILY)
+    		{
+    
+    			$queue_processing_hour = $this->container->getParameter('notification_queue_processing_hour');
+    
+    			$now = new \DateTime;
+    			$now_hour = (integer) $now->format('G');
+    
+    			$send_after = new \DateTime;
+    			if ($now_hour >= $queue_processing_hour)
+    			{
+    				$send_after->modify('+1 day');
+    			}
+    			$send_after->setTime($queue_processing_hour, 0, 0);
+    
+    			$toQueue = new NotificationQueue;
+    			$toQueue->setSendAfter($send_after)->setFromAddress($this->container->getParameter('from_email'))->setFromName($this->container->getParameter('from_name'))->setToAddress($receiver->getEmail())->setSubject($this->get('translator')->trans('message.notification.email.subject', array(
+    					'%username%' => $sender->getRegularUser()->getFirstname())))->setBodyHtml($this->renderView('FenchyMessageBundle:Notifications:messageEmailHTML.html.twig', array(
+    							'sender' => $sender,
+    							'message' => $message)))->setBodyPlain($this->renderView('FenchyMessageBundle:Notifications:messageEmailPlain.html.twig', array(
+    									'sender' => $sender,
+    									'message' => $message,
+    									'avatar' => $avatar,
+    							)));
+    							$em = $this->getDoctrine()->getManager();
+    							$em->persist($toQueue);
+    							$em->flush();
+    		}
+    		elseif ($interval_val === NotificationGroupInterval::INTERVAL_IMMEDIATELY)
+    		{
+    			$emailNotification = \Swift_Message::newInstance()->setFrom($this->container->getParameter('from_email'), $this->container->getParameter('from_name'))->setTo($receiver->getEmail())->setSubject($this->get('translator')->trans('message.notification.email.subject', array(
+    					'%username%' => $sender->getRegularUser()->getFirstname())))->setBody($this->renderView('FenchyMessageBundle:Notifications:messageEmailHTML.html.twig', array(
+    							'sender' => $sender,
+    							'message' => $message, 
+    							'avatar' => $avatar)), 'text/html')->addPart($this->renderView('FenchyMessageBundle:Notifications:messageEmailPlain.html.twig', array(
+    									'sender' => $sender,
+    									'message' => $message)), 'text/plain');
+    							$mailer = $this->get('mailer');
+    							$mailer->send($emailNotification);
+    		}
+    	}
+    
+    }
+    
+    public function kpiReportAction()
+    {
+        $request = $this->getRequest();
+        $limit_per_page = $this->container->getParameter('pagination_limit');
+        $paginator  = $this->get('knp_paginator');
+        
+         $postcodes = $this->getDoctrine()
+                ->getEntityManager()
+                ->getRepository('UserBundle:User')
+                ->findByPostalCode();
+        $pagination = array();
+        $users = array();
+        $i =0;
+        foreach ($postcodes as $postcode)
+        {
+                $users[$i] = $this->getDoctrine()
+                        ->getEntityManager()
+                        ->getRepository('UserBundle:User')
+                        ->findByPostalCode($postcode['postcode']);
+         
+                $i++;
+        }
+        $allusers[] = array();
+        $i=0; $j=0;
+        foreach ($postcodes as $postcode)
+        {
+            foreach ($users[$i] as $user)
+            {
+                $allusers[$j++] = $user;
+            }
+            $i++;
+        }
+       $pagination = $paginator->paginate(
+                        $allusers,
+                        $this->get('request')->query->get('page', 1),
+                        $limit_per_page/*limit per page*/
+        );
+
+        return $this->render(
+                'FenchyAdminBundle:Default:kpiReport.html.twig', 
+                array(
+                    'postcodes' => $postcodes,
+                    'users' => $allusers,
+                    'pagination' => $pagination
+                    )
+                );
+        
+    }
+    
+    public function kpiReportByAgeAction()
+    {
+        $request = $this->getRequest();
+        $limit_per_page = $this->container->getParameter('pagination_limit');
+        $paginator  = $this->get('knp_paginator');
+        
+        $ageIntervals = $this->getDoctrine()
+                ->getEntityManager()
+                ->getRepository('UserBundle:User')
+                ->findByAge();
+        $pagination = array();
+        $users = array();
+        $i =0;
+        foreach ($ageIntervals as $ageInterval)
+        {           
+            
+                $users[$i] = $this->getDoctrine()
+                        ->getEntityManager()
+                        ->getRepository('UserBundle:User')
+                        ->findByAge($ageInterval['ageband']);
+         
+                $i++;
+        }
+        
+        $allusers[] = array();
+        $i=0; $j=0;
+        $interval = array();
+        foreach ($ageIntervals as $ageInterval)
+        {
+            $interval[$j] = $ageInterval['ageband'];
+            foreach ($users[$i] as $user)
+            {                
+                $allusers[$j++] = $user;
+                $interval[$j] ='';
+            }
+            $i++;
+        }
+        $interval[++$j] ='';
+       $pagination = $paginator->paginate(
+                        $allusers,
+                        $this->get('request')->query->get('page', 1),
+                        $limit_per_page/*limit per page*/
+        );
+
+        if($this->get('request')->query->get('page')>=1)
+        {
+            $this->getRequest()->getSession()->set('i',($this->get('request')->query->get('page')-1)*$limit_per_page);
+        }
+       
+        return $this->render(
+                'FenchyAdminBundle:Default:kpiReportByAge.html.twig', 
+                array(
+                    'interval' => $interval,
+                    'users' => $allusers,
+                    'pagination' => $pagination
+                    )
+                );
+        
     }
 }

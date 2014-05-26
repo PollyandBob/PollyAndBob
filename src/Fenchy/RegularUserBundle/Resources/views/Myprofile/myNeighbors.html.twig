@@ -40,7 +40,7 @@
 
 
         $(document).ready(function() {
-
+        nice = $('.blockneighbors .neighborScroll').niceScroll();
         	$(document).on({
         	    "mouseup touchend": function () {
 					//alert("bye");
@@ -133,6 +133,40 @@
 				}
 			});
 		}
+                function unBlockNeigh(obj)
+                {
+                    var form = obj.id;
+                    var url = $('.'+form).attr('action');
+		    var data = $('.'+form).serialize();                     
+                   
+		     $.ajax({
+		        type: "POST",
+		        url: url,
+		        data: data,
+		        beforeSend: function()
+		        {
+		        	$(".ajax_loader_info1").show();
+		        	$("#dialog52").css('opacity','0.8');
+		        },
+		        success : function(response) {
+		         
+                            $('input[name="selected_neighbors[]"]:checked').map(function()
+                            {
+                                var id = $(this).val();
+                                $('#person'+id).hide();
+                            }).get();
+		        },
+		        complete : function() {
+		        	 $(".ajax_loader_info1").hide();
+		    		 $("#dialog52").hide();
+                                 $('#unblock_neighbour').click();
+                                 //window.location.reload();
+			}
+		     
+		     });
+                }
+                
+                
         // apply binding here
     </script>
     {# any view specific JS scripts for this view #}
@@ -170,8 +204,8 @@
                     </a>
                 </div>
                 <div class="slider-value">
-                    <strong class="pull-left">&lt; 100m</strong>
-                    <strong class="pull-right">&gt; 30km</strong>
+                    {#<strong class="pull-left">&lt; 100m</strong>
+                    <strong class="pull-right">&gt; 30km</strong>#}
                 </div>
                                                           
             </div>
@@ -189,7 +223,11 @@
 				{% for user in users2 %}
 		                <div class="persen">
 		                	<a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice') }}/{{ user.id }}" class="my_neighbour">
-		                    <img src="/{{ user.twitterusername }}" alt="" />
+		                    {% if user.twitterusername %}
+                                    <img src="/{{ user.twitterusername }}" alt="" />
+                                    {% else %}
+				    <img alt="" src="{{ absolute(asset('images/default_profile_picture.png')) }}">
+				    {% endif %}
 		                    <div class="persenname">
 		                        <p>{{ user.userRegular.firstname }}</p>
 		                    </div>		                    
@@ -206,8 +244,9 @@
 			     {% endif %}
 		         
 		         </div>
-		         <nav>
-					<ul>
+                                <nav>
+                                    <ul>
+                                        <li><a href="#dialog52" name="modal" id="vzoom_1944" class="zoomthis paddingset" style="margin-left: -135px;{#{% if not blockneighbors %}#}display: none; {#{% endif %}#}">{{ 'regularuser.blocked_neighbors'|trans }}</a></li>
 				       	<li><a class="paddingset" href="{{ path('fenchy_notice_indexv2',{ 'slug':'search','find':'neighbors'}) }}">{{ 'regularuser.find_neighbors'|trans }}</a></li>
 				    </ul>
 				 </nav>
@@ -219,5 +258,66 @@
             	<img src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}" alt="" />
             </div>    	
    	
-
+            <section id="boxes2">
+	    	<div id="dialog52" class="window" style="height: auto; width: 590px; padding: 30px 0 0 28px;"> 
+		        <div class="big_popup">
+		            <div class="big_popupclose"><a href="" class="close"></a></div>
+                            <form action="{{ path('fenchy_regular_user_user_otherprofile_unblockneighbors') }}" name="unblockNeighbor" method="post" class="unblockNeighbor-form">
+                                <div class="ajax_loader_info1" style="display: none;margin-left: 230px; margin-top: 210px; position: absolute; z-index: 10000;">
+                                    <img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
+                                </div>       
+		            <div class="blockneighbors">
+                                <div class="neighborScroll">
+                                    {% if blockneighbors %}
+                                        {% set i=0 %}
+                                        {% for blockneighbor in blockneighbors %}
+                                                <div class="persen" id="person{{blockneighbor.blocked.id}}">
+                                                            {% if blockneighbor.blocked.id != app.user.id %}
+                                                               <div class="checkbox">
+                                                                <input type="checkbox" name="selected_neighbors[]" value="{{ blockneighbor.blocked.id }}">
+                                                                <label></label>
+                                                               </div>
+                                                            {% endif %}
+                                                            <a href="javascript:void(0);" class="my_neighbour">
+                                                                {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': blockneighbor.blocked.id } %}
+                                                                        <div class="persenname">
+                                                                        <p>{{ blockneighbor.blocked.name }}</p>
+                                                                </div>
+                                                                <div class="neighbor {{ blockmanagertype[i][2] }}">
+                                                                    <p>{{ blockmanagertype[i][1] }}</p>
+                                                                    <span>{{ blockneighbor.blocked.activity }}</span>
+                                                                </div>
+                                                            </a>			                            
+                                                </div>
+                                            {% set i= i+1 %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <div id="no_neighbours" style="padding: 18px 0px 0px 230px;position: absolute;"><h4>{{ 'regularuser.message.no_neighbors'|trans }}</h4></div>
+                                    {% endif %}                                    
+                                </div>
+                                <input id="unblockNeighbor-form" style="cursor: pointer; background: none repeat scroll 0 0 #51B9D4; color: #FFFFFF; padding: 0 10px; float: right;" class="blue-button" type="button" value="{{ 'regularuser.unblock'|trans }}" onclick="unBlockNeigh(this);"/>
+                            </div>
+                                
+                            </form>
+		        </div> 
+		        <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">   
+	    	</div>    
+	    	<div id="mask"></div>
+    	</section>
+            
+       <a id="unblock_neighbour" href="#dialog306" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;"></a>
+        <section id="boxes2">
+		<div id="dialog306" class="window">
+		<div id="dialog45">
+		   	<div class="big_popup">
+		      	<div class="big_popupclose"><a href="" class="close"></a></div>
+				<div id="messageForm">
+					<p>{{ 'regularuser.unblock_neighbor_success'|trans }}</p>
+				</div>
+			</div>
+			<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+		</div>
+		</div>
+		<div id="mask"></div>
+	</section>
 {% endblock %}

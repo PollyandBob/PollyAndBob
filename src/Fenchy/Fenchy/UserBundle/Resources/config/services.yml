@@ -1,0 +1,78 @@
+parameters:
+    fenchy.form.handler.registration.class: Fenchy\UserBundle\Form\Handler\RegistrationFormHandler
+    reputation_counter.class: Fenchy\UserBundle\Services\ReputationCounter
+
+services:
+  fenchy_userbundle.registration.form.type:
+      class: Fenchy\UserBundle\Form\Type\RegistrationFormType
+      arguments: [%fos_user.model.user.class%]
+      tags:
+          - { name: form.type, alias: fenchy_userbundle_registration }
+
+  my.twitter.user:
+      class: Fenchy\UserBundle\Security\User\Provider\TwitterProvider
+      arguments:
+          twitter_oauth: "@fos_twitter.api"
+          validator: "@validator"
+          session: "@session"
+          logger: "@logger"
+          encoder: "@security.encoder_factory"
+          username_canonicalizer: "@fos_user.util.username_canonicalizer"
+          email_canonicalizer: "@fos_user.util.email_canonicalizer"
+          em: "@fos_user.entity_manager"
+          user: %fos_user.model.user.class%
+          
+  my.twitter.registration.form.handler:
+      class: Fenchy\UserBundle\Form\Handler\TwitterFormHandler
+      arguments:
+          ["@my.twitter.user", "@fos_user.mailer", "@fos_user.util.token_generator"]
+
+  my.registration.form.handler:
+      class: Fenchy\UserBundle\Form\Handler\RegistrationFormHandler
+      arguments:
+          ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@fos_user.mailer", "@fos_user.util.token_generator"]
+      scope: request
+
+
+  fenchy.facebook.user:
+      class: Fenchy\UserBundle\Security\User\Provider\FacebookProvider
+      arguments:
+          facebook: "@fos_facebook.api"
+          userManager: "@fos_user.user_manager"
+          validator: "@validator"
+          container: "@service_container"
+          
+  my.listener.notification:
+        class: Fenchy\UserBundle\Listener\UserNotificationListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            
+  my.listener.reference:
+        class: Fenchy\UserBundle\Listener\UserReferenceListener
+        tags:
+            - { name: doctrine.event_listener, event: postUpdate }     
+            - { name: doctrine.event_listener, event: prePersist } 
+      
+  fenchy.reputation_counter:
+    class: %reputation_counter.class%
+    arguments: 
+      points_notice: %points_notice%
+      points_got_review: %points_got_review%
+      points_review: %points_review%
+      points_facebook: %points_facebook%
+      points_contact: %points_contact%
+      profile_about_percent: %profile_about_percent%
+      profile_first_image_percent: %profile_first_image_percent%
+      profile_next_image_percent: %profile_next_image_percent%
+      profile_next_image_limit: %profile_next_images_limit%
+      profile_gender_percent: %profile_gender_percent%
+      profile_link_percent: %profile_link_percent%
+      profile_languages_percent: %profile_languages_percent%
+      profile_total_points: %profile_total_points%
+      
+  fenchy.registration.form.handler:
+    class: %fenchy.form.handler.registration.class%
+    scope: request
+    public: false
+    arguments:
+      ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@fos_user.mailer", "@fos_user.util.token_generator"]

@@ -102,7 +102,19 @@
                 
                 </script>  
                 {% endif %}
-                
+                <script type="text/javascript">
+                    $(document).ready(function(){
+                        if($.browser.mozilla && $.browser.version < '23')    {
+                            $('.createlinks').css('background','url("/images/icon_listing.png") no-repeat scroll right 6px transparent');
+                        }
+                        // For Leftside bar the mix options error sollution
+                        $(".rightside .options .optionsdetail a:visible:even").css('float', 'left');
+                        $(".rightside .options .optionsdetail a:visible:odd").css('float', 'right');
+                        //$(".leftpart .options .optionsdetail a:even").css('float', 'left');
+                        //$(".leftpart .options .optionsdetail a:odd").css('float', 'right');
+                        
+                    });
+                </script>
                 <script type="text/javascript">
                 	var nice = false;
                     $(document).ready(function(){
@@ -146,8 +158,8 @@
 							});
 						});
 					</script>
-                    <!-- Add Js -->
-		   			<!-- 
+                                    <!-- Add Js -->
+                                    <!-- 
 				    <script type="text/javascript" src="{{ asset('js/jquery-latest.js') }}"></script>
 				    <script type="text/javascript" src="{{ asset('js/jquery.nivo.slider.js') }}"></script>
 				    <script type="text/javascript" src="{{ asset('js/jquery.jcarousel.js') }}"></script>
@@ -167,6 +179,7 @@
 		                   	element.value = element.defaultValue;
 		                   }
 	                   }
+                           //window.onunload = confirmExit;
                     </script> 
             {% endblock %}
                 
@@ -178,19 +191,22 @@
             {
             	top: 0 !important;
             }
-			header .right {
-			    margin-right: 20px !important;
-			    margin-top: 20px  !important;
-			}
+	    header .right {
+                margin-right: 20px !important;
+                margin-top: 20px  !important;
+	    }
             .righ_to_right
             {
-            float: right;
-		    font-family: code_boldregular !important;
-		    font-size: 13px !important;
-		    letter-spacing: 1px !important;
-		    margin-top: 6px !important;
-		    position: relative !important;
-		    right: -21px !important;
+                float: right;
+                font-family: code_boldregular !important;
+                font-size: 13px !important;
+                letter-spacing: 1px !important;
+                margin-top:3px !important;
+                position: relative !important;
+                right: -3px !important;
+            }
+            header .right li {
+                margin-left: 14px !important;
             }
             .righ_to_right a span{ color:white;}
             </style>

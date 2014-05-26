@@ -51,8 +51,14 @@ services:
         class: Fenchy\UserBundle\Listener\UserReferenceListener
         tags:
             - { name: doctrine.event_listener, event: postUpdate }     
-            - { name: doctrine.event_listener, event: prePersist } 
-      
+            - { name: doctrine.event_listener, event: prePersist }
+
+  my.handler.session_idle:
+        class: Fenchy\UserBundle\Handler\SessionIdleHandler
+        arguments: ["@session", "@security.context", "@router", %session_max_idle_time%, "@doctrine.orm.entity_manager"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
   fenchy.reputation_counter:
     class: %reputation_counter.class%
     arguments: 

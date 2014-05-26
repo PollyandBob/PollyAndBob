@@ -128,9 +128,13 @@ class PunkaveController extends Controller
                 foreach($data as $file) {
 //                $gallery = new Gallery();
                     if($gallery->getImagesQuantity() >= $this->max) break;
-                    $img = new Image();
-                    $img->setName($file->name);
-                    $gallery->addImage($img);
+                    $ext = substr($file->name,strripos($file->name,'.'));
+                    if(strcasecmp($ext,'.jpeg')== 0 || strcasecmp($ext, '.jpg')==0 || strcasecmp($ext,'.gif') || strcasecmp($ext, '.png') )
+                    {
+                        $img = new Image();
+                        $img->setName($file->name);
+                        $gallery->addImage($img);
+                    }
                 }
 
                 $em = $this->getDoctrine()->getManager();

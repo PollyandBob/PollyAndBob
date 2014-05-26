@@ -1,4 +1,37 @@
 {# empty Twig template #}
+<style>
+.newsfeeds .right .persen .neighbor p
+{
+    line-height: 1 !important; 
+    margin-top: 0px !important;
+    margin-bottom: -27px !important;
+}
+.feeds2 .neighbor p
+{
+    line-height: 0 !important;
+    margin-bottom: -4px !important;
+    margin-top: 8px !important;
+}
+.newsfeeds .right .neighbor span,.feeds2 .neighbor span
+{
+    position: static !important;
+    left:0 !important;
+    top:0 !important;
+}
+</style>
+{% block javascripts %}
+<script type="text/javascript">
+     $(document).ready(function() {
+            var n = 0;
+            $(".newsfeeds").each(function(){
+                  n = n+1;
+            });
+            $(".around").text(n+' options around you');
+        });
+        
+        
+</script>
+{% endblock %}
 <div class="ajax_loader_info" style="display: none; padding: 108px 278px 0px 0px;">
 						<img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
 </div>
@@ -7,155 +40,325 @@
 				{% set i=0 %}
 				{% if not notices and listingInWideRange %}
 					<h3>{{ 'regularuser.no_newsfeeds_in_given_circle'|trans|upper }}</h3>
+                                        
 					{% set notices = listingInWideRange %}
 					{% set usergroups = usergroupsInWideRange %}
 				{% endif %}
 				{% if not notices and listing2WordSearch %}
-					<h3>{{ 'regularuser.no_newsfeeds_in_given_circle'|trans|upper }}</h3>
+                                       
+					<h3>{{ 'regularuser.no_newsfeeds_with_exact_match'|trans|upper }}</h3>
 					{% set notices = listing2WordSearch %}
 					{% set usergroups = usergroups2WordSearch %}
 				{% endif %}
-				{% if not notices and not listing2WordSearch and not listingInWideRange %}
-					<h3>{{ 'regularuser.no_newsfeeds_with_exact_match'|trans|upper }}</h3>
-				{% endif %}
+				
 				{% for notice in notices %}
-                    
-                    <div class="newsfeeds feeds1" style="{{ notice.createdAt|date('U') }}" id="{% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceClassCode" with { 'noticeLocLat': notice.location.latitude,'noticeLocLon': notice.location.longitude } %}">
-                        <span class="votes" style="display:none;"> {% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceClassCode" with { 'noticeLocLat': notice.location.latitude,'noticeLocLon': notice.location.longitude } %}</span>
-                        <div class="leftimg">
-                        	<a href="{{path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')  })}}">
-                        		<img width="200" height="135" alt="" src="{{ asset(notice.mainimagelanding)|replace({'square_l': "medium"})|raw }}"  onerror="imgError(this)">
-                        	</a>
-                        </div>
-                        <div class="rightimg"><img alt="" src="{{ asset('images/bgright_rightpart.png') }}"></div>
-                        <div class="right">
-                            <h3>{{notice.title}}</h3>
-                            <div class="clearfix"></div>
-                            <div class="otherdetail">
-                                <div class="left" style="letter-spacing: 1px;">
+                                    {% if notice.user.id not in blockUser %}
+                                        <div class="newsfeeds feeds1" style="{% if(notice.startDate and (notice.type.id==6 or notice.type.id==12))  %}{{ notice.startDate|date('U') }}{% else %}{{ notice.createdAt|date('U') }}{% endif %}" id="{% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceClassCode" with { 'noticeLocLat': notice.location.latitude,'noticeLocLon': notice.location.longitude } %}">
+                                            <span class="votes" style="display:none;"> {% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceClassCode" with { 'noticeLocLat': notice.location.latitude,'noticeLocLon': notice.location.longitude } %}</span>
+                                            <div class="searchOptionsCalc{% if notice.type.id == 12 %}6{% elseif notice.type.id == 13 %}7{% else %}{{ notice.type.id }}{% endif %}" style="display:none;"></div>
+                                            <div class="leftimg">
+                                                <a href="{{path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')  })}}">
+                                                    <img width="200" height="135" alt="" src="{{ asset(notice.mainimagelanding)|replace({'square_l': "medium"})|raw }}"  onerror="imgError(this)">
+                                                </a>
+                                            </div>
+                                            <div class="rightimg"><img alt="" src="{{ asset('images/bgright_rightpart.png') }}"></div>
+                                            <div class="right">
+                                                <a href="{{path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')  })}}">
+                                                    <h3>{{notice.title|truncate(28)|replace({'...': "..."})|raw}}</h3>
+                                                </a>
+                                                <div class="clearfix"></div>
+                                                <div class="otherdetail">
+                                                    <div class="left" style="letter-spacing: 1px;">
                                 	{% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceCode" with { 'noticeLocLat': notice.location.latitude,'noticeLocLon': notice.location.longitude } %}
-                                	{% if(notice.startDate)  %}&nbsp;&nbsp;&nbsp;&nbsp;{{ notice.startDate|date('d.m.Y') }} {% endif %}
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <p>{{ notice.content|truncate(130)|replace({'...': ". . ."})|raw }}</p>
-                            <div class="persen">
-                                <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice', {'userId': notice.user.id}) }}" >
+                                	{% if(notice.startDate and (notice.type.id==6 or notice.type.id==12))  %}&nbsp;&nbsp;&nbsp;&nbsp;{{ notice.startDate|date('d.m.Y') }}{% else %} &nbsp;&nbsp;&nbsp;&nbsp;{{ notice.createdAt|date('d.m.Y') }}{% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <p>{{ notice.content|truncate(130)|replace({'...': ". . ."})|raw }}</p>
+                                                    <b class="typename">
+                                                        {% if (notice.type.id==6) %}
+                                                            {{ 'notice.event_wanted'|trans}}
+                                                        {% elseif (notice.type.id==12) %}
+                                                            {{ 'notice.event_hosted'|trans}}
+                                                        {% else %}
+                                                            {{ notice.type.altText|trans}}
+                                                        {% endif %}
+                                                    </b>
+                                                    {% if notice.usergroup %}
+                                                    <div class="persen">
+                                                        <a href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo',{ 'groupId' : notice.usergroup.id}) }}" >
+								{% if notice.usergroup.path %}
+                                                                <img src="/{{ notice.usergroup.webpath }}" alt="" />
+                                                                {% else %}
+                                                                <img alt="" src="{{ absolute(asset('images/default_profile_picture.png')) }}">
+                                                                {% endif %}
+                                                        </a>		                            
+                                                        </div>
+                                                    {% else %}
+                                                    <div class="persen">
+                                                        <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice', {'userId': notice.user.id}) }}" >
 								{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': notice.user.id } %}
-                                <div class="neighbor {{ managertype1[i][2] }}">
-                                    <p>{{ managertype1[i][1] }}</p>
-                                    <span>{{ notice.user.activity }}</span>
-                                </div>
-                                </a>		                            
-                            </div>
-                        </div>
-                    </div>
+                                                                <div class="neighbor {{ managertype1[i][2] }}">
+                                                                    <p>{{ managertype1[i][1] }}</p>
+                                                                    {% set leftpx = 6 %}
+                                                                    {% if notice.user.activity|length == 1 %}
+                                                                        {% set leftpx = 12 %}
+                                                                    {% elseif notice.user.activity|length == 2 %}
+                                                                        {% set leftpx = 8 %}
+                                                                    {% elseif notice.user.activity|length == 3 %}
+                                                                        {% set leftpx = 6 %}
+                                                                    {% elseif notice.user.activity|length == 4 %}
+                                                                        {% set leftpx = 1 %}
+                                                                    {% endif %}
+                                                                    <span style="left:{{ leftpx}}px !important;">{{ notice.user.activity }}</span>
+                                                                </div>
+                                                            </a>		                            
+                                                        </div>
+                                                    {% endif %}
+                                                    </div>
+                                                </div>
                     
-                {% set i=i+1 %}
-                {% endfor %}
-                
-                {% set k=0 %}
+                                {% set i=i+1 %}
+                                {% endif %}
+                                {% endfor %}
+                                
+                                        
+                                {% set k=0 %}
 				{% for usergroup in usergroups %}
-	                <div class="newsfeeds feeds2" style="{{ usergroup.createdAt|date('U') }}" id="{% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceClassCode" with { 'noticeLocLat': usergroup.location.latitude,'noticeLocLon': usergroup.location.longitude } %}">
-						<span class="votes" style="display:none;"> {% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceClassCode" with { 'noticeLocLat': usergroup.location.latitude,'noticeLocLon': usergroup.location.longitude } %}</span>
-	                    <div class="leftimg">
-	                        	<a href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', {'groupId': usergroup.id }) }}" >
+                                      {% if usergroup.user.id not in blockUser %}
+                                        <div class="newsfeeds feeds2" style="{{ usergroup.createdAt|date('U') }}" id="{% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceClassCode" with { 'noticeLocLat': usergroup.location.latitude,'noticeLocLon': usergroup.location.longitude } %}">
+                                            <span class="votes" style="display:none;"> {% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceClassCode" with { 'noticeLocLat': usergroup.location.latitude,'noticeLocLon': usergroup.location.longitude } %}</span>
+                                            <div class="searchOptionsCalc2" style="display:none;"></div>
+                                            <div class="leftimg">
+                                                <a href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', {'groupId': usergroup.id }) }}" >
 	                        		{% if usergroup.path %}
-	                            	<img class="groupImage" onerror="imgError(this)" src="/uploads/profileimages/{{ usergroup.path }}" alt="">
-	                            	{% else %}
-	                            	<img class="groupImage" onerror="imgError(this)" src="{{ asset('images/default_listing_photo.png') }}" alt="">
-	                            	{% endif %}
-	                            </a>		                            
-	                            <div class="otherdetail">
-	                                <p  style="letter-spacing: 1px;">
+                                                        <img class="groupImage" onerror="imgError(this)" src="/uploads/profileimages/{{ usergroup.path }}" alt="">
+                                                {% else %}
+                                                        <img class="groupImage" onerror="imgError(this)" src="{{ asset('images/default_listing_photo.png') }}" alt="">
+                                                {% endif %}
+                                                    </a>		                            
+                                                    <div class="otherdetail">
+                                                        <p  style="letter-spacing: 1px;">
 	                                {% if usergroup.location %}
 	                                	{% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceCode" with { 'noticeLocLat': usergroup.location.latitude,'noticeLocLon': usergroup.location.longitude } %}
 	                                {% endif %}	
-	                                </p>
+                                                            </p>
 	                                {% set variable = 1+usergroup.usergroup|length %}
-	                                <span>{{ variable }}<br>
-	                                <b>
+                                                            <span>{{ variable }}<br>
+                                                                <b>
 	                                {% if variable==1 %}
 	                                {{ 'otherprofile.member'|trans }}
 	                                {% else %}
 	                                {{ 'otherprofile.members'|trans }}
 	                                {% endif %}
-	                                </b>
-	                                </span>
-	                            </div>
-	                        </div>
-	                        <div class="rightimg"><img alt="" src="{{ asset('images/bgright_rightpart.png') }}"></div>
-	                        <div class="right">
-	                            
-	                            <a href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', {'groupId': usergroup.id }) }}" >
-	                            <h3>{{usergroup.groupname}}</h3>
-	                            </a>
-	                            <div class="clearfix"></div>
-	                            <div class="clearfix"></div>
-	                            <p>{{ usergroup.aboutGroup|truncate(130)|replace({'...': ". . ."})|raw }}</p>
-	                                
-	                        </div>
-					</div> 
-                {% set k=k+1 %}
-                {% endfor %}
+                                                                    </b>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="rightimg"><img alt="" src="{{ asset('images/bgright_rightpart.png') }}"></div>
+                                                        <div class="right">
+                                                            <div class="redtitle">
+                                                                {% if usergroup.managergroup == '' %}
+                                                                    {% if usergroup.status==1 %}
+                                                                        {{ 'notice.open_group'|trans|upper }}
+                                                                    {% elseif usergroup.status==2  %}
+                                                                        {{ 'notice.closed_group'|trans|upper }}
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {% if usergroup.managergroup == 'C' %}
+                                                                    {{ 'listing.community_group'|trans|upper }}&nbsp;Germany
+                                                                    {#{% set varStack = usergroup.location | split(',') %}
+                                                                    {{ varStack[0] }}#}
+                                                                    {% elseif usergroup.managergroup == 'N' %}
+                                                                    {{ 'listing.neighborhood_group'|trans|upper }}&nbsp;Germany
+                                                                    {#{% set varStack = usergroup.location | split(',') %}
+                                                                    {{ varStack[0] }}#}
+                                                                    {% endif %}
+                                                                {% endif %}    
+                                                                </div>
+                                                                <a href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', {'groupId': usergroup.id }) }}" >
+                                                                    <h3>{{usergroup.groupname|truncate(28)|replace({'...': "..."})|raw}}</h3>
+                                                                </a>
+                                                                <div class="clearfix"></div>
+                                                                <div class="clearfix"></div>
+                                                                <p>{{ usergroup.aboutGroup|truncate(130)|replace({'...': ". . ."})|raw }}</p>
+
+                                                            </div>
+                                                        </div> 
+                                        {% set k=k+1 %}
+                                        {% endif %}
+                                        {% endfor %}
                 
-                	<script>
-		  			 function imgError(url)
-		  			 {
-		  			   var img = new Image();
-		  			   img.src = url;
-		  			   var newsrc = $(url).attr('src');
-		  			   newsrc=newsrc.replace('square_l','medium');
-					   $(url).attr('src',newsrc);	   
-		  			 }
-		  			</script>
+
+                                        <script>
+                                        function imgError(url)
+                                        {
+                                          var img = new Image();
+                                          img.src = url;
+                                          var newsrc = $(url).attr('src');
+                                          newsrc=newsrc.replace('square_l','medium');
+                                          $(url).attr('src',newsrc);	   
+                                        }
+                                        </script>
 		  	{% if neighbours %}
 				{% set j=0 %}
-                    {% for neighbour in neighbours %}
-                       	<div class="newsfeeds neighb feeds2" style="{{ neighbour.createdAt|date('U') }}" id="{% render "FenchyNoticeBundle:GlobalFilter:neighborDistanceClassCode" with { 'neighbourLocLat': neighbour.location.latitude,'neighbourLocLon': neighbour.location.longitude } %}">
-                       		<span class="votes" style="display:none;"> {% render "FenchyNoticeBundle:GlobalFilter:neighborDistanceClassCode" with { 'neighbourLocLat': neighbour.location.latitude,'neighbourLocLon': neighbour.location.longitude } %}</span>
-                            <div class="leftimg">
-                            	<div class="bg-gray"></div>
-                                <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice',{'userId': neighbour.id}) }}">
-					            	{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': neighbour.id } %}
-					            </a>
-                                <div class="neighbor {{ managertype[j][2] }}">
-                                    <p>{{ managertype[j][1] }}</p>
-                                    <span>{{ neighbour.activity }}</span>
-                                </div>		                            
-                                <div class="otherdetail">
-                                    <p>
-                                    {% if distance[j] < 1000 %}
-										{{ distance[j] }}M
-									{% else %}
-										{{ distance[j]/1000 // 1 }}KM
-									{% endif  %}
-					            	
-                                    </p>                                  
-                                </div>
-                            </div>
-                            <div class="rightimg"><img src="{{ absolute(asset('images/bgright_rightpart.png')) }}" alt="" /></div>
-                            <div class="right">
-                            	{% if managertype[j][0] !="" %}
-	                                <div class="redtitle">{{ ('otherprofile.'~managertype[j][0])|trans|upper }}</div>
-                                {% endif %}
-                                <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice',{'userId': neighbour.id}) }}">
-                                	<h3>{{ neighbour.name }}</h3>
-                                </a>
-                                <div class="clearfix"></div>
-                                <p>{{ neighbour.regularUser.aboutMe|truncate(130)|replace({'...': ". . ."})|raw }}</p>
-                            </div>
-                        </div>                        
-                        {%   set j=j+1 %}
-                     {% endfor %}
+                                {% for neighbour in neighbours %}
+                                   {% if neighbour.id not in blockUser %}
+                                    <div class="newsfeeds neighb feeds2" style="{{ neighbour.createdAt|date('U') }}" id="{% render "FenchyNoticeBundle:GlobalFilter:neighborDistanceClassCode" with { 'neighbourLocLat': neighbour.location.latitude,'neighbourLocLon': neighbour.location.longitude } %}">
+                                            <span class="votes" style="display:none;"> {% render "FenchyNoticeBundle:GlobalFilter:neighborDistanceClassCode" with { 'neighbourLocLat': neighbour.location.latitude,'neighbourLocLon': neighbour.location.longitude } %}</span>
+                                            <div class="searchOptionsCalc1" style="display:none;"></div>
+                                        <div class="leftimg">
+                                            <div class="bg-gray"></div>
+                                            <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice',{'userId': neighbour.id}) }}">
+                                                                    {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': neighbour.id } %}
+                                                                </a>
+                                            <div class="neighbor {{ managertype[j][2] }}">
+                                                <p>{{ managertype[j][1] }}</p>
+                                                {% set leftpx = 6 %}
+                                                {% if neighbour.activity|length == 1 %}
+                                                    {% set leftpx = 12 %}
+                                                {% elseif neighbour.activity|length == 2 %}
+                                                    {% set leftpx = 8 %}
+                                                {% elseif neighbour.activity|length == 3 %}
+                                                    {% set leftpx = 6 %}
+                                                {% elseif neighbour.activity|length == 4 %}
+                                                    {% set leftpx = 1 %}
+                                                {% endif %}
+                                                <span style="left:{{ leftpx}}px !important;">{{ neighbour.activity }}</span>
+                                            </div>		                            
+                                            <div class="otherdetail">
+                                                <p>
+                                                {% if distance[j] < 1000 %}
+                                                                                            {{ distance[j] }}M
+                                                                                    {% else %}
+                                                                                            {{ distance[j]/1000 // 1 }}KM
+                                                                                    {% endif  %}
+
+                                                </p>                                  
+                                            </div>
+                                        </div>
+                                        <div class="rightimg"><img src="{{ absolute(asset('images/bgright_rightpart.png')) }}" alt="" /></div>
+                                        <div class="right">
+                                            {% if managertype[j][0] !="" %}
+                                                    <div class="redtitle">{{ ('otherprofile.'~managertype[j][0])|trans|upper }}</div>
+                                            {% endif %}
+                                            <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice',{'userId': neighbour.id}) }}">
+                                                    <h3>{{ neighbour.name|truncate(28)|replace({'...': "..."})|raw }}</h3>
+                                            </a>
+                                            <div class="clearfix"></div>
+                                            <p>{{ neighbour.regularUser.aboutMe|truncate(130)|replace({'...': ". . ."})|raw }}</p>
+                                        </div>
+                                    </div>                        
+                                    {%   set j=j+1 %}
+                                    {% endif %}
+                                 {% endfor %}
                   {% else %}
                          <h3 class="no_find_neighbor" style="display:none;">{{ 'regularuser.message.no_neighbors'|trans|upper }}</h3>
                   {% endif %}
+                         
+                      {% if neighborhoodmsgs %}   
+                      {% for neighborhoodmsg in neighborhoodmsgs %}
+                       {% if neighborhoodmsg.user.id not in blockUser %}
+                       	<div class="newsfeeds neighb feeds2" style="{{ neighborhoodmsg.createdAt|date('U') }}" id="{% render "FenchyNoticeBundle:GlobalFilter:neighborDistanceClassCode" with { 'neighbourLocLat': neighborhoodmsg.user.location.latitude,'neighbourLocLon': neighborhoodmsg.user.location.longitude } %}">
+                       		<span class="votes" style="display:none;"> {% render "FenchyNoticeBundle:GlobalFilter:neighborDistanceClassCode" with { 'neighbourLocLat': neighborhoodmsg.user.location.latitude,'neighbourLocLon': neighborhoodmsg.user.location.longitude } %}</span>
+                                <div class="searchOptionsCalc22" style="display:none;"></div>
+                            <div class="leftimg neighbormsg">
+                              <a href="{{path('fenchy_neighborhoodmsg_show_slug', {'slug': neighborhoodmsg.slug, 'year': neighborhoodmsg.createdAt|date('Y'), 'day': neighborhoodmsg.createdAt|date('d')  })}}">
+                                 {% render "FenchyNoticeBundle:GlobalFilter:generateCodeNeighborMsg" with { 'userId': neighborhoodmsg.user.id } %}
+                              </a>
+                            </div>
+                            <div class="rightimg"><img src="{{ absolute(asset('images/bgright_rightpart.png')) }}" alt="" /></div>
+                            <div class="right">
+                            	
+                                <a href="{{path('fenchy_neighborhoodmsg_show_slug', {'slug': neighborhoodmsg.slug, 'year': neighborhoodmsg.createdAt|date('Y'), 'day': neighborhoodmsg.createdAt|date('d')  })}}">
+                                	<h3>
+                                        {% set title = neighborhoodmsg.content|split(' ',4) %}
+                                        {{ title[0] }}{% if title|length > 1 %}&nbsp;{{ title[1] }}{% endif %}{% if(title|length > 2) and (title|length < 5) %}&nbsp;{{ title[2] }}{% endif %}...</h3>
+                                </a>
+                                <div class="clearfix"></div>
+                                <p>{{ neighborhoodmsg.content|truncate(130)|replace({'...': ". . ."})|raw }}</p>
+                                <b class="typename" style="top:25px; letter-spacing: 0.5px;">
+                                      {{ 'notice.message_from'|trans|upper }}&nbsp;{{ neighborhoodmsg.user.regularUser.firstname }}
+                                 </b>
+                            </div>
+                        </div>
+                        {% endif %}
+                     {% endfor %}
+                     {% endif %}    
+                  
                           
               	</div>
-               
-<h3 class="no_find_newsfeeds" style="display:none;">{{ 'regularuser.no_newsfeeds_with_exact_match'|trans|upper }}</h3>
 
+                {# For on login First on Newsfeeds with 0 Options tools count Problem #}    
+                {% if notices2 %}       
+                {% set i=0 %}
+                {% for notice in notices2 %}
+                   {% if notice.user.id not in blockUser %}
+                       <div style="display:none;" class="after-ajax-none">
+                           <div class="" style="{% if(notice.startDate and (notice.type.id==6 or notice.type.id==12))  %}{{ notice.startDate|date('U') }}{% else %}{{ notice.createdAt|date('U') }}{% endif %}" id="{% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceClassCode" with { 'noticeLocLat': notice.location.latitude,'noticeLocLon': notice.location.longitude } %}">
+                               <div class="searchOptionsCalc{% if notice.type.id == 12 %}6{% elseif notice.type.id == 13 %}7{% else %}{{ notice.type.id }}{% endif %}" style="display:none;"></div>
+                           </div>
+                       </div>
+               {% set i=i+1 %}
+               {% endif %}
+               {% endfor %}       
+               {% endif %}
+               
+                {% if usergroups2 %}
+                {% set k=0 %}
+                {% for usergroup in usergroups2 %}
+                    {% if usergroup.user.id not in blockUser %}
+                        <div style="display:none" class="after-ajax-none">
+                            <div class="" style="{{ usergroup.createdAt|date('U') }}" id="{% render "FenchyNoticeBundle:GlobalFilter:noticeDistanceClassCode" with { 'noticeLocLat': usergroup.location.latitude,'noticeLocLon': usergroup.location.longitude } %}">
+                                    <div class="searchOptionsCalc2" style="display:none;"></div>
+                            </div>    
+                        </div>
+                        {% set k=k+1 %}
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
+
+                {% if neighbours2 %}
+                    {% set j=0 %}
+                    {% for neighbour in neighbours2 %}
+                       {% if neighbour.id not in blockUser %}
+                        <div style="display: none;" class="after-ajax-none">
+                        <div class="" style="{{ neighbour.createdAt|date('U') }}" id="{% render "FenchyNoticeBundle:GlobalFilter:neighborDistanceClassCode" with { 'neighbourLocLat': neighbour.location.latitude,'neighbourLocLon': neighbour.location.longitude } %}">
+                           <div class="searchOptionsCalc1" style="display:none;"></div>
+                        </div>
+                        </div>
+                        {%   set j=j+1 %}
+                        {% endif %}
+                     {% endfor %}
+                {% endif %}
+               
+                {% if neighborhoodmsgs2 %}   
+                    {% for neighborhoodmsg in neighborhoodmsgs2 %}
+                     {% if neighborhoodmsg.user.id not in blockUser %}
+                     <div style="display: none;" class="after-ajax-none">
+                      <div class="" style="{{ neighborhoodmsg.createdAt|date('U') }}" id="{% render "FenchyNoticeBundle:GlobalFilter:neighborDistanceClassCode" with { 'neighbourLocLat': neighborhoodmsg.user.location.latitude,'neighbourLocLon': neighborhoodmsg.user.location.longitude } %}">
+                              <div class="searchOptionsCalc22" style="display:none;"></div>
+                      </div>
+                     </div>   
+                      {% endif %}
+                   {% endfor %}
+               {% endif %}
+               
+<h3 class="no_find_newsfeeds" {% if not noticeCount %}style="display:block;"{% else %}style="display:none;"{% endif %}>{{ 'regularuser.no_newsfeeds_with_exact_match'|trans|upper }}</h3>
+<style>
+    .feedsdetail{
+        height: 800px;
+    }
+    .feedsdetail .right p:hover {
+        overflow-y: visible;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+      	nice = $(".feedsdetail").niceScroll();
+    });
+</script>
 <script type="text/html" id="list-template">
     <div class="article-list-wrapper clearfix">
     <!-- ko foreach: notices -->

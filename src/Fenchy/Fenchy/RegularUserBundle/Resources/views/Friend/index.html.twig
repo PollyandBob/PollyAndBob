@@ -1,0 +1,106 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# any view specific stylesheets for this view #}
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/sidebar-v2.css')) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/search-bar-v2.css')) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/inner-content-v2.css')) }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/article-box-v2.css')) }}" type="text/css" />    
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/user-contacts-view-model.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>     
+    <script type="text/javascript">
+        var userContactsViewModel;
+        
+        $(document).ready(function() {
+            
+            var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';
+            var geocoder = new google.maps.Geocoder();
+            
+            userContactsViewModel = new UserContactsViewModel(geocoder, baseSearchViewUri);
+            
+            ko.applyBindings( userContactsViewModel, document.getElementsByTagName('body')[0] );
+            
+            autocomplete = new GApiAutocomplete(
+                document.getElementById('location'), userContactsViewModel );
+        
+            $('#spoken-languages').tagit({
+                readOnly: true
+            });      
+            
+
+            var _default_location = '';
+
+            {% if app.user and not app.user.location.location %}
+                _default_location = '{{default_location}}';
+            {% elseif app.user and app.user.location.location %}
+                _default_location = '{{app.user.location.location|replace({"\n": ''})}}';
+            {% else %}
+                _default_location = '{{default_location}}';     
+            {% endif %}
+
+            $('input#location').val(_default_location);                  
+            
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+<section class="main content-rtl" data-role="main">
+    <div class="wrapper-inner-content">
+        <div class="clearfix">
+
+
+            <section class="sidebar pull-left large-padding-top">
+                    {% include 'FenchyRegularUserBundle:Partials:userProfileLeftMenuV2.html.twig' %}
+                </section>
+
+
+                <section class="content pull-right">                
+                    {% include '::searchBarV2.html.twig' %}
+
+                        <div class="inner-content">
+                            <div class="article-list-wrapper clearfix">
+
+            {% for contact in contacts %}
+                                <article class="box smallbox ">
+                                    <div class="clearfix">
+                                        <figure class="pull-left">
+                                            <div class="img pull-left"><img alt="" src="{{asset(contact.avatar)}}"></div>
+                                            <figcaption class="pull-left">
+                                                <div>
+                                                    <h3><a href="{{path('fenchy_regular_user_user_profilev2', {'userId': contact.user.id})}}">{{contact.firstname}}</a></h3>
+                                                    <strong>{{contact.user.location.location}}</strong>
+                                                    <p>{{contact.aboutMe|truncate(150)}}</p>
+                                                </div>                                        
+                                            </figcaption>
+                                        </figure>
+                                        <div class="pull-left event-master">
+
+                                        </div>
+                                        <div class="activity">
+                                            <a href="#" class="event"><i class="icon-user"></i></a>
+                                        </div>
+                                    </div>
+                                </article>            
+             {% else %}
+                                <p>{{ 'regularuser.friends.contacts.no_other'|trans }}</p>
+            {% endfor %}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}

@@ -30,7 +30,7 @@ class NoticeListingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', NULL, array('label' => 'notice.title'))
+            ->add('title', NULL, array('label' => 'notice.title', 'max_length'=>85 ))
             ->add('content', NULL, array('label' => 'notice.content'))    
                                
             ->add('currency', 'choice', array(
@@ -79,6 +79,12 @@ class NoticeListingType extends AbstractType
 		                    'widget' => 'single_text',                    		
 		                    'label' => 'listing.create.end_time',
 		           			'required' => false,
+		                    ));
+        }
+        if($this->type->isDateAvailable() && $this->type == 'events') {
+            $builder->add('start_time_arrange', 'checkbox', array(                    		
+		                    		'label' => 'listing.create.start_time_arrange',
+		            				'required'  => false,
 		                    ));
         }
         if($this->type->isDateAvailable() && $this->type != 'offerevents' && $this->type != 'events') {
@@ -176,20 +182,20 @@ class NoticeListingType extends AbstractType
         	$form = $event->getForm();
         	if($this->type->isDateAvailable() && $this->type != 'offerevents' && $this->type != 'events')
         	{        	
-	        	if (!$form['start_date']->getData() && !$form['end_date']->getData() && !$form['date_arrange']->getData()) {
-	        		$form['date_arrange']->addError(new FormError('Enter either date or check checkbox'));
-	        	}
-	        	if ($form['start_date']->getData() && $form['date_arrange']->getData() && $form['end_date']->getData()) {
-	        		$form['date_arrange']->addError(new FormError('Enter date or check checkbox'));
-	        	}
+// 	        	if (!$form['start_date']->getData() && !$form['end_date']->getData() && !$form['date_arrange']->getData()) {
+// 	        		$form['date_arrange']->addError(new FormError('Enter either date or check checkbox'));
+// 	        	}
+// 	        	if ($form['start_date']->getData() && $form['date_arrange']->getData() && $form['end_date']->getData()) {
+// 	        		$form['date_arrange']->addError(new FormError('Enter date or check checkbox'));
+// 	        	}
 	        	
-	        	if ($form['start_date']->getData() && !$form['end_date']->getData()) {
-	        		$form['date_arrange']->addError(new FormError('Enter both date or check checkbox'));
-	        	}
-	        	if (!$form['start_date']->getData() && $form['end_date']->getData()) {
-	        		$form['date_arrange']->addError(new FormError('Enter both date or check checkbox'));
-	        		$form['start_date']->addError(new FormError('required'));	        	
-	        	}
+// 	        	if ($form['start_date']->getData() && !$form['end_date']->getData()) {
+// 	        		$form['date_arrange']->addError(new FormError('Enter both date or check checkbox'));
+// 	        	}
+// 	        	if (!$form['start_date']->getData() && $form['end_date']->getData()) {
+// 	        		$form['date_arrange']->addError(new FormError('Enter both date or check checkbox'));
+// 	        		$form['start_date']->addError(new FormError('required'));	        	
+// 	        	}
 	        	
 // 	        	if (!$form['start_time']->getData() && !$form['end_time']->getData() && !$form['start_time_arrange']->getData()) {
 // 	        		$form['start_time_arrange']->addError(new FormError('Enter either time or check checkbox'));
@@ -270,26 +276,53 @@ class NoticeListingType extends AbstractType
 //         		}
         		
 //         	}
+                
+                if($this->type->isDateAvailable() && ($this->type == 'offerevents' || $this->type == 'events'))
+         	{
+         		if ($form['start_time']->getData()!= "" && $form['end_time']->getData()!="")
+         		{
+         			$todays_date = date("H:m");
+        			
+         			$startTime = $form['start_time']->getData()->format('H:i');
+                                $endTime= $form['end_time']->getData()->format('H:i');
+        			 
+         			if(strtotime($startTime) > strtotime($endTime))
+         			{
+         				$form['start_date']->addError(new FormError('createlisting.end_time'));
+         			}
+         		}
+//         		if ($form['start_date']->getData() != "" )
+//         		{
+//         			$start_date = $form['start_date']->getData()->format('d-m-Y');
+//         			$end_date = $form['end_date']->getData()->format('d-m-Y');
+//        		
+//         			if(strtotime($start_date) > strtotime($end_date))
+//         			{
+//         				$form['end_date']->addError(new FormError('Must greater then start date'));
+//         			}
+//         		}
+        		
+         	}
         	
         	if($this->type=='events' || $this->type=='help' || $this->type=='offerhelp' || $this->type=='others' || $this->type=='offerothers' ||  $this->type=='neighbours' ||  $this->type=='groups')
         	{
         		if(!$form['type']['value_'.$this->type->getSubcategoryId()]['value']->getData())
         		{
-        			$form['type']['value_'.$this->type->getSubcategoryId()]['value']->addError(new FormError('Please check option'));
+        			$form['type']->addError(new FormError('createlisting.please_check'));
         		}
         	}  
         	if($this->type=='offerservice')
         	{
         		if(!$form['type']['value_'.$this->type->getSubcategoryId()]['value']->getData())
         		{
-        			$form['type']['value_'.$this->type->getSubcategoryId()]['value']->addError(new FormError('Please check at least one option'));
+        			$form['type']->addError(new FormError('createlisting.please_check_one'));
         		}
         	}
         	if($this->type=='service')
         	{
         		if(!$form['type']['value_'.$this->type->getSubcategoryId()]['value']->getData())
         		{
-        				$form['type']['value_'.$this->type->getSubcategoryId()]['value']->addError(new FormError('Please check at least one option'));
+        				$form['type']->addError(new FormError('createlisting.please_check_one'));
         			
         		}
         	}
@@ -297,7 +330,7 @@ class NoticeListingType extends AbstractType
         	{
         		if(!$form['type']['value_'.$this->type->getSubcategoryId()]['value']->getData())
         		{
-        			$form['type']['value_'.$this->type->getSubcategoryId()]['value']->addError(new FormError('Please check at least one option'));
+        			$form['type']->addError(new FormError('createlisting.please_check_one'));
         			 
         		}
         	}
@@ -305,7 +338,7 @@ class NoticeListingType extends AbstractType
         	{
         		if(!$form['type']['value_'.$this->type->getSubcategoryId()]['value']->getData())
         		{
-        			$form['type']['value_'.$this->type->getSubcategoryId()]['value']->addError(new FormError('Please check at least one option'));
+        			$form['type']->addError(new FormError('createlisting.please_check_one'));
         		}
         	}
         	if($this->type=='offergoods')
@@ -315,27 +348,27 @@ class NoticeListingType extends AbstractType
 	        		$array_values = $form['type']['value_'.$this->type->getSubcategoryId()]['value']->getData();
 	        		if(count($array_values) < 1 )
 	        		{
-	        			$form['type']['value_'.$this->type->getSubcategoryId()]['value']->addError(new FormError('Please check at least one option'));
+	        			$form['type']->addError(new FormError('createlisting.please_check_one'));
 	        		}
 	        		elseif (count($array_values) > 2 )
 	        		{
-	        			$form['type']['value_'.$this->type->getSubcategoryId()]['value']->addError(new FormError('Please check maximum two options'));
+	        			$form['type']->addError(new FormError('createlisting.max_two'));
 	        		}
 	        	}
 	        	elseif (!$form['type']['value_'.$this->type->getSubcategoryId()]['value']->getData())
 	        	{
-	        		$form['type']['value_'.$this->type->getSubcategoryId()]['value']->addError(new FormError('Please check at least one option'));
+	        		$form['type']->addError(new FormError('createlisting.please_check_one'));
 	        	}
         
         	}
         	if($this->type->isPieceAvailable())
         	{
 	        	if (!$form['pieces']->getData() && !$form['one_piece']->getData()) {
-	        		$form['pieces']->addError(new FormError('Either enter number of pieces or check checkbox'));
+	        		$form['pieces']->addError(new FormError('createlisting.enter_piece'));
 	        		
 	        	}
 	        	if ($form['pieces']->getData() && $form['one_piece']->getData()) {
-	        		$form['pieces']->addError(new FormError('Either enter number of pieces or check checkbox'));
+	        		$form['pieces']->addError(new FormError('createlisting.enter_piece'));
 	        		 
 	        	}
         	}
@@ -343,33 +376,104 @@ class NoticeListingType extends AbstractType
         	{
         		if (!$form['spot']->getData() && !$form['unlimited']->getData()) 
         		{
-        			$form['spot']->addError(new FormError('Either enter number of spots or check checkbox'));
+        			$form['spot']->addError(new FormError('createlisting.enter_spot'));
         		}
         		if ($form['spot']->getData() && $form['unlimited']->getData())
         		{
-        			$form['spot']->addError(new FormError('Either enter number of spots or checkdd checkbox'));
+        			$form['spot']->addError(new FormError('createlisting.enter_spot'));
         		}
         	}
         	
         	if($this->type->isPriceAvailable())
         	{
-        		if (!$form['price']->getData() && !$form['free']->getData())
-        		{
-        			$form['price']->addError(new FormError('Either enter price or check checkbox'));
-        		}
-        		if ($form['price']->getData() && $form['free']->getData())
-        		{
-        			$form['price']->addError(new FormError('Either enter price or check checkbox'));
-        		}
+                    $array_values = $form['type']['value_'.$this->type->getSubcategoryId()]['value']->getData();
+                    
+                        if($this->type=='offerservice')
+                        {
+                            $flag=TRUE;
+                            if ((in_array("1", $array_values) || in_array("2", $array_values) || in_array("3", $array_values)) && in_array("4", $array_values))
+                            {                                
+                                         $form['type']->addError(new FormError('createlisting.createnote5'));
+                                         $flag=FALSE;
+                            }
+                            if ($flag && !$form['default_setting']->getData() && ($form['price']->getData() || in_array("1", $array_values) || in_array("2", $array_values) || in_array("3", $array_values)))
+                            {                                
+                                        $form->get('default_setting')->addError(new FormError('createlisting.createnote1'));
+                            }
+                            if ((in_array("1", $array_values) || in_array("2", $array_values) || in_array("3", $array_values)) && $form['free']->getData())
+                            {                                
+                                        $form->get('free')->addError(new FormError('createlisting.createnote2'));
+                            }
+                            if ((in_array("1", $array_values) || in_array("2", $array_values) || in_array("3", $array_values) || in_array("4", $array_values)) && in_array("5", $array_values))
+                            {                                
+                                        $form['type']->addError(new FormError('createlisting.createnote6'));
+                            }
+                            
+                        }
+                        if($this->type=='goods')
+                        {
+                            if ($form['price']->getData() && (in_array("5", $array_values) || $form['free']->getData() ))
+                            {                                
+                                        $form->get('free')->addError(new FormError('createlisting.createnote3'));
+                            }
+                            if (in_array("5", $array_values)&& (in_array("1", $array_values)|| in_array("2", $array_values) ||  in_array("6", $array_values)) )
+                            {                                
+                                        $form['type']->addError(new FormError('createlisting.createnote4'));
+                            }
+                           
+                        }
         		
-        		if (!$form['default_setting']->getData() && !$form['free']->getData())
-        		{
-        			$form['default_setting']->addError(new FormError('Either check free or check default setting'));
+                        if($this->type=='service')
+                        {
+//                            if (!$form['default_setting']->getData() && ($form['price']->getData() || in_array("1", $array_values) || in_array("2", $array_values)))
+//                            {                                
+//                                        $form->get('default_setting')->addError(new FormError('createlisting.createnote1'));
+//                            }
+//                            if ((in_array("1", $array_values) || in_array("2", $array_values)) && $form['free']->getData())
+//                            {                                
+//                                        $form->get('free')->addError(new FormError('createlisting.createnote2'));
+//                            }
         		}
-        		if ($form['default_setting']->getData() && $form['free']->getData())
-        		{
-        			$form['default_setting']->addError(new FormError('Either check free or check default setting'));
+        		if($this->type=='offergoods')
+                        {
+                            if (!$form['default_setting']->getData() && ($form['price']->getData() || in_array("1", $array_values) || in_array("2", $array_values)))
+                            {                                
+                                        $form->get('default_setting')->addError(new FormError('createlisting.createnote1'));
+                            }
+                            if (!$form['price']->getData() && in_array("1", $array_values))
+                            {                                
+                                        $form->get('free')->addError(new FormError('createlisting.enter_price'));
+                            }
+                            if (in_array("2", $array_values) && $form['free']->getData())
+                            {                                
+                                        $form->get('free')->addError(new FormError('createlisting.set_price'));
+                            }
         		}
+                        
+                        if($this->type=='offerevents')
+                        {
+                            if (!$form['default_setting']->getData() && ($form['price']->getData() || in_array("1", $array_values) || in_array("2", $array_values)))
+                            {                                
+                                        $form->get('default_setting')->addError(new FormError('createlisting.createnote1'));
+                            }
+                            if (!$form['price']->getData() && in_array("1", $array_values))
+                            {                                
+                                        $form->get('free')->addError(new FormError('createlisting.enter_price'));
+                            }
+                            if (in_array("2", $array_values) && $form['free']->getData())
+                            {                                
+                                        $form->get('free')->addError(new FormError('createlisting.createnote2'));
+                            }
+        		}
+                        
+//        		if (!$form['default_setting']->getData() && !$form['free']->getData() && (!in_array("6", $array_values) || !in_array("3", $array_values)))
+//        		{
+//        			$form->get('default_setting')->addError(new FormError('Either check free or check default setting'));
+//        		}
+//        		if ($form['default_setting']->getData() && ($form['free']->getData() || (in_array("6", $array_values) || in_array("3", $array_values))))
+//        		{
+//        			$form->get('default_setting')->addError(new FormError('Either check free or check default setting'));
+//        		}
         	}
         	
 //         	if($this->type->isLocationChangeAvailable())

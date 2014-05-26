@@ -1,0 +1,22 @@
+{% autoescape false %}
+
+{{ 'emailchange.email.1'|trans({'%username%': user.regularuser.firstname }) }}
+
+{{ 'emailchange.email.2'|trans }}
+
+<a href="{{ confirmUrl }}">{{ 'emailchange.email.3'|trans }}</a>
+
+{{ 'emailchange.email.4'|trans }}
+{{ confirmUrl }}
+
+{{ 'emailchange.email.8'|trans }}
+{{ 'emailchange.email.9'|trans }}
+
+
+{{ 'emailchange.email.10'|trans }}
+{{ 'emailchange.email.11'|trans }}
+
+
+{{ 'email.message.help'|trans({}, 'FOSUserBundle') }}
+{{ 'email.message.address'|trans({}, 'FOSUserBundle') }}
+{% endautoescape %}

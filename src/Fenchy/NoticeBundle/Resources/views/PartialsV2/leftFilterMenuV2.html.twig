@@ -17,7 +17,9 @@
 
 		<!-- Your Selected options -->
         <div class="options">
-        
+            <input type="hidden" name="hiddentime" id="hiddentime" value="">
+            <input type="hidden" name="hiddentime2" id="hiddentime2" value="">
+            <input type="hidden" name="hiddentime3" id="hiddentime3" value="">
             	<h4>{{ 'notice.filter.filters'|trans }}</h4>
             	<div class="right">
                 <a href="javascript:void(0);" onclick="clearOptions();">{{ 'notice.filter.clear'|trans }}</a>
@@ -25,7 +27,7 @@
             	
             <div class="optionsdetail">
             	{% if(findNeighbors == 'neighbors') %} 
-            	<a href='javascript:void(0)' id='1' onclick='selectedOptions(this)' class='blue_button selected' >{{ 'neighbors'|trans }}</a>
+                    <a href='javascript:void(0)' id='1' onclick='selectedOptions(this)' class='blue_button selected' >{{ 'neighbors'|trans }}<span id="span1"></span></a>
             	{% endif %}
             	{% for type in types %}
             		{% set stype = '' %}
@@ -38,7 +40,7 @@
             		{% endif %}		
 				  {% if ( type.name=="help" or type.name=="offerhelp" or type.name=="service" or type.name=="offerservice" or type.name=="goods" or type.name=="offergoods" ) %}
                 		{% if not findNeighbors %}
-                		<a href='javascript:void(0)' id='{{ type.id }}' onclick='selectedOptions(this)' class='blue_button {% if stype %}selected{% endif %}' >{{ type.alttext|trans }}</a>
+                		<a href='javascript:void(0)' id='{{ type.id }}' onclick='selectedOptions(this)' class='blue_button {% if stype %}selected{% endif %}' >{{ type.alttext|trans }}<span id="span{{ type.id }}"></span></a>
                   		{% endif %}
                   {% endif %}
                 {% endfor %} 
@@ -49,24 +51,34 @@
 	            				{% if (userSearchedType == type.id) %}
 	            					{% set stype = userSearchedType %}
 	            				{% endif %}
-	            			{% endfor %}
+                                        {% endfor %}
 	            		{% endif %}
-							 {% if ( type.name=="neighbours" or type.name=="groups" or type.name=="events" or type.name=="others" ) %}
-						 		{% if not findNeighbors %}
-                					<a href='javascript:void(0)' id='{{ type.id }}' onclick='selectedOptions(this)' class='blue_button {% if stype %}selected{% endif %}' >{{ type.alttext|trans }}</a>
-                  				{% endif %}
-			                 {% endif %}
-			                 {% if type.name=="offergroups" %}
-							 	<a href='javascript:void(0)' id='{{ type.id }}' class='blue_button {% if stype %}selected{% endif %}' style="display:none;">{{ type.alttext|trans }}</a>
-							 {% endif %}
-							 {% if type.name=="offerevents" %}
-							 	<a href='javascript:void(0)' id='{{ type.id }}' class='blue_button {% if stype %}selected{% endif %}' style="display:none;">{{ type.alttext|trans }}</a>
-							 {% endif %}
-							 {% if type.name=="offerothers" %}
-							 	<a href='javascript:void(0)' id='{{ type.id }}' class='blue_button {% if stype %}selected{% endif %}' style="display:none;">{{ type.alttext|trans }}</a>
-							 {% endif %}
-				{% endfor %}				  							
-				<!-- selected options -->
+                                {% if ( type.name=="neighbours" or type.name=="groups" or type.name=="events" or type.name=="others" ) %}
+                                   {% if not findNeighbors %}
+                                          <a href='javascript:void(0)' id='{{ type.id }}' onclick='selectedOptions(this)' class='blue_button {% if stype %}selected{% endif %}' >{{ type.alttext|trans }}<span id="span{{ type.id }}"></span></a>
+                                   {% endif %}
+                                   {% endif %}
+                                   {% if type.name=="offergroups" %}
+                                          <a href='javascript:void(0)' id='{{ type.id }}' class='blue_button {% if stype %}selected{% endif %}' style="display:none;">{{ type.alttext|trans }}<span id="span{{ type.id }}"></span></a>
+                                   {% endif %}
+                                   {% if type.name=="offerevents" %}
+                                          <a href='javascript:void(0)' id='{{ type.id }}' class='blue_button {% if stype %}selected{% endif %}' style="display:none;">{{ type.alttext|trans }}<span id="span{{ type.id }}"></span></a>
+                                   {% endif %}
+                                   {% if type.name=="offerothers" %}
+                                          <a href='javascript:void(0)' id='{{ type.id }}' class='blue_button {% if stype %}selected{% endif %}' style="display:none;">{{ type.alttext|trans }}<span id="span{{ type.id }}"></span></a>
+                                          {% if userSearchedTypes %}	
+                                                {% for key,userSearchedType in userSearchedTypes %}
+                                                        {% if (userSearchedType == 22) %}
+                                                                {% set stype = userSearchedType %}
+                                                        {% endif %}
+                                                {% endfor %}
+                                        {% endif %}
+                                          {% if not findNeighbors %}
+                                          <a href='javascript:void(0)' id='22' onclick='selectedOptions(this)' class='blue_button {% if stype %}selected{% endif %}' >{{ 'blackboard'|trans }}<span id="span22"></span></a>
+                                          {% endif %}
+                                   {% endif %}
+                   {% endfor %}
+                               <!-- selected options -->
 				
 		   </div>            
 		   <div class="clearfix"></div>
@@ -74,35 +86,37 @@
            		   <div class="selectoptions" id="reviews">{{ 'notice.filter.select_options'|trans }}</div>
                    <div class="reviewdetial" id="reviewdetail" style="display: none;">
                    		<div class="selectoptionsopen">{{ 'notice.filter.select_options'|trans }}</div>                                    		
-							<p>I search neighbours who</p>
-								{% for type in types %}
-								 {% if ( type.name=="help" or type.name=="offerhelp" or type.name=="service" or type.name=="offerservice" or type.name=="goods" or type.name=="offergoods" ) %}
-                        			<input type="checkbox" name="selectoptions" id="{{ type.alttext|trans }}" value="{{ type.id }}" /><span>{{ type.alttext|trans }}</span><br>
-                        		 {% endif %}	
-		                        {% endfor %}
+				<p>I search neighbours who</p>
+                                    {% for type in types %}
+                                     {% if ( type.name=="help" or type.name=="offerhelp" or type.name=="service" or type.name=="offerservice" or type.name=="goods" or type.name=="offergoods" ) %}
+                                        <input type="checkbox" name="selectoptions" id="{{ type.alttext|trans }}" value="{{ type.id }}" /><span>{{ type.alttext|trans }}</span><br>
+                                     {% endif %}	
+                                    {% endfor %}
 		                    <br>
 		                    <br>    
                         	<p>I search for</p>
-                        		{% for type in types %}
-								 {% if ( type.name=="neighbours" or type.name=="groups" or type.name=="events" or type.name=="others" ) %}
-								 	{% if type.name=="groups" %}
-                       				<!-- <input type="checkbox" name="selectoptions" id="Community Managers" value="30" /><span>Community Managers</span><br> -->
-                       				{% endif %}
-								 	<input type="checkbox" name="selectoptions" id="{{ type.alttext|trans }}" value="{{ type.id }}" /><span>{{ type.alttext|trans }}</span><br>
-                        		 {% endif %}
-                        		 <div style="display: none;">
-                        		 {% if type.name=="offergroups" %}
-								 	<input type="checkbox" name="selectoptions" id="offergroups" value="{{ type.id }}" />
-								 {% endif %}
-								 {% if type.name=="offerevents" %}
-								 	<input type="checkbox" name="selectoptions" id="offerevents" value="{{ type.id }}" />
-								 {% endif %}
-								 {% if type.name=="offerothers" %}
-								 	<input type="checkbox" name="selectoptions" id="offerothers" value="{{ type.id }}" />
-								 {% endif %}		
-		                        </div>
-		                        
-								{% endfor %}
+                                    {% for type in types %}
+                                            {% if ( type.name=="neighbours" or type.name=="groups" or type.name=="events" or type.name=="others" ) %}
+                                                   {% if type.name=="groups" %}
+                                                    <!-- <input type="checkbox" name="selectoptions" id="Community Managers" value="30" /><span>Community Managers</span><br> -->
+                                                   {% endif %}
+                                                    <input type="checkbox" name="selectoptions" id="{{ type.alttext|trans }}" value="{{ type.id }}" /><span>{{ type.alttext|trans }}</span><br>
+                                            {% endif %}
+                                            <div style="display: none;">
+                                            {% if type.name=="offergroups" %}
+                                                           <input type="checkbox" name="selectoptions" id="offergroups" value="{{ type.id }}" />
+                                            {% endif %}
+                                            {% if type.name=="offerevents" %}
+                                                           <input type="checkbox" name="selectoptions" id="offerevents" value="{{ type.id }}" />
+                                            {% endif %}
+                                            {% if type.name=="offerothers" %}
+                                                           <input type="checkbox" name="selectoptions" id="offerothers" value="{{ type.id }}" />
+                                            {% endif %}		
+                                            </div>
+
+                                    {% endfor %}
+                                        <input type="checkbox" name="selectoptions" id="{{ 'blackboard'|trans }}" value="22" /><span>{{ 'blackboard'|trans }}</span><br>
+                                                        
 		                        <a href="javascript:void(0)" id="option_button" onclick="selectedOptions(this);" style="width: 42px; float: left;" class="blue_button">Select</a>
 		                        <a href="javascript:void(0)" id="option_button_all" onclick="selectedOptions(this);" class="blue_button">Select All</a>
 				   </div>
@@ -117,7 +131,7 @@
         <div class="myneighbours">
           	<div class="arround_you">
 	          	<h4>{{ 'notice.filter.around_you'|trans }}</h4>
-	            <div class="neighboursdetils">
+	            <div class="neighboursdetils" style="margin-top: 4px;">
 	                <div class="" style="text-align: center">
 		                <div id="filter-distance-slider" 
 		                data-bind="jqSlider: {
@@ -134,10 +148,7 @@
 		                        </span>                                            
 		                    </a>
 		                </div>
-		                <div class="slider-value">
-		                    <strong class="pull-left">&lt; 100m</strong>
-		                    <strong class="pull-right">&gt; 30km</strong>
-		                </div>                                            
+		                
 		            </div>
 	            </div>
             </div>
@@ -163,7 +174,7 @@
         <div class="myneighbours">
                 	<h4>{{ 'regularuser.my_neighbours'|trans }}</h4>
                 	
-                    <div class="neighboursdetils">
+                    <div class="neighboursdetils" style="width: 255px;margin-top:5px;">
                     	{% render "FenchyNoticeBundle:GlobalFilter:myNeighborsCode" with { 'userId': displayUser.id } %}
                     </div>
         </div>

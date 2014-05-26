@@ -1,0 +1,78 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('plugins/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/moment-js/moment.min.js') }}"> </script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-slider.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/global-filter-view-model.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ absolute(asset('js/global-filter-widgets.js')) }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.tinyscrollbar.js') }}"></script>
+    
+    {# any view specific JS scripts for this view #}
+{% endblock %}
+
+{% block content %}	
+	{% render 'FenchyRegularUserBundle:Myprofile:myAvatar' %}
+	{% include 'FenchyRegularUserBundle:Myprofile:menu.html.twig' %}
+	
+	<style>
+	#filter-distance-slider .ui-state-hover
+	{
+		border:none !important;
+	}
+	</style>
+	
+
+            <div class="myneighbors">
+                <div id="group-profile">
+                <div class="tellfriend">
+                    <form action="{{ path('fenchy_regular_user_user_myprofile_tellafriends') }}" class="tell_a_friends" method="post">
+                    	<div class="ajax_loader_info" style="display: none; padding: 37px 0px 0 315px; position: absolute;">
+						<img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
+                        </div>
+                        <label>{{ 'regularuser.invite_friends_emails'|trans }}</label>
+                        <div class="errors" style="display: none; color:#E14F45;font-family: code_boldregular;">{{ 'regularuser.message.invite_friends_emails_errors'|trans }}</div>
+                        <input class="friends_email" type="email"   name="friends_email1[]" placeholder="{{ 'regularuser.email'|trans }}">
+                        <div class="clearfix"></div>
+                    	<label></label><input class="friends_email" type="email" onfocus="myFocus(this);" onblur="myBlur(this);" name="friends_email1[]" placeholder="{{ 'regularuser.email'|trans }}">
+                        <div class="clearfix"></div>
+                    	<label></label><input class="friends_email" type="email" onfocus="myFocus(this);" onblur="myBlur(this);" name="friends_email1[]" placeholder="{{ 'regularuser.email'|trans }}">
+                        <div class="clearfix"></div>
+                    	<label></label><input class="friends_email" type="email" onfocus="myFocus(this);" onblur="myBlur(this);" name="friends_email1[]" placeholder="{{ 'regularuser.email'|trans }}">
+                        <div class="clearfix"></div>
+                    	<label></label><input class="friends_email" type="email" onfocus="myFocus(this);" onblur="myBlur(this);" name="friends_email1[]" placeholder="{{ 'regularuser.email'|trans }}">
+                        <button type="button" class="blue_button" id="tell_a_friends" onclick="tellAFriendsFormsubmit(this);" >{{ 'regularuser.invite_now'|trans }}</button>
+                        <div class="clearfix"></div><br /><br /><br /><br />
+                    	<label>{{ 'regularuser.invite_friends_facebook'|trans }}</label>
+                        <button type="button" class="blue_button">{{ 'regularuser.invite_now'|trans }}</button>
+                        <div class="clearfix"></div><br />
+                    	<label>{{ 'regularuser.invite_friends_twitter'|trans }}</label>
+                        <button type="button" class="blue_button">{{ 'regularuser.invite_now'|trans }}</button>
+                    </form>
+                </div>
+                    </div>        
+            </div>
+         	
+            <div class="clearfix"></div>
+            <div class="bgbottom">
+            	<img src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}" alt="" />
+            </div>    	
+            <section id="boxes2">
+                <div id="dialog35" class="window">
+                    <div class="big_popup">
+                        <div class="big_popupclose"><a href="" class="close"></a></div>
+                        <div id="messageForm">
+                            <p>{{ 'regularuser.invited_successfully'|trans }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="mask"></div>
+            </section>
+<a id="successDialog2" href="#dialog35" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">{{ success }}</a>
+{% endblock %}

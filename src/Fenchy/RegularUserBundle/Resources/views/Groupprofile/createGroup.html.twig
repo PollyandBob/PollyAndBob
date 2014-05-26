@@ -61,8 +61,8 @@
     $(document).ready(function() {
     	initialize();
     });
-        </script>
-        <script type="text/javascript" src="{{ asset('js/regular_user/settings/form.js') }}"></script>
+    </script>
+    <script type="text/javascript" src="{{ asset('js/regular_user/settings/form.js') }}"></script>
         
     <script type="text/javascript">
 		function verifyLocation()
@@ -89,17 +89,34 @@
 	</script>
 	<script type="text/javascript">
 		function postCommentToGroup(){
+                        var flag = true;
 			var groupId = {{ groupId }};
 			var text = $('#commenttext').val();
-		    $.post('{{path('fenchy_usergroup_post_comment')}}',
-		                {groupId: groupId, text: text}, 
-		            function(response){
-		                $('.commentdata').html(response.success);
-		                $('#commenttext').val('');
-		                $('#commenttext').blur();
-		    }, "json");    
+                        if(text.trim() == "" || text == "post your message to the group here" || text == "posten sie ihre nachricht an die gruppe hier")
+                        {
+                                flag = false;
+				$('#commenttext').val('');
+				$('#commenttext').attr('placeholder', 'required*');
+                        }
+                        if(flag)
+			{
+                            $.post('{{path('fenchy_usergroup_post_comment')}}',
+                                        {groupId: groupId, text: text}, 
+                                    function(response){
+                                        $('.commentdata').html(response.success);
+                                        $('#commenttext').val('');
+                                        $('#commenttext').blur();
+                            }, "json");   
+                        }    
+                            
 		}
 	</script>
+        <script type="text/javascript">
+     	function showHide(){
+                    $('.editable').slideToggle();
+                    $('.show').slideToggle();
+        }            
+        </script>
 {% endblock %}
 
 {% block content %}
@@ -112,62 +129,85 @@
 		}
 		#group-profile div.form textarea
 		{
-			color: #000000;
+                    color: #000000;
 		    font-family: code_boldregular;
 		    font-size: 12px;
 		    letter-spacing: 1px;
 		}
+                .leftside .right a {
+                font-family: code_boldregular;
+                font-size: 13px;
+                color: #fff;
+                margin-left: 10px;
+                padding: 1px 15px;
+                background: #51b9d4;
+                letter-spacing: 1px;
+                cursor: pointer;
+                }
 		</style>
 		<div class="clearfix"></div>
            	<div id="group-profile">
                 <div class="leftside">
                     <h4>{{ 'regularuser.about'|trans|upper }}</h4>
+                    {% if(usergroup.user.id == displayUser.id or isAdmin==1) %}
+                    <div class="right">
+	                   <a class="about_edit" href="javascript:showHide();">{{'btn.edit'|trans}}</a>
+	            </div>
+                    {% endif %}
                     <div class="aboutdata">
-                    	<div {% if(usergroup.user.id == displayUser.id) %} style="display:block;"{% else %}style="display:none;"{% endif %}>
-	                    	<form action="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', {'groupId': groupId }) }}" method="post" {{ form_enctype(form) }} class="form-settings location">
-									<label>{{ 'regularuser.groupname'|trans|upper }}:</label>
-									{{ form_widget(form.groupname) }}
-									<br><br><br><br>
-									<label>{{ 'regularuser.aboutgroup'|trans|upper }}:</label>
-									{{ form_widget(form.aboutGroup) }}
-									<br>
-									
-									<label>{{ 'regularuser.groupStatus'|trans|upper }}</label>
-									{{ form_widget(form.status) }}
-									<br>
-									<br>
-									<input type="hidden" value="{{ groupId }}" name="group_ids" >
-									<div style="display: none">
-									
-		            				{{form_rest(form)}}
-		            				</div>
-									<input type="submit" id="continue" class="blue_button" value="{{ 'btn.save'|trans }}"/>
-	          				</form>
-          				</div>
+                    	<div {% if(usergroup.user.id == displayUser.id or isAdmin==1) %} style="display:block;"{% else %}style="display:none;"{% endif %}>
+                            <div class="editable" style="display: none;">
+                                <form action="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', {'groupId': groupId }) }}" method="post" {{ form_enctype(form) }} class="form-settings location">
+                                       
+                                            <label>{{ 'regularuser.aboutgroup'|trans|upper }}:</label>
+                                            {{ form_widget(form.aboutGroup) }}
+                                            {% if usergroup.managergroup == '' %}<br>
+                                            <label>{{ 'regularuser.groupStatus'|trans|upper }}</label>
+                                            {{ form_widget(form.status) }}
+                                            <br>{% endif %}
+                                            <br>
+                                            <input type="hidden" value="{{ groupId }}" name="group_ids" >
+                                            <div style="display: none">
+                                            {{form_rest(form)}}
+                                                </div>
+                                                <input type="submit" id="continue" class="blue_button" value="{{ 'btn.save'|trans }}"/>
+                                </form>
+                            </div>
+                        </div>
           				
-          				<div {% if(usergroup.user.id == displayUser.id) %} style="display:none;" {% else %}style="display:block;" {% endif  %}>
-          						<br>
-								<br>
-		            				{% if usergroup %}
-		            					<p>{{ usergroup.aboutgroup }}</p>
-		            				{% endif %}	
-									<br>
-									<br>
-							
-          				</div>
+                        <div class="show">    
+                            <br>
+                             {% if usergroup %}
+                                   <p>{{ usergroup.aboutgroup }}</p>
+                             {% endif %}	
+                            <br>
+                        </div>
+                            
                     </div>
                     <div class="clearfix"></div>
                     <h4>Administrators</h4>
                     <div class="clearfix"></div>
                     <div class="administratorimg">
+                        <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice')}}/{{usergroup.user.id}}" >
+                            {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': usergroup.user.id } %}
+                        </a>
+                            
                     	{% for administrator in administrators %}
-                    		<img alt="" src="{{ asset(administrator.neighbor.twitterusername) }}">
+                                {% if administrator.neighbor.twitterusername %}
+                                <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice')}}/{{administrator.neighbor.id}}" >
+                                    <img alt="{{ administrator.neighbor.name }}" src="{{ asset(administrator.neighbor.twitterusername) }}">
+                                </a>
+                                {% else %}
+                                <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice')}}/{{administrator.neighbor.id}}" >
+                                    <img alt="{{ administrator.neighbor.name }}" src="{{ asset('images/default_profile_picture.png') }}">
+                                </a>
+                                {% endif %}
                     	{% endfor %}
                     </div>
                     
                     <div class="clearfix"></div>
                       {% if(groupMember==1 or usergroup.user.id==displayUser.id) %}
- 						<div class="blockboard">
+ 				<div class="blockboard">
                         	<h4>{{ 'regularuser.black_board'|trans }}</h4>
                         	<div class="form">
 				            {% if app.user.id is defined %}
@@ -192,7 +232,8 @@
 			               	{% endif %}
 		                {% endfor %}
                     	</div>
-                      {% endif %}	
+                      {% endif %}
+                     <div class="bgbottom-big"><img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}"></div>
                 </div>
                 {% render 'FenchyRegularUserBundle:Groupprofile:groupLeftSidebar' with { 'groupId' : groupId } %}
             </div>		        
@@ -211,5 +252,7 @@
     		</div>    
     		<div id="mask"></div>
     	</section>
+        
+        
                    
 {% endblock %}

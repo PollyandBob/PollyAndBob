@@ -1,0 +1,147 @@
+{% extends '::baseV3.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/regular_user/listing/create.css') }}" type="text/css" />
+    {% if app.request.locale == 'de' %}
+    	<style>
+	    	.candolot h4, .window h4 {
+		    font-family: mathletebulky;
+		    font-size: 50px;
+		    letter-spacing: 1px;
+		    line-height: 36px;
+		    margin-left: -102px;
+		    margin-top: 10px;
+		    width: 400px;
+		}
+    	</style>
+    {% elseif app.request.locale == 'en' %}
+    <style>
+    	.candolot h4, .window h4 {    
+		    font-family: mathletebulky;
+		    font-size: 50px;
+		    letter-spacing: 1px;
+		    line-height: 36px;
+		    margin-left: -25px;
+		    margin-top: 10px;
+		    width: 250px;
+		}
+	</style>
+    {% endif %}
+    <style>
+ 
+		.candolot .left {   
+			border-right: 0px solid #000000;
+		    padding: 15px 0;
+		    width: 33%;
+		}
+		.candolot .right {
+		    padding: 15px 0;
+		    width: 30%;
+		}		
+		.candolot span {
+		    color: #000000;
+		    display: block;
+		    font-family: code_boldregular;
+		    font-size: 14px;
+		    letter-spacing: 1px;
+		    margin-left: -54px;
+		    margin-top: 18px;
+		}
+		.candolot a {
+		    background: none repeat scroll 0 0 #51B9D4;
+		    color: #FFFFFF;
+		    display: block;    
+		    font-family: code_boldregular;
+		    font-size: 13px;
+		    letter-spacing: 1px;
+		    margin: 10px 10px 0 0;
+		    padding: 14px 10px;
+		    text-align: center;
+		    width: 100px;
+		}
+		.right > a {
+		    margin-left: 35px;
+		}
+	</style>    
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/regular_user/listing/create.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+     <section data-role="main" class="main" style="padding-top: 0px;">
+        <div id="main-container" style="padding: 20px 0px 0px; margin-bottom: 70px;">
+            <div class="inner-content" style="background: none repeat scroll 0 0 #FFFFFF;">               
+                <div id="reviews-tabs" style="margin-left: 165px; margin-right: 130px;">                    
+                            <h4 style="color: #727272; font-size: 60px; margin-left: 100px;">{{ 'listing.create.1.subtitle'|trans|upper }}</h4>
+                    <div class="candolot">
+                        <div class="left">
+                        	<h4 style="color: #444444;">{{ 'listing.create.1.find_something'|trans|upper }}
+                        	<span style="margin-bottom: 20px; text-align: center;">{{ 'listing.create.1.in_neighbourhood'|trans|upper }}</span></h4>
+                        	<div class="clearfix"></div>
+                        	{% for type in types|slice(0,7) %}                        		
+                           		<a style="width:115px" href="{{path('fenchy_regular_user_notice_create2', {'typename':type.name, 'groupId': groupId})}}">
+		                        	{{ type|trans }}
+		                        </a>
+                        	{% endfor %}
+                        </div>
+                        <div class="right">
+                        {% if app.request.locale == 'de' %}
+							<h4 style="color: #444444; margin-left: -85px;">{{ 'listing.create.1.offer_something'|trans|upper }}                        
+                        {% elseif app.request.locale == 'en' %}                        
+                        	<h4 style="color: #444444; margin-left: -5px;">{{ 'listing.create.1.offer_something'|trans|upper }}
+                        {% else %}
+                        	<h4 style="color: #444444; margin-left: -5px;">{{ 'listing.create.1.offer_something'|trans|upper }}
+                        {% endif %}
+                        	<span style="margin-bottom: 20px; text-align: center; margin-left: -33px;">{{ 'listing.create.1.to_neighbourhood'|trans|upper }}</span></h4>
+                        	<div class="clearfix"></div>
+                        	
+                        	{% for type in types %}
+                            	{% if loop.index > 7 %}
+                            		{% if not alertmsg  and type == 'offergroups' and groupId == '' %}
+ 										<a style="width:115px" href="#dialog45" class="zoomthis blue_button" name="modal" id="vzoom_1944">
+ 											{{ type|trans }}
+ 										</a>
+ 									{% elseif type == 'offergroups' and groupId == '' %}
+ 										<a style="width:115px" href="{{path('fenchy_regular_user_notice_create2', {'typename':type.name})}}">
+ 											{{ type|trans }} 
+			                           	</a>
+                            		{% endif %}
+                            		{% if type != 'offergroups' %}
+	                                	<a style="width:115px" href="{{path('fenchy_regular_user_notice_create2', {'typename':type.name, 'groupId': groupId})}}">
+			                           		{{ type|trans }} 
+			                           	</a>
+			                        {% endif %}		                       		
+                            	{% endif %}
+                        	{% endfor %}
+                        </div>
+                	</div>                        
+                </div>                 
+            </div>    
+            <div class="clearfix"></div>
+        	<div class="bgbottom"><img src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}" alt="" /></div>                                
+        </div>
+    </section>
+
+    <section id="boxes2">
+		<div id="dialog45" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+			<div id="messageForm">
+				<p>{{ 'regularuser.only_community_Neighborhood_manager'|trans }}</p>
+			</div>
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+		</div>
+		<div id="mask"></div>
+	</section>
+	
+    <script type="text/javascript">
+        $(document).ready(function () {
+            createListing.step1.init();
+        });
+    </script>
+{% endblock %}

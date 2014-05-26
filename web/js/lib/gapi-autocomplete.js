@@ -14,6 +14,7 @@ function GApiAutocomplete(inputElement, viewModel) {
         viewModel.fcGFormattedAddress(place.formatted_address);
         viewModel.fcGLat(place.geometry.location.lat());
         viewModel.fcGLng(place.geometry.location.lng());
+        
         if(typeof setLocation != 'undefined') {
             setLocation(place.formatted_address);
         }

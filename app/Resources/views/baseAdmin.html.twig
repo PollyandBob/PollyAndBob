@@ -14,6 +14,7 @@
                 <link rel="stylesheet" href="{{ asset('css/app/header-v2.css') }}" type="text/css" />
                 <link rel="stylesheet" href="{{ asset('css/app/foot-v2.css') }}" type="text/css" />
                 <link rel="stylesheet" href="{{ asset('js/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" />
+                <link rel="stylesheet" href="{{ asset('css/admin/adminstyle.css') }}" type="text/css" />
                 <!-- Add CSS -->
 			    <link rel="stylesheet" href="{{ absolute(asset('css/frontend/frontend/style.css')) }}" type="text/css" />
 			    <link rel="stylesheet" href="{{ absolute(asset('css/frontend/frontend/skin.css')) }}" type="text/css" />
@@ -65,14 +66,14 @@
             <title>{% block title %}{{ 'main.title_suffix'|trans }}{% endblock %}</title>
             
     </head>
-    <body>
-        <div id="page">            
+    <body class="bodygrey">
+        <div class="header">           
                 {% block header %}
-                    {% include '::headerV3.html.twig' %}
+                    {% include '::headeradmin.html.twig' %}
                 {% endblock %}
-                <div id="page-spacer"></div>
+        </div>         
                 {% block body %}
-                <div id="page-wrapper" class="container">                    
+                                 
                     {% block positive_msg %}
                         {% set flash = app.session.flash('positive') %}
                         {% if flash|length > 0 %}
@@ -91,13 +92,13 @@
                     {% block content %}
 
                     {% endblock %}
-                
+          
                     <div class="footer-push"></div>
-                </div>
+                
             {% endblock %}
             {% block foot %}
-                {% include '::footV2.html.twig' %}
+                 {% include '::footeradmin.html.twig' %}
             {% endblock %}
-        </div>
+        
     </body>
 </html>

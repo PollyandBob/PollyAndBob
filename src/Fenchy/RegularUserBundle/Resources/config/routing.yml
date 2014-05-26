@@ -419,8 +419,12 @@ fenchy_regular_user_user_myprofile_mycommunitypoints:
     defaults: { _controller: FenchyRegularUserBundle:Myprofile:myCommunityPoints }
 
 fenchy_regular_user_user_myprofile_myneighbors:
-    pattern: /myneighbors/
-    defaults: { _controller: FenchyRegularUserBundle:Myprofile:myNeighbors }
+    pattern: /myneighbors/{id}
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:myNeighbors, id: null }
+    
+fenchy_regular_user_user_myprofile_mygroups:
+    pattern: /mygroups
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:myGroups }
 
 fenchy_regular_user_user_myprofile_myneighborsdst:
     pattern: /myneighbors/dst={id}
@@ -445,6 +449,10 @@ fenchy_regular_user_user_myprofile_identityVerification:
 fenchy_regular_user_user_myprofile_filterusers:
     pattern: /filterusers
     defaults: { _controller: FenchyRegularUserBundle:Myprofile:filterusers }
+    
+fenchy_regular_user_user_myprofile_tellafriends:
+    pattern: /tellafriends
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:tellAFriends }    
 
 # For Other profile
 
@@ -472,6 +480,14 @@ fenchy_regular_user_user_otherprofile_addneighbors:
     pattern: /addneighbors
     defaults: { _controller: FenchyRegularUserBundle:Otherprofile:addNeighbors }
 
+fenchy_regular_user_user_otherprofile_blockneighbors:
+    pattern: /blockneighbors
+    defaults: { _controller: FenchyRegularUserBundle:Otherprofile:blockNeighbors }
+
+fenchy_regular_user_user_otherprofile_unblockneighbors:
+    pattern: /unblockneighbors
+    defaults: { _controller: FenchyRegularUserBundle:Otherprofile:unblockNeighbors }
+    
 fenchy_regular_user_user_otherprofile_addneighborrequest:
     pattern: /addneighborrequest
     defaults: { _controller: FenchyRegularUserBundle:Otherprofile:addNeighborRequest }
@@ -514,6 +530,14 @@ fenchy_regular_user_user_groupprofile_groupmessages_view:
     pattern: /groupmessages/{groupId}/{id}
     defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupMessagesView, groupId: null, id: null}    
 
+fenchy_regular_user_user_groupprofile_joinclosedgroup:
+    pattern: /joinclosedgroup
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:joinClosedGroup }
+
+fenchy_regular_user_user_groupprofile_joinclosedgrouprequest:
+    pattern: /joinclosedgrouprequest
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:joinClosedGroupRequest }
+
 #fenchy_regular_user_user_groupprofile_groupleftsidebar:
 #    pattern: /groupleftsidebar/{groupId}
 #    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupLeftSidebar, groupId: null}
@@ -523,7 +547,7 @@ fenchy_regular_user_user_groupprofile_joingroup:
     defaults: { _controller: FenchyRegularUserBundle:Groupprofile:joinGroup, groupId: null}
     
 fenchy_regular_user_user_groupprofile_leavegroup:
-    pattern: /leavegroup/{groupId}/{msg}
+    pattern: /leavegroup/{groupId}/{msg}/{requestId}
     defaults: { _controller: FenchyRegularUserBundle:Groupprofile:leaveGroup, groupId: null}    
     
 fenchy_regular_user_user_groupprofile_deletegroup:
@@ -543,10 +567,18 @@ fenchy_notice_post_comment:
 fenchy_notice_write_review:
     pattern: /writereview
     defaults: { _controller: FenchyRegularUserBundle:Listing:writeReview }
-    
+
+fenchy_notice_write_message:
+    pattern: /writemessage
+    defaults: { _controller: FenchyRegularUserBundle:Listing:writeMessage }
+
 fenchy_notice_send_reueqst:
     pattern: /sendrequest
     defaults: { _controller: FenchyRegularUserBundle:Listing:sendRequest }
+
+fenchy_neighborhoodmsg_send_reueqst:
+    pattern: /neighbormsgsendrequest
+    defaults: { _controller: FenchyRegularUserBundle:Listing:neighborMsgsendRequest }
 
 fenchy_notice_store_session:
     pattern: /storesession
@@ -583,7 +615,15 @@ fenchy_regular_user_listing_markread:
 fenchy_notice_invite_to_listing:
     pattern: /invitetolisting/{noticeId}
     defaults: { _controller: FenchyRegularUserBundle:Listing:inviteToListing, noticeId : null }
-    
+
+fenchy_regular_user_listing_repost:
+    pattern: /listing/repost
+    defaults: { _controller: FenchyRegularUserBundle:Listing:repost }
+
+fenchy_regular_user_listing_listagain:
+    pattern: /listing/listagain
+    defaults: { _controller: FenchyRegularUserBundle:Listing:ListAgain}
+
 #payment settings
 
 fenchy_regular_user_settings_paymentsave:
@@ -597,3 +637,41 @@ fenchy_regular_user_settings_paymentdelete:
 fenchy_regular_user_paymillpayment:
     pattern:  /paymillpayment
     defaults: { _controller: FenchyRegularUserBundle:Listing:paymillPayment }
+
+fenchy_regular_user_paypalpayment:
+    pattern:  /paypalpayment
+    defaults: { _controller: FenchyRegularUserBundle:Listing:paypalPayment }
+    
+fenchy_regular_user_paypalcancel:
+    pattern:  /paypalcancel/{requestId}/{groupId}
+    defaults: { _controller: FenchyRegularUserBundle:Listing:paypalCancel, requestId: null, groupId: null }    
+
+#Group Payment settings
+
+fenchy_regular_user_groupprofile_grouppayment:
+    pattern: /grouppayment/{groupId}/{noticeType}
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:groupPayment, groupId: null, noticeType: null }
+
+fenchy_regular_user_groupprofile_grouppaymentsave:
+    pattern: /grouppaymentsave
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:saveGroupPaymentSetting}
+
+fenchy_regular_user_groupprofile_grouppaymentdelete:
+    pattern: /grouppaymentdelete
+    defaults: { _controller: FenchyRegularUserBundle:Groupprofile:deleteGroupPaymentSetting }
+    
+fenchy_regular_user_setaslogout:
+    pattern:  /setaslogout
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:setAsLogout }
+
+fenchy_regular_user_checkuserlogin:
+    pattern:  /checkuserlogin
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:checkUserLogin }
+
+fenchy_regular_user_updatechatcount:
+    pattern:  /updatechatcount
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:updateChatCount }
+
+fenchy_regular_user_addactivitypoint:
+    pattern:  /addactivitypoint
+    defaults: { _controller: FenchyRegularUserBundle:Myprofile:addActivityPoint }

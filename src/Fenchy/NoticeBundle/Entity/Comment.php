@@ -72,7 +72,7 @@ class Comment
      * @var Notice
      * 
      * @ORM\ManyToOne(targetEntity="Fenchy\NoticeBundle\Entity\Notice", inversedBy="comments")
-     * @ORM\JoinColumn(name="notice_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(name="notice_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $aboutNotice;
     
@@ -80,7 +80,7 @@ class Comment
      * @var UserGroup
      *
      * @ORM\ManyToOne(targetEntity="Fenchy\RegularUserBundle\Entity\UserGroup", inversedBy="comments")
-     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $aboutUserGroup;
     
@@ -103,10 +103,31 @@ class Comment
     /**
      *
      * @var boolean $is_read
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $is_read = false;
 	
+    /**
+     *
+     * @var boolean $is_read_status
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $is_read_status = false;
+    
+    /**
+     *
+     * @var boolean $blue
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $blue = false;
+    
+    /**
+     *
+     * @var boolean $request_blue
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $request_blue = false;
+    
     public function __construct() {
         
         $this->type = self::TYPE_POSITIVE;
@@ -423,4 +444,73 @@ class Comment
 
 
 
+
+    /**
+     * Set is_read_status
+     *
+     * @param boolean $isReadStatus
+     * @return Comment
+     */
+    public function setIsReadStatus($isReadStatus)
+    {
+        $this->is_read_status = $isReadStatus;
+    
+        return $this;
+    }
+
+    /**
+     * Get is_read_status
+     *
+     * @return boolean 
+     */
+    public function getIsReadStatus()
+    {
+        return $this->is_read_status;
+    }
+
+    /**
+     * Set blue
+     *
+     * @param boolean $blue
+     * @return Comment
+     */
+    public function setBlue($blue)
+    {
+        $this->blue = $blue;
+    
+        return $this;
+    }
+
+    /**
+     * Get blue
+     *
+     * @return boolean 
+     */
+    public function getBlue()
+    {
+        return $this->blue;
+    }
+
+    /**
+     * Set request_blue
+     *
+     * @param boolean $requestBlue
+     * @return Comment
+     */
+    public function setRequestBlue($requestBlue)
+    {
+        $this->request_blue = $requestBlue;
+    
+        return $this;
+    }
+
+    /**
+     * Get request_blue
+     *
+     * @return boolean 
+     */
+    public function getRequestBlue()
+    {
+        return $this->request_blue;
+    }
 }

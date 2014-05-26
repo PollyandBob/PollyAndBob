@@ -33,10 +33,18 @@
                                             <td style="padding-left: 30px">
                                                 <p><span style="font-weight: bold; color: #51B9D4">{{sender.userRegular.firstname}}</span> | {{message.createdAt|date('Y-m-d H:i')}}</p>
                                                 <p style="font-weight: bold">{{message.title}}</p>
-                                                <p>{{message.content|nl2br}}</p>
+                                                {% set msgcontent =  message.content%}
+                                                    {% set link = msgcontent|split('|') %}
+                                                          {% if '|' in msgcontent %}
+                                                                <p class="message-all">{{ link[0]|nl2br }}<br><br><a style="color:#51B9D4;" href="{{ absolute(link[1]) }}">{{'regularuser.click_here'|trans }}</a><br><br>{{ link[2]|nl2br }}</p>
+                                                          {% else %}
+                                                                <p class="message-all">{{ msgcontent|nl2br }}</p>
+                                                          {% endif %}
                                                 <p>
                                                     <a href="{{absolute(path('fenchy_regular_user_messages_view', {'id':message.first.id}))}}">{{'message.notification.email.follow_link'|trans}}</a>
                                                 </p>
+                                                <p>{{'regularuser.message.message_last_part'|trans}}</p>
+                                                <p>{{'request.request_msg_part1'|trans}}</p>
                                             </td>
                                         </tr>
                                     </table>

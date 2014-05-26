@@ -22,7 +22,9 @@ class PropertyTypeData extends AbstractFixture implements OrderedFixtureInterfac
                     2 => 'to_lend',
                     3 => 'to_use',
                     4 => 'to_swap',
-                	5 => 'to_give'	
+                    5 => 'to_give',
+                    6 => 'propose_price',
+                    
                 ));
       	$pt1 = new PropertyType();
         $pt1->setElement(PropertyType::ELEMENT_SELECT)
@@ -77,7 +79,9 @@ class PropertyTypeData extends AbstractFixture implements OrderedFixtureInterfac
                 ->setMultiple(FALSE)
                 ->setOptions(array(
                 		1 => 'buy',
-                		2 => 'propose_time_price',
+                		2 => 'propose_price',
+                		3 => 'propose_time_price',
+                                4 => 'Propose_location'
                 ));
        
        	$pt8 = new PropertyType();
@@ -85,8 +89,10 @@ class PropertyTypeData extends AbstractFixture implements OrderedFixtureInterfac
                 ->setName('findservice')
                 ->setExpanded(FALSE)
                 ->setMultiple(FALSE)
-                ->setOptions(array(                	
-                		1 => 'propose_time_price',
+                ->setOptions(array(
+                		1 => 'propose_price',
+                		2 => 'propose_time_price',
+                		
                 ));
         $pt9 = new PropertyType();
        	$pt9->setElement(PropertyType::ELEMENT_SELECT)

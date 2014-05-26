@@ -1,0 +1,206 @@
+{# //extends 'FenchyRegularUserBundle::settings.html.twig' #}
+{% extends 'FenchyRegularUserBundle::myProfileSettings.html.twig' %}
+
+
+{% block stylesheets %}
+   {{ parent() }}
+<link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+<script type="text/javascript" src="{{ asset('js/regular_user/listing/create.js') }}"></script>
+<script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+{% include '::gmapsApiAsset.html.twig' %}
+
+<script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/mvvm/user-settings-view-model.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+
+{# <script type="text/javascript">#}
+
+{#     userSettingsViewModel = null;#}
+
+{#     $(document).ready(function() {#}
+{#         geocoder = new google.maps.Geocoder();#}
+{#         var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';#}
+
+{#         userSettingsViewModel = new UserSettingsViewModel(geocoder, baseSearchViewUri);#}
+
+{#         ko.applyBindings(userSettingsViewModel, document.getElementsByTagName('body')[0]);#}
+
+{#         autocomplete = new GApiAutocomplete(#}
+{#                 document.getElementById('fenchy_userbundle_user_locationtype_location_location'),#}
+{#                 userSettingsViewModel);#}
+
+
+{#     });#}
+{#     function hasCoordinates()#}
+{#     {#}
+{#     	{% if app.user.hasRequiredLocation %}#}
+{#         	return true;#}
+{#         {% endif %}#}
+
+{#         return false;#}
+{#     }#}
+
+{#     function getLatitude()#}
+{#     {#}
+{#         return '{{ app.user.location.latitude }}'#}
+{#     }#}
+
+{#     function getLongitude()#}
+{#     {#}
+{#         return '{{ app.user.location.longitude }}';#}
+{#     }#}
+{#     </script>#}
+    
+    <script src="{{ asset('js/geolocalization.js') }}"></script>
+    	<script type="text/javascript">
+    	$(document).ready(function() {
+        	initialize();
+		});
+        </script>
+        <script type="text/javascript" src="{{ asset('js/regular_user/settings/form.js') }}"></script>
+        
+    <script type="text/javascript">
+		function verifyLocation()
+		{
+			var url = "{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}";
+			$.ajax({
+				url : url,
+				type : "post",
+				data : {
+					},
+				beforeSend : function() {
+					
+				},
+				success : function(response) {
+					alert(response);
+				},
+				error : function() {
+					alert('Something went wrong!');
+				},
+				complete : function() {					
+				}
+			});
+		}		
+	</script>
+	{% if (members_removed == 1) %}
+	<script type="text/javascript">
+	window.onload=function(){ 	$('.memeber_removed_success').click(); };
+	</script>
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	{% render 'FenchyRegularUserBundle:Groupprofile:groupAvatar' with { 'groupId' : groupId } %}
+	{% render 'FenchyRegularUserBundle:Groupprofile:groupmenu' with { 'groupId' : groupId } %}
+		
+		<div class="clearfix"></div>
+           	<div id="group-profile">
+                <div class="leftside">
+                    <!-- <h4>{{ 'regularuser.about'|trans|upper }}</h4> -->
+                    	<div {% if(usergroup.user.id == displayUser.id or adminmember1==1) %} style="display:block;"{% else %}style="display:none;"{% endif %}>
+	                    <form action="{{ path('fenchy_regular_user_user_groupprofile_groupmembers', {'groupId': groupId}) }}" method="post">	
+					<div class="persen">
+				               		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': usergroup.user.id } %}
+			                        <div class="persenname">
+			                        	<p>{{ usergroup.user.regularuser.firstname }}</p>
+						</div>
+						<div class="neighbor {{ adminManagertype[2] }}">
+                                                    <p>{{ adminManagertype[1] }}</p>
+			                            <span>{{ usergroup.user.activity }}</span>
+						</div>		                            
+			                </div>
+			                {% set i=0 %}
+							{% for groupmember in groupmembers %}
+				               <div class="persen">
+                                                    <input type="checkbox" name="selected_members[]" value="{{ groupmember.neighbor.id }}">
+                                                    <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice') }}/{{ groupmember.neighbor.id }}" class="my_neighbour">
+                                                    {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': groupmember.neighbor.id } %}
+                                                    <div class="persenname">
+                                                            <p>{{ groupmember.neighbor.name }}</p>
+                                                    </div>
+                                                    <div class="neighbor {{ managertype[i][2] }}">
+                                                            <p>{{ managertype[i][1] }}</p>
+                                                    <span>{{ groupmember.neighbor.activity }}</span>
+                                                    </div>
+                                                    </a>			                            
+                                                </div>
+			                    {% set i = i+1 %}
+	                    	{% endfor %}
+	                    	<div class="clearfix"></div>
+	                    	<div style="float: right;margin-top: 45px;">
+		                    	
+			                    	<select name="select_action" style="float:left;margin-right: 22px;">
+			                    		{% if adminmember1!=1 %}
+			                    		<option value="admin" >{{ 'regularuser.make_administrator'|trans }}</option>
+			                    		<option value="remove" >{{ 'regularuser.remove_members'|trans }}</option>
+			                    		<option value="remove_admin" >{{ 'regularuser.remove_admin'|trans }}</option>
+			                    		{% endif %}
+			                    		<option value="send_message" >{{ 'regularuser.send_new_message'|trans }}</option>
+			                    	</select>
+			                    	
+			                    	<input type="submit" name="memberaction" class="blue_button" value="{{ 'regularuser.save'|trans }}" />
+		                    	
+	                    	</div>
+	                    </form>	
+          				</div>
+          				
+          				<div {% if(usergroup.user.id == displayUser.id or adminmember1==1) %} style="display:none;" {% else %}style="display:block;" {% endif  %}>
+          						<br>
+          						{% set i=0 %}
+          						<div class="persen">
+				               		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': usergroup.user.id } %}
+			                        <div class="persenname">
+			                        	<p>{{ usergroup.user.regularuser.firstname }}</p>
+									</div>
+									<div class="neighbor {{ adminManagertype[2] }}">
+			                        	<p>{{ adminManagertype[1] }}</p>
+			                            <span>{{ usergroup.user.activity }}</span>
+									</div>		                            
+			                	</div>
+								{% for groupmember in groupmembers %}
+				               	<div class="persen">
+			                    	<a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice') }}/{{ groupmember.neighbor.id }}" class="my_neighbour">
+									{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': groupmember.neighbor.id } %}
+			                        <div class="persenname">
+			                        	<p>{{ groupmember.neighbor.name }}</p>
+									</div>
+			                        <div class="neighbor {{ managertype[i][2] }}">
+                        				<p>{{ managertype[i][1] }}</p>
+                            			<span>{{ groupmember.neighbor.activity }}</span>
+									</div>
+									</a>			                            
+			                    </div>
+			                    {% set i = i+1 %}
+	                    		{% endfor %}
+								<br>
+							
+          				</div>
+          				
+          			{% set count = groupmembers|length %}	
+          			<div class="clearfix"></div>
+                    
+                </div>
+                {% render 'FenchyRegularUserBundle:Groupprofile:groupLeftSidebar' with { 'groupId' : groupId } %}
+            </div>		        
+        <div class="clearfix"></div>
+	   	
+		<section id="boxes2">
+    		<div id="dialog2" class="window"> 
+    	    	<div class="big_popup">
+	            	<div class="big_popupclose"><a href="" class="close"></a></div>
+            
+					<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>			
+            		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
+						<button>{{ 'regularuser.ok'|trans|upper }}</button>
+    	        	</form>
+        		</div>    
+    		</div>    
+    		<div id="mask"></div>
+    	</section>
+                   
+{% endblock %}

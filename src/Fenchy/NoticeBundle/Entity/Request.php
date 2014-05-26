@@ -8,7 +8,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Fenchy\UserBundle\Entity\User,
-    Fenchy\UtilBundle\Entity\Sticker;
+    Fenchy\RegularUserBundle\Entity\UserGroup,
+    Fenchy\UtilBundle\Entity\Sticker,
+    Fenchy\NoticeBundle\Entity\RequestMessages;
 
 /**
  * @ORM\Table(name="notice__requests")
@@ -49,7 +51,7 @@ class Request
     /**
      * @var string $text
      * 
-     * @ORM\Column(type="string", length=1000, nullable=false)
+     * @ORM\Column(type="string", length=1000, nullable=true)
      * @Assert\NotBlank
      */
     private $text;
@@ -68,6 +70,15 @@ class Request
      */
     private $requeststatus;
     
+     /**
+     * @var ArrayCollection $requestmessage
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\RequestMessages", mappedBy="request")
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $requestmessage;
+    
+    
     /**
      * @var \DateTime
      * @ORM\Column(type="datetime", nullable=false)
@@ -77,7 +88,7 @@ class Request
     /**
      * @var User
      * 
-     * @ORM\ManyToOne(targetEntity="Fenchy\UserBundle\Entity\User", inversedBy="ownRequest")
+     * @ORM\ManyToOne(targetEntity="Fenchy\UserBundle\Entity\User", inversedBy="ownRequests")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false)
      */
     private $author;
@@ -85,18 +96,35 @@ class Request
     /**
      * @var Notice
      * 
-     * @ORM\ManyToOne(targetEntity="Fenchy\NoticeBundle\Entity\Notice", inversedBy="request")
-     * @ORM\JoinColumn(name="notice_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity="Fenchy\NoticeBundle\Entity\Notice", inversedBy="requests")
+     * @ORM\JoinColumn(name="notice_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $aboutNotice;
+    
+    
+    /**
+     * @var NeighborhoodMsg
+     * 
+     * @ORM\ManyToOne(targetEntity="Fenchy\RegularUserBundle\Entity\NeighborhoodMsg", inversedBy="requests")
+     * @ORM\JoinColumn(name="neighbormsg_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     */
+    private $aboutNeighborhoodMsg;
     
     /**
      * @var User
      * 
-     * @ORM\ManyToOne(targetEntity="Fenchy\UserBundle\Entity\User", inversedBy="request")
+     * @ORM\ManyToOne(targetEntity="Fenchy\UserBundle\Entity\User", inversedBy="requests")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     private $aboutUser;
+    
+    /**
+     * @var UserGruop
+     * 
+     * @ORM\ManyToOne(targetEntity="Fenchy\RegularUserBundle\Entity\UserGroup", inversedBy="request")
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
+     */
+    private $aboutUserGroup;
     
     /**
      * @var piece_spot
@@ -149,11 +177,89 @@ class Request
      */
     private $is_read_status = false;
 	
+    /**
+     *
+     * @var boolean $blue
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $blue = false;
+    
+    /**
+     *
+     * @var boolean $request_blue
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $request_blue = false;
+    
+    /**
+     *
+     * @var boolean $other_review
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $other_review = false;
+    
+    /**
+     *
+     * @var boolean $my_review
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $my_review = false;
+    
+    /**
+     * @var string $swapMsg
+     *
+     * @ORM\Column(type="string", length=1000, nullable=true)
+     * @Assert\NotBlank
+     */
+    private $swapMsg;
+    
+    /**
+     * @var string $proposedLocation
+     *
+     * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank
+     */
+    private $proposedLocation;
+    
+    /**
+     * @var Date
+     *
+     * @ORM\Column(type="date", nullable=true)
+     *
+     */
+    private $start_date;
+    
+    /**
+     * @var Time
+     *
+     * @ORM\Column(type="time", nullable=true)
+     *
+     */
+    private $start_time;
+    
+    /**
+     * @var Date
+     *
+     * @ORM\Column(type="date", nullable=true)
+     *
+     */
+    private $end_date;
+    
+    /**
+     * @var Time
+     *
+     * @ORM\Column(type="time", nullable=true)
+     *
+     */
+    private $end_time;
+    
     public function __construct() {
         
         $this->status = self::STATUS_PENDING;
         $this->requeststatus = self::STATUS_PENDING;
-        $this->created_at = new \DateTime();        
+        $this->created_at = new \DateTime();
+        $this->blue = FALSE;
+        $this->request_blue = FALSE;
     }
     
     public function __toString() {
@@ -352,6 +458,27 @@ class Request
     public function setAboutUser(User $user) {
         
         $this->aboutUser = $user;
+        
+        return $this;
+    }
+    
+    /**
+     * Get About UserGroup
+     * @return UserGroup
+     */
+    public function getAboutUserGroup() {
+        
+        return $this->aboutUserGroup;
+    }
+    
+    /**
+     * Set About UserGroup.
+     * @param \Fenchy\RegularUserBundle\Entity\UserGroup $usergroup
+     * @return \Fenchy\NoticeBundle\Entity\Request
+     */
+    public function setAboutUserGroup(UserGroup $usergroup) {
+        
+        $this->aboutUserGroup = $usergroup;
         
         return $this;
     }
@@ -566,5 +693,293 @@ class Request
     public function getCurrency()
     {
         return $this->currency;
+    }
+
+    /**
+     * Set swapMsg
+     *
+     * @param string $swapMsg
+     * @return Request
+     */
+    public function setSwapMsg($swapMsg)
+    {
+        $this->swapMsg = $swapMsg;
+    
+        return $this;
+    }
+
+    /**
+     * Get swapMsg
+     *
+     * @return string 
+     */
+    public function getSwapMsg()
+    {
+        return $this->swapMsg;
+    }    
+
+    /**
+     * Set start_time
+     *
+     * @param \DateTime $startTime
+     * @return Request
+     */
+    public function setStartTime($startTime)
+    {
+        $this->start_time = $startTime;
+    
+        return $this;
+    }
+
+    /**
+     * Get start_time
+     *
+     * @return \DateTime 
+     */
+    public function getStartTime()
+    {
+        return $this->start_time;
+    }
+    
+    /**
+     * Set end_time
+     *
+     * @param \DateTime $endTime
+     * @return Request
+     */
+    public function setEndTime($endTime)
+    {
+        $this->end_time = $endTime;
+    
+        return $this;
+    }
+
+    /**
+     * Get end_time
+     *
+     * @return \DateTime 
+     */
+    public function getEndTime()
+    {
+        return $this->end_time;
+    }
+
+    /**
+     * Set start_date
+     *
+     * @param \DateTime $startDate
+     * @return Request
+     */
+    public function setStartDate($startDate)
+    {
+        $this->start_date = $startDate;
+    
+        return $this;
+    }
+
+    /**
+     * Get start_date
+     *
+     * @return \DateTime 
+     */
+    public function getStartDate()
+    {
+        return $this->start_date;
+    }
+
+    /**
+     * Set end_date
+     *
+     * @param \DateTime $endDate
+     * @return Request
+     */
+    public function setEndDate($endDate)
+    {
+        $this->end_date = $endDate;
+    
+        return $this;
+    }
+
+    /**
+     * Get end_date
+     *
+     * @return \DateTime 
+     */
+    public function getEndDate()
+    {
+        return $this->end_date;
+    }
+
+    /**
+     * Set blue
+     *
+     * @param boolean $blue
+     * @return Request
+     */
+    public function setBlue($blue)
+    {
+        $this->blue = $blue;
+    
+        return $this;
+    }
+
+    /**
+     * Get blue
+     *
+     * @return boolean 
+     */
+    public function getBlue()
+    {
+        return $this->blue;
+    }
+
+    /**
+     * Set request_blue
+     *
+     * @param boolean $requestBlue
+     * @return Request
+     */
+    public function setRequestBlue($requestBlue)
+    {
+        $this->request_blue = $requestBlue;
+    
+        return $this;
+    }
+
+    /**
+     * Get request_blue
+     *
+     * @return boolean 
+     */
+    public function getRequestBlue()
+    {
+        return $this->request_blue;
+    }
+
+    /**
+     * Set other_review
+     *
+     * @param boolean $otherReview
+     * @return Request
+     */
+    public function setOtherReview($otherReview)
+    {
+        $this->other_review = $otherReview;
+    
+        return $this;
+    }
+
+    /**
+     * Get other_review
+     *
+     * @return boolean 
+     */
+    public function getOtherReview()
+    {
+        return $this->other_review;
+    }
+
+    /**
+     * Set my_review
+     *
+     * @param boolean $myReview
+     * @return Request
+     */
+    public function setMyReview($myReview)
+    {
+        $this->my_review = $myReview;
+    
+        return $this;
+    }
+
+    /**
+     * Get my_review
+     *
+     * @return boolean 
+     */
+    public function getMyReview()
+    {
+        return $this->my_review;
+    }
+
+    /**
+     * Set aboutNeighborhoodMsg
+     *
+     * @param Fenchy\RegularUserBundle\Entity\NeighborhoodMsg $aboutNeighborhoodMsg
+     * @return Request
+     */
+    public function setAboutNeighborhoodMsg(\Fenchy\RegularUserBundle\Entity\NeighborhoodMsg $aboutNeighborhoodMsg = null)
+    {
+        $this->aboutNeighborhoodMsg = $aboutNeighborhoodMsg;
+    
+        return $this;
+    }
+
+    /**
+     * Get aboutNeighborhoodMsg
+     *
+     * @return Fenchy\RegularUserBundle\Entity\NeighborhoodMsg 
+     */
+    public function getAboutNeighborhoodMsg()
+    {
+        return $this->aboutNeighborhoodMsg;
+    }
+
+
+    /**
+     * Add requestmessage
+     *
+     * @param Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage
+     * @return Request
+     */
+    public function addRequestmessage(\Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage)
+    {
+        $this->requestmessage[] = $requestmessage;
+    
+        return $this;
+    }
+
+    /**
+     * Remove requestmessage
+     *
+     * @param Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage
+     */
+    public function removeRequestmessage(\Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage)
+    {
+        $this->requestmessage->removeElement($requestmessage);
+    }
+
+    /**
+     * Get requestmessage
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getRequestmessage()
+    {
+        return $this->requestmessage;
+    }
+
+
+    /**
+     * Set proposedLocation
+     *
+     * @param string $proposedLocation
+     * @return Request
+     */
+    public function setProposedLocation($proposedLocation)
+    {
+        $this->proposedLocation = $proposedLocation;
+    
+        return $this;
+    }
+
+    /**
+     * Get proposedLocation
+     *
+     * @return string 
+     */
+    public function getProposedLocation()
+    {
+        return $this->proposedLocation;
     }
 }

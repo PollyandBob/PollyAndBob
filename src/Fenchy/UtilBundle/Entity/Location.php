@@ -75,6 +75,80 @@ class Location {
      */
     private $notice;
     
+    
+     /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $street_number;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $route;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $locality;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $sublocality;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $administrative_area_level_1;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $administrative_area_level_2;
+    
+     /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $postal_code;
+    
+     /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $country;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $street_address;
+    
+    
     public function __construct() {}
     
     public function __clone() {
@@ -357,5 +431,214 @@ class Location {
         return $this;
     }
 
+
+
+    /**
+     * Set street_number
+     *
+     * @param string $streetNumber
+     * @return Location
+     */
+    public function setStreetNumber($streetNumber)
+    {
+        $this->street_number = $streetNumber;
+    
+        return $this;
+    }
+
+    /**
+     * Get street_number
+     *
+     * @return string 
+     */
+    public function getStreetNumber()
+    {
+        return $this->street_number;
+    }
+
+    /**
+     * Set route
+     *
+     * @param string $route
+     * @return Location
+     */
+    public function setRoute($route)
+    {
+        $this->route = $route;
+    
+        return $this;
+    }
+
+    /**
+     * Get route
+     *
+     * @return string 
+     */
+    public function getRoute()
+    {
+        return $this->route;
+    }
+
+    /**
+     * Set locality
+     *
+     * @param string $locality
+     * @return Location
+     */
+    public function setLocality($locality)
+    {
+        $this->locality = $locality;
+    
+        return $this;
+    }
+
+    /**
+     * Get locality
+     *
+     * @return string 
+     */
+    public function getLocality()
+    {
+        return $this->locality;
+    }
+
+    /**
+     * Set administrative_area_level_1
+     *
+     * @param string $administrativeAreaLevel1
+     * @return Location
+     */
+    public function setAdministrativeAreaLevel1($administrativeAreaLevel1)
+    {
+        $this->administrative_area_level_1 = $administrativeAreaLevel1;
+    
+        return $this;
+    }
+
+    /**
+     * Get administrative_area_level_1
+     *
+     * @return string 
+     */
+    public function getAdministrativeAreaLevel1()
+    {
+        return $this->administrative_area_level_1;
+    }
+
+    /**
+     * Set postal_code
+     *
+     * @param string $postalCode
+     * @return Location
+     */
+    public function setPostalCode($postalCode)
+    {
+        $this->postal_code = $postalCode;
+    
+        return $this;
+    }
+
+    /**
+     * Get postal_code
+     *
+     * @return string 
+     */
+    public function getPostalCode()
+    {
+        return $this->postal_code;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     * @return Location
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string 
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * Set street_address
+     *
+     * @param string $streetAddress
+     * @return Location
+     */
+    public function setStreetAddress($streetAddress)
+    {
+        $this->street_address = $streetAddress;
+    
+        return $this;
+    }
+
+    /**
+     * Get street_address
+     *
+     * @return string 
+     */
+    public function getStreetAddress()
+    {
+        return $this->street_address;
+    }
+
+
+    /**
+     * Set sublocality
+     *
+     * @param string $sublocality
+     * @return Location
+     */
+    public function setSublocality($sublocality)
+    {
+        $this->sublocality = $sublocality;
+    
+        return $this;
+    }
+
+    /**
+     * Get sublocality
+     *
+     * @return string 
+     */
+    public function getSublocality()
+    {
+        return $this->sublocality;
+    }
+
+    /**
+     * Set administrative_area_level_2
+     *
+     * @param string $administrativeAreaLevel2
+     * @return Location
+     */
+    public function setAdministrativeAreaLevel2($administrativeAreaLevel2)
+    {
+        $this->administrative_area_level_2 = $administrativeAreaLevel2;
+    
+        return $this;
+    }
+
+    /**
+     * Get administrative_area_level_2
+     *
+     * @return string 
+     */
+    public function getAdministrativeAreaLevel2()
+    {
+        return $this->administrative_area_level_2;
+    }
 
 }

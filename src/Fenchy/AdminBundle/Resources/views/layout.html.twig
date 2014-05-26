@@ -16,22 +16,24 @@
 {% endblock %}
 
 {% block content %}
-<section class="main">
-    <div class="container admin">
-        <div class="clearfix">
-            <ul id="admin-menu">
-	            <li>{{ getlink('Categories', 'fenchy_admin_categories', {}, {'class': 'dark'})|raw }}</li>
-                <li>{{ getlink('Notices', 'fenchy_admin_notices', {}, {'class': 'dark'})|raw }}</li>
-                <li>{{ getlink('Reviews', 'fenchy_admin_reviews', {}, {'class': 'dark'})|raw }}</li>
-                <li>{{ getlink('Search', 'fenchy_admin_search', {}, {'class': 'dark'})|raw }}</li>
-                <li>{{ getlink('Users', 'fenchy_admin_users', {}, {'class': 'dark'})|raw }}</li>
-                <li>{{ getlink('Identity', 'fenchy_admin_identity', {}, {'class': 'dark'})|raw }}</li>
-                <li>{{ getlink('Location', 'fenchy_admin_location', {}, {'class': 'dark'})|raw }}</li>
-            </ul>
-            <div id="admin-content">
+<div class="maincontent">
+     <div class="left">
+            <menu>
+	       {# {{ getlink('Categories', 'fenchy_admin_categories', {}, {'class': 'dark'})|raw }} #}
+                {{ getlink('Notices', 'fenchy_admin_notices', {}, {'class': 'dark'})|raw }}
+                {{ getlink('Reviews', 'fenchy_admin_reviews', {}, {'class': 'dark'})|raw }}
+                {{ getlink('Requests', 'fenchy_admin_requests', {}, {'class': 'dark'})|raw }}
+                {{ getlink('Comments', 'fenchy_admin_comments', {}, {'class': 'dark'})|raw }}
+               {# {{ getlink('Search', 'fenchy_admin_search', {}, {'class': 'dark'})|raw }} #}
+                {{ getlink('Users', 'fenchy_admin_users', {}, {'class': 'dark'})|raw }}
+                {{ getlink('Identity', 'fenchy_admin_identity', {}, {'class': 'dark'})|raw }}
+                {{ getlink('Location', 'fenchy_admin_location', {}, {'class': 'dark'})|raw }}
+                {#{{ getlink('KPI - Reports', 'fenchy_admin_kpi', {}, {'class': 'dark'})|raw }}#}
+            </menu>
+           
                 {% block admincontent %}{% endblock %}
-            </div>
-            </div>
+           
+        
         </div>
-    </section>
+</div>
 {% endblock %}

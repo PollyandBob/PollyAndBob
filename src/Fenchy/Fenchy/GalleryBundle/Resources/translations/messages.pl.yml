@@ -1,0 +1,10 @@
+gallery:
+  change_image: Zmień obraz
+
+  delete: Usuń
+
+  change: Zmień
+
+  file_too_big_choose_smaller: Rozmiar pliku jest zbyt duży. Proszę wybrać mniejszy.
+
+  file_should_have_jpeg_png: Plik powinien mieć format png lub jpg.

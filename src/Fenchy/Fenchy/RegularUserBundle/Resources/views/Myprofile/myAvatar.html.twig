@@ -1,0 +1,415 @@
+
+{% block stylesheets %}    
+    <link rel="stylesheet" href="{{ asset('js/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/tapmodo-Jcrop-1902fbc/css/jquery.Jcrop.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/jquery.tagit.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/tagit.ui-zendesk.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/editSmall.css') }}" type="text/css" />
+    <style>
+            #form_file {
+                display: none;
+            }
+            #form_file2 {
+                display: none;
+            } 
+            .profileandcover_image .blue_button {
+                margin-left: 60px !important;
+                padding: 2px 5px 1px !important;
+            }
+            
+            #placeholder {
+                display: block;
+                height: 123px;
+                width: 455px;
+                margin: 0 auto;
+                position: relative;
+                padding: 0 0 81px;
+                top: 20px;
+            }
+            .placeholder {
+                display: block;
+                height: 262px;
+                width: 970px;
+                margin: 0 auto;
+                position: relative;
+            }
+            .placeholder .crop_me2 {
+                pointer-events: none !important;
+            }
+            .crop_me
+            {
+                display: block !important;
+            }
+            #placeholder img {
+                margin: auto;
+                display: block;
+                height: auto;
+                position: absolute;
+                width: 100%;
+            }
+
+            #placeholder .jwc_frame
+            {
+                cursor: move !important;
+            }
+            .jwc_controls .dragger {
+                background: url("{{ asset('images/drag.png') }}") no-repeat scroll 9px 8px rgba(84, 97, 133, 0.4);
+                border-radius: 2px 2px 2px 2px;
+                box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12) inset;
+                color: #FFFFFF;
+                display: inline;
+                font-family: mathletebulky;
+                font-size: 17px;
+                padding: 4px 9px 6px 24px;
+                letter-spacing: 1px;
+            }
+            ._6_f {
+                max-width: 275px;
+                display: inline-block;
+            }
+            ._8_2 {
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-size: 24px;
+                line-height: 30px;
+                font-weight: bold;
+                display: inline-block;
+                padding-right: 30px;
+            }
+            ._8_2, .alternate {
+                color: #FFF;
+                text-rendering: optimizelegibility;
+                text-shadow: 0 0 3px rgba(0,0,0,0.8);
+            }
+            .alternate {
+                font-size: 20px;
+                font-weight: normal;
+                white-space: nowrap;
+                color: #fff;
+            }  
+
+            #mygroup_id
+            {
+                background-color: #E14F45 !important; 
+                background-image: none !important; 
+                left: 0px !important; 
+                position: absolute !important; 
+                margin-top: 30px !important;
+                width: 156px !important;        
+            }
+	</style>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('js/underscore-min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.iframe-transport.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/FileUploaderSmall.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/fancybox/jquery.fancybox-1.3.4.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/tapmodo-Jcrop-1902fbc/js/jquery.Jcrop.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/editSmall.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jWindowCrop.js') }}"></script>
+    <script type="text/javascript">
+		function verifyYourIdentity()
+		{
+			var url = "{{ path('fenchy_regular_user_user_myprofile_identityVerification') }}";
+			$.ajax({
+				url : url,
+				type : "post",
+				data : {
+					},
+				beforeSend : function() {
+					$(".ajax_loader_info").show();
+				},
+				success : function(response) {
+					$(".ajax_loader_info").hide();
+					alert('Your Request is sent.');
+				},
+				error : function() {
+					alert('Something went wrong!');
+				},
+				complete : function() {						
+					setTimeout(function(){ location.reload(); }, 500); 			
+				}
+			});
+		}
+
+		$(function(){
+		    Test = {
+		        UpdatePreview: function(obj){
+		          // if IE < 10 doesn't support FileReader
+		          if(!window.FileReader){
+		             // don't know how to proceed to assign src to image tag
+		          } else {
+		             var reader = new FileReader();
+		             var target = null;
+		             
+		             reader.onload = function(e) {
+		              target =  e.target || e.srcElement;
+		               $("img.form_file").prop("src", target.result);
+		             };
+		              reader.readAsDataURL(obj.files[0]);
+		          }
+		        }
+		    };
+
+		    Test2 = {
+			        UpdatePreview: function(obj){
+			          // if IE < 10 doesn't support FileReader
+			          if(!window.FileReader){
+			             // don't know how to proceed to assign src to image tag
+			          } else {
+			             var reader = new FileReader();
+			             var target = null;
+			             
+			             reader.onload = function(e) {
+			              target =  e.target || e.srcElement;
+			               $("img.form_file2").prop("src", target.result);
+			             };
+			              reader.readAsDataURL(obj.files[0]);
+			          }
+			        }
+			    };
+		    
+		    $('#form_file').change(function(){ 
+		    	Test.UpdatePreview(this);
+		    });
+		    $('#form_file2').change(function(){ 
+		    	Test2.UpdatePreview(this);
+		    });
+
+		    $("#FormFileBrowse1").click(function(){
+		    	   $("#form_file").click();
+		    });
+
+		    $("#FormFileBrowse2").click(function(){
+		    	   $("#form_file2").click();
+		    });
+		    
+
+		});	
+  
+		$(document).ready(function() {
+		$('.crop_me2').attr('src', '{{ absolute(asset(coverpath)) }}').load(function() {  
+		  //alert('Image Loaded');  
+		});
+		    $('.crop_me').jWindowCrop({
+				targetWidth: 455, //Width of facebook cover division
+				targetHeight: 123, //Height of cover division
+				loadingText: '',
+				onChange: function(result) {
+					var strcropX = $(this).css('left');
+					var strcropY = $(this).css('top');
+					strcropX = strcropX.replace(/px/g, '');
+					strcropX = strcropX.replace(/-/g, '');
+					strcropY = strcropY.replace(/px/g, '');
+					strcropY = strcropY.replace(/-/g, '');	
+					$('#form_cropX').val(strcropX);
+					$('#form_cropY').val(strcropY);
+					/*console.log("separation from left- "+result.cropX);
+					console.log("separation from left- "+result.cropY);
+					console.log("width- "+result.cropW-455);
+					console.log("Height- "+result.cropH-123);*/
+				}
+			});
+			
+		    $('.crop_me2').jWindowCrop({
+				targetWidth: 970, //Width of facebook cover division
+				targetHeight: 262, //Height of cover division
+				loadingText: ''
+			});
+                        
+                    var vcropY = 0;
+                    {% if cropY %}
+                    vcropY = {{ cropY }};
+                    {% endif %}
+                    
+		    var newCropY = 2.13 * vcropY;
+		    newCropY = Math.ceil(newCropY);
+		    $('.crop_me2').css('left',{{ cropX }}+'px');
+		    $('.crop_me2').css('top',-newCropY+'px');
+		    $('.crop_me').css('left',{{ cropX }}+'px');
+		    $('.crop_me').css('top',-{{ cropY }}+'px');
+
+		    $('.placeholder').find('.jwc_controls').empty();
+	      
+		});	
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div class="profile">
+				<div class="profile_bak" >
+					<div class="placeholder">
+						{%  if coverpath %}
+							<img alt="" width="970" class="crop_me2" src="">
+						{% else %}
+							<img alt="" src="{{ absolute(asset('images/bg_profileheader.png')) }}">
+						{% endif %}
+					</div>
+				</div>
+                <div class="left">
+                    <div class="persen">
+                    {%  if profilepath %}
+			<img alt="" src="{{ absolute(asset(profilepath)) }}">
+                    {% else %}
+			<img alt="" src="{{ absolute(asset('images/default_profile_picture.png')) }}">
+                    {% endif %}
+                        <div class="persenname">
+                        	<p>{{ displayUser.regularuser.firstname|truncate(12) }}</p>
+                            <a href="#dialog36" name="modal" id="vzoom_1944" class="zoomthis">{{ 'regularuser.edit'|trans }}</a>
+			</div>
+                        <div class="neighbor {{ managertype[2] }}">
+                        	<p>{{ managertype[1] }}</p>
+                            <span>{{ displayUser.activity }}</span>
+						</div>		                            
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="about-details" align="center">
+                    	{% if managertype %}
+                    	<span>{{ ('otherprofile.'~managertype[0])|trans }}</span>
+                    	{% endif %}<br>
+                        <span>
+                        {% set varStack = displayUser.location | split(',') %}
+                    	{{ varStack[0] }}
+                        </span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="right">                	
+                	{% if verified %}
+                		<a href="#dialog8" name="modal" id="vzoom_1944" class="zoomthis location">Location</a>	
+                	{% else %}
+						<a href="#dialog8" name="modal" id="vzoom_1944" class="zoomthis notlocation">Location</a>
+                	{% endif %}
+                	{% if identity %}
+                		<a href="#dialog2" name="modal" id="vzoom_1944" class="zoomthis identity">Identity</a>
+                	{% else %}
+                		{% if verifyIdentity %}                			            		
+                   			<a href="#dialog2" name="modal" id="vzoom_1944" class="zoomthis notidentity">Identity</a>							
+						{% else %}
+							<a href="#dialog2" name="modal" id="vzoom_1944" class="zoomthis notidentity">Identity</a>
+						{% endif %}
+                    {% endif %}
+                </div>
+     </div>
+     <div class="clearfix"></div>
+     
+     <section id="boxes2">
+    	<div id="dialog2" class="window"> 
+        	<div class="big_popup">
+	           	<div class="big_popupclose"><a href="" class="close"></a></div>            
+            		{% if identity %}
+            			<p>{{ 'regularuser.verified_identity_message'|trans|upper }}</p>
+    	        	{% else %}
+    	        		{% if verifyIdentity %}
+    		        		<p>{{ 'regularuser.verify_identity_message'|trans|upper }}</p>
+							<button onclick="verifyYourIdentity()">{{ 'regularuser.ok'|trans|upper }}</button>
+						{% else %}
+							<p>{{ 'regularuser.verifing_identity_message'|trans|upper }}</p>
+						{% endif %}
+    	        	{% endif %}
+    	        	<div class="ajax_loader_info" style="display: none; padding: 0 0 0 217px;;">
+     					<img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
+					</div>   
+        		</div>
+        		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+    		</div>    
+    	<div id="mask"></div>
+    </section>
+    <section id="boxes2">
+    <div id="dialog8" class="window" style="height: auto;"> 
+        <div class="big_popup">
+            <div class="big_popupclose"><a href="" class="close"></a></div>
+            
+				{% if verified %}
+            		<p>{{ 'regularuser.verified_location_message'|trans|upper }}</p>            								   	        		
+    	        {% else %}
+    	        	{% if verifyLocation %}
+    		        		<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>			
+		            		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
+			            		<input type="text" id="firstname" name="firstname" readonly="readonly" value="{{ displayUser.regularuser.name }}"/><br/>
+			            		<input type="text" id="lastname" name="lastname" text="{{ displayUser.regularuser.lastname }}" placeholder="{{ 'regularuser.lastname'|trans  }}"/><br/>
+			            		<textarea id="address" name="address" readonly="readonly">{{ displayUser.location.location }}</textarea><br/>
+			            		<textarea id="additionaladdress" name="additionaladdress" placeholder="{{ 'regularuser.additional_address'|trans  }}"></textarea><br/>
+			           			<input type="text" id="pincode" name="pincode" placeholder="{{ 'regularuser.postcode1'|trans }}"/><br/>
+								<button type="submit"> {{ 'regularuser.ok'|trans|upper }}</button>
+		    	        	</form>
+						{% else %}							
+		    	        	<p>{{ 'regularuser.verifing_location_message'|trans|upper }}</p>
+    	        	{% endif %}
+    	        {% endif %}
+        </div> 
+        <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">   
+    </div>    
+    <div id="mask"></div>
+    </section>
+     <section id="boxes2">
+            <div id="dialog36" class="window"> 
+                <form action="{{ path('fenchy_regular_user_settings_image') }}" method="post" {{ form_enctype(form3) }}>
+                <input type="submit" class="blue_button" style="z-index: 150;float: right; position: absolute; top: 349px; left: 395px;" value="Upload" />
+                <div class="big_popup">
+                    <div class="big_popupclose"><a href="" class="close"></a></div>
+                    <div class="profileandcover_image">
+                        <div class="profileimage">
+                            <div class="title">{{ 'regularuser.profile_image'|trans}}</div>
+                            <div class="clearfix"></div>
+	                         	{{ form_row(form3.file) }}
+	                         	{% if profilepath =="" %}
+                                    <img src="{{ asset('images/profileimage.png') }}" class="form_file" alt="" width="128" height="128" style="border-radius: 50% 50% 50% 50%" />
+	                         	{% else %}
+                                    <img src="{{ asset(profilepath) }}" class="form_file" alt="" width="128" height="128" style="border-radius: 50% 50% 50% 50%"/>
+	                         	{% endif %}
+	   				{{ form_row(form3.user_id) }}
+                                    <div style="display:none;">{{ form_rest(form3) }}</div>
+                                    <a id="FormFileBrowse1" href="#" class="blue_button">Select</a>
+                                <div class="clearfix"></div>                                            
+                            </div>
+
+                            <div class="coverimage">
+                                <div class="title">{{ 'regularuser.cover_image'|trans}}</div>
+                                <div class="clearfix"></div>
+                                
+                                    <div id="placeholder">
+	   							{{ form_row(form3.file2) }}
+	                         	{% if coverpath =="" %}
+                                            <img src="{{ asset('images/coverimage.png') }}" class="form_file2 crop_me" alt="" width="455"/>
+	                         	{% else %}
+                                            <img src="{{ asset(coverpath) }}" class="form_file2 crop_me" alt="" width="455" />
+	                         	{% endif %}
+                                        </div>
+	 							{{ form_row(form3.user_id) }}
+	 							{{ form_row(form3.cropX) }}
+	 							{{ form_row(form3.cropY) }}
+                                        <div style="display:none;">{{ form_rest(form3) }}</div>
+                                        <div class="clearfix"></div>
+                                        <div class="coverimage_buttons">
+                                            <a id="FormFileBrowse2" href="#" class="blue_button">Select</a>                        
+                                        </div>
+                                </div>
+                            </div>
+                            <!-- Your custom code end -->
+                        </div>
+                </form>
+                <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+            </div>
+            <div id="mask"></div>
+    	</section>  
+	<!-- 
+	<section class="user-profile-group">
+        <figure class="avatar">
+            <span class="image-container large-avatar bordered"><img src="{{ displayUser.regularuser.avatar(false) }}" alt=""/></span>
+            <div class="ranking-flag status-flag">
+                <strong>{{ displayUser.activity }}</strong>
+            </div>
+        </figure>
+    </section>
+     -->
+          
+{% endblock %}
+

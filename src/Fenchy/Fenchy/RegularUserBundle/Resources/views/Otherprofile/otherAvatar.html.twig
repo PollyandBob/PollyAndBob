@@ -1,0 +1,191 @@
+
+{% block stylesheets %}    
+    <link rel="stylesheet" href="{{ asset('js/fancybox/jquery.fancybox-1.3.4.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/tapmodo-Jcrop-1902fbc/css/jquery.Jcrop.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/jquery.tagit.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/tagit.ui-zendesk.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/editSmall.css') }}" type="text/css" />
+    <style>
+    #placeholder {
+    display: block;
+    height: 123px;
+    width: 455px;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 0 81px;
+    top: 20px;
+    }
+    .placeholder {
+    display: block;
+    height: 262px;
+    width: 970px;
+    margin: 0 auto;
+    position: relative;
+    }
+    .placeholder .crop_me2 {
+        pointer-events: none !important;
+    }
+    .crop_me
+    {
+        display: block !important;
+    }
+    #placeholder img {
+    margin: auto;
+    display: block;
+    height: auto;
+    position: absolute;
+    width: 100%;
+    }
+
+    #placeholder .jwc_frame
+    {
+    cursor: move !important;
+    }
+    .jwc_controls .dragger {
+        background: url("{{ asset('images/drag.png') }}") no-repeat scroll 9px 8px rgba(84, 97, 133, 0.4);
+        border-radius: 2px 2px 2px 2px;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12) inset;
+        color: #FFFFFF;
+        display: inline;
+        font-family: mathletebulky;
+    font-size: 17px;
+        padding: 4px 9px 6px 24px;
+        letter-spacing: 1px;
+    }
+    ._6_f {
+    max-width: 275px;
+    display: inline-block;
+    }
+    ._8_2 {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: bold;
+    display: inline-block;
+    padding-right: 30px;
+    }
+    ._8_2, .alternate {
+    color: #FFF;
+    text-rendering: optimizelegibility;
+    text-shadow: 0 0 3px rgba(0,0,0,0.8);
+    }
+    .alternate {
+    font-size: 20px;
+    font-weight: normal;
+    white-space: nowrap;
+    color: #fff;
+    }
+    </style>
+    
+    
+{% endblock %}
+        
+{% block javascripts %}    
+    <script type="text/javascript" src="{{ asset('js/underscore-min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.iframe-transport.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/FileUploaderSmall.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/fancybox/jquery.fancybox-1.3.4.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/tapmodo-Jcrop-1902fbc/js/jquery.Jcrop.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/gallery/punkave/editSmall.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jWindowCrop.js') }}"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+                $('.crop_me2').attr('src', '{{ absolute(asset(coverpath)) }}').load(function() {  
+		  //alert('Image Loaded');  
+		});
+                $('.crop_me2').jWindowCrop({
+                            targetWidth: 970, //Width of facebook cover division
+                            targetHeight: 262, //Height of cover division
+                            loadingText: ''
+                    });
+
+                var vcropY = 0;
+                {% if cropY %}
+                vcropY = {{ cropY }};
+                {% endif %}
+
+                var newCropY = 2.13 * vcropY;
+                newCropY = Math.ceil(newCropY);
+                $('.crop_me2').css('left',{{ cropX }}+'px');
+                $('.crop_me2').css('top',-newCropY+'px');
+                $('.crop_me').css('left',{{ cropX }}+'px');
+                $('.crop_me').css('top',-{{ cropY }}+'px');
+
+                $('.placeholder').find('.jwc_controls').empty();
+
+            });
+    </script>
+            
+{% endblock %}
+
+{% block content %}
+	<div class="profile">
+				<div class="profile_bak" >
+                                    <div class="placeholder">
+                                        {%  if coverpath %}
+                                                <img alt="" width="970" class="crop_me2" src="">
+                                        {% else %}
+                                                <img alt="" src="{{ absolute(asset('images/bg_profileheader.png')) }}">
+                                        {% endif %}
+                                    </div>    
+				</div>
+                <div class="left">
+                    <div class="persen">
+                    	 {%  if profilepath %}
+							<img alt="" src="	{{ absolute(asset(profilepath)) }}">
+						 {% else %}
+							<img alt="" src="{{ absolute(asset('images/default_profile_picture.png')) }}">
+						 {% endif %}
+                        <div class="persenname">
+                        	<p style="margin-top: 8px;">{{ displayUser.regularuser.firstname|truncate(12) }}</p>
+                        </div>
+                        <div class="neighbor {{ managertype[2] }}">
+                        	<p>{{ managertype[1]|trans }}</p>
+                            <span>{{ displayUser.activity }}</span>
+						</div>		                            
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="about-details" align="center">
+                    	{% if managertype %}
+                    	<span>{{ ('otherprofile.'~managertype[0])|trans }}</span>
+                    	{% endif %}<br>
+                        <span style="display: none;">
+                        {% set varStack = displayUser.location | split(',') %}
+                    	{{ varStack[0] }}
+                        </span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+               <div class="right">                	
+                	{% if verified %}
+                		<a href="javascript:void(0);" class="location">Location</a>	
+                	{% else %}
+						<a href="javascript:void(0);" class="notlocation">Location</a>
+                	{% endif %}
+                	{% if identity %}
+                		<a href="javascript:void(0);" class="identity">Identity</a>
+                	{% else %}
+                		<a href="javascript:void(0);" class="notidentity">Identity</a>
+                    {% endif %}
+                </div>
+     </div>
+     <div class="clearfix"></div>
+	<!-- 
+	<section class="user-profile-group">
+        <figure class="avatar">
+            <span class="image-container large-avatar bordered"><img src="{{ displayUser.regularuser.avatar(false) }}" alt=""/></span>
+            <div class="ranking-flag status-flag">
+                <strong>{{ displayUser.activity }}</strong>
+            </div>
+        </figure>
+    </section>
+     -->
+{% endblock %}

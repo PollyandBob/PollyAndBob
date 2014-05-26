@@ -1,0 +1,17 @@
+parameters:
+    fenchy_message.messenger.class: Fenchy\MessageBundle\Services\Messenger
+
+services:
+    fenchy.messenger:
+        class: %fenchy_message.messenger.class%
+        arguments: ["@service_container"]
+    twig.extension.messenger:
+        class: Fenchy\MessageBundle\Twig\FenchyMessengerExtension
+        arguments: ["@fenchy.messenger"]
+        tags:
+            - { name: twig.extension }
+    fenchy.type.hidden_user:
+        class: Fenchy\MessageBundle\Form\HiddenUserType
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type, alias: hidden_user }

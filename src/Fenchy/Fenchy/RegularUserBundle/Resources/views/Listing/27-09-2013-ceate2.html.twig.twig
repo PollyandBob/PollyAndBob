@@ -1,0 +1,242 @@
+{% extends 'FenchyGalleryBundle::galleryBase.html.twig' %}
+{% form_theme form '::noLabelForm.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}        
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/jquery.tagit.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/tagit.ui-zendesk.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/regular_user/listing/create.css') }}" type="text/css" />
+{% endblock %}
+
+    
+    
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/regular_user/listing/create.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    {% if type.locationChangeAvailable %}
+        {% include '::gmapsApiAsset.html.twig' %}
+    {% endif %}
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/landing-page-view-model.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.timepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/fenchydropdown.js') }}"></script> 
+    
+    <script type="text/javascript">
+
+        var landingPageViewModel;
+
+        $(document).ready(function() {
+            
+            createListing.step2.init();
+        
+            {% if type.locationChangeAvailable %}
+                geocoder = new google.maps.Geocoder();
+                var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';            
+
+                landingPageViewModel = new LandingPageViewModel(geocoder, baseSearchViewUri);
+
+                ko.applyBindings( landingPageViewModel, document.getElementsByTagName('body')[0] );
+
+                autocomplete = new GApiAutocomplete(
+                    document.getElementById('location_gapi'),
+                    landingPageViewModel );
+            {% endif %}
+        });
+        
+    </script>
+    <script type="text/javascript" src="{{ asset('js/regular_user/listing/form.js') }}"></script>
+    
+{% endblock %}    
+
+{% block content %}
+    {{ parent() }}
+    <section data-role="main" class="main">
+        <div id="main-container">
+            <div class="inner-content">               
+                <div id="reviews-tabs">                    
+                    <div class="tabs-panel">
+                        <div id="tip">
+                            <h2>
+                                <span>{{ 'listing.create.2.subtitle_'~type.name|trans }}</span>
+                            </h2>
+                            {% if type.name=="service" %}
+                            	<p>
+                            		{{ 'service1'|trans }}
+                            	</p>
+                            {% endif %}
+                            {% if type.name=="offerservice" %}
+                            	<p>
+                            		{{ 'service2'|trans }}
+                            	</p>
+                            {% endif %}
+                        </div>                   
+                        <form class="form-wrapper listing-form" action="{{ path('fenchy_regular_user_notice_create2', {'typename': type.name, 'direction': direction}) }}" method="post" {{ form_enctype(form) }}>
+                            <div id="form-container" class="clearfix">
+                                {{ block('galleryContainer') }}
+                                <div id="form-fields">
+                                    <div class="row fieldInput grid_6"> {{ form_errors(form) }} 
+                                        {{ form_row(form.title) }}
+                                    </div>
+                                    <div class="row fieldInput textarea_content grid_10">
+                                        {{ form_row(form.content) }}
+                                    </div>
+                                    <div class="row fieldInput with_icon grid_6 tags-container">
+                                    	<i class="icon-tag"></i>
+                                        {{ form_row(form.tags) }}
+                                    </div>
+                                    {% set subId = type.subcategoryId %}
+                                    {% if subId %}
+	                                    <div class="rowlast fieldInput grid_4">
+	                                    	{{ form_widget(form.type['value_'~subId]) }}
+	                                    </div>
+                                    {% endif %}
+                                    {% if type !='neighbours' and type !='groups'%}
+                                     	<div class="rowleft"><i class="icon-calendar"></i></div>
+	                                    <div class="row fieldInput with_icon grid_2">	                                       
+	                                        {{ form_row(form.start_date) }}
+	                                    </div>
+	                                    <div class="rowright">	                                       
+	                                        {{ form_row(form.date_arrange) }}
+	                                    </div>                                        
+	                                   <div class="row fieldInput with_icon grid_2">
+	                                        <i class="icon-calendar"></i>
+	                                       	{{ form_row(form.end_date) }}
+	                                    </div> 
+	                                    <div class="rowleft">
+	                                    	<i class="icon-time"></i>
+	                                    </div>
+	                                    <div class="row fieldInput with_icon grid_2">
+	                                        {{ form_row(form.start_time) }}
+	                                    </div>
+	                                    <div class="rowright">	                                        
+	                                        {{ form_row(form.start_time_arrange) }}
+	                                    </div>
+	                                    <div class="rowleft">
+	                                    	<i class="icon-time"></i>
+	                                    </div>
+	                                    <div class="row fieldInput with_icon grid_2">
+	                                        {{ form_row(form.end_time) }}
+	                                    </div>
+	                                     <div class="rowright">	                                       
+	                                        {{ form_row(form.end_time_arrange) }}
+	                                    </div>
+                                    {% endif %}
+                                    {% if type.locationChangeAvailable %}
+                                    	<div class="rowleft">
+                                    		<i class="icon-map-marker"></i>
+                                    	</div>
+                                        <div class="row fieldInput with_icon grid_2">
+                                            <input type="text" value="" id="location_gapi"/>
+                                        </div>
+                                        <div class="rowright">	                                      
+	                                        {{ form_row(form.location_arrange) }}
+	                                    </div>  
+                                    {% endif %}
+                                    {% if type.pieceAvailable %}
+                                    	<div class="row fieldInput with_icon grid_2">	                                      
+	                                       	{{ form_row(form.pieces) }}
+	                                   	</div>  
+	                                   	<div class="rowright">	                                      
+	                                       	{{ form_row(form.one_piece) }}
+	                                   	</div>	                                   
+                                    	{% if type == 'offergoods' %}
+                                    		<div class="rowleft rowleft fieldInput noticebundle grid_3" style="float: left; margin-left: -30px">	                                      
+	                                        	{{ form_row(form.currency) }}
+	                                    	</div>  
+	                                    	<div class="row fieldInput with_icon grid_2" style="margin-right: 616px">	                                        	
+	                                        	{{ form_row(form.price, {'label': 'listing.create.price_piece'|trans|upper }) }}
+	                                    	</div>
+	                                    	<div class="rowright" style="margin-right: 405px">	                                      
+	                                        	{{ form_row(form.free) }}
+	                                    	</div>
+                                    	{% endif %}                                                                       	
+                                    {% endif %}
+                                    
+                                    {% if type.spotAvailable %}
+                                     	<div class="rowleft">
+                                     		<i class="icon-user" style="margin-right: -24px"></i>
+	                                    	<i class="icon-user icon-white"></i>
+	                                    	<i class="icon-user" style="margin-left: -6px"></i>
+	                                    </div>
+                                    	<div class="row fieldInput with_icon grid_2">	                                      
+	                                       	{{ form_row(form.spot) }}
+	                                   	</div>  
+	                                   	<div class="rowright">	                                      
+	                                       	{{ form_row(form.unlimited) }}
+	                                   	</div>	                                   
+                                    	{% if type == 'offerevents' %}
+                                    		<div class="rowleft fieldInput noticebundle grid_3" style="float: left; margin-left: -30px">                                      
+	                                        	{{ form_row(form.currency) }}
+	                                    	</div>  
+	                                    	<div class="row fieldInput with_icon grid_2" style="margin-right: 616px">
+												{{ form_row(form.price, {'label': 'listing.create.price_spot'|trans|upper }) }}
+	                                    	</div>
+	                                    	<div class="rowright" style="margin-right: 405px">
+	                                        	{{ form_row(form.free) }}
+	                                    	</div>
+                                    	{% endif %}                                                                       	
+                                    {% endif %}
+                                    
+                                    {% if type == 'offerservice' %}
+                                    	<div class="rowleft fieldInput noticebundle grid_3" style="float: left; margin-left: -30px">	                                      
+	                                       	{{ form_row(form.currency) }}
+	                                    </div>  
+	                                    <div class="row fieldInput with_icon grid_2" style="margin-right: 616px">
+											{{ form_row(form.price, {'label': 'listing.create.price_hour'|trans|upper }) }}
+	                                    </div>
+	                                    <div class="rowright" style="margin-right: 405px">	                                      
+	                                       	{{ form_row(form.free) }}
+	                                    </div>
+                                    {% endif %} 
+                                    	
+                                    {% if form.put_on_fb is defined %}
+                                        <div class="row grid_6">
+                                            {{ form_row(form.put_on_fb) }}
+                                        </div>
+                                    {% endif %}
+                                    <div class="form-type-fields-container">
+                                        {{ form_widget(form.type) }}
+                                    </div>
+                                    <div class="row fieldInput noticebundle grid_2" style="display:none;">
+                                        {{ form_rest(form) }}
+                                    </div>                                        
+                                </div>
+                            </div>                           
+                                <div class="button submit pull-left" id="buttons" style="background-color: #93B881; margin-top:39px">
+                                    <a style="width: 30px;" id="back" class="wrapper" href="{{ path('fenchy_regular_user_notice_create1') }}">
+                                        <strong>{{ 'regularuser.back'|trans|upper }}</strong>
+                                    </a>
+                                </div>
+                                <div class="button submit pull-right" style="background-color: #93B881; margin-top:39px">
+                                    <div>
+                                        <input type="submit" id="continue" value="{{ 'regularuser.continue'|trans|upper }}"/>
+                                    </div>
+                                </div>
+                             
+                        </form>
+                    </div>
+                </div>
+            </div>                
+        </div>                    
+    </section>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var sampleTags = {{ tags|json_encode|raw }};
+        
+            createListing.step2.init();
+            
+            $('#fenchy_noticebundle_noticetype_tags').tagit({
+                availableTags: sampleTags,
+                allowSpaces: true
+            });
+            
+        });
+    </script>
+{% endblock %}

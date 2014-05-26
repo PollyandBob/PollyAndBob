@@ -5,7 +5,23 @@ fenchy_admin_users:
 fenchy_admin_user:
     pattern:  /user/{id}
     defaults: { _controller: FenchyAdminBundle:Default:user }
-    
+
+fenchy_admin_user_delete:
+    pattern: /user/delete/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:userDelete }
+    requirements:
+        id: \d+
+
+fenchy_admin_user_sendmsg:
+    pattern: /user/sendmsg/
+    defaults: { _controller: FenchyAdminBundle:Default:sendMsg }
+
+fenchy_admin_flag_delete:
+    pattern: /flag/delete/{id}/{type}
+    defaults: { _controller: FenchyAdminBundle:Default:flagDelete }
+    requirements:
+        id: \d+
+
 fenchy_admin_search:
     pattern:  /search/
     defaults: { _controller: FenchyAdminBundle:Default:search }
@@ -58,6 +74,40 @@ fenchy_admin_review:
     pattern: /review/{id}
     defaults: { _controller: FenchyAdminBundle:Default:review }
 
+fenchy_admin_review_delete:
+    pattern: /review/delete/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:reviewDelete }
+    requirements:
+        id: \d+
+
+fenchy_admin_comments:
+    pattern: /comments/
+    defaults: { _controller: FenchyAdminBundle:Default:comments }
+
+fenchy_admin_comment:
+    pattern: /comment/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:comment }
+
+fenchy_admin_comment_delete:
+    pattern: /comment/delete/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:commentDelete }
+    requirements:
+        id: \d+
+
+fenchy_admin_requests:
+    pattern: /requests/
+    defaults: { _controller: FenchyAdminBundle:Default:requests }
+    
+fenchy_admin_request:
+    pattern: /request/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:request }
+
+fenchy_admin_request_delete:
+    pattern: /request/delete/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:requestDelete }
+    requirements:
+        id: \d+
+
 fenchy_admin_notice_delete:
     pattern: /notice/delete/{id}
     defaults: { _controller: FenchyAdminBundle:Default:noticeDelete }
@@ -82,3 +132,11 @@ fenchy_admin_category_delete:
     defaults: { _controller: FenchyAdminBundle:Default:categoryDelete }
     requirements:
         id: \d+
+
+fenchy_admin_kpi:
+    pattern: /kpi-report/
+    defaults: { _controller: FenchyAdminBundle:Default:kpiReport }
+
+fenchy_admin_kpibyage:
+    pattern: /kpi-report-by-age/
+    defaults: { _controller: FenchyAdminBundle:Default:kpiReportByAge }

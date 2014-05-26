@@ -34,28 +34,61 @@
 {% endblock %}
 
 {% block admincontent %}
-    <form action="{{ path('fenchy_admin_identity') }}" method="post" {{ form_enctype(filter) }}>
-        {{ form_widget(filter) }}
-        <br/>
-        <input type="submit" value="Search"/>
-    </form>
-    <table class="admin-table">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+             <tr>
+                    <td align="center">
+                        <form action="{{ path('fenchy_admin_identity') }}" method="post" {{ form_enctype(filter) }}>
+                        <table width="100%" border="1" cellspacing="0" cellpadding="0" class="searchuser">
+                        <tr>
+                            <td width="100">{{ form_label(filter.username) }}:</td>
+                            <td width="150">{{ form_widget(filter.username) }}</td>
+                            <td width="75">{{ form_label(filter.status) }}:</td>
+                            <td width="150">{{ form_widget(filter.status) }}</td>
+                            <td width="60">{{ form_label(filter.sort) }}</td>
+                            <td width="130">{{ form_widget(filter.sort) }}</td>
+                            <td width="90">{{ form_label(filter.order) }}</td>
+                            <td width="110">{{ form_widget(filter.order) }}</td>
+                            <td width="100"><input type="submit" value="Search" class="searchoptions"/></td>
+                            <td>&nbsp;</td>
+                            {{ form_rest(filter) }}
+                      </tr>
+                      </table>
+                      </form>
+                    </td>
+              </tr>
+        </table>
+    
+    <div class="clearfix"></div>
+    <div class="sTableWrapper">
+    <table class="sTable" id="userlist" cellpadding="0" cellspacing="0" width="100%">
         <thead>
-            <tr><th>ID</th><th>User Id</th><th>User Name</th><th>Status</th><th>Created At</th></tr>
+            <tr>
+                <th class="head0" width="5%" align="center">ID</th>
+                <th class="head1" width="20%">User Id</th>
+                <th class="head0" width="20%">User Name</th>
+                <th class="head1" width="20%">Status</th>
+                <th class="head0" width="20%">Created At</th>
+            </tr>
         </thead>
         <tbody>
         {% if identities %}
-           {% for identity in identities %}
+           {% for identity in pagination %}
                 <tr>
-                    <td>#{{ identity.id }}</td>
-                    <td>{{ identity.user.id }}</td>
-                    <td>{{ identity.username }}</td>
-                    <td class="identity-status switch" rel="{{identity.id}}" id="status">{{ identity.status }}</td>
-                    <td>{{ identity.createdAt|date('Y-m-d H:i') }}</td>
+                    <td class="con0" width="5%" align="center">{{ identity.id }}</td>
+                    <td class="con1" width="20%">{{ identity.user}}</td>
+                    <td class="con0" width="20%">{{ identity.username }}</td>
+                    <td class="identity-status switch con1" rel="{{identity.id}}" id="status">{{ identity.status }}</td>
+                    <td class="con0" width="20%">{{ identity.createdAt|date('Y-m-d H:i') }}</td>
                  </tr>
            {% endfor %}
          {% endif %}
         </tbody>
     </table>
+    </div>
+    <div class="sTableOptions">
+            <div class="pagination pgright">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+    </div>
 {% endblock %}
     

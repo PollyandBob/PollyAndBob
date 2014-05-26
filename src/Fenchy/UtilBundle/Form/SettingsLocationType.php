@@ -19,8 +19,15 @@ class SettingsLocationType extends base
                 'attr' => array(
                     'placeholder' => 'regularuser.printable_location'
                 )))
-            ->add('latitude', 'hidden')                
-            ->add('longitude', 'hidden');  
+                ->add('street_number', 'hidden')              
+                ->add('route', 'hidden')
+                ->add('locality', 'hidden')
+                ->add('sublocality', 'hidden')
+                ->add('administrative_area_level_1', 'hidden')
+                ->add('administrative_area_level_2', 'hidden')
+                ->add('postal_code', 'hidden')
+                ->add('country', 'hidden')
+                ->add('street_address', 'hidden');
         ;
     }
 }

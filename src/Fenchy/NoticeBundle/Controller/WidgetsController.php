@@ -22,6 +22,7 @@ class WidgetsController extends Controller {
         
         return $this->render('FenchyNoticeBundle:Widgets:userListings.html.twig', array(
             'listings' => $recent_listings,
+            'notice' => $notice,
             'user' => $user
         ));
     }
@@ -39,5 +40,24 @@ class WidgetsController extends Controller {
                     'listings' => $similar_listings
         ));
     }
+    
+    public function userGroupListingsAction($notice_id) {
 
+        $notice = $this->getDoctrine()->getEntityManager()->getRepository('FenchyNoticeBundle:Notice')->find($notice_id);
+
+        $user = null;
+        
+        $repo = $this->getDoctrine()->getEntityManager()->getRepository('FenchyNoticeBundle:Notice');
+        $recent_listings = $repo->getUserGroupRecentListings(3, $notice);
+        
+        if($recent_listings) {
+            $user = $recent_listings[0]->getUser();
+        }
+        
+        return $this->render('FenchyNoticeBundle:Widgets:userListings.html.twig', array(
+            'listings' => $recent_listings,
+            'notice' => $notice,
+            'user' => $user
+        ));
+    }
 }

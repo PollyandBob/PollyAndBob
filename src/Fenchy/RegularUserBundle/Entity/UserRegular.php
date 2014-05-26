@@ -77,6 +77,13 @@ class UserRegular
     private $birthday;
     
     /**
+     * @var integer $userAge
+     * 
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $userAge;
+    
+    /**
      * @var string aboutMe
      * @ORM\Column(name="about_me", type="text", nullable=true)
      * @Assert\MaxLength(1000)
@@ -878,5 +885,28 @@ class UserRegular
     public function getBirthday()
     {
         return $this->birthday;
+    }
+
+    /**
+     * Set userAge
+     *
+     * @param integer $userAge
+     * @return UserRegular
+     */
+    public function setUserAge($userAge)
+    {
+        $this->userAge = $userAge;
+    
+        return $this;
+    }
+
+    /**
+     * Get userAge
+     *
+     * @return integer 
+     */
+    public function getUserAge()
+    {
+        return $this->userAge;
     }
 }

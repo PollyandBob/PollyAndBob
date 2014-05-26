@@ -74,7 +74,6 @@
 }
 .has-subrow:hover {
     cursor: pointer;
-    font-weight: bold;
 }
 
 .filter-element {
@@ -114,4 +113,5 @@ section.main .admin .clearfix {
 }
 ul.reasons {
     list-style: disc;
+    margin-left: 13px;
 }

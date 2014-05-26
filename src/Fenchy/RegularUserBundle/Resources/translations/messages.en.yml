@@ -1,4 +1,6 @@
 regularuser:
+  neighborhoodmsg: the whole neighborhood
+  
   leave_a_review: Leave a review
 
   edit_review: Edit Review
@@ -17,6 +19,8 @@ regularuser:
   
   closed: Closed
   
+  click_here: Click here
+  
   you_are_member: YOU ARE A MEMBER
   
   you_are_not_member: YOU ARE NOT A MEMBER
@@ -25,11 +29,23 @@ regularuser:
   
   make_administrator: Make Administrator
   
+  profile_image: Profile Image
+  
+  cover_image: Cover Image
+  
+  groupprofile_image: Group Image
+  
+  groupcover_image: Group Cover Image
+  
+  alert_for_wrong_file: YOU MUST SELECT A VALID IMAGE FILE!
+  
   remove: Remove
   
   remove_members: Remove Members
   
   remove_admin: Remove Administrators
+  
+  not_delete_admin: You cannot delete the Admin
   
   all_trust_points: Reputation:
 
@@ -44,18 +60,40 @@ regularuser:
   added_neighbor_success: Neighbor added successfully.
   
   remove_neighbor_success: Neighbor removed successfully.
+  
+  added_member_success: Member added successfully.
+  
+  reject_member_success: Member requested rejected successfully.
+  
+  block_neighbor_success: Neighbor blocked successfully.
+  
+  unblock_neighbor_success: Neighbor unblocked successfully.
 
-  reject_neighbor_success: Neighbor rejected.
+  reject_neighbor_success: Neighbor request rejected.
   
   requested_neighbor: Your request is already send. Please wait or send message him to remind.
+  
+  requested_neighbor1: %username% has already requested you to add as neighbour. Please accept request.
   
   your_request_send: Your request send successfully.
   
   references: References
   
-  your_listing_success: Your listing has been published succesfully.
+  your_listing_success: Your listing has been published successfully.
   
   invite_neighbor_to_listing: You want to invite neighbors to your listing?
+  
+  invite_friends_emails: Invite friends by Email
+  
+  invite_now: Invite Now
+  
+  invite_friends_facebook: Invite friends by facebook
+  
+  invite_friends_twitter: Invite friends by twitter
+  
+  invited_successfully: Your friends invited by email successfully
+  
+  invited_by_facebook: Your friends invited successfully
   
   no_thank_you: No thank you.
   
@@ -93,6 +131,8 @@ regularuser:
   
   block: Block
   
+  unblock: Unblock
+  
   flag: Flag
 
   change_password: Change password
@@ -115,12 +155,14 @@ regularuser:
   
   invite_this_neighbor: invite this neighbor
   
-  invite_another_friends: invite other friends by email
+  invite_another_friends: invite another friends by email
   
   join_group: Join the group
   
   leave_group: Leave the Group
   
+  join_group_requested: Your request is already send. Please wait or send message him to remind
+
   joined_group_success: Group joined successfully. 
   
   left_group_success: You are removed from the group.
@@ -154,8 +196,12 @@ regularuser:
   listing_deleted: Your listing deleted successfully.
   
   change_pass_success: The password has been changed
+
+  wrong_old_password_or_new_confirm_not_matched: Old password is wrong or New password & Confirm password not matched
   
   find_neighbors: Find neighbors now
+  
+  blocked_neighbors: Unblock neighbors now
   
   no_newsfeeds: No match to your search. What about these results (they are the closest):
   
@@ -165,9 +211,15 @@ regularuser:
   
   want_to_add_as_neighbour: wants to add you to as neighbor
   
+  want_to_join_group: wants to join group
+  
   add_me_in_your_neighbor: You want to add 
   
   to_your_neighborlist: to your neighbours list
+  
+  enter_location: Enter Location
+  
+  invite_facebook: Invite your friends to join Polly and Bob!
   
   message:
     sent: Your message has been sent!
@@ -208,6 +260,8 @@ regularuser:
     
     no_neighbors: There are no Neighbours within chosen radius.
     
+    no_groups: you are not a member of any group
+    
     no_location: There is no location for this user.
     
     group_created: Your Group is created successfully!
@@ -222,15 +276,21 @@ regularuser:
     
     subject_notice: New created Listing invitation
     
-    subject_members: %groupname% administrator send a message
+    subject_members: The group %groupname%'s administrator send a message
     
     subject_for_invitegroupby_mail: New created Group invitation by Polly & Bob
     
     subject_for_invitelistingby_mail: New created Listing invitation by Polly & Bob
     
+    subject_for_invitefriendsby_mail: Invitation from Polly & Bob
+      
+    message_for_invitefriendsby_mail: Test Message
+    
+    invite_friends_emails_errors: Enter valid E-mail address
+    
     subject_for_buy_share_mail: Buy shares of Polly & Bob.
     
-    message_part: Hello, %username%
+    message_part: Hello %username%,
     
     message_first_part:  The Group %groupname% on Polly & Bob was created lately by %administrator%. 
     
@@ -258,6 +318,10 @@ regularuser:
   
   reject: Reject
   
+  list_it_again: List it again
+  
+  repost: Repost
+  
   write_review: Write Review
   
   mark_done: Mark as Done
@@ -276,7 +340,9 @@ regularuser:
 
   my_community_ponts: MY COMMUNITY POINTS
   
-  my_neighbours: MY NEIGHBOURS
+  my_neighbours: MY NEIGHBORS
+  
+  my_groups: MY Groups
   
   my_location: MY LOCATION
   
@@ -345,13 +411,14 @@ regularuser:
   verify_your_passport_now: VERYFY YOUR PASSPORT NOW!
   verify_this_location: VERIFY THIS LOCATION!
   no_listing: There is no Listing.
-  verify_location_message: A poscard has been sent to your address. Please follow the instructions in order to verify your location.
-  verified_location_message: Your location is already verified or in verification process.
-  verify_identity_message: Press Ok and submit your identity verification request. Admin will verify this and update your status as soon as possible.
+  verify_location_message: Please enter your adress in order to verify it. Afterwards we will send you a postcard with a password and a link to your email.
+  verified_location_message: Your location is verified.
+  verify_identity_message: In order to verify your ID please sent us a copy of your Passport to ID@pollyandbob.com. Somebody will contact you as soon as possible.
   verified_identity_message: Your identity is now verified.
-  verifing_identity_message: Thanks for your request. We will verify your identity as soon as possible.
-  verifing_location_message: Thanks for your request. Your location is in verification process. We will send you postcard as soon as possible with your password.
-  
+  verifing_identity_message: Your identity is in verification process. We will verify your identity as soon as possible.
+  verifing_location_message: Your location is in verification process. We will send you postcard as soon as possible with your password.
+  verifing_location: Your location is in verification process. To change it please inform to admin.
+  verified_location: Your location is now verified. To change it please inform to admin.
   change_email: E-MAIL & PASSWORD
   
   back: back
@@ -383,8 +450,10 @@ regularuser:
 
   general: General
 
-  notification: Notification
+  notification: Listings & Requests
 
+  list_req: Listings & Requests
+  
   image: Image
 
   connect: Connect
@@ -427,6 +496,8 @@ regularuser:
   your_street: Your street
 
   country: Country
+  
+  state: State
 
   your_country: Your country
 
@@ -609,11 +680,11 @@ find: Find
 ask_for: Ask for
 service1: If you want to demand a service for free you have to ask for help.
 service2: If you want to offer a service for free you have to offer help.
-to_sell: Sell it to you
-to_swap: Swap it
-to_lend: Lend it to you
-to_use: Let me use it
-to_give: Give it for free
+to_sell: I Sell It
+to_swap: I Swap it
+to_lend: I lend it
+to_use: I let it use
+to_give: I give it for free
 sports: Sports
 party: Party
 arts: Arts
@@ -621,8 +692,10 @@ music: Music
 other: Others
 contact_me: Contact 
 propose_time_price: Propose a time and price
+Propose_location: Propose a location
 reserve_spot: Reserve a spot (if free)
-take_part: Come and take part
+take_part: Come and take a part
+take_part1: You take part
 buy: Buy
 buy_a_spot: Buy a spot
 propose_price: Propose a price
@@ -634,10 +707,32 @@ take_free: Take it for free
 listing:
   my_listing: MY LISTINGS
   my_request: MY REQUESTS
-  
+  community_group: Community manager
+  neighborhood_group: Neighborhood manager
+  community_group_status: Community managers
+  neighborhood_group_status: Neighborhood managers
+  option_community_group: Community group
+  option_neighborhood_group: Neighborhood group
   my_grouplisting: Group LISTINGS
   my_grouprequest: Group REQUESTS
   create:
+    createnote1: YOU MARKED IT FREE
+    createnote2: YOU MARKED ONLY ONE PIECE
+    createnote3: YOU MARKED UNLIMITED
+    createnote4: EITHER CHECK BUY OR CHECK FREE 
+    createnote5: EITHER CHECK SELL IT OR CHECK GIVE IT FOR FREE
+    createnote6: EITHER CHECK PROPOSEPRICE OR CHECK GIVE IT FOR FREE
+    createnote7: EITHER CHECK SELL IT OR CHECK FREE
+    createnote8: YOU MARKED IT FREE/TAKE IT FREE
+    createnote9: YOU MARKED IT FREE/GIVE IT FOR FREE
+    createnote10: YOU MARKED IT FREE/PROPOSE LOCATION
+    createnote11: EITHER CHECK PROPOSE A PRICE OR CHECK FREE
+    createnote12: EITHER CHECK PROPOSE A PRICE/BUY OR CHECK TAKE IT FREE
+    createnote13: EITHER CHECK PROPOSE A PRICE/BUY A SPOT OR RESERVE A SPOT
+    createnote14: EITHER CHECK BUY OR CHECK FREE/RESERVE A SPOT
+    createnote15: EITHER CHECK BUY OR CHECK FREE/PROPOSE A LOCATION
+    createnote16: EITHER CHECK PROPOSE A LOCATION OR CHECK OTHER THREE OPTION
+    
     title: Create Your Listing
 
     tab_title:
@@ -651,31 +746,31 @@ listing:
       description: Pick the category that best describe your listing.
       
       find_something : Find something?
-      in_neighbourhood: in the Neighbourhood
+      in_neighbourhood: in the Neighborhood
       
       offer_something : Offer something?
-      to_neighbourhood: to the Neighbourhood
+      to_neighbourhood: to the Neighborhood
       
       event_to_neighbour: Event to the Neighbourhood
       
       something_else: You want to do something else.
 
     2:
-      subtitle_neighbours: You want to find Neighbours.
-      subtitle_help: You search for Help.
-      subtitle_goods: You need a Good.
-      subtitle_events: You want to find an Event.
-      subtitle_others: You want to offer Something Else.      
-      subtitle_service: You are looking for a Service.
-      subtitle_service1: If you want to demand a service for free you have to ask for help.
-      subtitle_service2: If you want to offer a service for free you have to offer help.
-      subtitle_groups: You want to find a group.
-      subtitle_offerhelp: You want to offer Help.
-      subtitle_offergoods: You want to offer a Good.
-      subtitle_offerevents: You want to organize an Event.
-      subtitle_offerothers: You want to offer Something Else.
-      subtitle_offerservice: You want to offer a Service.
-      subtitle_offergroups: You want to open a Group.
+      subtitle_neighbours: You want to find Neighbours
+      subtitle_help: You search for Help
+      subtitle_goods: You need a Good
+      subtitle_events: You want to find an Event
+      subtitle_others: You want to offer Something Else      
+      subtitle_service: You are looking for a Service
+      subtitle_service1: If you want to demand a service for free you have to ask for help
+      subtitle_service2: If you want to offer a service for free you have to offer help
+      subtitle_groups: You want to find a group
+      subtitle_offerhelp: You want to offer Help
+      subtitle_offergoods: You want to offer a Good
+      subtitle_offerevents: You want to organize an Event
+      subtitle_offerothers: You want to offer Something Else
+      subtitle_offerservice: You want to offer a Service
+      subtitle_offergroups: You want to open a Group
       
       description: Tell us more about your listing!
 
@@ -697,6 +792,8 @@ listing:
     
     pieces: Pieces
     
+    piece: Piece
+    
     one_piece: Only 1 piece
     
     price_piece: Price/piece
@@ -708,6 +805,8 @@ listing:
     total: Total price
     
     spot: Spots
+    
+    spots: Spot
     
     hour: Hours
     
@@ -743,9 +842,10 @@ listing:
 
   manage_listings: My listings
 
-  no: You didn't add any listing yet.
-  noreq: You didn't requested on any listing yet.
-
+  no: You didn't add any listing yet nor you get any neighbour request.
+  noreq: You didn't requested on any listing or any neighbor or any group yet.
+  no1: You didn't add any listing yet nor you get any member request.
+  
   delete:
     msg: Do you really want to delete your listing %notice% ?
 
@@ -842,24 +942,49 @@ otherprofile:
 
 request:
   msg1: Thanks for connecting to the hood.
-  msg2: Thanks for requesting to
+  msg2: Nice that you want to
   send: Send
   return_to_listing: Return to Listing
   your_list: This is your listing!
+  your_requested_msg: You already requested.
+  your_take_part_msg: You already Take part.
   price_propose: Make your price proposal:
+  time_propose: Make your time proposal:
   login_require: In order to proceed please register/login first.
   left: available.
   how_many: How many do you want?
+  how_many_pieces: How many pieces do you offer?
   in_price: In price of
   total_price: Total Price
   proposed: Proposed
   want: want
+  offer: offer
+  swap_msg: What do you want to swap?
+  location_msg: Which location will you prefer?
   message_to_user: Message to  
   write_a_review: Write a review about
   sorry_msg: Thanks for visiting the listing, we are sorry, but there are no more
+  sorry_msg1: You can't accept more request, because there are no more
+  listing_closed: Your listing is closed now, You can re-list the same listing again.
+  listing_closed1: The listing you are looking for is closed now.  Please see the relisted or similar listing if any.
+  repost_msg: Your Listing Reposted.
+  request_msg_part: You have got new request on Polly & bob from %requester%. Have a look at this link:
+  review_msg_part: You have got new review on Polly & bob from %requester%. Have a look at this link:
+  request_msg_part1: This is an automatic E-mail notification. No-reply possible. Please take further action on the platform.
+  sold_out: Sold out
+  wrong_paypal: Wrong paypal information provided or not registered in paypal with given email id.
+  notification1: SYSTEM IS ASKING TO ENTER MORE THAN ONE
+  notification2: GIVE PRICE OR SELECT THE FREE
+  notification3: SELECT CURRENCY
+  notification4: CHECK DEFAULT PAYMENT SETTINGS
+  notification5: THERE IS NO NEED TO CHECK DEFAULT PAYMENT SETTINGS IF YOU ARE SELECTING FREE
+  notification6: ONLY
+  notification7: REQUIRED
+  notification8: AVAILABLE
+
 payment:
   default_payment: Default payment settings
-  no_default: No default payment settings installed..
+  no_default: No default payment settings installed.
   choose_default: Choose your default payment method.
   direct_debit: Direct debit
   paypal: Paypal
@@ -884,7 +1009,7 @@ payment:
   you_can_invest: You can invest in us by lending us some money.
   invest: Invest in Polly & Bob
   donate: You can donate!
-  donation: Donation
+  donation: Donate to Polly & Bob
   account_holder: Account Holder
   account: Account
   bank_code: Bank Code
@@ -904,10 +1029,18 @@ payment:
   deletemsg: Your payment settings are uninstalled.
   savemsg: You installed your payment settings successfully.
   cvv: cvv code
-  
+  notify1: ACEEPT TERMS AND CONDITION
+  notify2: ALL FIELDS ARE REQUIRED
+  notify3: ENTER VALID ACCOUNT NUMBER
+  notify4: NOT VALID BANK CODE
+  notify5: ENTER VALID CARD NUMBER
+  notify6: SELECT VALID EXPIRY DATE
+  notify7: NOT VALID CVC
+
 account:
   old_pass: Old Password
   new_pass: New Password
+  confirm_pass: Confirm Password
   confirm: confirm
   location_identity: Location & Identity
   your_email: Your E-mail

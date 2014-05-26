@@ -2,6 +2,18 @@
 
 {% block stylesheets %}
     {{ parent() }}
+<style>
+#select_receiver {    
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border: 0 none;
+    background: url("/images/arrow.png") no-repeat scroll right 0 transparent;
+    border-bottom: 1px solid #51B9D4 !important;
+    color: #51B9D4;
+    text-indent: 0.01px;
+    text-overflow: "";
+    }
+</style>
 {% endblock %}
     
 {% block javascripts %}
@@ -12,11 +24,11 @@
     
 {% block content %}
 
-	<div class="message-title">
+	{#<div class="message-title">
            		<a href="{{ path('fenchy_regular_user_messages_index') }}">
          			{{ 'regularuser.message.message_center'|trans }}
           		</a>
-    </div>
+        </div>#}
            	{% block message_content %}
                 {% endblock %}
          

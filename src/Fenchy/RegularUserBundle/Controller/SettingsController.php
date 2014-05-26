@@ -451,32 +451,40 @@ class SettingsController extends Controller {
     	$form3 = $this->createFormBuilder($document)
     	->add('user_id','hidden', array(
     			'data' => $user->getId(),))
-    			->add('file',null,array('label' => 'settings.general.profile_photo'))
-    			->getForm();
-    	
-    	$form4 = $this->createFormBuilder($document)
+    	->add('file',null,array('label' => 'settings.general.profile_photo'))
     	->add('user_id','hidden', array(
     			'data' => $user->getId(),))
-    	->add('cropX','hidden')
-    	->add('cropY','hidden')
-    	->add('file2',null,array('label' => 'settings.general.cover_photo'))
-    	->getForm();
+    	->add('cropX','hidden',array(
+    			'data' => $document->getCropX(),))
+    	->add('cropY','hidden',array(
+    			'data' => $document->getCropY(),))
+    	->add('file2',null,array('label' => 'settings.general.cover_photo'))		
+        ->getForm();
+    	
     	    	
     	if ($this->getRequest()->isMethod('POST')) {
     		$form3->bindRequest($this->getRequest());
-    		$form4->bindRequest($this->getRequest());
     		$user_id= $this->getRequest()->get('user_id');
     		$file = $this->getRequest()->get('file');
     		$file2 = $this->getRequest()->get('file2');
+    		$vcropX = $form3->get('cropX')->getData();
+    		$vcropY = $form3->get('cropY')->getData();
     		
-    		 
-    		if ($form3->isValid() or $form4->isValid()) {
+    		if(!$vcropX)
+    		{
+    			$vcropX = 0;
+    		}
+    		if(!$vcropY)
+    		{
+    			$vcropY = 0;
+    		}	
+    		if ($form3->isValid()) {
     	
     			$document->upload();
     			$document->uploadcover();
     	
-    			$document->setCropX($form4->get('cropX')->getData());
-    			$document->setCropY($form4->get('cropY')->getData());
+    			$document->setCropX($vcropX);
+    			$document->setCropY($vcropY);
     			
     			$em->persist($document);
     			if($document->getWebPath()=="")
@@ -677,9 +685,16 @@ class SettingsController extends Controller {
     	
     	$process = $formHandler->process($user);
     	$data_saved = $this->get('translator')->trans('regularuser.change_pass_success');
+        
     	if ($process) {
     		$this->get('session')->setFlash('positive', $data_saved);
     	}
+        else
+        {
+            $data_error = $this->get('translator')->trans('regularuser.wrong_old_password_or_new_confirm_not_matched');
+            
+            $this->get('session')->setFlash('negative', $data_error);
+        }
     	
     	return $this->redirect($this->generateUrl('fenchy_regular_user_settings_account'));
     }
@@ -702,6 +717,31 @@ class SettingsController extends Controller {
                 
                 $this->get('fenchy.messenger')->removeUserMessages();
                 $em = $this->getDoctrine()->getManager();
+                $messages = $em->getRepository('CunningsoftChatBundle:Message')->findBySenderOrReceiver($user);
+
+        foreach($messages as $message) {
+
+            if($message->getAuthor() == NULL) {
+                if($message->getReceiver()->getId() === $user->getId()) {
+                    $em->remove($message); // remove if sender and receiver has been deleted
+                }
+            } elseif($message->getReceiver() == NULL) {
+                if($message->getAuthor()->getId() == $user->getId()) {
+                    $em->remove($message); // remove if sender and receiver has been deleted
+                }
+            } else {
+                if($message->getAuthor()->getId() == $user->getId()) {
+                     $em->remove($message);  
+                }
+                
+                if($message->getReceiver()->getId() == $user->getId()) {
+                     $em->remove($message);
+                }
+            }
+        }       
+        // We have to flush because after chat remove we can remove user        
+            $em->flush();
+        
                 $em->remove($user);
                 $em->flush();
 
@@ -865,14 +905,21 @@ class SettingsController extends Controller {
 			    	
     	$payment = $query->getOneOrNullResult();
     	$isPayment = false;
+    	$cvv_code = null;
     	if($payment) 
+    	{
     		$isPayment = true;
+                if($payment->getCvvCode() != '')                
+                    $cvv_code = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5('!p@a#b$o'), base64_decode($payment->getCvvCode()), MCRYPT_MODE_CBC, md5(md5('!p@a#b$o'))), "\0");
+    	}    	
     	
     	return $this->render('FenchyRegularUserBundle:Settings:payment.html.twig',array(
     			'user' => $user,
     			'payment' => $payment,
     			'noticeType'=> $noticeType,
-    			'groupId'=> $this->getRequest()->get('groupId')
+    			'groupId'=> $this->getRequest()->get('groupId'),
+                        'noticeId'=> $this->getRequest()->get('noticeId'),
+    			'cvv_code' => $cvv_code
     	));
     }
     

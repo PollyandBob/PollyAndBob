@@ -23,19 +23,70 @@ function addNeighbors(receiver)
 		}
 	}); 
 }
-function sendMsg()
+
+    function blockNeighbor(neighborid, neighbourRequestId,obj)
+    {			
+	var url = "{{path('fenchy_regular_user_user_otherprofile_blockneighbors')}}";
+                        
+			$.ajax({
+				url : url,
+				type : "post",
+				data : {
+					'neighborId' : neighborid,
+					'neighbourRequestId': neighbourRequestId,
+                                        'obj' : obj.id
+					},
+				beforeSend : function() {
+					
+				},
+				success : function(response) {		
+					if(response == 'blocked')
+					{
+                                                $('#Block').hide();
+                                                $('#unBlock').show();
+						$('#block_neighbour').click();
+                                                $('.added_n').hide();
+                                                $('.remove_n').hide();
+                                                $('.requested_n').hide();
+					}
+                                        if(response == 'unblocked')
+                                        {
+                                                $('#unBlock').hide();
+                                                $('#Block').show();
+						$('#unblock_neighbour').click();
+                                                $('.added_n').show();
+                                        }
+				},
+				error : function() {
+					alert('Something went wrong!');
+				},
+				complete : function() {
+					window.location.replace('{{ app.request.getSchemeAndHttpHost() }}{{ path('fenchy_regular_user_user_myprofile_aboutmychoice') }}');
+				}
+			});
+	}
+        
+                function sendMsg()
 		{
 			var flag = true;
-			var title = $('#MsgTitle').val();
+{#			var title = $('#MsgTitle').val();#}
 			var content = $('#MsgContent').val();
 			//alert(title + content);
 			
-			if(title == "" || content == "")
+			if(content == "")
 			{
 				flag = false;
-				$('#MsgTitle').attr('placeholder', 'required*');
+{#				$('#MsgTitle').attr('placeholder', 'required*');#}
 				$('#MsgContent').attr('placeholder', 'required*');
 			}
+                        if(content.trim() == "" )
+                        {
+                                flag = false;
+{#				$('#MsgTitle').val('');#}
+				$('#MsgContent').val('');
+{#                                $('#MsgTitle').attr('placeholder', 'required*');#}
+				$('#MsgContent').attr('placeholder', 'required*');
+                        }
 			var receiver = "{{ userId }}";
 			if(flag)
 			{
@@ -45,7 +96,7 @@ function sendMsg()
 					type : "post",
 					data : {
 						'receiverId': receiver,				
-						'title': title,
+{#						'title': title,#}
 						'content': content,										
 						},
 					beforeSend : function() {
@@ -59,7 +110,7 @@ function sendMsg()
 						alert('Something went wrong!');
 					},
 					complete : function() {
-						$('#MsgTitle').val('');
+{#						$('#MsgTitle').val('');#}
 						$('#MsgContent').val('');					
 					}
 				}); 
@@ -82,95 +133,45 @@ function sendMsg()
                         <div class="optionsdetail">
                         <a href="#dialog44" class="zoomthis blue_button" name="modal" id="vzoom_1944">{{ 'regularuser.send_new_message'|trans }}</a>
                         	{% if requestObj %}
-                            	<a href="javascript:void(0);"  {% if check!="" and requestObj and requestObj.status == "accepted" %}style="display: block;" {% else %}style="display: none;" {% endif %}  class="blue_button remove_n" id="{{ 'regularuser.remove_neighbor_success'|trans }}" onclick="removeNeighbor({{ userId }},this,{{ requestObj.id }});">{{ 'regularuser.remove_neighbor'|trans }}</a>
+                            	<a href="javascript:void(0);"  {% if check!="" and requestObj and (requestObj.status == "accepted" or requestObj.requeststatus == "accepted") %}style="display: block;" {% else %}style="display: none;" {% endif %}  class="blue_button remove_n" id="{{ 'regularuser.remove_neighbor_success'|trans }}" onclick="removeNeighbor({{ userId }},this,{{ requestObj.id }});">{{ 'regularuser.remove_neighbor'|trans }}</a>
                         	{% endif %}
-                            {% if (distanceBetween <  30000 ) %} 
-                            	<a href="javascript:void(0);"  {% if check=="" and not requestObj %}style="display: block;" {% else %} style="display: none;" {% endif %} class="blue_button added_n" id="{{ 'regularuser.added_neighbor_success'|trans }}" onclick="addNeighbors({{ userId }});">{{ 'regularuser.add_neighbor'|trans }}</a>
+                        	
+                            {% if (distanceBetween <  30000 ) %}
+   	                        <a href="javascript:void(0);"  {% if check=="" and not requestObj and not blocked %}style="display: block;" {% else %} style="display: none;" {% endif %} class="blue_button added_n" id="{{ 'regularuser.added_neighbor_success'|trans }}" onclick="addNeighbors({{ userId }});">{{ 'regularuser.add_neighbor'|trans }}</a>
                                 <a href="#dialog303" class="zoomthis blue_button requested_n" name="modal" id="vzoom_1944" {% if check == "" and requestObj %}style="display: block;" {% else %} style="display: none;" {% endif %} >{{ 'regularuser.add_neighbor'|trans }}</a>
                             {% endif %}
-                            <a href="#" class="blue_button">{{ 'regularuser.block'|trans }}</a>
+                            
+                            {% if blocked %}
+                                {% if blocked.blocked.id == userId %}
+                                    <a id="unBlock" href="javascript:void(0);" class="blue_button" onclick="blockNeighbor({{ userId }},0,this);" style="display: block;">{{ 'regularuser.unblock'|trans }}</a>
+                                {% else %}
+                                    <a id="unBlock" href="javascript:void(0);" class="blue_button" style="display: block;">You Blocked by {{ displayUser.name }}</a>
+                                {% endif %}
+                                <a id="Block" href="javascript:void(0);" class="blue_button" onclick="{% if requestObj %}blockNeighbor({{ userId }},{{ requestObj.id }},this); {% else %} blockNeighbor({{ userId }},0,this); {% endif %}" style="display: none">{{ 'regularuser.block'|trans }}</a>
+                            {% else %}
+                                {% if requestObj %}
+                                    <a id="Block" href="javascript:void(0);" class="blue_button" onclick="blockNeighbor({{ userId }},{{ requestObj.id }},this);" style="display: block;">{{ 'regularuser.block'|trans }}</a>
+                                {% else %}
+                                    <a id="Block" href="javascript:void(0);" class="blue_button" onclick="blockNeighbor({{ userId }},0,this);" style="display: block;">{{ 'regularuser.block'|trans }}</a>
+                                {% endif %}
+                                    <a id="unBlock" href="javascript:void(0);" class="blue_button" onclick="blockNeighbor({{ userId }},0,this);" style="display: none">{{ 'regularuser.unblock'|trans }}</a>
+                            {% endif %}  
+                                    
                             {% if userLogged.id != displayUser.id %}
-                				<a href="{{ url('fenchy_create_user_sticker', {id: displayUser.id}) }}" class="add-sticker">{{ 'regularuser.flag'|trans }}</a>
+                				<a href="{{ url('fenchy_create_user_sticker', {'id': displayUser.id}) }}" class="add-sticker">{{ 'regularuser.flag'|trans }}</a>
                 			{% endif %}
                         </div>
 		            </div>
+                         <div class="bgbottom"><img src="{{ asset('images/bgbottom_leftpart.png')}}" alt=""></div>
 		        </div>
 		        {% if userLogged.id != displayUser.id %}
 			        <div id="flagwindow" class="userflagwindow">
-						<img class="iconarrow" src="{{ asset('images/icon_arrow.png') }}" alt="" />
-						{% render 'FenchyUtilBundle:Sticker:userSticker' with {'id': displayUser.id} %}
-					</div>
-					{% endif %}
-		            <div class="neighbour-comments" style="display: none;">
-                    	<div class="title">
-                        	<div class="left">Laura</div>
-                            <div class="right">Online</div>
-                        </div>
-                        <div class="commentsdetail">
-                            <div class="comments-scroll">
-                                <div class="data">
-                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
-                                    <div class="rightdetail">
-                                        <div class="name">Frank</div>
-                                        <div class="date">26.08.2013</div>
-                                        <div class="time">14:30</div>
-                                        <div class="clearfix"></div>
-                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
-                                    </div>
+					<img class="iconarrow" src="{{ asset('images/icon_arrow.png') }}" alt="" />
+					{% render 'FenchyUtilBundle:Sticker:userSticker' with {'id': displayUser.id} %}
                                 </div>
-                                <div class="data">
-                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
-                                    <div class="rightdetail">
-                                        <div class="name">Frank</div>
-                                        <div class="date">26.08.2013</div>
-                                        <div class="time">14:30</div>
-                                        <div class="clearfix"></div>
-                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
-                                    </div>
-                                </div>
-                                <div class="data">
-                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
-                                    <div class="rightdetail">
-                                        <div class="name">Frank</div>
-                                        <div class="date">26.08.2013</div>
-                                        <div class="time">14:30</div>
-                                        <div class="clearfix"></div>
-                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
-                                    </div>
-                                </div>
-                                <div class="data">
-                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
-                                    <div class="rightdetail">
-                                        <div class="name">Frank</div>
-                                        <div class="date">26.08.2013</div>
-                                        <div class="time">14:30</div>
-                                        <div class="clearfix"></div>
-                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
-                                    </div>
-                                </div>
-                                <div class="data">
-                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
-                                    <div class="rightdetail">
-                                        <div class="name">Frank</div>
-                                        <div class="date">26.08.2013</div>
-                                        <div class="time">14:30</div>
-                                        <div class="clearfix"></div>
-                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
-                                    </div>
-                                </div>
-                                <div class="data">
-                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
-                                    <div class="rightdetail">
-                                        <div class="name">Frank</div>
-                                        <div class="date">26.08.2013</div>
-                                        <div class="time">14:30</div>
-                                        <div class="clearfix"></div>
-                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
-                                    </div>
-                                </div>
-                            </div>	                            
-						</div>                            
-                    </div>
+			{% endif %}
+				
+		          
 		         
 </div>
 <a id="successDialog" href="#dialog301" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
@@ -179,7 +180,8 @@ function sendMsg()
 	   	<div class="big_popup">
 	      	<div class="big_popupclose"><a href="" class="close"></a></div>
 				<p>{{ 'regularuser.write_msg_to'|trans }} {{ displayUser. name}}</p>
-					<input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}"/>
+{#					<input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}"/>#}
+                                        <div class="clearfix"></div>
 					<textarea id="MsgContent" placeholder="{{ 'message.content'|trans }}"></textarea>
 				<input class="blue_button" style="margin-bottom: 10px; margin-left: -71px; margin-top: 130px;" type="button" id="continue" value="{{ 'btn.send'|trans }}" onclick="sendMsg();"/>
 		</div>
@@ -223,7 +225,15 @@ function sendMsg()
 		   	<div class="big_popup">
 		      	<div class="big_popupclose"><a href="" class="close"></a></div>
 				<div id="messageForm">
+				{% if requestObj %}
+					{% if requestObj.author.id == userLogged.id %}
+						<p>{{ 'regularuser.requested_neighbor'|trans }}</p>
+					{% else %}
+						<p>{{ 'regularuser.requested_neighbor1'|trans({'%username%': displayUser.regularUser.firstname}) }}</p>
+					{% endif %}
+				{% else %}
 					<p>{{ 'regularuser.requested_neighbor'|trans }}</p>
+				{% endif %}
 				</div>
 			</div>
 			<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
@@ -231,7 +241,7 @@ function sendMsg()
 		</div>
 		<div id="mask"></div>
 	</section>
-<a id="neighbor_request_send" href="#dialog304" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">	
+        <a id="neighbor_request_send" href="#dialog304" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;"></a>
 	<section id="boxes2">
 		<div id="dialog304" class="window">
 		<div id="dialog45">
@@ -239,6 +249,38 @@ function sendMsg()
 		      	<div class="big_popupclose"><a href="" class="close"></a></div>
 				<div id="messageForm">
 					<p>{{ 'regularuser.your_request_send'|trans }}</p>
+				</div>
+			</div>
+			<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+		</div>
+		</div>
+		<div id="mask"></div>
+	</section>
+
+        <a id="block_neighbour" href="#dialog305" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;"></a>
+        <section id="boxes2">
+		<div id="dialog305" class="window">
+		<div id="dialog45">
+		   	<div class="big_popup">
+		      	<div class="big_popupclose"><a href="" class="close"></a></div>
+				<div id="messageForm">
+					<p>{{ 'regularuser.block_neighbor_success'|trans }}</p>
+				</div>
+			</div>
+			<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+		</div>
+		</div>
+		<div id="mask"></div>
+	</section>
+        
+        <a id="unblock_neighbour" href="#dialog306" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;"></a>
+        <section id="boxes2">
+		<div id="dialog306" class="window">
+		<div id="dialog45">
+		   	<div class="big_popup">
+		      	<div class="big_popupclose"><a href="" class="close"></a></div>
+				<div id="messageForm">
+					<p>{{ 'regularuser.unblock_neighbor_success'|trans }}</p>
 				</div>
 			</div>
 			<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">

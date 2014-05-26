@@ -1,5 +1,6 @@
 function PunkAveFileUploader(options)
 {
+  //$.getScript("{{ asset('js/add_new.js') }}");
   var self = this,
     uploadUrl = options.uploadUrl,
     viewUrl = options.viewUrl,
@@ -106,6 +107,50 @@ function PunkAveFileUploader(options)
     stop: function (e) {
       $el.find('[data-spinner="1"]').hide();
       self.uploading = false;
+      $('.crop_me4').jWindowCrop({
+              
+            targetWidth: 970, //Width of facebook cover division
+            targetHeight: 326, //Height of cover division
+            loadingText: '',
+            onChange: function(result) {
+                    
+                    var strcropX = $(this).css('left');
+                    var strcropY = $(this).css('top');
+                    strcropX = strcropX.replace(/px/g, '');
+                    strcropX = strcropX.replace(/-/g, '');
+                    strcropY = strcropY.replace(/px/g, '');
+                    strcropY = strcropY.replace(/-/g, '');
+                    //alert($(this).parent().parent().parent('li.selected').index());
+                    var imageNumber = $('li.selected').index();
+                    if(imageNumber==0)
+                    {
+                    $('#form_cropX0').val(strcropX);
+                    $('#form_cropY0').val(strcropY);
+                    }
+                    if(imageNumber==1)
+                    {
+                    $('#form_cropX1').val(strcropX);
+                    $('#form_cropY1').val(strcropY);
+                    }
+                    if(imageNumber==2)
+                    {
+                    $('#form_cropX2').val(strcropX);
+                    $('#form_cropY2').val(strcropY);
+                    }
+                    if(imageNumber==3)
+                    {
+                    $('#form_cropX3').val(strcropX);
+                    $('#form_cropY3').val(strcropY);
+                    }
+                    /*console.log("separation from left- "+result.cropX);
+                    console.log("separation from left- "+result.cropY);
+                    console.log("width- "+result.cropW-455);
+                    console.log("Height- "+result.cropH-123);*/
+            }
+    });
+		 
+    //$('.placeholder_listing').find('.jwc_controls').empty();     
+    
     }
   });
 

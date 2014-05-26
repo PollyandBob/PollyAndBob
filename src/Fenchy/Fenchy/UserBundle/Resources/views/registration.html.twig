@@ -1,0 +1,22 @@
+{% extends '::baseV2.html.twig' %}
+{% if form is defined %}
+    {% form_theme form '::labelForm.html.twig' %}
+{% endif %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+{% endblock %}
+    
+{% block content %}
+<section class="main main-wrapper">
+    <div id="main-container">
+        <div class="clearfix">
+            <header><h1>{{ 'user.registration'|trans }}</h1></header>
+            {% block registration_content %}{% endblock %}            
+        </div>
+    </div>
+</section>
+        
+{% endblock %}

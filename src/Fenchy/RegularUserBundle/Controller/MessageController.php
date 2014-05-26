@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Fenchy\MessageBundle\Entity\Message;
 use Fenchy\UserBundle\Entity\User;
 use Fenchy\RegularUserBundle\Entity\Document;
+use Fenchy\RegularUserBundle\Entity\NeighborhoodMsg;
 
 use Fenchy\UserBundle\Entity\NotificationGroupInterval;
 use Fenchy\UserBundle\Entity\NotificationQueue;
@@ -24,7 +25,7 @@ class MessageController extends Controller
     	$userLoggedIn = $this->get('security.context')->getToken()->getUser();
     	ini_set('memory_limit', "912M");
     	$request = $this->getRequest();
-    	
+    	$receiver = $request->get('receiver');
         if($this->getRequest()->get('_format') == 'json') {
             $messages = $this->get('fenchy.messenger')->findReceivedMessages($type, $this->getRequest()->get('ids'));
             $m = array();
@@ -47,23 +48,37 @@ class MessageController extends Controller
         $userMessages = array();
         foreach ($messages as $message)
         {
-        	if($message->getUsergroup()== null and $message->getFromgroup()== null)
+        	if($message->getFromgroup() != null && $message->getSender()->getId() == $userLoggedIn->getId())
         	{
-        		$userMessages[] = $message;
+        		
         	}
-        	if($message->getUsergroup() != null and $message->getFromgroup() != null)
-        	{
-        		$userMessages[] = $message;
-        	}
+                else if($message->getUsergroup() == null)
+                    $userMessages[] = $message;
+        	
         }
         
         $messagesToNeighbors = $this->messagesToNeighbors($userLoggedIn->getId());
+        $this->getDoctrine()->getEntityManager()->getRepository('FenchyMessageBundle:Message')->updateCountHeader($userLoggedIn);
+        $chats = $this->getDoctrine()->getRepository('CunningsoftChatBundle:Message')->findBy(
+                    array('receiver' => $this->getUser(), 'read' => 'false'));
+                 
+            if($chats)
+                {
+                    foreach($chats as $chat)
+                    {
+                        $chat->setRead(true);
+                        $this->getDoctrine()->getEntityManager()->persist($chat);
+                    }
+                }
+             $this->getDoctrine()->getEntityManager()->flush();
+           
         
         return array(
             'messages' => $userMessages,
             'type' => null === $type ? 'all' : $type,
         	'displayUser' => $userLoggedIn,
-        	'messagesToNeighbors'=>$messagesToNeighbors
+        	'messagesToNeighbors'=>$messagesToNeighbors,
+                'receiver' => $receiver
         );
     }
     
@@ -126,34 +141,25 @@ class MessageController extends Controller
     
     			if($user->getLocation()!="" && $userid!=$currentuid)
     			{
-    				
-    							if($user->getActivity() >= 400 && $user->getActivity() < 1000)
-    							{
-    								$managertype = "Community Manager";
-    								$managertype_alpha = "C";
-    								$classColor = "green";
-    							}
-    							elseif($user->getActivity() >= 1000)
-    							{
-    								$managertype = "Neighborhood Manager";
-    								$managertype_alpha = "N";
-    								$classColor = "orange";
-    							}
-    							elseif($user->getManagerType()==1)
-    							{
-    								$managertype = "House Manager";
-    								$managertype_alpha = "H";
-    								$classColor = "blue";
-    							}
-    							else
-    							{
-    								$managertype = "";
-    								$managertype_alpha = " ";
-    								$classColor = "red";
-    							}
-    							// Added By jignesh for Manager type
-    							$user->setTwitterUsername($avatar);
-    							$users2[] = $user;
+                            $lat = $user->getLocation()->getLatitude();
+                            $log = $user->getLocation()->getLongitude();
+
+                            $lat2 = $displayUser->getLocation()->getLatitude();
+                            $log2 = $displayUser->getLocation()->getLongitude();
+
+                            $theta = $log - $log2;
+                            // Find the Great Circle distance
+                            $distance = rad2deg(acos((sin(deg2rad($lat)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)))));
+                            $distance = $distance * 60 * 1.1515;
+                            $gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
+                            $mindist = 0;// minimum distance
+                            $maxdist = $this->container->getParameter('filter_max_distance_user');// maximum distance
+			
+                            if($gmap_distance >= $mindist && $gmap_distance < $maxdist)
+                            {		
+                                $user->setTwitterUsername($avatar);
+                                $users2[] = $user;
+                            }
     						
     			}
     		}
@@ -203,14 +209,12 @@ class MessageController extends Controller
         $userMessages = array();
         foreach ($messagesLeft as $message)
         {
-       		if($message->getUsergroup()== null and $message->getFromgroup()== null)
+       		if($message->getFromgroup() != null && $message->getSender()->getId() == $userLoggedIn->getId())
         	{
-        		$userMessages[] = $message;
+        		
         	}
-        	if($message->getUsergroup() != null and $message->getFromgroup() != null)
-        	{
-        		$userMessages[] = $message;
-        	}
+                else if($message->getUsergroup() == null)
+                    $userMessages[] = $message;
         }
         
         $messagesToNeighbors = $this->messagesToNeighbors($userLoggedIn->getId());
@@ -222,10 +226,43 @@ class MessageController extends Controller
             $form = $messenger->createForm()->createView();
         }
 
+        $blockUser = array();
+        $index=0;
+        $em = $this->getDoctrine()->getEntityManager();
+        $blockneighbors = $em->getRepository('FenchyRegularUserBundle:BlockedNeighbor')->findByMe($userLoggedIn->getId());
+	foreach ($blockneighbors as $blockneighbor)
+        {
+            
+            if($blockneighbor->getBlocker()->getId() == $userLoggedIn->getId())
+            {
+                $blockUser[$index++] = $blockneighbor->getBlocked()->getId();
+            }
+            if($blockneighbor->getBlocked()->getId() == $userLoggedIn->getId())
+            {
+                $blockUser[$index++] = $blockneighbor->getBlocker()->getId();
+            }
+        }
+         $this->getDoctrine()->getEntityManager()->getRepository('FenchyMessageBundle:Message')->updateCountHeader($userLoggedIn);
+         
+         $chats = $em->getRepository('CunningsoftChatBundle:Message')->findBy(
+                    array('receiver' => $this->getUser(), 'read' => 'false'));
+                 
+            if($chats)
+                {
+                    foreach($chats as $chat)
+                    {                       
+                        $chat->setRead(true);
+                        $em->persist($chat);
+                        $em->flush($chat);
+                    }                     
+                }
+            
+             
         return array(
             'messages' => $messages,
         	'messagesLeft' => $userMessages,	
-            'form' => $form
+            'form' => $form,
+            'blockUser' => $blockUser
         );
     }
     
@@ -262,11 +299,26 @@ class MessageController extends Controller
         }
         
         $user = $this->get('security.context')->getToken()->getUser();
-        
+        $em = $this->getDoctrine()->getEntityManager();
+        $msg = $em->getRepository('FenchyMessageBundle:Message')->find($prev_id);
+
         $form = $messenger->createForm();
         
         if ($form->isValid()) {
             $message = $messenger->send();
+            if($msg->getChat())
+            {
+                $message->setChat(true);
+                $em->persist($message);
+                $em->flush();
+            }
+            if($msg->getFromgroup())
+            {
+                $message->setUsergroup($msg->getFromgroup());
+                $message->setFromgroup();
+                $em->persist($message);
+                $em->flush();
+            }
             if ( $this->container->getParameter('notifications_enabled'))
                 $this->messageNotification($message, $user);
             $this->get('session')->setFlash('positive', 'regularuser.message.sent');
@@ -281,7 +333,7 @@ class MessageController extends Controller
         }
         return $this->forward('FenchyRegularUserBundle:Message:view', array(
                                                                             'id' => $prev_id,
-                                                                            'read' => false
+                                                                            'read' => false,
                                                                         ));
     }
     	
@@ -294,18 +346,23 @@ class MessageController extends Controller
     	$em = $this->getDoctrine()->getEntityManager();
     	
     	if (null !== $prev_id) {
-    		$messenger->findLastById($prev_id, false);
+    		$messenger->findLastByIdGroup($prev_id, false, $groupId);
     	}
     	$request = $this->getRequest();
     	
     	$user = $this->get('security.context')->getToken()->getUser();
-    	$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
+    	$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->find($groupId);
     	
     	
     	$form = $messenger->createForm();
     	
     	if ($form->isValid()) {
     		$message = $messenger->send();
+                $message->setUsergroup();
+                $message->setFromgroup($usergroup);
+                $em->persist($message);
+                $em->flush();
+                
     		if ( $this->container->getParameter('notifications_enabled'))
     			$this->messageNotification($message, $user);
     		$this->get('session')->setFlash('positive', 'regularuser.message.sent');
@@ -393,16 +450,40 @@ class MessageController extends Controller
     	$displayUser = $userLoggedIn;
     	
     	$request = $this->getRequest();
-    	$messenger = $this->get('fenchy.messenger');
+        $title = $request->get('title');
+	$content = $request->get('content');
+        
+            if($request->get('receiverId')=="all")
+            {
+                
+                $neighborhoodmsg = new NeighborhoodMsg();
+                $neighborhoodmsg->setTitle(substr($content, 0, 9));
+		$neighborhoodmsg->setContent($content);
+		$neighborhoodmsg->setUser($displayUser);
+                
+                $em->persist($neighborhoodmsg);
+                $em->flush();
+            }
+            else
+            {
+                $messenger = $this->get('fenchy.messenger');
 		$messageNew = new Message();
 		$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($request->get('receiverId'));
 		if (null === $receiver || $receiver === $this->getUser()) {
 			throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
 		}
 		$messenger->setReceiver($receiver);
-		$title = $request->get('title');
-		$content = $request->get('content');
 		
+		if($request->get('groupId')!='')
+                {
+                    $usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($request->get('groupId'));
+                    $messageNew->setUsergroup($usergroup);
+                }
+                if($request->get('groupFrom')!='')
+                {
+                    $fromgroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($request->get('groupFrom'));
+                    $messageNew->setFromgroup($fromgroup);
+                }
 		$messageNew->setTitle($title);
 		$messageNew->setContent($content);
 		$messageNew->setSender($displayUser);
@@ -411,8 +492,9 @@ class MessageController extends Controller
 						
 		if ( $this->container->getParameter('notifications_enabled'))
 			$this->messageNotification($message, $displayUser);
-
-		return new Response();
+            }
+            
+	    return new Response();
     }
     
     public function sendMsgToGroupFormAction()

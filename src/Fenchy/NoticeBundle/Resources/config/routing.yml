@@ -28,3 +28,11 @@ fenchy_notice_show_slug:
         year: \d+
         month: \d+
         day: \d+
+        
+fenchy_neighborhoodmsg_show_slug:
+    pattern: /{slug}/{year}/{day}
+    defaults: { _controller: FenchyRegularUserBundle:Listing:msgshowWithSlug }
+    requirements:
+        slug: "[a-z0-9\-]+"
+        year: \d+
+        day: \d+        

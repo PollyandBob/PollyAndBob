@@ -1,0 +1,251 @@
+ <script type="text/javascript"> 
+	  
+		function sendRequest()
+		{
+			var id = '{{ neighborhoodmsg.id }}';
+			var request_text = $('#requestdata').val();
+			var flag = true;
+			
+			$('#requestdata').focus(function()
+			{
+				$('#requestdata').val('');
+			});
+			{#if($('#requestdata').val() == "" || $('#requestdata').val() == '*REQUIRED')
+			{
+				$('#requestdata').val('*REQUIRED');
+				flag = false;
+			}#}
+                                //alert(flag);
+			if(flag)
+			{
+				var url = "{{path('fenchy_neighborhoodmsg_send_reueqst')}}";
+				$.ajax({
+					url : url,
+					type : "post",
+					data : {
+						'noticeId': id,					
+						'request_text': request_text,
+						},
+					beforeSend : function() {
+						
+					},
+					success : function(response) {
+						//alert('Your request send');
+						$('#RequestSend').click();
+						$('#dialog42').hide();
+					},
+					error : function() {
+						alert('Something went wrong!');
+					},
+					complete : function() {
+						$('#requestdata').val('');
+						//$('#freebox').attr('checked' : false);
+						//setTimeout(function(){ location.reload(); }, 100);
+					}
+				}); 
+			}				
+		}
+		
+		function sendMsg()
+		{
+			var flag = true;
+			var title = $('#MsgTitle').val();
+			var content = $('#MsgContent').val();			
+			
+			if(title == "" || content == "")
+			{
+				flag = false;
+				$('#MsgTitle').attr('placeholder', 'required*');
+				$('#MsgContent').attr('placeholder', 'required*');
+			}
+                        if(title.trim() == "" || content.trim() == "" )
+                        {
+                                flag = false;
+				$('#MsgTitle').val('');
+				$('#MsgContent').val('');
+                                $('#MsgTitle').attr('placeholder', 'required*');
+				$('#MsgContent').attr('placeholder', 'required*');
+                        }
+			var receiver = "{{ neighborhoodmsg.user.id }}";
+			if(flag)
+			{
+				var url = "{{path('fenchy_regular_user_sendmsgform')}}";
+				$.ajax({
+					url : url,
+					type : "post",
+					data : {
+						'receiverId': receiver,				
+						'title': title,
+						'content': content,										
+						},
+					beforeSend : function() {
+						
+					},
+					success : function(response) {
+						$('#dialog44').hide();
+						$('#successDialog').click();
+					},
+					error : function() {
+						alert('Something went wrong!');
+					},
+					complete : function() {
+						$('#MsgTitle').val('');
+						$('#MsgContent').val('');					
+					}
+				}); 
+			}		
+		}
+</script>
+{# empty Twig template #}
+<style>
+.rightparts .profile .person img {
+    height: 152px;
+    width: 152px;
+}
+</style>
+<div class="rightparts">
+	<div class="right" >
+  	  	<div class="options">
+
+    		<div class="optionsdetail">
+                    <a  id="contact_me" href="#dialog42" name="modal" id="vzoom_1944" class="zoomthis blue-button">{{ 'contact_me'|trans }}&nbsp;{{ displayUser.name }}!</a>
+                </div>
+            <div class="clearfix"></div>
+            	
+            </div>
+    	<div class="options">
+    		<h4>{{ displayUser.name }}</h4>
+    		<div class="profile">        	
+        		<div class="person">
+        		{% if app.user %}
+        		<a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice',{'userId': displayUser.id}) }}">
+            		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': displayUser.id } %}
+            	</a>
+            	{% else %}
+            	<a href="javascript:void(0);">
+            		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': displayUser.id } %}
+            	</a>
+            	{% endif %}	
+            			<div class="neighbor {{ managerType[2] }}">
+							<p>{{ managerType[1] }}</p>
+							<span>{{ displayUser.activity }}</span>
+					</div>               
+            	</div>
+            </div>
+            <h2>{{displayUser.regularuser.aboutMe|truncate(200)}}</h2>
+            {% if app.user.id is defined and app.user.id != displayUser.id %}
+              	<div class="optionsdetail">              	
+              	<a href="#dialog44" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="margin-left: 70px;">                                            
+               		{{ 'btn.send_message' | trans }}
+            	</a></div>
+        	{% endif %}            
+		</div>		
+		
+		
+    </div>
+</div>
+<section id="boxes2">
+    <div id="dialog42" class="window" >
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+	      	
+			<form action="" method="post">
+                        <div id="requestDiv">
+                            <h3>{{ 'request.msg1'|trans }}</h3>
+{#                            <h2>{{ 'request.msg2'|trans }} contact {{ displayUser.name }}</h2>	    	#}
+
+                            <h2 style="text-align:left; padding: 20px 12px 5px; margin-left: 54px;"> {{ 'request.message_to_user'|trans|upper }} {{ displayUser.name }}</h2>
+                                <div class="box1" style="border: 0px none; margin-top: -10px;">
+                                <textarea id="requestdata" rows="5" cols="48" placeholder="Request Message" style="width: 380px; padding: 10px;"></textarea>
+                                </div>
+
+                            <div class="bottom-buttons">
+                                <input class="blue-btn" type="button" id="continue" value="{{ 'request.send'|trans }}" onclick="sendRequest();" style="float: right; margin-right: 19px; padding: 1px 6px 0; height: auto;"/>
+                                <a class="blue-btn" style="padding: 2px 6px 0; height: auto; float: left;" href="{{path('fenchy_notice_indexv2')}}">
+                                    {{ 'request.return_to_listing'|trans }}
+                                    </a>
+
+                            </div>
+                        </div>
+			</form>
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%;" />
+	</div>
+	<div id="mask"></div>
+</section>
+<section id="boxes2">
+	<div id="dialog43" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+	      	{% if app.user.id is defined and app.user.id != displayUser.id %}
+	      		
+	      			<div id="requestDiv">
+		    						
+   					</div>
+	      		
+	      	{% endif %}
+						
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="top: 69px; width: 100%;">
+	</div>
+	<div id="mask"></div>
+</section>
+<a id="successDialog" href="#dialog45" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+<section id="boxes2">
+	<div id="dialog44" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+				<p>{{ 'regularuser.write_msg_to'|trans }} {{ neighborhoodmsg.user.name }} about {{ neighborhoodmsg.title }}</p>
+					<input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}"/>
+					<textarea id="MsgContent" placeholder="{{ 'message.content'|trans }}"></textarea>
+				<input class="blue_button" style="margin-bottom: 10px; margin-left: -71px; margin-top: 130px;" type="button" id="continue" value="{{ 'btn.send'|trans }}" onclick="sendMsg();"/>
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width:100%">
+	</div>
+	<div id="mask"></div>
+</section>
+
+<section id="boxes2">
+	<div id="dialog45" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+			<div id="messageForm">
+				<p>{{ 'regularuser.msg_send'|trans }}</p>
+			</div>
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+	</div>
+	<div id="mask"></div>
+</section>
+
+<a id="RequestSend" href="#dialog49" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+<section id="boxes2">
+	<div id="dialog49" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+			<div id="messageForm">
+				<p>{{ 'request.msg1'|trans }}</p>
+			</div>
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+	</div>
+	<div id="mask"></div>
+</section>
+
+<a id="SetPayments" href="#dialog451" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+    <section id="boxes2">
+		<div id="dialog451" class="window">
+		<div id="dialog43">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+			<div id="messageForm">
+				<p>{{ 'regularuser.payment_settings'|trans }}</p>
+			</div>
+			<a href="{{ path('fenchy_regular_user_settings_payment') }}" class="blue_button right" style="margin-right:20px;">{{ 'regularuser.setpayment'|trans }}</a>
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+		</div>
+		</div>
+		<div id="mask"></div>
+	</section>
+	

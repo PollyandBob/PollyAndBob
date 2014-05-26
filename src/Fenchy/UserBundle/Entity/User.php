@@ -16,10 +16,12 @@ use Fenchy\NoticeBundle\Entity\Notice,
     Fenchy\UtilBundle\Entity\Sticker,
     Fenchy\NoticeBundle\Entity\Review,
     Fenchy\RegularUserBundle\Entity\Neighbors,
+    Fenchy\RegularUserBundle\Entity\BlockedNeighbor,    
 	Fenchy\NoticeBundle\Entity\Request;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Fenchy\NoticeBundle\Entity\Comment;
-
+use Cunningsoft\ChatBundle\Entity\AuthorInterface;
+use Fenchy\NoticeBundle\Entity\RequestMessages;
 
 /**
  * @ORM\Table(name="user__users")
@@ -27,7 +29,7 @@ use Fenchy\NoticeBundle\Entity\Comment;
  * @UniqueEntity("username")
  * @UniqueEntity("email")
  */
-class User extends BaseUser
+class User extends BaseUser implements AuthorInterface
 {
     
     /**
@@ -59,7 +61,7 @@ class User extends BaseUser
     /**
      * @var boolean
      *
-     * @ORM\Column(name="managertype", type="boolean", length=255, unique=true, nullable=true)
+     * @ORM\Column(name="managertype", type="boolean", length=255, nullable=true)
      */
     protected $managertype;
 
@@ -102,6 +104,12 @@ class User extends BaseUser
      */
     protected $user_group;
 
+    /**
+     * @var UserGroup $user_group
+     *
+     * @ORM\OneToOne(targetEntity="Fenchy\RegularUserBundle\Entity\NeighborhoodMsg", mappedBy="user", cascade={"persist", "remove"})
+     */
+    protected $neighborhoodmsg;
     
     /**
      * @var LocationVerification $location_id
@@ -109,6 +117,13 @@ class User extends BaseUser
      * @ORM\OneToOne(targetEntity="Fenchy\UserBundle\Entity\LocationVerification", mappedBy="user", cascade={"persist", "remove"})
      */
     protected $location_id;
+    
+    /**
+     * @var TellFriend $tellfriend
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\UserBundle\Entity\TellFriend", mappedBy="user", cascade={"persist", "remove"})
+     */
+    protected $tellfriend;
     
     /**
      * @var LocationVerification $identity
@@ -271,6 +286,15 @@ class User extends BaseUser
     private $comments;
     
     /**
+     * Comment about this user
+     * @var ArrayCollection $requestmessage
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\RequestMessages", mappedBy="aboutUser", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $requestmessage;
+    
+    /**
      * Reviews created by this user
      * @var ArrayCollection $ownReviews
      * 
@@ -298,6 +322,24 @@ class User extends BaseUser
     private $myNeighbor;
     
     /**
+     * Logged User
+     * @var ArrayCollection $blockeruser
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\RegularUserBundle\Entity\BlockedNeighbor", mappedBy="blocker", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $blockeruser;
+
+    /**
+     * Logged users Neighbor
+     * @var ArrayCollection $blockeduser
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\RegularUserBundle\Entity\BlockedNeighbor", mappedBy="blocked", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $blockeduser;
+    
+    /**
      * Requests created by this user
      * @var ArrayCollection $ownRequests
      *
@@ -314,6 +356,15 @@ class User extends BaseUser
      * @ORM\OrderBy({"created_at"="DESC"})
      */
     private $ownComments;
+    
+     /**
+     * Comment created by this user
+     * @var ArrayCollection $ownRequestMessage
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\RequestMessages", mappedBy="author", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $ownRequestMessage;
     
     /**
      * Indicates whether user's account is business type
@@ -332,11 +383,34 @@ class User extends BaseUser
     private $prevFacebookId = FALSE;
     
     /**
+     * Indicates whether user is online
+     * @var boolean
+     *
+     * @ORM\Column(name="is_login", type="boolean", nullable=true)
+     */
+    private $isLogin = false;
+    
+    /**
      * @var DateTime
      * 
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $created_at;
+    
+    /**
+     * @var DateTime
+     * 
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $last_active;  
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="chatwindows", type="string", nullable=true)
+     */
+    protected $chatwindows;
+    
     
     protected $prevNoticesQuantity = FALSE;
     protected $prevOwnReviewsQuantity = FALSE;
@@ -353,6 +427,7 @@ class User extends BaseUser
         $this->notification_group_intervals = new ArrayCollection();
         $this->notifications                = new ArrayCollection();
         $this->notices                      = new ArrayCollection();
+        $this->tellfriend                   = new ArrayCollection();
         $this->messages                     = new ArrayCollection();
         $this->got_references               = new ArrayCollection();
         $this->sent_references              = new ArrayCollection();
@@ -363,13 +438,18 @@ class User extends BaseUser
         $this->ownReviews                   = new ArrayCollection();
         $this->myNeighbor                   = new ArrayCollection();
         $this->logged                   	= new ArrayCollection();
+        $this->blockeduser                  = new ArrayCollection();
+        $this->blockeruser                  = new ArrayCollection();
         $this->requests                     = new ArrayCollection();
         $this->ownRequests                  = new ArrayCollection();
         $this->comment                      = new ArrayCollection();
-        $this->ownComments                   = new ArrayCollection();
+        $this->ownComments                  = new ArrayCollection();
         $this->created_at                   = new \DateTime(); 
-       	$this->user 						= new ArrayCollection();
-       	$this->members 						= new ArrayCollection();
+        $this->last_active                  = new \DateTime(); 
+       	$this->user                         = new ArrayCollection();
+       	$this->members                      = new ArrayCollection();
+        $this->requestmessage               = new ArrayCollection();
+        $this->ownRequestMessage            = new ArrayCollection();
      
     }
     
@@ -1640,6 +1720,29 @@ class User extends BaseUser
         return $this->created_at;
     }    
 
+     /**
+     * Set last_active
+     *
+     * @param \DateTime $createdAt
+     * @return User
+     */
+    public function setLastActive($lastActive)
+    {
+        $this->last_active = $lastActive;
+    
+        return $this;
+    }
+
+    /**
+     * Get last_active
+     *
+     * @return \DateTime 
+     */
+    public function getLastActive()
+    {
+        return $this->last_active;
+    }    
+
     /**
      * Set location_id
      *
@@ -1786,6 +1889,29 @@ class User extends BaseUser
     {
         return $this->user_group;
     }
+    
+    /**
+     * Set neighborhoodmsg
+     *
+     * @param Fenchy\RegularUserBundle\Entity\NeighborhoodMsg $neighborhoodmsg
+     * @return User
+     */
+    public function setNeighborhoodMsg(\Fenchy\RegularUserBundle\Entity\NeighborhoodMsg $neighborhoodmsg = null)
+    {
+        $this->neighborhoodmsg = $neighborhoodmsg;
+    
+        return $this;
+    }
+
+    /**
+     * Get neighborhoodmsg
+     *
+     * @return Fenchy\RegularUserBundle\Entity\NeighborhoodMsg
+     */
+    public function getNeighborhoodMsg()
+    {
+        return $this->neighborhoodmsg;
+    }
 
     /**
      * Add user
@@ -1900,5 +2026,250 @@ class User extends BaseUser
     public function removeMember(\Fenchy\RegularUserBundle\Entity\GroupMembers $members)
     {
         $this->members->removeElement($members);
+    }
+
+    /**
+     * Set isLogin
+     *
+     * @param boolean $isLogin
+     * @return User
+     */
+    public function setIsLogin($isLogin)
+    {
+        $this->isLogin = $isLogin;
+    
+        return $this;
+    }
+
+    /**
+     * Get isLogin
+     *
+     * @return boolean 
+     */
+    public function getIsLogin()
+    {
+        return $this->isLogin;
+    }
+
+    /**
+     * Add blockeruser
+     *
+     * @param Fenchy\RegularUserBundle\Entity\BlockedNeighbor $blockeruser
+     * @return User
+     */
+    public function addBlockeruser(\Fenchy\RegularUserBundle\Entity\BlockedNeighbor $blockeruser)
+    {
+        $this->blockeruser[] = $blockeruser;
+    
+        return $this;
+    }
+
+    /**
+     * Remove blockeruser
+     *
+     * @param Fenchy\RegularUserBundle\Entity\BlockedNeighbor $blockeruser
+     */
+    public function removeBlockeruser(\Fenchy\RegularUserBundle\Entity\BlockedNeighbor $blockeruser)
+    {
+        $this->blockeruser->removeElement($blockeruser);
+    }
+
+    /**
+     * Get blockeruser
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getBlockeruser()
+    {
+        return $this->blockeruser;
+    }
+
+    /**
+     * Add blockeduser
+     *
+     * @param Fenchy\RegularUserBundle\Entity\BlockedNeighbor $blockeduser
+     * @return User
+     */
+    public function addBlockeduser(\Fenchy\RegularUserBundle\Entity\BlockedNeighbor $blockeduser)
+    {
+        $this->blockeduser[] = $blockeduser;
+    
+        return $this;
+    }
+
+    /**
+     * Remove blockeduser
+     *
+     * @param Fenchy\RegularUserBundle\Entity\BlockedNeighbor $blockeduser
+     */
+    public function removeBlockeduser(\Fenchy\RegularUserBundle\Entity\BlockedNeighbor $blockeduser)
+    {
+        $this->blockeduser->removeElement($blockeduser);
+    }
+
+    /**
+     * Get blockeduser
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getBlockeduser()
+    {
+        return $this->blockeduser;
+    }
+    
+      /**
+     * Set blockeduser
+     * @param \Doctrine\Common\Collections\ArrayCollection $blockeduser
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function setBlockeduser(ArrayCollection $blockeduser) {
+    	
+    	$this->blockeduser = $blockeduser;
+    
+    	return $this;
+    }
+    
+    /**
+     * Set blockeruser
+     * @param \Doctrine\Common\Collections\ArrayCollection $blockeruser
+     * @return \Fenchy\UserBundle\Entity\User
+     */
+    public function setBlockeruser(ArrayCollection $blockeruser) {
+    	
+    	$this->blockeruser = $blockeruser;
+    
+    	return $this;
+    } 
+     
+   
+
+    /**
+     * Add requestmessage
+     *
+     * @param Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage
+     * @return User
+     */
+    public function addRequestmessage(\Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage)
+    {
+        $this->requestmessage[] = $requestmessage;
+    
+        return $this;
+    }
+
+    /**
+     * Remove requestmessage
+     *
+     * @param Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage
+     */
+    public function removeRequestmessage(\Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage)
+    {
+        $this->requestmessage->removeElement($requestmessage);
+    }
+
+    /**
+     * Get requestmessage
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getRequestmessage()
+    {
+        return $this->requestmessage;
+    }
+
+    /**
+     * Add ownRequestMessage
+     *
+     * @param Fenchy\NoticeBundle\Entity\RequestMessages $ownRequestMessage
+     * @return User
+     */
+    public function addOwnRequestMessage(\Fenchy\NoticeBundle\Entity\RequestMessages $ownRequestMessage)
+    {
+        $this->ownRequestMessage[] = $ownRequestMessage;
+    
+        return $this;
+    }
+
+    /**
+     * Remove ownRequestMessage
+     *
+     * @param Fenchy\NoticeBundle\Entity\RequestMessages $ownRequestMessage
+     */
+    public function removeOwnRequestMessage(\Fenchy\NoticeBundle\Entity\RequestMessages $ownRequestMessage)
+    {
+        $this->ownRequestMessage->removeElement($ownRequestMessage);
+    }
+
+    /**
+     * Get ownRequestMessage
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getOwnRequestMessage()
+    {
+        return $this->ownRequestMessage;
+    }
+
+    
+    public function setTellfriend(\Fenchy\UserBundle\Entity\TellFriend $tellfriend = null)
+    {
+        $this->tellfriend = $tellfriend;
+    
+        return $this;
+    }
+
+    /**
+     * Get tellfriend
+     *
+     * @return Fenchy\UserBundle\Entity\TellFriend 
+     */
+    public function getTellfriend()
+    {
+        return $this->tellfriend;
+    }
+
+    /**
+     * Add tellfriend
+     *
+     * @param Fenchy\UserBundle\Entity\TellFriend $tellfriend
+     * @return User
+     */
+    public function addTellfriend(\Fenchy\UserBundle\Entity\TellFriend $tellfriend)
+    {
+        $this->tellfriend[] = $tellfriend;
+    
+        return $this;
+    }
+
+    /**
+     * Remove tellfriend
+     *
+     * @param Fenchy\UserBundle\Entity\TellFriend $tellfriend
+     */
+    public function removeTellfriend(\Fenchy\UserBundle\Entity\TellFriend $tellfriend)
+    {
+        $this->tellfriend->removeElement($tellfriend);
+    }
+
+    /**
+     * Set chatwindows
+     *
+     * @param string $chatwindows
+     * @return User
+     */
+    public function setChatwindows($chatwindows=NULL)
+    {
+        $this->chatwindows = $chatwindows;
+    
+        return $this;
+    }
+
+    /**
+     * Get chatwindows
+     *
+     * @return string 
+     */
+    public function getChatwindows()
+    {
+        return $this->chatwindows;
     }
 }

@@ -12,7 +12,7 @@ ul.tagit li.tagit-choice {
     -moz-border-radius: 0px;
     border-radius: 0px;
     -webkit-border-radius: 0px;
-    border: 1px solid #CAD8F3;
+    border: 0px solid #CAD8F3;
 
     background: none;
     background-color: #E14F45;
@@ -38,7 +38,7 @@ ul.tagit li.tagit-choice .tagit-close .text-icon {
     font-family: arial, sans-serif;
     font-size: 16px;
     line-height: 7px;
-    color: #000;
+    color: #FFF;
 }
 ul.tagit li.tagit-choice:hover, ul.tagit li.tagit-choice.remove {
     background-color: #51B9D4;
@@ -46,7 +46,7 @@ ul.tagit li.tagit-choice:hover, ul.tagit li.tagit-choice.remove {
 }
 ul.tagit li.tagit-choice a.tagLabel:hover,
 ul.tagit li.tagit-choice a.tagit-close .text-icon:hover {
-    color: #222;
+    color: #FFF;
 }
 ul.tagit input[type="text"] {
     color: #333333;

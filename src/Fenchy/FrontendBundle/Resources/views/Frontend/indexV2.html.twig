@@ -33,7 +33,14 @@
         userSettingsViewModel = new UserSettingsViewModel(geocoder, baseSearchViewUri);
 
         ko.applyBindings(userSettingsViewModel, document.getElementsByTagName('body')[0]);
-
+        
+        var requester = "{{ requester }}";
+        
+        if(requester!='')
+        {
+            $('.signup').click();
+        }
+        var requester = GetURLParameter('requester');
     });
     </script>
       

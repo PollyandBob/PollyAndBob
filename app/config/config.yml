@@ -14,7 +14,8 @@ framework:
     validation:      { enable_annotations: true }
     templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
     trust_proxy_headers: false # Whether or not the Request object should trust proxy headers (X_FORWARDED_FOR/HTTP_CLIENT_IP)
-    session:         ~
+    session: ~
+        
     
 # Twig Configuration
 twig:
@@ -66,6 +67,8 @@ doctrine:
             geometry:  Fenchy\UtilBundle\Types\GeometryType
 
     orm:
+        resolve_target_entities:
+            Cunningsoft\ChatBundle\Entity\AuthorInterface: Fenchy\UserBundle\Entity\User
         auto_generate_proxy_classes: %kernel.debug%
         entity_managers:
             default:
@@ -218,4 +221,19 @@ services:
           # For bc reasons we're not changing the names of the parameters
           - file_base_path: '%file_uploader.file_base_path%'
 
+cunningsoft_chat:
+    # refresh interval in milliseconds
+    update_interval: 2000
+    # messages to be shown in chat
+    number_of_messages: 25
 
+knp_paginator:
+    page_range: 5                      # default page range used in pagination control
+    default_options:
+        page_name: page                # page query parameter name
+        sort_field_name: sort          # sort field query parameter name
+        sort_direction_name: direction # sort direction query parameter name
+        distinct: true                 # ensure distinct results, useful when ORM queries are using GROUP BY statements
+    template:
+        pagination: KnpPaginatorBundle:Pagination:sliding.html.twig     # sliding pagination controls template
+        sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template

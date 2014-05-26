@@ -1,0 +1,38 @@
+{% extends '::baseAdmin.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+<link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('css/admin/base.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('css/regular_user/profile/userprofile-v2.css') }}" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+<script type="text/javascript" src="{{ asset('js/admin.js') }}"></script>
+{% endblock %}
+
+{% block header %}
+    {# include 'FenchyFrontendBundle:Partials:headerPartialMenuBar.html.twig' #}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="maincontent">
+     <div class="left">
+            <menu>
+	       {# {{ getlink('Categories', 'fenchy_admin_categories', {}, {'class': 'dark'})|raw }} #}
+                {{ getlink('Notices', 'fenchy_admin_notices', {}, {'class': 'dark'})|raw }}
+                {{ getlink('Reviews', 'fenchy_admin_reviews', {}, {'class': 'dark'})|raw }}
+                {{ getlink('Requests', 'fenchy_admin_requests', {}, {'class': 'dark'})|raw }}
+                {{ getlink('Comments', 'fenchy_admin_comments', {}, {'class': 'dark'})|raw }}
+               {# {{ getlink('Search', 'fenchy_admin_search', {}, {'class': 'dark'})|raw }} #}
+                {{ getlink('Users', 'fenchy_admin_users', {}, {'class': 'dark'})|raw }}
+                {{ getlink('Identity', 'fenchy_admin_identity', {}, {'class': 'dark'})|raw }}
+                {{ getlink('Location', 'fenchy_admin_location', {}, {'class': 'dark'})|raw }}
+            </menu>
+           
+                {% block admincontent %}{% endblock %}
+           
+        
+        </div>
+</div>
+{% endblock %}

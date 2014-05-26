@@ -20,29 +20,7 @@
 
         <script type="text/javascript" src="{{ asset('js/regular_user/settings/form.js') }}"></script>
         
-    <script type="text/javascript">
-		function verifyLocation()
-		{
-			var url = "{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}";
-			$.ajax({
-				url : url,
-				type : "post",
-				data : {
-					},
-				beforeSend : function() {
-					
-				},
-				success : function(response) {
-					alert(response);
-				},
-				error : function() {
-					alert('Something went wrong!');
-				},
-				complete : function() {					
-				}
-			});
-		}		
-	</script>
+    
 
 {% endblock %}
 
@@ -93,13 +71,19 @@
                                         <div id="comments" class="comments">Show Comments</div>
                                         <div id="commentdetail" class="commentdetail">
                                             <div class="commentopen">Show Comments</div>
-                                                {% if i < reviews %}                                    		
+                                                {% if i < reviews %}
 	                    						{% for initialComment in initialComments[i] %}
 			                                    	{% if initialComment %}
-			                                    		<div class="data">                                      	 
-				                                      		<a href="{{ initialComment['author']['profileUrl'] }}">
+			                                    		<div class="data"> 
+                                                                            {% if initialComment['author']['id'] in blockUser %}
+				                                      		<a href="javascript:void(0);">
 				                                      			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialComment['author']['id'] } %}
 				                                      		</a>
+                                                                            {% else %}
+                                                                                <a href="{{ initialComment['author']['profileUrl'] }}">
+				                                      			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialComment['author']['id'] } %}
+				                                      		</a>
+                                                                            {% endif %}
 				                                      		<p>{{ initialComment['text'] }}</p>
 				                                     	</div>
 			                                      	{% endif %}
@@ -114,10 +98,16 @@
                                     		{% if i < reviews %}                                    		
 	                    						{% for initialReview in initialReviews[i] %}
 			                                    	{% if initialReview %}
-			                                    		<div class="data">                                      	 
-				                                      		<a href="{{ initialReview['author']['profileUrl'] }}">
+			                                    		<div class="data">  
+                                                                            {% if initialReview['author']['id'] in blockUser %}
+				                                      		<a href="javascript:void(0);">
 				                                      			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialReview['author']['id'] } %}
 				                                      		</a>
+                                                                            {% else %}
+                                                                                <a href="{{ initialReview['author']['profileUrl'] }}">
+				                                      			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialReview['author']['id'] } %}
+				                                      		</a>
+                                                                            {% endif %}
 				                                      		<p>{{ initialReview['text'] }}</p>
 				                                     	</div>
 			                                      	{% endif %}
@@ -142,19 +132,7 @@
        </div>        
 		
 		
-		<section id="boxes2">
-    		<div id="dialog2" class="window"> 
-    	    	<div class="big_popup">
-	            	<div class="big_popupclose"><a href="" class="close"></a></div>
-            
-					<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>			
-            		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
-						<button>{{ 'regularuser.ok'|trans|upper }}</button>
-    	        	</form>
-        		</div>    
-    		</div>    
-    		<div id="mask"></div>
-    	</section>
+		
         <script>
   			 function imgError(url)
   			 {

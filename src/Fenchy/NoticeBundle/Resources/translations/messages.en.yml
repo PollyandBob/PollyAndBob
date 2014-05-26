@@ -23,13 +23,15 @@ notice:
   
   location: Location
   
+  place: place
+  
   action: Action
   
   price_spots: Price & Spots
   
   price_pieces: Price & Pieces
   
-  price_hours: Price / Hours
+  price_hours: Price / Hour
 
   price: Price
   
@@ -49,7 +51,23 @@ notice:
   
   contact_request: Contact Request
   
+  group_request: Group Request
+  
   contact: Contact
+  
+  you_take_part: You take part
+  
+  you_requested: You Requested
+  
+  closed_group: closed local group
+    
+  open_group: open group
+  
+  event_wanted: Event wanted
+  
+  event_hosted: Event offer
+  
+  message_from: Message From
   
   category:
     help: Services/Help
@@ -89,15 +107,17 @@ notice:
     
     propose_time_price: Propose a time and price
     
-    reserve_spot: Reserve s spot (if free)
+    reserve_spot: Reserve a spot (if free)
     
-    take_part: Come and take part!
+    take_part: Come and take a part!
     
     buy: Buy
     
     buy_a_spot: Buy a spot
     
     propose_price: Propose a price
+    
+    Propose_location: Propose a location
     
     borrow_bring: Borrow and bring back
     

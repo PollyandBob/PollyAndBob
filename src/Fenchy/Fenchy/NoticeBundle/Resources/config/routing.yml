@@ -1,0 +1,30 @@
+fenchy_notice_indexv2:
+    pattern: /listings/{slug}
+    defaults: { _controller: FenchyNoticeBundle:GlobalFilter:indexV2, slug: '' }
+    requirements:
+        slug: ".*"
+
+fenchy_notice_detailsv2:
+    pattern: /listing/details
+    defaults: { _controller: FenchyNoticeBundle:GlobalFilter:detailsV2 }
+
+fenchy_filter_content:
+    pattern: /listing/content
+    defaults: { _controller: FenchyNoticeBundle:GlobalFilter:list }
+#    requirements:
+#        _method: GET
+
+fenchy_what_autocomplete_suggestions:
+    pattern: /listing/acsuggest
+    defaults: { _controller: FenchyNoticeBundle:GlobalFilter:autocompleteSuggest}
+    requirements:
+        _method:  POST
+        
+fenchy_notice_show_slug:
+    pattern: /{slug}/{year}/{month}/{day}
+    defaults: { _controller: FenchyRegularUserBundle:Listing:showWithSlug }
+    requirements:
+        slug: "[a-z0-9\-]+"
+        year: \d+
+        month: \d+
+        day: \d+

@@ -83,9 +83,14 @@
             
             
             
-	        </div>
+	        
             
-       		      
+       		{% if app.user %}      
+                        <div class="neighboursdetils">
+                            {% render "FenchyNoticeBundle:GlobalFilter:myNeighborsCode1" with { 'userId': app.user.id } %}
+                        </div>
+                {% endif %}
+	</div>
 {#         <div class="container clearfix">#}
 {#             <nav class="main clearfix">#}
 {#                 <ul>#}
@@ -183,13 +188,49 @@
         </div>
         <div id="mask"></div>
     </section>
-    <script>
-    //alert('test');
-    </script>
+    
+    
+    <script language="JavaScript" type="text/javascript">
+        
+       $(function () {
+            $("a").click(function() {
+                window.onbeforeunload = null;
+            });
+        });
+        $('form').submit(function() {  window.onbeforeunload = null; });
+  	</script>
+        
+        <script type="text/javascript"> 
+           
+            function updateChatCount()
+                {
+                    {% if app.user %}
+                        $.post('{{ path('fenchy_regular_user_updatechatcount') }}',
+                            function(data) { 
+                                if(data>0)
+                                {
+                                    $('.mailcount span').html(data);
+                                    $('.mailcount').css('display','block');
+                                }
+                                else
+                                {
+                                    $('.mailcount').css('display','none');
+                                }
+                        });
+                    {% endif %}
+                }
+        </script>
+    
+        <script type="text/javascript">
+            $(window).load(function(){
+                updateChatCount();
+                window.setInterval(function(){
+                    updateChatCount();
+                }, 3000);
+              });
+        </script>
     {% if not app.user %}
     <div id="signup-wrapper" class="loginform">
-        
-        
         
     </div>
     {% endif %}

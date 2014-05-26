@@ -1,0 +1,27 @@
+{% extends "UserBundle::social_base.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/frontend/login.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/frontend/register.css') }}" type="text/css" />
+{% endblock %}
+    
+{% block header %}
+    {% include 'FenchyFrontendBundle:Partials:headerLogo.html.twig' %}
+{% endblock %}
+
+{% block content %}
+    {% block fos_user_content %}
+        <div id="preregister">
+            <h2 class="new_at_fenchy">{{ 'user.new_at_fenchy'|trans }}</h2>
+            {% include 'UserBundle:Partials:social_signup.html.twig' %}
+            <div class="pre_reg_sign">
+                {{'user.or_sign_up_with'|trans}}<a class="bold_link" href="{{ path ('connect_twitter')}}"> {{'user.twitter'|trans}}</a>
+            </div>
+            <hr>
+            <div class="pre_reg_sign">
+                {{'user.or_sign_up_with'|trans}}<a class="bold_link" href="{{ path('fenchy_frontend_signup') }}"> {{'user.with_your_email_address'|trans}}</a>
+            </div>
+        </div>
+    {% endblock %}
+{% endblock %}

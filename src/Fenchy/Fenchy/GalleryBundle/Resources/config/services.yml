@@ -1,0 +1,8 @@
+parameters:
+#    fenchy_gallery.example.class: Fenchy\GalleryBundle\Example
+
+services:
+  fenchy.gallery_manager:
+    class: Fenchy\GalleryBundle\Services\GalleryManager
+    arguments: ["@request", "@doctrine", "@punk_ave.file_uploader", "@fenchy.reputation_counter", %gallery_notice_max%, %gallery_about_me_max%, %gallery_profile_max%]
+    scope: request

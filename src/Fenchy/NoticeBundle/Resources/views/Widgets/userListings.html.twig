@@ -1,7 +1,13 @@
 {% if listings %}                                
 	<div class="options">
-    	<h4>{{ 'notice.other_from_title' | trans }} {{user.getUserRegular.getFirstName}} {{user.getUserRegular.getLastName}}</h4>
-    	<ul class="profile-summary-list additional-user-info">
+    	<h4>{{ 'notice.other_from_title' | trans }} 
+            {% if notice.usergroup %}
+                {{ notice.usergroup.groupname }}
+            {% else %}
+                {{user.getUserRegular.getFirstName}}
+            {% endif %}
+        </h4>
+        <ul class="profile-summary-list additional-user-info" style="margin-top: 7px;">
             {% for item in listings %}
             <li>
                 <div class="event-master clearfix">
@@ -19,5 +25,6 @@
             {% endfor %}     
 
         </ul>
+        <div class="bgbottom"><img src="{{ asset('images/bgbottom_leftpart.png')}}" alt=""></div>
    </div>
 {% endif %}

@@ -1,0 +1,238 @@
+{# //extends 'FenchyRegularUserBundle::settings.html.twig' #}
+{% extends 'FenchyRegularUserBundle::myProfileSettings.html.twig' %}
+
+{% form_theme form.location '::noLabelForm.html.twig' %}
+
+{% block stylesheets %}
+   {{ parent() }}
+<link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+<script type="text/javascript" src="{{ asset('js/regular_user/listing/create.js') }}"></script>
+<script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+{% include '::gmapsApiAsset.html.twig' %}
+
+<script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/mvvm/user-settings-view-model.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+<script type="text/javascript">
+
+function sendMsg()
+		{
+			var flag = true;
+			var title = $('#MsgTitle').val();
+			var content = $('#MsgContent').val();
+			//alert(title + content);
+			
+			if(title == "" || content == "")
+			{
+				flag = false;
+				$('#MsgTitle').attr('placeholder', 'required*');
+				$('#MsgContent').attr('placeholder', 'required*');
+			}
+                        if(title.trim() == "" || content.trim() == "" )
+                        {
+                                flag = false;
+				$('#MsgTitle').val('');
+				$('#MsgContent').val('');
+                                $('#MsgTitle').attr('placeholder', 'required*');
+				$('#MsgContent').attr('placeholder', 'required*');
+                        }
+			var receiver = $('#select_receiver').val();
+			
+			if(flag)
+			{	
+				var url = "{{path('fenchy_regular_user_sendmsgform')}}";
+				$.ajax({
+					url : url,
+					type : "post",
+					data : {
+						'receiverId': receiver,				
+						'title': title,
+						'content': content,										
+						},
+					beforeSend : function() {
+						
+					},
+					success : function(response) {
+						$('#successDialog2').click();
+					},
+					error : function() {
+						alert('Something went wrong!');
+					},
+					complete : function() {
+						$('#MsgTitle').val('');
+						$('#MsgContent').val('');					
+					}
+				}); 
+			}		
+		}
+</script>   
+<script type="text/javascript">
+
+    userSettingsViewModel = null;
+
+    $(document).ready(function() {
+        geocoder = new google.maps.Geocoder();
+        var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';
+
+        userSettingsViewModel = new UserSettingsViewModel(geocoder, baseSearchViewUri);
+
+        ko.applyBindings(userSettingsViewModel, document.getElementsByTagName('body')[0]);
+
+        autocomplete = new GApiAutocomplete(
+                document.getElementById('fenchy_userbundle_user_locationtype_location_location'),
+                userSettingsViewModel);
+
+
+    });
+    function hasCoordinates()
+    {
+    	{% if app.user.hasRequiredLocation %}
+        	return true;
+        {% endif %}
+
+        return false;
+    }
+
+    function getLatitude()
+    {
+        return '{{ app.user.location.latitude }}'
+    }
+
+    function getLongitude()
+    {
+        return '{{ app.user.location.longitude }}';
+    }
+    </script>
+    
+    <script src="{{ asset('js/geolocalization.js') }}"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        initialize();
+    });
+        </script>
+        <script type="text/javascript" src="{{ asset('js/regular_user/settings/form.js') }}"></script>
+        
+    <script type="text/javascript">
+		function verifyLocation()
+		{
+			var url = "{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}";
+			$.ajax({
+				url : url,
+				type : "post",
+				data : {
+					},
+				beforeSend : function() {
+					
+				},
+				success : function(response) {
+					alert(response);
+				},
+				error : function() {
+					alert('Something went wrong!');
+				},
+				complete : function() {					
+				}
+			});
+		}		
+	</script>
+{% endblock %}
+
+{% block content %}
+	{% render 'FenchyRegularUserBundle:Groupprofile:groupavatar' with { 'groupId' : groupId } %}
+	{% render 'FenchyRegularUserBundle:Groupprofile:groupmenu' with { 'groupId' : groupId } %}
+		
+		
+       <div class="message">
+				<div class="left">
+                	<a href="#" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>
+                    <div class="clearfix"></div>
+                    <div class="messagedetail">
+                    	{% if messages %}
+                          {% for message in messages %}
+	                    	<a href="{{ path('fenchy_regular_user_user_groupprofile_groupmessages_view', {'groupId': groupId ,'id': message.id}) }}" {% if not message.read %} {% if message.receiver != app.user %} class="message-read" {% else %} class="message-unread" {% endif %} {% endif %}>
+	                    	<div {% if message.read %}class="message-read"{% endif %}>
+	                            <div class="profilei">
+                          			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
+                          		</div>
+	                            {% if message.receiver != userObj %}
+	                            <img class="read_arrow" src="{{ asset('images/message-arrow1.png') }}" alt="" />
+	                            {% elseif message.receiver == userObj %}
+	                            <img class="read_arrow" src="{{ asset('images/message-arrow2.png') }}" alt="" />
+	                            {% endif %}
+	                            <p>{{ message.sender.userregular.firstname }}</p>
+	                            <p>{{ message.title }}</p>
+	                        </div>
+	                        </a>
+	                    	
+                    	 {% endfor %}
+                      {% else %}
+                         	{{'regularuser.message.no_messages'|trans}}</td>
+                      {% endif %}
+                    </div>
+                <div class="bgbottom"><img alt="" src="{{ asset('images/bgbottom_leftpart.png') }}"></div>
+                </div>
+                
+                <div class="right">
+{#                     <img class="personimage" src="{{ asset('images/person.png') }}" alt="" />#}
+{#                     <p class="name">gregory</p>#}
+{#                     <div class="clearfix"></div>#}
+{#                     <p class="message-all">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>#}
+                    
+			     	<p>{{ 'regularuser.write_msg_to'|trans }} 
+			     	
+			     	<select name="select_receiver" id="select_receiver">
+			     	{% if groupmembers %}
+			     		{% for groupmember in groupmembers %}
+			     			<option value="{{ groupmember.neighbor.id }}">{{ groupmember.neighbor.regularuser.firstname }} {{ groupmember.neighbor.regularuser.lastname }}</option>
+			     		{% endfor %}
+			     	{% else %}
+			     	<option>No members</option>
+			     	{% endif %}
+			     	</select>
+			     	</p>
+			     	
+			     	<br>
+			     	<br>
+					<input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}"/>
+					<br>
+					<textarea id="MsgContent" style="padding: 5px;" placeholder="{{ 'message.content'|trans }}"></textarea>
+					
+					<input class="blue_button" type="button" id="continue" value="{{ 'btn.send'|trans }}" onclick="sendMsg();"/>
+                    
+                    <div class="bgbottom_right"><img src="{{ asset('images/bgbottom_contantinner.png') }}" alt="" /></div>
+                </div>
+            </div>
+            
+         <a id="successDialog2" href="#dialog35" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+            
+        <section id="boxes2">
+				<div id="dialog35" class="window">
+				   	<div class="big_popup">
+				      	<div class="big_popupclose"><a href="" class="close"></a></div>
+						<div id="messageForm">
+							<p>{{ 'regularuser.msg_send'|trans }}</p>
+					</div>
+				</div>
+			</div>
+			<div id="mask"></div>
+		</section>    
+		<section id="boxes2">
+    		<div id="dialog2" class="window"> 
+    	    	<div class="big_popup">
+	            	<div class="big_popupclose"><a href="" class="close"></a></div>
+            
+					<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>			
+            		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
+						<button>{{ 'regularuser.ok'|trans|upper }}</button>
+    	        	</form>
+        		</div>    
+    		</div>    
+    		<div id="mask"></div>
+    	</section>
+                   
+{% endblock %}

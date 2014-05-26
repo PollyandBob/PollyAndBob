@@ -16,26 +16,26 @@ var createListing = {
             var $dd = $('#review-type-selector');
             $end.datepicker({
                 dateFormat: 'dd.mm.yy', 
-                stepMinute: 5, 
-                minuteMax: 55
+                stepMinute: 1, 
+                minuteMax: 59
             });
             $start_time.timepicker({
                 //dateFormat: 'dd.mm.yy', 
-                stepMinute: 5, 
-                minuteMax: 55
+                stepMinute: 1, 
+                minuteMax: 59
             });
             $end_time.timepicker({
                 //dateFormat: 'dd.mm.yy', 
-                stepMinute: 5, 
-                minuteMax: 55
+                stepMinute: 1, 
+                minuteMax: 59
             });
             $start.datepicker({
                 dateFormat: 'dd.mm.yy', 
-                stepMinute: 5, 
-                minuteMax: 55,
-                onClose: function () {
-                    if($end.val() == '') $end.val(this.value);
-                }
+                stepMinute: 1, 
+                minuteMax: 59,
+//                onClose: function () {
+//                    if($end.val() == '') $end.val(this.value);
+//                }
             });
             
             if($dd.length) new fenchyDropdown($dd);

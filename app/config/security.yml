@@ -115,6 +115,8 @@ security:
         - { path: ^/user/groupsettings, role: ROLE_USER }
         - { path: ^/user/groupmessages, role: ROLE_USER }
         - { path: ^/user/groupinfo, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/chatwindow, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/popupChatWindow, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/grouplistingsreviews, role: ROLE_USER }
         - { path: ^/user/groupnotifications, role: ROLE_USER }
         - { path: ^/user/deletegroup, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -127,6 +129,7 @@ security:
         - { path: ^/user/sendmsgform, role: ROLE_USER }
         - { path: ^/user/sendmsgtogroupform, role: ROLE_USER }
         - { path: ^/user/sendrequest, role: ROLE_USER }
+        - { path: ^/user/neighbormsgsendrequest, role: ROLE_USER }
         - { path: ^/user/storesession, role: ROLE_USER }
         - { path: ^/gallery/upload/, role: ROLE_USER }
         - { path: ^/businessuser/, role: ROLE_BUSINESSUSER }

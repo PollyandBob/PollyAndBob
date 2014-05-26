@@ -8,7 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Fenchy\UserBundle\Entity\User,
     Fenchy\NoticeBundle\Entity\Notice,
     Fenchy\NoticeBundle\Entity\Review,
- 	Fenchy\NoticeBundle\Entity\Comment;
+    Fenchy\NoticeBundle\Entity\Comment,
+    Fenchy\RegularUserBundle\Entity\UserGroup;
 
 /**
  * @ORM\Table(name="stickers")
@@ -62,6 +63,14 @@ class Sticker {
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     private $user;
+    
+    /**
+     * @var User
+     * 
+     * @ORM\ManyToOne(targetEntity="Fenchy\RegularUserBundle\Entity\UserGroup", inversedBy="stickers")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=true)
+     */
+    private $group;
     
     /**
      * @var Notice
@@ -331,6 +340,7 @@ class Sticker {
         if($this->notice) return $this->notice->getId();
         if($this->review) return $this->review->getId();
         if($this->comment) return $this->comment->getId();
+        if($this->group) return $this->group->getId();
         
         return NULL;
     }
@@ -341,11 +351,35 @@ class Sticker {
         if($this->notice) return 'notice';
         if($this->review) return 'review';
         if($this->comment) return 'comment';
+        if($this->group) return 'group';
         return '';
     }
     
     public function discard() {
         
         $this->discarded_at = new \DateTime();
+    }
+
+    /**
+     * Set group
+     *
+     * @param Fenchy\RegularUserBundle\Entity\UserGroup $group
+     * @return Sticker
+     */
+    public function setGroup(\Fenchy\RegularUserBundle\Entity\UserGroup $group = null)
+    {
+        $this->group = $group;
+    
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return Fenchy\RegularUserBundle\Entity\UserGroup 
+     */
+    public function getGroup()
+    {
+        return $this->group;
     }
 }

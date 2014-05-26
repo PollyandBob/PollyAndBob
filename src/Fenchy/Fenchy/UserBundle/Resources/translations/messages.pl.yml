@@ -1,0 +1,103 @@
+user:
+  rest_pass_msg: Proszę podać nowe hasło
+
+  enter_pass_again: Proszę ponownie dodać nowe hasło
+
+  forgot_your_password: Zapomniałeś hasła?
+
+  password_changed_msg: Sukces ! Twoje hasło zostało zmnienione !
+
+  password_changed_link_msg: Kliknij tu aby kontynuować
+
+  password_changed_alternative: lub
+
+  sign_in: Zaloguj się
+
+  back_to_login: Powrót do logowania
+
+  password_reset:
+    name: Odzyskiwanie hasła
+
+  account_deleted: Konto zostało usunięte
+
+  twitter_disconnected: Twitter odłączony
+
+  could_not_get_token: Nie można pobrać tokena
+
+  could_not_verify_credentials_twitter: Weryfikacja poświadczeń używanego konta Twitter'a nie powiodła się.
+
+  could_not_sign_in_via_facebook: Nie udało się zalogować z użyciem Facebook'a. Spróbuj ponownie.
+
+  problem_with_logging_try_again:
+    : Problem z logowaniem, spróbuj ponownie.
+
+  user_with_confirmation_token_not_exist: Użytkownik z tokenem %s% nie istnieje
+
+  your_facebook_account_already_connected: Twoje konto Facebook było wcześniej podłączone do innego konta Polly & Bob.
+
+  facebook_connected: Facebook podłączony
+
+  facebook_disconnected: Facebook odłączony
+
+  facebook_timeline_connected: Podłączono do tablicy Facebooka
+
+  facebook_timeline_disconnected: Odłączono od tablicy Facebooka
+
+  twitter_user_exists:
+    0: W Polly & Bob istnieje już konto związane z Twoim kontem na Twitterze, lecz jest od niego odłączone.
+
+    1: Jeśli chcesz połączyć swoje konto w Polly & Bob z kontem na Twitterze,
+
+    2: musisz zalogować się do Polly & Bob nazwą użytkownika i hasłem i przejść do Ustawienia->Połącz.
+
+    3: Możesz także stworzyć nowe konto w Polly & Bob z użyciem obecnego konta Twitter, lecz w tym celu musisz podać nowy adres e-mail
+
+    4: oraz nazwę użytkownika
+
+  some_fb_data_invalid_for_fenchy: Prawdopodobnie niektóre dane z Facebooka są nieprawidłowe dla Polly & Bob.
+
+  facebook_user_exists:
+    0: W Polly & Bob istnieje już konto związane z twoim profilem na Facebooku, lecz jest od niego odłączone
+
+    1: Jeśli chcesz połączyć swoje konto w Polly & Bob z kontem na Facebooku,
+
+    2: musisz zalogować się do Polly & Bob nazwą użytkownika i hasłem i przejść do Ustawienia->Połącz.
+
+    3: Możesz także stworzyć nowe konto w Polly & Bob z użyciem obecnego konta Facebook, lecz w tym celu musisz podać nowy adres e-mail
+
+    4: oraz nazwę użytkownika.
+
+  new_user_created: Użytkownik został utworzony.
+
+  token_expired: Token został użyty bądź stracił ważność.
+
+  user_twitter_reg_not_exist: Podany użytkownik Twittera nie istnieje.
+
+  registration: Rejestracja
+
+  register_welcome_msg_twitter: Zalogowałeś się za pomocą Twittera, do ukończenia procedury musisz przejść przez jeszcze jeden krok.
+
+  go_to_main_page: Przejdź do strony głównej
+change_password:
+  facebook_user_exists:
+    submit: Zmień hasło
+
+    flash:
+      success: Hasło zostało zmienione
+register:
+  footer_message:
+    1: Rejestrując się zgadzasz się na
+
+    2: warunki użytkowania
+
+    3: i
+
+    4: politykę prywatności
+
+  save_button: Rejestruj
+
+  title: Rejestracja
+
+  with_fb: Zarejestruj z Facebook
+
+  with_twitter: Zarejestruj z Twitter

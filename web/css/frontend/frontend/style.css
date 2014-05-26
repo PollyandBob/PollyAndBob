@@ -16,6 +16,74 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 ol, ul {
 	list-style:none;
 }
+.styled-checkbox {
+opacity: 0;
+filter: alpha(opacity=0);
+  
+}
+.styled-checkbox + label {
+position: relative;
+}
+.styled-checkbox + label:before,
+.lt-ie8 .checkbox-replacement {
+content: '';
+display: inline-block;
+visibility: visible;
+left: 0;
+width: 9px;
+height: 9px;
+line-height: 0.8;
+text-align: center;
+/* Put checkbox styles here: */
+border: 2px solid #51B9D4;
+}
+.styled-checkbox:checked + label:before,
+.lt-ie9 .styled-checkbox.checked + label:before {
+content: '✔';
+  color:#51B9D4;
+}
+
+
+.checkbox input[type='checkbox'] {
+opacity: 0;
+filter: alpha(opacity=0);
+position: relative;
+z-index: 100;
+  
+}
+.checkbox input[type='checkbox'] + label {
+position: relative;
+}
+.checkbox input[type='checkbox'] + label:before,
+.lt-ie8 .checkbox-replacement {
+content: '';
+display: inline-block;
+visibility: visible;
+left: 0;
+width: 0.6em;
+height: 0.6em;
+margin: 0 0.3em 0 -1em;
+line-height: 0.6;
+text-align: center;
+/* Put checkbox styles here: */
+border: 2px solid #51B9D4;
+}
+.checkbox input[type='checkbox']:checked + label:before,
+.lt-ie9 .checkbox input[type='checkbox'].checked + label:before {
+content: '✔';
+color:#51B9D4;
+}
+
+#fenchy_message_reply .input-element-errors 
+{
+    bottom: 195px;
+    color: #E14E44;
+    font-family: code_boldregular;
+    font-size: 13px;
+    position: absolute;
+    right: 0;
+}
+
 blockquote, q {
 	quotes:none;
 }
@@ -45,6 +113,10 @@ h2 {
 	color:#444;
 	font-family:mathletebulky;
 }
+#requestDiv h3
+{
+    padding-left: 22px;
+}
 h3 {
 	font-size:30px;
 	color:#000;
@@ -62,7 +134,7 @@ h4 {
 	clear:both;
 }
 .left {
-	float:left;
+	float:left !important;
 }
 .right {
 	float:right !important;
@@ -603,30 +675,32 @@ header .right .loginwindow2
     border: 1px solid #CCCCCC;
 }  
 .mailcount {
-	background: none repeat scroll 0 0 #E14E44;
-    border-radius: 6px 6px 6px 6px;
+    background: none repeat scroll 0 0 #E14E44;
+    border-radius: 8px 8px 8px 8px;
     color: #FFFFFF;
-    font-size: 11px;
-    font-weight: bold;    
+    font-size: 0.53em;
+    font-weight: normal;
+    height: 16px;
     margin-left: 10px;
-    margin-top: -2px;
+    margin-top: -6px;
     position: absolute;
     text-align: center;
-    top: 2px;	
-	width:12px;
+    top: 1px;
+    width: 16px;
 }
 .requestcount {
-	background: none repeat scroll 0 0 #E14E44;
-    border-radius: 6px 6px 6px 6px;
+    background: none repeat scroll 0 0 #E14E44;
+    border-radius: 8px 8px 8px 8px;
     color: #FFFFFF;
-    font-size: 11px;
-    font-weight: bold;    
+    font-size: 0.53em;
+    font-weight: normal;
+    height: 16px;
     margin-left: 10px;
-    margin-top: -2px;
+    margin-top: -6px;
     position: absolute;
     text-align: center;
-    top: 2px;	
-	width:12px;
+    top: 1px;
+    width: 16px;
 }
 header .right ul {
 	float:left;
@@ -684,7 +758,7 @@ header button {
 	color:#000;
 	letter-spacing:1px;
 	padding-right:30px;
-	background:url(/images/icon_listing.png) right 2px no-repeat;
+	background:url(/images/icon_listing.png) right 3px no-repeat;
 }
 header .createlinks {
 	float:left;
@@ -701,6 +775,18 @@ header .right select {
 	height:262px;
 	margin-top:15px;
 	position: relative;
+}
+#contentinner .group
+{
+    height:326px !important;
+}
+.group .left .persen
+{
+    margin: 89px 0 0 15px !important;
+}
+#contentinner .group .right
+{
+    margin-top: 289px !important;
 }
 .open-close {
 	background: none repeat scroll 0 0 #e14f45;
@@ -721,6 +807,46 @@ header .right select {
     width: 59px;
     z-index: 9;
 }
+
+.manager_group_C {
+    background: none repeat scroll 0 0 #008dd7;
+    border-radius:50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    -khtml-border-radius:50%;
+    color: #fff;
+    font-family: code_boldregular;
+    font-size: 11px;
+    height: 54px;
+    letter-spacing: 1px;
+    padding-top: 36px;
+    position: absolute;
+    right: 15px;
+    text-align: center;
+    top: 15px;
+    width: 90px;
+    z-index: 9;
+}
+.manager_group_N {
+    background: none repeat scroll 0 0 #56b75a;
+    border-radius:50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    -khtml-border-radius:50%;
+    color: #fff;
+    font-family: code_boldregular;
+    font-size: 11px;
+    height: 54px;
+    letter-spacing: 1px;
+    padding-top: 36px;
+    position: absolute;
+    right: 15px;
+    text-align: center;
+    top: 15px;
+    width: 90px;
+    z-index: 9;
+}
+
 .group .right a {
 	font-size:12px; 
 	padding:2px 0
@@ -787,7 +913,7 @@ header .right select {
 	z-index: 19;
 }
 .violet {
-	background:violet;
+	background:darkgrey;
 }
 .orange {
 	background:#f77b00;
@@ -799,7 +925,7 @@ header .right select {
 	background:#008dd7;
 }
 .red {
-    background: red;
+    background: #E14F45;
 }
 .redcolor {
 	color:#e14f45 !important;
@@ -809,6 +935,7 @@ header .right select {
 	line-height:9px;
 	margin-top:10px;
 	color:#fff !important;
+        margin-left: 1px;
 }
 .neighbor span {
 	font-size:16px;
@@ -883,7 +1010,7 @@ nav {
 .myneighbors nav {
     float: right;
     left: 800px;
-    margin-top: 25px;
+    margin-top: 0px;
     position: absolute;
 }
 
@@ -975,6 +1102,10 @@ nav li a:hover b {
 	color:#000;
 	letter-spacing:1px;
 }
+.about-details .name input{
+    border: 1px solid #C8C8C8;
+    width: 174px;
+}
 .persendata .about-details .title {
 	float:left;
 	width:100%;
@@ -992,7 +1123,12 @@ nav li a:hover b {
 .aboutmedata .about-details .right {
 	width:91%;
 }
-
+.aboutmedata .about-details .right .about_input
+{
+    margin-left: -82px;
+    margin-top: 25px;
+    width: 100%;
+}
 .persendata .about-details p {
 	font-family:code_boldregular;
 	font-size:12px;
@@ -1007,10 +1143,12 @@ form fieldset, form input, form select, form button, form textarea, .about_show
     font-size:12px;
     color:#000;
     letter-spacing:1px;
+    /*border: 1px solid #C8C8C8;*/
 }
 .persendata .findmedata {
 	float:left;
 	margin-bottom:5px;
+        width: 100%;
 }
 .likedata {
 	margin-top:10px;
@@ -1038,6 +1176,22 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 {
     background:none !important;
 }
+.tagit-new input[type='text']
+{
+    letter-spacing: 0 !important;
+}
+#fenchy_regularuserbundle_useraboutsettingstype_gender input[type='radio']
+{
+    float: left;
+    width: auto;
+    
+}
+#fenchy_regularuserbundle_useraboutsettingstype_gender label
+{
+    float: left;
+    padding: 5px 0px;
+}
+
 .persendata .findme .about-details {
 	margin-bottom:20px;
 }
@@ -1062,7 +1216,7 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	margin:40px 16px 0;		
 	position:relative;
 }
-.myneighbors .persen img {
+.myneighbors .persen img, .blockneighbors .persen img {
 	width:156px;
 	height:156px;
 	border-radius:50%;
@@ -1076,7 +1230,7 @@ form fieldset, form input, form select, form button, form textarea, .about_show
     font-family: code_boldregular;
     font-size: 12px;
     height: 15px;
-    left:1px;
+    left:2px;
     letter-spacing: 1px;
     position: absolute;
     text-align: center;
@@ -1084,11 +1238,11 @@ form fieldset, form input, form select, form button, form textarea, .about_show
     width: 153px;
     z-index: 15;
 }
-.myneighbors .persenname p, #group-profile .persenname p {
+.myneighbors .persenname p, #group-profile .persenname p, .blockneighbors .persenname p {
 	line-height:9px;
 	margin-top:4px;
 }
-.myneighbors .persenname a ,#group-profile .persenname a {
+.myneighbors .persenname a ,#group-profile .persenname a, .blockneighbors .persenname a {
 	font-size:9px;
 	color:#fff !important;
 }
@@ -1109,11 +1263,59 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	text-align:center;
 	z-index: 15;
 }
+/*================================================= BLOCKED NEIGHBORS =============================================*/
+.blockneighbors {
+	float:left;
+	padding:10px 5px 20px;
+	width:550px;
+	background:#fff;
+	min-height:500px;
+        position: relative;
+}
+.blockneighbors .persen {
+	float:left;
+	margin:40px 13px 0;		
+	position:relative;
+}
+.blockneighbors .neighbor {
+	position:absolute;	
+	font-family:code_boldregular;
+	font-size:23px;
+	color:#fff !important;
+	letter-spacing:1px;
+	border-radius:50%;
+	-moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    -khtml-border-radius:50%;
+	width:45px;
+	height:45px;
+	left:100px;
+	top:14px;
+	text-align:center;
+	z-index: 15;
+}
+.blockneighbors .persenname {
+    background: url(/images/bg_persen_name1.png) center no-repeat;
+    color: #fff !important;
+    font-family: code_boldregular;
+    font-size: 12px;
+    height: 15px;
+    left:2px;
+    letter-spacing: 1px;
+    position: absolute;
+    text-align: center;
+    top: 145px;
+    width: 153px;
+    z-index: 15;
+}
 
+.blockneighbors .neighborScroll{
+    height: 435px;
+}
 /*================================================= MY COMMUNITY POINTS =============================================*/
 .mycommunitypoints {
 	float:left;
-	padding:10px 15px 40px;
+	padding:10px 15px 20px;
 	width:940px;
 	background:#fff;
 }
@@ -1334,6 +1536,10 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	width:47px;
 	margin-top:2px;
 }
+.leftpart .options .right a
+{
+    text-align: right;
+}
 .options .right a {
 	font-family:code_boldregular;
 	font-size:10px;
@@ -1345,18 +1551,50 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 .optionsdetail {
 	margin-top:20px;
 }
+
+/* custom css for newsfeed options */
+.leftpart .optionsdetail
+{
+        position: relative;
+        width: 265px !important;
+}
+.leftpart .optionsdetail a:nth-of-type(3),.leftpart .optionsdetail a:nth-of-type(13),.leftpart .optionsdetail a:nth-of-type(14)
+{
+    margin-left: 45px;
+}
+.optionsdetail a span {
+    margin: 1px;
+}
+.rightside .options .optionsdetail a
+{
+    padding:1px 1px 0px 4px !important;
+    margin: 0 10px 10px 0 !important;
+}
 .optionsdetail a {
 	float:left;
 	font-family:code_boldregular;
 	font-size:13px;
 	color:#fff;
-	padding:1px 4px 0px;
+	padding:1px 1px 1px 4px;
 	background:#51b9d4;
 	letter-spacing:1px;
 	cursor: pointer;
 	border:0;
 	margin:0 10px 0 0px;
 	margin-bottom:6px;
+}
+.optionsdetail #desc
+{
+    background: url(/images/bg_description.png) no-repeat; 
+    margin: 0 !important; 
+    width:104px !important;
+    height: 14px !important;
+}
+.optionsdetail #review
+{
+    background: url(/images/bg_reviews.png) no-repeat;
+    margin: 0;
+    min-width: 75px;
 }
 .optionsdetail a:hover, .optionsdetail a.selected {
 	color:#fff;
@@ -1402,12 +1640,13 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	margin-top:27px;
 }
 .neighboursdetils {
-	margin-top:20px;
+	position: relative;
 }
 .neighboursdetils a {
-	float: left;
+    float: left;
     line-height: 16px;
-    margin-right: 0.5px;
+    margin-right: 5px;
+    margin-bottom: 1px;
 }
 .rightpart {
 	float:right;
@@ -1448,13 +1687,14 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 }
 .feedsdetail .right h3 {
 	width:80%;
-	margin-bottom:7px;	
+	margin-bottom:7px;
+        padding-left: 1px;
 }
 .feedsdetail .right p {
 	font-family:code_boldregular;
 	font-size:13px;
 	color:#000;
-	height: 32px;
+	height: 30px;
 	line-height:15px;
 	margin-top:3px;
 	overflow: hidden;
@@ -1489,16 +1729,17 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 }
 .feedsdetail .right .neighbor p, .feeds2 .neighbor p {
 	font-family:code_boldregular;
-	font-size:15px;
+	font-size:16px;
 	color:#fff;
 	margin-top:3px;
 	line-height:12px;
 }
 .feedsdetail .right .neighbor span, .feeds2 .neighbor span {
-	font-size:11px;
+	font-family:code_boldregular;
+        font-size:11px;
 	position:absolute;
 	left:6px;
-	top:15px;
+	top:14px;
 }
 .feeds2 .leftimg .otherdetail  {
 	background: none repeat scroll 0 0 #D4D4D4;
@@ -1563,6 +1804,7 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 .leftside {
 	float:left;
 	margin-bottom:20px;
+        position: relative;
 }
 #other-profile .persendata {
 	width:600px;	
@@ -1583,15 +1825,17 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	float:right;
 	width:282px;
 }
-.neighbour-comments {
-	margin-top:50px;
+.neighbour-comments {	
 	display:inline-block;
+	/*
+	margin-top:50px;
 	position:absolute;
-	bottom:-34px;
+	bottom:-34px;*/
 }
 .neighbour-comments .title {
 	background:#000;
 	height:16px;
+        width: 300px;
 }
 .neighbour-comments .title .left {
 	font-family:code_boldregular;
@@ -1604,8 +1848,13 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	font-family:code_boldregular;
 	font-size:10px;
 	color:#56b75a;
-	margin-right:15px;
+	margin-right:20px;
 	padding-top:2px;
+}
+.neighbour-comments .title .righttoright {
+    float: right;
+    margin-right: -50px;
+    margin-top: 2px;
 }
 .neighbour-comments .commentsdetail {
 	background:#fff;
@@ -1613,8 +1862,8 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	padding:15px 20px 15px 15px;
 }
 .comments-scroll {
-	height:233px;
-	overflow:hidden;	
+	height:211px;
+	/*overflow:hidden;*/
 }
 .neighbour-comments .commentsdetail .data {
 	display:inline-block;
@@ -1633,6 +1882,14 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	width:84%;
 	margin:0;
 	line-height:12px;
+}
+.neighbour-comments textarea
+{
+    border: 1px solid #CCCCCC;
+    height: 25px;
+    margin-bottom: -11px;
+    padding: 5px 0;
+    width: 250px;
 }
 .neighbour-comments .rightdetail .name, .neighbour-comments .rightdetail .date, .neighbour-comments .rightdetail .time {
 	float:left;
@@ -1734,6 +1991,7 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 #reviewdetail .data, #commentdetail .data {
 	display:inline-block;
 	margin-bottom:40px;
+        width: 270px;
 }
 
 /*================================================= GROUP PROFILE PAGES =============================================*/
@@ -1810,7 +2068,7 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 	float: left;
     height: 80px;
     margin-bottom: 5px;
-    margin-right: 5px;
+    margin-right: 10px;
     width: 80px;
 	border-radius:50%;
 	-moz-border-radius:50%;
@@ -1841,8 +2099,8 @@ form fieldset, form input, form select, form button, form textarea, .about_show
 }
 #group-profile .persen input[type="checkbox"] {
 	position:absolute;
-	top:0;
-	left:0;
+	top:-13px;
+	left:-5px;
 }
 .red_button {
 	float:right;
@@ -2117,6 +2375,10 @@ footer li a.nomargin {
 }
 .make_listing {
 	margin-left:206px;	
+}
+#boxes2 #dialog6611
+{
+    width: 400px;
 }
 #dialog5 p.left, #dialog5 p.right {
 	font-family:code_boldregular;
@@ -2516,6 +2778,17 @@ footer li a.nomargin {
 .halfleft .createlistingdetail, .halfright .createlistingdetail {
 	width:96.6% !important;
 	padding:7px;
+        min-height: 105px;
+}
+.createlisting select, .triangle_dropdown, .aboutdata #form_status {
+    text-indent: 0.01px;
+    text-overflow:"";
+    background: url("/images/arrow.png") right 0px no-repeat;
+    border-bottom: 1px solid #51b9d4 !important;
+    color: #51b9d4;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    width: 75px;
 }
 .red_button_small {
 	background:#e14f45;
@@ -2550,10 +2823,18 @@ footer li a.nomargin {
     margin-right: 10px;   
     width: 70px;
 }
+.date input[type="time"] {
+    float: left;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 70px;
+}
 .checkbox {
 	display:block;
-	margin-top:6px;
-	margin-left:1px;
+	margin-top:0px;
+        margin-left:5px;
 }
 .checkbox label {
 	/*float:left;*/
@@ -2564,10 +2845,26 @@ footer li a.nomargin {
 }
 .checkbox input[type="checkbox"] {
 	float:left;
-	margin-right:5px;
-	margin-top:1px;
+	margin-right:0px;
+	margin-top:0px;
 	font-size:10px;
 		
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .date input[type="time"] {
+    float: left;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 61px;
+    }
+    .createlistingdetail .left .checkbox {
+    margin-left: -1px !important;
+    margin-top: 19px !important;
+    padding-top: 20px !important;
+    }
 }
 
 .checkboxaction {
@@ -2662,8 +2959,9 @@ footer li a.nomargin {
 .createlistingdetail .price-spots .right .blue_button {
 	font-size:11px;
 	padding:1px 3px 0;
-	margin-top:15px;
+	margin-top:5px;
 	margin-left: 0px;
+        -webkit-margin-before: -18px;
 }
 .createlistingdetail .price-spots .right input[type="text"] {
 	float:left;
@@ -2786,7 +3084,7 @@ footer li a.nomargin {
 {
     color: red;
     font-family: code_boldregular;
-    font-size: 12px;
+    font-size: 10px;
     letter-spacing: 1px;
     width: 413px;
 }
@@ -2800,7 +3098,7 @@ footer li a.nomargin {
 }
 .date-div
 {
-    height:80px;
+    height:60px;
 }
 
 /* Newsfeeds Right side */
@@ -2831,6 +3129,7 @@ footer li a.nomargin {
     float: left;
     position: relative;
     right: -10px;
+    top: 4px;
 }
 .selectoptionsopen
 {
@@ -2848,7 +3147,10 @@ footer li a.nomargin {
     width: 138px;
     
 }
-
+.leftpart .options #reviews
+{
+    padding: 2px 0 9px 3px !important;
+}
 .options #reviews
 {
     background: url("/images/bg_dropdown_big.png") no-repeat scroll 0 0 transparent;
@@ -2858,7 +3160,7 @@ footer li a.nomargin {
     font-size: 10px;
     height: 10px;
     letter-spacing: 0.5px;
-    padding: 2px 0 2px 5px;
+    padding: 2px 0 2px 3px;
     width: 160px;
 }
 .options #reviewdetail
@@ -3038,16 +3340,17 @@ footer li a.nomargin {
 }
 .noticedata .commentdata .neighbor span{
 	font-size: 12px;
-    left: 5px;
-    margin-top: 12px;
-    position: absolute;
+    left: 4px;
+    margin-top: 10px;
+    /*position: absolute;*/
 }
 .noticedata .commentdata .data .neighbor p{
 	color: #FFFFFF !important;
     font-size: 11px;
     margin-left: 9px;
-    margin-top: 5px;
+    margin-top: 4px;
     position: absolute;
+    overflow: visible !important;
 }
 .noticedata .writereviewdata .data p{
 	color: #000000;
@@ -3133,7 +3436,7 @@ footer li a.nomargin {
     background: none repeat scroll 0 0 #FFFFFF;
     float: left;
     padding: 4% 5%;
-    margin-bottom: 55px;
+    margin-bottom: 30px;
    	width: 90%;
 }
 .rightparts .right .options h2 {
@@ -3234,10 +3537,10 @@ footer li a.nomargin {
     color: #FFFFFF;
     font-size: 11px;
     font-weight: bold;
-    margin-left: 118px;
+    margin-left: 116px;
     position: absolute;
     text-align: center;
-    top: 481px;
+    top: 483px;
     width: 12px;
 }
 .groupnoti_block .myrequestcount {
@@ -3278,21 +3581,24 @@ footer li a.nomargin {
     font-size: 12px;
     letter-spacing: 2px;
     line-height: 20px;
-    margin-left: -205px;
-    margin-top: 46px;
+    margin-left: 20px;
+    margin-top: 20px;
     padding: 5px;
     float: left;
+    height: 60px;
 }
 #boxes2 #dialog44 input[type="text"] {
-	font-family:code_boldregular;
+    font-family:code_boldregular;
     color:#000;   	
     font-size: 12px;
     letter-spacing: 2px;
-    line-height: 20px;
+    line-height: 20px !important;
     border: 1px solid #CCCCCC;
     float: left;
     margin-left: 20px;
-    padding: 5px;
+    padding: 5px !important;
+    width: 200px;
+    height: 15px !important;
 }
 #boxes2 #dialog45 p {
 	font-family:code_boldregular;
@@ -3323,13 +3629,47 @@ footer li a.nomargin {
     margin-top: 10px;
     padding: 10px 115px 2px 20px;
 }
-
+#boxes2 #dialog35 .title {
+    color: #333333;
+    font-family: mathletebulky;
+    font-size: 40px;
+    letter-spacing: 2px;
+    text-align: center;
+}
+#dialog42
+{
+    top:20px !important;
+}
 #boxes2 #dialog42 p
 {
-    padding: 10px 115px 2px 20px;
+    padding: 10px 45px 2px 0px;
     font-family:code_boldregular;
     font-size:15px;
+    clear:both;
+    margin-bottom:20px;
+    text-align:center;
 }
+
+#boxes2 #dialog42 .box1
+{
+    border:1px solid #ccc;
+    padding: 10px 0 30px;
+    font-family:code_boldregular;
+    font-size:14px;
+    clear:both;
+    margin: 15px auto;
+    text-align:center;    
+    width: 400px;
+}
+#boxes2 #dialog42 .box1 span {
+    color: #000;
+}
+
+#dialog42 #requestDiv {
+    width:530px;
+    max-height: 540px;
+}
+
 #boxes2 #dialog34 p 
 {
     color: #000000;
@@ -3339,20 +3679,115 @@ footer li a.nomargin {
     padding: 0 113px 15px 0;
 }
 
+#dialog42 #requestDiv h3 {
+    font-size: 40px;
+    letter-spacing: 2px;
+    line-height: 40px;
+    padding-left: 55px !important;
+}
+.proposeprice2
+{
+    display: inline-block;
+    width: 100%;
+}
+
+.proposeprice2 li {
+    list-style: none outside none;
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: #000;
+}
+#proposeTime li {
+    list-style: none outside none;
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: #000;
+}
+#itemAvailable li {
+    list-style: none outside none;
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: #000;
+}
+/*.proposeprice2 .box1 {
+    margin:0 auto;
+    width: 400px;
+    padding: 20px 10px !important;
+    border:1px solid #ccc;
+}*/
+
+.proposeprice2 p {
+    margin:0 auto;
+    width: 400px;
+    padding: 20px 10px !important;
+    border:1px solid #ccc;
+}
+.proposeprice2 .checkbox {
+    margin-left: 140px;
+    margin-top: -20px;
+    padding: 0;
+}
+.proposeprice2 .checkbox label
+{
+    font-size: 14px;
+    margin-left: -35px;
+}
+.checkbox input[type="checkbox"]:checked {
+    padding: 0 !important;
+}
 #boxes2 #dialog42 h2 {
     color: #000000;
     font-family: code_boldregular;
-    font-size: 16px;
+    font-size: 13px;
     letter-spacing: 2px;
     line-height: 20px;
-    margin-top: 4px;
-    padding: 10px 105px 2px 0;  
+    padding: 45px 0 6px 55px; 
+    width: auto;
+    text-align: left;
 }
-#boxes2 #dialog42 input {
-    border: 1px solid #CCCCCC;
+
+
+#boxes2 #dialog42 input[type="text"] {
+    border: 0 solid #CCCCCC;
+    color: #51B9D4;
     margin-bottom: 5px;
-    padding: 5px;
+    padding: 2px;
+    width: 100px;
+    text-align: center;
 }
+#boxes2 #dialog42 #cur {
+    margin-left: -5px;
+    margin-right: -25px;
+    text-indent: 0.01px;
+    text-overflow:"";
+    background: url("/images/arrow.png") right 0px no-repeat;
+    /*border-bottom: 1px solid #51b9d4 !important;*/
+    padding-right: 10px;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+#boxes2 #dialog42 #freebox {
+    left: 70px;
+    position: relative;
+}
+#boxes2 #dialog42 #default_settings {
+    left: 85px;
+    margin-top: 0;
+    position: relative;
+    margin-left: -25px;
+}
+#boxes2 #dialog42 a.blue_button {
+    margin-left: 64px;
+    margin-top: 5px;
+    -webkit-margin-start: 55px;
+}
+#dialog42 #proposeprice .bottom-buttons {
+    float: none;
+}
+
 
 #boxes2 #dialog34 input[type="text"] {
     float: left;
@@ -3365,8 +3800,8 @@ footer li a.nomargin {
 }
 
 #boxes2 #dialog42 form {
-    margin-left: 40px;
-    margin-right: 65px;
+    margin-left: 50px;
+    margin-right: 50px;
     margin-top: 50px;
 }
 
@@ -3387,12 +3822,16 @@ footer li a.nomargin {
     cursor: pointer;
     float: inherit;        
     height: 28px;   
-    margin: 26px -197px 25px 221px;    
+    margin: 25px 0px 25px 60px;    
     text-align: center;
     padding: 5px;
     font-family: code_boldregular;
     font-size: 12px;
     letter-spacing: 1px;
+}
+#boxes2 #dialog42 .bottom-buttons {
+    margin: -35px 44px auto;
+    width: 480px;
 }
 #boxes2 #dialog43 p {
     font-family:code_boldregular;
@@ -3475,8 +3914,8 @@ footer li a.nomargin {
     width: 80px;
     
 }
-#reviewforms .descdata{
-	background: none repeat scroll 0 0 #FFFFFF;
+#reviewforms .descdata{	
+    background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #FFFFFF;
     color: #000000;
     display: inline-block;
@@ -3484,8 +3923,8 @@ footer li a.nomargin {
     font-size: 12px;
     height: 60px;
     letter-spacing: 1px;
-    margin-bottom: 20px;
-    margin-top: -50px;
+    margin-bottom: 0;
+    margin-top: 10px;
     padding: 3%;
     position: relative;
     width: 93.8%;
@@ -3496,31 +3935,43 @@ footer li a.nomargin {
 	margin-bottom: 20px;
 }
 #messageforms .descdata{
-	background: none repeat scroll 0 0 #FFFFFF;
+    background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #FFFFFF;
     color: #000000;
     display: inline-block;
     font-family: code_boldregular;
     font-size: 12px;
-    height: 90px;
+    height: 107px;
     letter-spacing: 1px;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     margin-top: 10px;
     padding: 3%;
     position: relative;
     width: 93.8%;
     z-index: 1000;
 }
-
+/* unfortunate hack since Webkit has an issue with Margin-top */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  .descdata .rightimg img {
+    margin-top: -108px !important;
+  }
+  #dialog42 #requestDiv p textarea
+  {
+      width: 480px;
+  }
+}
 #messageforms .descdata p{
-	margin-bottom: 20px;
+	margin-bottom: 5px;
+        font-family: code_boldregular;
+        font-size: 13px;
 }
 #messageforms .descdata form label{
 	display: none;
 }
 #messageforms .descdata form input[type="text"], textarea {
-	margin-bottom: 15px;
+	margin-bottom: 10px;
 	width: 370px;
+        border: 1px solid #C8C8C8 !important;
 }
 
 #boxes2 #dialog28 {
@@ -3585,6 +4036,7 @@ input[type="checkbox"] {
 }
 .invite_group .left, .invite_single .left{
 	width:48%;
+        max-height: 200px;
 }
 .invite_group .right, .invite_single .right {
 	width:50%;
@@ -3629,6 +4081,7 @@ invite_checkbox {
 }
 .invite_another {
 	margin-top:15px;
+        margin-left: 12px;
 }
 .invite_another p {
 	float:left;
@@ -3952,6 +4405,9 @@ invite_checkbox {
 .accountsetting label {
 	display: none;
 }
+.accountsetting .checkbox label {
+	display: block;
+}
 .accountsetting input[type="text"], .accountsetting input[type="email"], .accountsetting input[type="password"] {
 	border-bottom: 1px solid #51B9D4;
     color: #51B9D4;
@@ -3982,6 +4438,13 @@ invite_checkbox {
     letter-spacing: 1px;
     line-height: 1.5;
     padding-bottom: 15px;
+}
+.accountsetting .checkbox label {
+    color: #000000;
+    font-family: code_boldregular;
+    font-size: 12px;
+    letter-spacing: 1px;
+    line-height: 1.5;
 }
 .accountdetails input[type="submit"] {
     margin-left: 355px;
@@ -4018,7 +4481,8 @@ invite_checkbox {
 }
 .message-read, .message-unread {
 	float:left;
-	margin-bottom:15px;
+	margin-bottom: 12px;
+        margin-top: 4px;
 	position:relative;
 	width: 100%;
 }
@@ -4070,6 +4534,7 @@ invite_checkbox {
     margin-bottom: 10px;
     padding-top: 2px;
     padding-left: 5px;
+    margin-top: 15px;
 }
 .message .right {
 	width:570px;
@@ -4089,6 +4554,7 @@ invite_checkbox {
 	font-size:11px;
 	color:#000;
 	letter-spacing:1px;
+        margin-top: 20px;
 }
 .message .right p.name {
 	padding-top:38px;
@@ -4327,6 +4793,7 @@ invite_checkbox {
 .coverimage_buttons {
     margin:0 auto;
     width:175px;
+    position: relative;
 }
 /********************** FLAG *************************/
 .flagwindow {
@@ -4355,6 +4822,22 @@ invite_checkbox {
     z-index: 9999;
 }
 .userflagwindow .iconarrow {
+	left: 15px;
+    position: absolute;
+    top: -9px;
+}
+
+.groupflagwindow {
+	background: none repeat scroll 0 0 #FFFFFF;
+    display: none;
+    left: 763px;
+    padding: 1px 10px;
+    position: absolute;
+    top: 130px;
+    width: 326px;
+    z-index: 9999;
+}
+.groupflagwindow .iconarrow {
 	left: 15px;
     position: absolute;
     top: -9px;
@@ -4439,4 +4922,62 @@ a.tooltip {
 #filter-distance-slider .ui-state-focus 
 {
     border:none !important;
+}
+
+/************** CHAT WINDOW ************/
+
+.chatwindow {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 0px solid #CCCCCC;
+    position: fixed;
+    right: 60px;
+    bottom: 70px;
+    width: 300px;
+    z-index: 9999;
+}
+.online {
+    margin-left: 30px;
+    position: absolute;
+}
+
+/* TELL A FRIEND */
+#group-profile .tellfriend {
+	width:94%;
+	background:#fff;
+	padding:17px 15px 16px;
+	position:relative;
+	color:#333;
+	font-family:code_boldregular;
+	font-size:12px;
+	letter-spacing:1px;
+}
+#group-profile .tellfriend form {
+	width:95.8%;
+	padding:2%;
+	display:inline-block;
+	border:1px solid #ccc;
+}
+#group-profile .tellfriend form label {
+	float:left;
+	color:#333;
+	font-family:code_boldregular;
+	font-size:12px;
+	letter-spacing:1px;
+	width:215px;
+	padding:5px 0;
+}
+#group-profile .tellfriend form input[type="email"] {
+	float:left;
+	width:300px;
+	height:20px;
+	border:1px solid #ccc;
+	color:#333;
+	font-family:code_boldregular;
+	font-size:11px;
+	letter-spacing:1px;
+	padding-left:5px;
+	margin:0 22px 10px 0;
+}
+#group-profile .tellfriend .blue_button {
+	margin-top:2px;
 }

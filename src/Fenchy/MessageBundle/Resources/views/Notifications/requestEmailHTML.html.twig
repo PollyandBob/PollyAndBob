@@ -22,13 +22,21 @@
                 border-top: none;
                 ">
 				<td style="padding: 20px;">
-                                    <p>
-                                        {{ 'message.notification.email.body'|trans}}                                    
-                                    </p>
+                                   
                                     <table style="border: 0; width: 100%; border-collapse: collapse;">
                                         <tr>
-                                            <td style="padding-left: 30px">									           
-										        <p>{{ 'message.req_notification.email.body'|trans}}</p>
+                                            <td style="padding-left: 30px">
+						<p style="font-weight: bold">{{message.title}}</p>
+                                                {% set msgcontent =  message.content%}
+                                                    {% set link = msgcontent|split('|') %}
+                                                          {% if '|' in msgcontent %}
+                                                                <p class="message-all">{{ link[0]|nl2br }}<br><br><a style="color:#51B9D4;" href="{{ absolute(link[1]) }}">{{'regularuser.click_here'|trans }}</a><br><br>{{ link[2]|nl2br }}</p>
+                                                          {% else %}
+                                                                <p class="message-all">{{ msgcontent|nl2br }}</p>
+                                                          {% endif %}
+                                                          <p>{{'regularuser.message.message_last_part'|trans}}</p>
+                                                          <p>{{'request.request_msg_part1'|trans}}</p>
+                                                          
                                             </td>
                                         </tr>
                                     </table>

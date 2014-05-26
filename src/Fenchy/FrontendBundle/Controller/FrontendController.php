@@ -31,6 +31,7 @@ class FrontendController extends Controller
         $noticeRepo = $this->getDoctrine()->getEntityManager()->getRepository('FenchyNoticeBundle:Notice');
         $notices = $noticeRepo->getDashboardNotices();
 
+        $requester = $this->getRequest()->get('requester');
         
         $user = $this->get('security.context')->getToken()->getUser();
         
@@ -42,7 +43,8 @@ class FrontendController extends Controller
 	                'notices' => $notices,
 	            	'flag' => $flag,
 	            	'get' => $get,
-	            	'location' => false
+	            	'location' => false,
+                        'requester' => $requester
 	                )
 	        );
         }
@@ -53,6 +55,10 @@ class FrontendController extends Controller
 			{
 				return $this->redirect($this->generateUrl('fenchy_regular_user_user_your_location'));
 			}
+                        else
+                        {
+                            return $this->redirect($this->generateUrl('fenchy_notice_indexv2'));
+                        }
 		       	
         	return $this->render('FenchyFrontendBundle:Frontend:indexV2.html.twig',
         			array(
@@ -60,6 +66,7 @@ class FrontendController extends Controller
         					'notices' => $notices,
         					'flag' => $flag,
         					'get' => $get,
+                                                'requester' => $requester
         			)
         	);
         }
@@ -266,4 +273,122 @@ class FrontendController extends Controller
     		
     	}	
     }
+    
+     public function chatWindowAction()
+        {
+            $userLoggedIn = $this->get('security.context')->getToken()->getUser();
+            $session = $this->getRequest()->getSession();
+            $request = $this->getRequest();
+            $flag = $request->get('flag');
+            if($userLoggedIn instanceof \Fenchy\UserBundle\Entity\User)
+            {
+                if($flag=='add')
+                {
+                    $id = explode(',', $userLoggedIn->getChatwindows());
+                    $ids = array_unique($id);
+                    array_push($ids,  $request->get('userId'));
+                    $ids = array_unique($ids);
+                    $userLoggedIn->setChatwindows(implode(',',$ids));
+                    $this->getDoctrine()->getEntityManager()->persist($userLoggedIn);
+                    $this->getDoctrine()->getEntityManager()->flush($userLoggedIn);
+                    $session->set('id'.$request->get('userId'), $request->get('userId'));
+                }
+                else if($flag == 'remove'){
+                    
+                    $ids = explode(',', $userLoggedIn->getChatwindows());
+                    
+                    if (($key = array_search($request->get('userId'), $ids)) !== false) 
+                    {
+                        unset($ids[$key]);
+                    }                   
+                    $ids = array_unique($ids);
+                    
+                    $userLoggedIn->setChatwindows(implode(',',$ids));
+                    $this->getDoctrine()->getEntityManager()->persist($userLoggedIn);
+                    $this->getDoctrine()->getEntityManager()->flush($userLoggedIn);
+                    $session->remove('id'.$request->get('userId'));
+                }
+                else if($flag == 'get')
+                {
+                    $userArr = $request->get('userId');
+                    $str = '';
+                    $str1 = '';
+                    $id = explode(',', $userLoggedIn->getChatwindows());
+                    $ids = array_unique($id);
+                    
+                    for($i=0; $i< sizeof($userArr); $i++)
+                    {
+                        if(in_array($userArr[$i], $ids))
+                               $str .= ",".$userArr[$i];
+                        else
+                            $str1 .= ",".$userArr[$i];
+                    }                
+                    echo $str."^^".$str1;
+                }
+                else if($flag == 'getonload')
+                {
+                      echo $userLoggedIn->getChatwindows();
+//                    $str = '';
+//                    $id = explode(',', $userLoggedIn->getChatwindows());
+//                    $ids = array_unique($id);
+//                    
+//                    for($i=0; $i< sizeof($ids); $i++)
+//                    {                        
+//                        $str .= ",".$ids[$i];                     
+//                    }                
+//                    echo $str;
+                }
+            }
+            else
+            {
+                echo 'none';
+            }
+            exit;
+        }
+        
+        public function popupChatWindowAction()
+        {
+            $user = $this->get('security.context')->getToken()->getUser();
+            
+            $request = $this->getRequest();
+            $session = $this->getRequest()->getSession();
+            
+            $sender = $this->getDoctrine()->getEntityManager()->getRepository('UserBundle:User')->find($request->get('sender'));
+            if($user instanceof \Fenchy\UserBundle\Entity\User)
+            {
+                if($request->get('flag')=='true')
+                {
+                    $chats = $this->getDoctrine()->getRepository('CunningsoftChatBundle:Message')->findBySenderAndReceiver($user, $sender);
+                    $session->set('count'.$sender->getId(),count($chats));
+                    echo count($chats);
+                    exit;
+                }
+                else
+                {
+                    $flag = $session->get('count'.$sender->getId());//intval($request->get('flag'));
+                    $chats = $this->getDoctrine()->getRepository('CunningsoftChatBundle:Message')->findBySenderAndReceiver($user, $sender);
+                    if($session->get('count'.$sender->getId()) != NULL)
+                    {
+                        if(count($chats) > $flag)
+                        {
+                            $session->set('count'.$sender->getId(),count($chats));
+                            echo count($chats);
+                            exit;
+                        }
+                    }
+                    else
+                    {
+                        $session->set('count'.$sender->getId(),count($chats));
+                    }
+                    echo "0";
+                    exit;
+                }
+            }
+            else
+            {
+                echo "none";
+                exit;
+            }
+        }
+       
 }

@@ -130,20 +130,20 @@ class UserRegularRepository extends EntityRepository
 		    	->getQuery()
                 ->getResult();
     	
+        
     	$location = $user->getLocation();
-    	$lat = $location->getLongitude();
-    	$log = $location->getLatitude();
-    	 
-    	$users = array();
+    	$lat2 = $location->getLatitude();
+    	$log2 = $location->getLongitude();    	 
+    	
     	$distanceArray = array();
     	$count = 0;
     	if($users)
     	{
     		foreach ($users as $u)
     		{
-    			$location = $u->getLocation();
-    			$lat2 = $location->getLongitude();
-    			$log2 = $location->getLatitude();
+    			$location = $u->getUser()->getLocation();
+    			$lat = $location->getLatitude();
+    			$log = $location->getLongitude();
     	
     			$theta = $log - $log2;
     			// Find the Great Circle distance
@@ -153,7 +153,7 @@ class UserRegularRepository extends EntityRepository
     	
     			if($u->getId() != $user->getId())
     			{
-    				if($distance < 30000 && $distance > 0)
+    				if($distance < 30000 && $distance >= 0)
     				{
     					$count++;
     				}
@@ -165,35 +165,35 @@ class UserRegularRepository extends EntityRepository
     	$managertype_alpha = " ";
     	$classColor = "red";
     	
-    	if($count < 500 && $user->getActivity() < 400 && $user->getManagertype()!=1)
+    	if($count < 500 && $user->getActivity() < 500 && $user->getManagertype()!=1)
     	{
     		$managertype = "pioneer";
-    		$managertype_alpha = " ";
-    		$classColor = "violet";
+    		$managertype_alpha = "P";
+    		$classColor = "red";
     	}
-    	else if($user->getActivity() >= 400 && $user->getActivity() < 1000)
+    	else if($user->getActivity() >= 500 && $user->getActivity() < 1000 && $user->getManagerType()!=1)
     	{
     		$managertype = "community_m";
     		$managertype_alpha = "C";
-    		$classColor = "green";
+    		$classColor = "blue";
     	}
-    	elseif($user->getActivity() >= 1000)
+    	elseif($user->getActivity() >= 1000 && $user->getManagerType()!=1)
     	{
     		$managertype = "neighbor";
     		$managertype_alpha = "N";
-    		$classColor = "orange";
+    		$classColor = "green";
     	}
     	elseif($user->getManagerType()==1)
     	{
     		$managertype = "house_m";
     		$managertype_alpha = "H";
-    		$classColor = "blue";
+    		$classColor = "orange";
     	}
     	else
     	{
     		$managertype = "";
     		$managertype_alpha = " ";
-    		$classColor = "red";
+    		$classColor = "violet";
     	}
     	$managertype_array = array();
     	$managertype_array[0] = $managertype;

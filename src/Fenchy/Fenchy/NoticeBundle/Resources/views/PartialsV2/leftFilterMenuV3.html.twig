@@ -1,0 +1,223 @@
+{# empty Twig template #}
+		<style>
+		.loginwindow3 li a {
+		    color: #000000;
+		    font-family: code_boldregular;
+		    font-size: 12px !important;
+		    letter-spacing: 1px;
+		}
+		.loginwindow3 li a:hover {
+			color:#51B9D4;
+		}
+		#filter-distance-slider .ui-state-hover,#filter-distance-slider .ui-state-default, #slider-range  .ui-state-hover, #slider-range .ui-slider-handle
+		{
+			border:none !important;
+		}
+		</style>
+
+		<!-- Your Selected options -->
+        <div class="options">
+            	<h4>{{ 'notice.filter.filters'|trans }}</h4>
+            	<div class="right">
+                <a href="javascript:void(0);">{{ 'notice.filter.clear'|trans }}</a>
+            	</div>
+            	
+            <div class="optionsdetail">
+				<!-- selected options -->
+				
+		   </div>            
+		   <div class="clearfix"></div>
+		   <div class="selectoptions" style="float: right; width:auto;">
+           		   <div class="selectoptions" id="reviews">{{ 'notice.filter.select_options'|trans }}</div>
+                   <div class="reviewdetial" id="reviewdetail" style="display: none;">
+                   		<div class="selectoptionsopen">{{ 'notice.filter.select_options'|trans }}</div>                                    		
+							<p>I search neighbours who</p>
+								{% for type in types %}
+								 {% if ( type.name=="help" or type.name=="offerhelp" or type.name=="service" or type.name=="offerservice" or type.name=="goods" or type.name=="offergoods" ) %}
+                        			<input type="checkbox" name="selectoptions" id="{{ type.alttext|trans }}" value="{{ type.id }}" /><span>{{ type.alttext|trans }}</span><br>
+                        		 {% endif %}	
+		                        {% endfor %}
+		                    <br>
+		                    <br>    
+                        	<p>I search for</p>
+                        		{% for type in types %}
+								 {% if ( type.name=="neighbours" or type.name=="groups" or type.name=="events" or type.name=="others" ) %}
+								 	{% if type.name=="groups" %}
+                       				<!-- <input type="checkbox" name="selectoptions" id="Community Managers" value="30" /><span>Community Managers</span><br> -->
+                       				{% endif %}
+								 	<input type="checkbox" name="selectoptions" id="{{ type.alttext|trans }}" value="{{ type.id }}" /><span>{{ type.alttext|trans }}</span><br>
+                        		 {% endif %}
+                        		 <div style="display: none;">
+                        		 {% if type.name=="offergroups" %}
+								 	<input type="checkbox" name="selectoptions" id="offergroups" value="{{ type.id }}" />
+								 {% endif %}
+								 {% if type.name=="offerevents" %}
+								 	<input type="checkbox" name="selectoptions" id="offerevents" value="{{ type.id }}" />
+								 {% endif %}
+								 {% if type.name=="offerothers" %}
+								 	<input type="checkbox" name="selectoptions" id="offerothers" value="{{ type.id }}" />
+								 {% endif %}		
+		                        </div>
+		                        
+								{% endfor %}
+		                        <a href="javascript:void(0)" id="option_button" style="width: 42px; float: left;" class="blue_button">Select</a>
+		                        <a href="javascript:void(0)" id="option_button_all" class="blue_button">Select All</a>
+				   </div>
+			
+			</div>
+           
+           
+        </div>
+        <div class="bgbottom"><img src="{{ asset('images/bgbottom_leftpart.png') }}" alt="" /></div>
+        
+        <!-- Around You -->
+        <div class="myneighbours">
+          	<div class="arround_you">
+	          	<h4>{{ 'notice.filter.around_you'|trans }}</h4>
+	            <div class="neighboursdetils">
+	                <div class="" style="text-align: center">
+		                <div id="filter-distance-slider" 
+		                data-bind="
+		                " class="bord ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all jq-slider">
+		                    <a href="#" class="ui-slider-handle ui-state-default ui-corner-all ui-state-hover">
+		                        <i class="icon-align-justify"></i>
+		                        <span class="inner-tooltip">
+		                            <strong class="tooltip-value"></strong>
+		                        </span>                                            
+		                    </a>
+		                </div>
+		                <div class="slider-value">
+		                    <strong class="pull-left">&lt; 100m</strong>
+		                    <strong class="pull-right">&gt; 30km</strong>
+		                </div>                                            
+		            </div>
+	            </div>
+            </div>
+            <div class="clearfix"></div>
+            <!-- When -->
+           
+            <div class="when_date">
+	            <h4>{{ 'notice.filter.when'|trans }}</h4>
+	            <div class="right">
+		        	{% set now = "now"|date("Y-m-d H:i:s") %}
+	            	<a id="{{ now }}" class="nowtime"  href="javascript:void(0);">NOW</a>
+	            </div>
+	            <div class="neighboursdetils">
+						<div id="slider-range"></div>
+	            </div>
+            </div>
+            
+            
+        </div>
+        <div class="bgbottom"><img src="{{ asset('images/bgbottom_leftpart.png') }}" alt="" /></div>
+        
+        <!-- My Neighbours -->
+        <div class="myneighbours">
+                	<h4>My neighbours</h4>
+                	
+                    <div class="neighboursdetils">
+                    	
+                    </div>
+        </div>
+        <div class="bgbottom"><img src="{{ asset('images/bgbottom_leftpart.png') }}" alt="" /></div>
+
+        
+        
+        
+        
+        <section class="group clearfix" style="display: none;">
+            <header><h3>{{ 'notice.filter.categories'|trans }}</h3>
+                <div class="pull-right with-arrow">
+                    <i class="icon-caret-down"></i>
+                    <i class="icon-caret-up"></i>
+                </div>            
+            </header>
+            <div class="wrapper">
+                <div class="checkbox-button">
+
+                    <div class="bord" data-bind="template: {name: categoriesTemplate()}" ></div>  
+
+                </div>
+            </div>
+        </section>
+            
+            
+        <section class="group clearfix" style="display: none;">
+            <header><h3>{{ 'notice.filter.post_date'|trans }}</h3>
+                <div class="pull-right with-arrow">
+                    <i class="icon-caret-down"></i>
+                    <i class="icon-caret-up"></i>
+                </div>            
+            </header>
+            <div class="wrapper">
+                <div id="filter-datepicker" ></div>    
+            </div> 
+        </section>            
+            
+            
+        <section class="group clearfix" style="display: none;">
+            <header><h3>{{ 'notice.filter.post_date'|trans }}</h3>
+                <div class="pull-right with-arrow">
+                    <i class="icon-caret-down"></i>
+                    <i class="icon-caret-up"></i>
+                </div>
+            </header>
+            <div class="wrapper">
+                <div class="select-button">
+                    <ul class="replacement side-summary-list" data-bind="foreach: availablePostDates">
+                        <li data-bind="attr: { 'class': $parent.fcPostDateBar()==id ? 'select-value' : '' },
+                                       click: $parent.selectDateBar">
+                            <strong data-bind="text: name"></strong><div class="counter"><strong data-bind="text: count"></strong></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>                                
+        </section>
+
+       
+
+
+
+<script type="text/html" id="categories-template">
+    <ul data-bind="foreach: fcCategories " class="replacement">
+        <li>
+            <div class="checkbox-wrapper noactive">
+                <span class="checkbox" data-bind="click: $parent.categoryCheck">
+                    <!-- ko if: checked -->
+                        <span class="check-knob">
+                            <i class="icon-ok"></i>
+                        </span>
+                    <!-- /ko -->
+                    <!--<input type="checkbox" data-bind="checked: checked" />-->
+                </span>
+                <label><strong data-bind="text: name">Help</strong></label>
+                <div class="counter">
+                    <strong data-bind="text: count">0</strong>
+                </div>
+                <!-- ko if: subcategoriesObs[0] -->
+                <div class="with-arrow pull-right">
+                    <i class="icon-caret-down"></i>
+                    <i class="icon-caret-up"></i>  
+                </div>
+                <!-- /ko -->
+            </div>
+            <ul data-bind="foreach: subcategoriesObs">
+                <li class="bord">
+                    <ul data-bind="foreach: subcategoriesObs"> 
+                        <li class="clearfix">
+                            <span class="checkbox" data-bind="click: $parents[2].categoryCheck">
+                                <!-- ko if: checked -->
+                                    <span class="check-knob">
+                                        <i class="icon-ok"></i>
+                                    </span>
+                                <!-- /ko -->
+                                <!--<input type="checkbox" data-bind="checked: checked" />-->
+                            </span>                                                                
+                            <label for="checkbox-1-1"><strong data-bind="text: name"></strong></label>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</script>

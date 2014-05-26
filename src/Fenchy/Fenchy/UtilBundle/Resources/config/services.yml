@@ -1,0 +1,18 @@
+parameters:
+  boolornull_options:
+    false: no
+    true: yes
+
+services:
+    fenchy.twig.fenchy_extension:
+        class: Fenchy\UtilBundle\Twig\FenchyExtension
+        arguments: ["@service_container"]
+        tags:
+            - { name: twig.extension }
+            
+    fenchy.form.type.boolornull:
+        class: Fenchy\UtilBundle\Form\Type\BoolOrNullType
+        arguments:
+            - "%boolornull_options%"
+        tags:
+            - { name: form.type, alias: boolornull }

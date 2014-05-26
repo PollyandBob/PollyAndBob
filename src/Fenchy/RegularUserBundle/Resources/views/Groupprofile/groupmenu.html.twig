@@ -2,19 +2,71 @@
 nav li a.selected b {
     color: white;
 }
+#select_receiver {    
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border: 0 none;
+    background: url("/images/arrow.png") no-repeat scroll right 0 transparent;
+    border-bottom: 1px solid #51B9D4 !important;
+    color: #51B9D4;
+    font-family: code_boldregular;
+    text-indent: 0.01px;
+    text-overflow: "";
+}
 </style>
 <nav>
-	<ul>
-	   	<li><a {% if link == 'fenchy_regular_user_user_groupprofile_creategroup' or link == 'fenchy_regular_user_user_groupprofile_groupinfo' %} class="selected"" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', {'groupId': groupId}) }}" >{{ 'regularuser.group_info' |trans|upper}}</a></li>
-        <li><a {% if link == 'fenchy_regular_user_user_groupprofile_grouplistingsreviews' %} class="paddingset selected" {% else %}class="paddingset {{ link }}" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_grouplistingsreviews',{ 'groupId': groupId }) }}">{{ 'regularuser.listing_reviews'|trans }}</a></li>
-        <li><a {% if link == 'fenchy_regular_user_user_groupprofile_groupmembers' %} class="paddingset selected" {% else %}class="paddingset {{ link }}" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_groupmembers', {'groupId': groupId}) }}">{{ 'otherprofile.members'|trans }} {{ 1+groupmembers|length }}<br><span>{{ 'regularuser.neighbours'|trans }} {{ mutualNeighbors|length }}</span></a></li>
-        {% if(usergroup.user.id == app.user.id) %}
-        <li><a {% if link == 'fenchy_regular_user_user_groupprofile_groupsettings' %} class="paddingset_groupsetting selected"{% else %}class="paddingset_groupsetting" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_groupsettings', {'groupId': groupId}) }}">{{ 'regularuser.group_settings' |trans|upper}}</a></li>
-        <li><a href="">Payment Settings</a></li>
-        {% endif %}
+    <ul>
+            <li>
+                <a {% if link == 'fenchy_regular_user_user_groupprofile_creategroup' or link == 'fenchy_regular_user_user_groupprofile_groupinfo' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', {'groupId': groupId}) }}" >
+                    {{ 'regularuser.group_info' |trans|upper}}
+                </a>
+            </li>
+        <!--<li><a {% if link == 'fenchy_regular_user_user_groupprofile_grouplistingsreviews' %} class="paddingset selected" {% else %}class="paddingset {{ link }}" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_grouplistingsreviews',{ 'groupId': groupId }) }}">{{ 'regularuser.listing_reviews'|trans }}</a></li>-->
+            <li>
+                <a {% if link == 'fenchy_regular_user_user_groupprofile_groupmembers' %} class="paddingset selected" {% else %}class="paddingset {{ link }}" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_groupmembers', {'groupId': groupId}) }}">
+                    {{ 'otherprofile.members'|trans }} {{ 1+groupmembers|length }}
+                    <br><span>
+                            {{ 'regularuser.neighbours'|trans }} {{ mutualNeighbors|length }}
+                        </span>
+                </a>
+            </li>
         {% if(usergroup.user.id == app.user.id or adminmember == 1) %}
-        <li><a {% if link == 'fenchy_regular_user_user_groupprofile_groupnotifications' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_groupnotifications',{'groupId': groupId }) }}">Notifications</a></li>
-        <li class="nomargin"><a {% if link == 'fenchy_regular_user_user_groupprofile_groupmessages' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_groupmessages', {'groupId': groupId}) }}"><b>{{ messages|length }}</b> {{ 'regularuser.group_messages'|trans }}</a></li>
+            <li>
+                <a {% if link == 'fenchy_regular_user_user_groupprofile_groupsettings' %} class="paddingset_groupsetting selected"{% else %}class="paddingset_groupsetting" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_groupsettings', {'groupId': groupId}) }}">
+                    {{ 'regularuser.my_location'|trans|upper }}
+                </a>
+            </li>
+            {% if usergroup.managergroup == '' %}
+            <li>
+                <a {% if link == 'fenchy_regular_user_groupprofile_grouppayment' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_groupprofile_grouppayment',{ 'groupId': groupId }) }}">
+                    {{ 'settings.account.payment'|trans }}
+                </a>
+            </li>
+            {% endif %}
+        {% endif %}
+        
+        {% if(usergroup.user.id == app.user.id or adminmember == 1) %}
+            {% if usergroup.managergroup == '' %}
+            <li>
+                 <div class="groupnoti_block">
+            
+            {#{% if req_count %}
+                    <div class="mylistingcount" style="background: none repeat scroll 0 0 #51B9D4;">{{ req_count }}</div>
+            {% endif %}#}
+            </div>
+                <a style=" padding: 3px 0px;" {% if link == 'fenchy_regular_user_user_groupprofile_groupnotifications' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_groupnotifications',{'groupId': groupId }) }}">
+                    {{ 'regularuser.list_req'|trans }} {% if req_count > 0 %} {{ req_count }} {% endif %}
+                </a>
+            </li>
+            {% endif %}
+{#            {% if adminmember != 1 %}#}
+            <li class="nomargin">
+                <a {% if link == 'fenchy_regular_user_user_groupprofile_groupmessages' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_user_groupprofile_groupmessages', {'groupId': groupId}) }}">
+                    {% if msg_count > 0 %}<b>{{ msg_count }}</b> {% endif %}
+                        {{ 'regularuser.group_messages'|trans }}
+                </a>
+            </li>
+{#            {% endif %}#}
         {% endif %}
     </ul>
 </nav>

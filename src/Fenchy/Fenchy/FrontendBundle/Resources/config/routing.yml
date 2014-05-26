@@ -1,0 +1,85 @@
+#Homepage
+fenchy_frontend_homepage:
+    pattern:  /
+    defaults: { _controller: FenchyFrontendBundle:Frontend:indexv2 }
+
+# temporary routes to new layout mockup actions
+fenchy_frontend_indexv2:
+    pattern:  /indexv2/{flag}
+    defaults: { _controller: FenchyFrontendBundle:Frontend:indexV2, flag: null }
+
+
+#Sign in/up
+fenchy_frontend_signin:
+    pattern:  /signin
+    defaults: { _controller: UserBundle:Security:login }
+
+fenchy_frontend_presignup:
+    pattern:  /new_at_fenchy
+    defaults: { _controller: FenchyFrontendBundle:Frontend:preregister}
+
+fenchy_frontend_signup:
+    pattern:  /signup
+    defaults: { _controller: UserBundle:Registration:register }
+
+#Foot options
+
+fenchy_frontend_boardofneigbor:
+    pattern:  /boardofneighbor
+    defaults: { _controller: FenchyFrontendBundle:Frontend:boardofneighbor }
+
+fenchy_frontend_investinus:
+    pattern:  /investinus
+    defaults: { _controller: FenchyFrontendBundle:Frontend:investinus }
+
+fenchy_frontend_joinus:
+    pattern:  /joinus
+    defaults: { _controller: FenchyFrontendBundle:Frontend:joinus }
+
+fenchy_frontend_share:
+    pattern:  /share
+    defaults: { _controller: FenchyFrontendBundle:Frontend:share }
+
+fenchy_frontend_aboutandimprint:
+    pattern:  /aboutandimprint
+    defaults: { _controller: FenchyFrontendBundle:Frontend:aboutAndImprint }
+        
+fenchy_frontend_about:
+    pattern:  /about
+    defaults: { _controller: FenchyFrontendBundle:Frontend:about }
+
+fenchy_frontend_imprint:
+    pattern:  /imprint
+    defaults: { _controller: FenchyFrontendBundle:Frontend:imprint }
+
+fenchy_frontend_jobs:
+    pattern:  /jobs
+    defaults: { _controller: FenchyFrontendBundle:Frontend:jobs }
+
+fenchy_frontend_languages:
+    pattern:  /languages
+    defaults: { _controller: FenchyFrontendBundle:Frontend:languages }
+
+fenchy_frontend_privacy:
+    pattern:  /privacy
+    defaults: { _controller: FenchyFrontendBundle:Frontend:privacy }
+
+fenchy_frontend_privacy_popup:
+    pattern:  /privacypopup
+    defaults: { _controller: FenchyFrontendBundle:Frontend:privacyPopup }
+
+fenchy_frontend_facebook:
+    pattern:  /facebook
+    defaults: { _controller: FenchyFrontendBundle:Frontend:facebook }
+
+fenchy_frontend_advertising:
+    pattern:  /advertising
+    defaults: { _controller: FenchyFrontendBundle:Frontend:advertising }
+
+fenchy_frontend_terms:
+    pattern:  /terms
+    defaults: { _controller: FenchyFrontendBundle:Frontend:terms }
+    
+fenchy_frontend_terms_popup:
+    pattern:  /termspopup
+    defaults: { _controller: FenchyFrontendBundle:Frontend:termsPopup }

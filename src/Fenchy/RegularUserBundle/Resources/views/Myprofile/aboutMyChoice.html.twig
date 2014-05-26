@@ -15,7 +15,7 @@
 {% endblock %}
         
 {% block javascripts %}
-	{{ parent() }}    
+	{{ parent() }}
     <script type="text/javascript" src="{{ asset('js/underscore-min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery.iframe-transport.js') }}"></script>
@@ -86,7 +86,8 @@
 				$('.about_input').show();
 				$('.about_show').hide();
 			});
-			
+
+			$('ul').prop('spellcheck', true);
      		$('#fenchy_regularuserbundle_useraboutsettingstype_mylike').tagit({
             	allowSpaces: true
         	});
@@ -114,168 +115,138 @@
                 stepMinute: 5, 
                 minuteMax: 55,
                 changeYear: true,
-                yearRange: 'c-20:c+20'
+                yearRange: 'c-80:c+50'
             });
 
     	});
+        
+        $(document).ready(function(){
+            // For the Tag textbox width change after charactors increased
+            $(".tagit-new input").bind('keydown', function () {
+                     $(this).attr("size", Math.max(10,$(this).val().length) );
+            });   
+        });
     </script>
     
     
-	<div class="persendata">
- 	
-    <form action="{{ path('fenchy_regular_user_user_myprofile_aboutmychoice') }}" method="post" {{ form_enctype(form) }} class="form-settings general">
-					
-					<div class="aboutmedata">
-	                    <h4>{{ 'regularuser.about_me'|trans|upper }}</h4>
-	                    <div class="right">
-	                    	<a class="about_edit" href="javascript:void(0);">{{ 'regularuser.edit'|trans|upper }}</a>
-	                        <input type="submit" value="{{ 'btn.save'|trans|upper }}"/>
-						</div>                         
-	                    <div class="about-details" style="min-height:68px;">
-	                    	<div class="name" style="width:68px;">
-	                    		{{ form_widget(form.firstname) }}
-	                    	</div>
-	                        <div class="right">
-	                        	<div class="about_show">
-	                        		{{ displayUser.regularuser.aboutMe }}
-	                        	</div>
-	                        	<div class="about_input">
+    <div class="persendata">
+
+        <form action="{{ path('fenchy_regular_user_user_myprofile_aboutmychoice') }}" method="post" {{ form_enctype(form) }} class="form-settings general">
+
+            <div class="aboutmedata">
+                <h4>{{ 'regularuser.about_me'|trans|upper }}</h4>
+                <div class="right">
+                    <a class="about_edit" href="javascript:void(0);">{{ 'regularuser.edit'|trans|upper }}</a>
+                    <input type="submit" value="{{ 'btn.save'|trans|upper }}"/>
+                </div>                         
+                <div class="about-details" style="min-height:68px;">
+                    <div class="name" style="width:68px;">
+                        <div class="about_show">
+	                    		{{ displayUser.regularuser.firstname }}
+                            </div>
+                            <div class="about_input">
+	                            	{{ form_widget(form.firstname) }}
+                                </div>
+                            </div>
+                            <div class="right">
+                                <div class="about_show">
+                                        {{ displayUser.regularuser.aboutMe }}
+                                    </div>
+                                    <div class="about_input">
 	                            	{{ form_widget(form.aboutMe) }}
-	                            </div>
-	                        </div>
-	                    </div>
-                	</div>
-            	<div class="findmedata">
-                    <h4>{{ 'regularuser.find_me_by_what_i_like'|trans|upper }}</h4>
-                    <div class="about-details">
-                    	<div class="title">{{ 'regularuser.i_like'|trans|upper }}</div>
-                        <div class="clearfix"></div>
-                        <div class="likedata">
-							<ul>
-                            	<!-- <li><a href="#">Saling</a></li> -->
-	                            <div class="about_show">
-	                            	{% set varStack = displayUser.regularuser.mylike | split(',') %}
-									{% for value in varStack %}
-								       {% if value %}
-											<li><a href="javascript:void(0)">{{ value }}</a></li>
-									   {% endif %}
-								    {% endfor %}
-	                        	</div>
-	                        	<div class="about_input">
-									{{ form_row(form.mylike) }}
-	                            </div>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="about-details">
-                    	<div class="title">{{ 'regularuser.hot_places'|trans|upper }}</div>
-                        <div class="clearfix"></div>
-                        <div class="likedata">
-							<ul>
-                            	<!-- <li><a href="#">boxhagener platz</a></li> -->
-                            	<div class="about_show">
-                            		{% set varStack = displayUser.regularuser.hotplaces | split(',') %}
-									{% for value in varStack %}
-								       {% if value %}
-											<li><a href="javascript:void(0)">{{ value }}</a></li>
-									   {% endif %}
-								    {% endfor %}
-	                        	</div>
-	                        	<div class="about_input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="findmedata">
+                                <h4>{{ 'regularuser.find_me_by_what_i_like'|trans|upper }}</h4>
+                                <div class="about-details">
+                                    <div class="title">{{ 'regularuser.i_like'|trans|upper }}</div>
+                                    <div class="clearfix"></div>
+                                    <div class="likedata">
+                                        <ul>
+                                            <!-- <li><a href="#">Saling</a></li> -->
+                                            <div class="about_show">
+                                                {% set varStack = displayUser.regularuser.mylike | split(',') %}
+                                                {% for value in varStack %}
+                                                    {% if value %}
+                                                            <li><a href="javascript:void(0)">{{ value }}</a></li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                </div>
+                                                <div class="about_input">
+                                                        {{ form_row(form.mylike) }}
+                                                    </div>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="about-details">
+                                            <div class="title">{{ 'regularuser.hot_places'|trans|upper }}</div>
+                                            <div class="clearfix"></div>
+                                            <div class="likedata">
+                                                <ul>
+                                                    <!-- <li><a href="#">boxhagener platz</a></li> -->
+                                                    <div class="about_show">
+                                                            {% set varStack = displayUser.regularuser.hotplaces | split(',') %}
+                                                            {% for value in varStack %}
+							       {% if value %}
+                                                                <li><a href="javascript:void(0)">{{ value }}</a></li>
+								{% endif %}
+							    {% endfor %}
+                                                        </div>
+                                                        <div class="about_input">
 									{{ form_row(form.hotplaces) }}
-	                            </div>
-									
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="about-details halfleft">
-                    	<div class="title">{{ 'regularuser.not_shown_information'|trans|upper }}</div>
-                        <div class="clearfix"></div>
-                        <div class="likedata">
-							<ul>                           		                        	
-	                        	<div class="about_show">
-	                        		{% if displayUser.regularuser.lastname != "" %} <li><a href="javascript:void(0)"> {{ displayUser.regularuser.lastname }} </a></li> {% endif %}
-	                        		{% if displayUser.regularuser.birthday != "" %}<li><a href="javascript:void(0)"> {{ displayUser.regularuser.birthday|date('d.m.Y') }}</a></li> {% endif %}
-	                        		{% if displayUser.regularuser.gender != "" %}
-	                        		<li><a href="javascript:void(0)">{%  if displayUser.regularuser.gender == 2 %} {{ 'regularuser.female'|trans }} {% elseif displayUser.regularuser.gender == 1 %}{{ 'regularuser.male'|trans }} {% endif %}</a></li>{% endif %}
-	                        	</div>
-	                        	<div class="about_input">									
-									<li>{{ form_row(form.lastname) }}</li>
-									<li>{{ form_row(form.birthday) }}</li>
-									<li>{{ form_row(form.gender) }}</li>
-	                            </div>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="about-details halfright">
-                    	<div class="title">{{ 'regularuser.my_languages'|trans|upper }}</div>
-                        <div class="clearfix"></div>
-                        <div class="likedata">
-							<ul>
-                            	<!-- <li><a href="#">German</a></li> -->
-                            	<div class="about_show">
-                            		{% set varStack = displayUser.regularuser.languages | split(',') %}
+                                                            </div>
+
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="about-details halfleft">
+                                                    <div class="title">{{ 'regularuser.not_shown_information'|trans|upper }}</div>
+                                                    <div class="clearfix"></div>
+                                                    <div class="likedata">
+                                                        <ul>                           		                        	
+                                                            <div class="about_show">
+                                                                    {% if displayUser.regularuser.lastname != "" %} <li><a href="javascript:void(0)"> {{ displayUser.regularuser.lastname }} </a></li> {% endif %}
+                                                                    {% if displayUser.regularuser.birthday != "" %}<li><a href="javascript:void(0)"> {{ displayUser.regularuser.birthday|date('d.m.Y') }}</a></li> {% endif %}
+                                                                    {% if displayUser.regularuser.gender != "" %}
+                                                                    <li><a href="javascript:void(0)">{%  if displayUser.regularuser.gender == 2 %} {{ 'regularuser.female'|trans }} {% elseif displayUser.regularuser.gender == 1 %}{{ 'regularuser.male'|trans }} {% endif %}</a></li>{% endif %}
+                                                                </div>
+                                                                <div class="about_input">									
+                                                                    <li>{{ form_row(form.lastname) }}</li>
+                                                                    <li>{{ form_row(form.birthday) }}</li>
+                                                                    <li>{{ form_row(form.gender) }}</li>
+                                                                </div>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="about-details halfright">
+                                                        <div class="title">{{ 'regularuser.my_languages'|trans|upper }}</div>
+                                                        <div class="clearfix"></div>
+                                                        <div class="likedata">
+                                                            <ul>
+                                                                <!-- <li><a href="#">German</a></li> -->
+                                                                <div class="about_show">
+                                                                        {% set varStack = displayUser.regularuser.languages | split(',') %}
 									{% for value in varStack %}
-								       {% if value %}
-											<li><a href="javascript:void(0)">{{ value }}</a></li>
-									   {% endif %}
-								    {% endfor %}
-	                        	</div>
-	                        	<div class="about_input">
+                                                                            {% if value %}
+                                                                                <li><a href="javascript:void(0)">{{ value }}</a></li>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                    <div class="about_input">
 									{{ form_row(form.languages) }}
-	                            </div>
-                            </ul>
-                        </div>
-                    </div>
-                    <div style="display:none;">{{ form_rest(form) }}</div>
-                    {{ form_row(form.promotedinitiatives) }}
-                </div>
-            
-					
-					
-					<!-- 
-                    <div id="first_name">
-                        <div class="input-wrapper">
-                            <div class="input-element">
-                                {{ form_widget(form.firstname) }}
-                            </div>
-	                    </div>                         
-                    </div>
-                    <div class="row input-wrapper textarea_content">
-                        <div class="input-element">
-                           {{ form_widget(form.aboutMe) }}
-                        </div>
-                    </div> 
-                    <h2>{{ 'regularuser.find_me_by_what_i_like'|trans|upper }}</h2>                                                              
-                    <div class="row input-wrapper pre-tags-container">
-                        {{ form_row(form.mylike) }}
-                    </div>
-                    <div class="row input-wrapper pre-tags-container">
-                        {{ form_row(form.hotplaces) }}
-                    </div>
-                    <div class="row input-wrapper pre-tags-container">
-                        {{ form_row(form.promotedinitiatives) }}
-                    </div>
-                    <div class="row input-wrapper pre-tags-container">
-                        {{ form_row(form.languages) }}
-                    </div>
-                    <div class="row input-wrapper pre-tags-container">
-                        {{ form_row(form.notshowninfo) }}
-                    </div>                    
-                                   
-                    <div style="display:none;">{{ form_rest(form) }}</div>
-                    <footer class="clearfix">
-                        <div class="button submit pull-right">
-                            <div>
-                                <input type="submit" value="{{ 'btn.save'|trans|upper }}"/>                                
-                            </div>
-                        </div>
-                    </footer>
-                      -->                   
-            </form>
-            </div>
+                                                                        </div>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div style="display:none;">{{ form_rest(form) }}</div>
+                                                                    {{ form_row(form.promotedinitiatives) }}
+                                                        </div> 
+                                                    </form>
+                                                </div>
             <div class="clearfix"></div>
             <div class="bgbottom">
             	<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">

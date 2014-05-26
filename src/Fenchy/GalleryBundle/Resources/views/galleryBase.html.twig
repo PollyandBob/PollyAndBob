@@ -25,13 +25,14 @@
     <script type="text/javascript" src="{{ asset('plugins/tapmodo-Jcrop-1902fbc/js/jquery.Jcrop.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/gallery/punkave/editSmall.js') }}"></script>
     {% endif %}
-    
+
 {% endblock %}
     
 {% block content %}
     {# Underscore templates for the uploader #}
     {% include "PunkAveFileUploaderBundle:Default:templates.html.twig" %}
     <script type="text/javascript">
+      
     // Enable the file uploader
     $(function() {
         
@@ -58,12 +59,25 @@
             })
         });
         {% endif %}
+        
+    });
+    $(document).ready(function(){
+      var gallery = '{{ image_gallery }}';
+            if(gallery == true)
+            {
+                var len = $( "#gallery-edit-images-container li" ).length;
+                if(len>=3)
+                {
+                    $( "#gallery-edit-images-container li:first" ).removeClass('selected');   
+                }                                   
+            }  
     });
     </script>
 {% endblock %}
     
 {% block galleryContainer %}
     <div class="file-uploader"></div>
+    
     {% if galleryType == 'small' %}
     <div style="display:none">
         <div id="crop-area">
@@ -79,5 +93,6 @@
         </div>
     </div>
     {% endif %}
+
 {% endblock %}
     

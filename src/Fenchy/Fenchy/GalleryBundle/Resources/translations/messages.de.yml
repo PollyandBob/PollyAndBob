@@ -1,0 +1,10 @@
+gallery:
+  change_image: Bild ändern
+
+  delete: Löschen
+
+  change: Ändern
+
+  file_too_big_choose_smaller: Sorry, die Datei ist zu groß (max 5MB).
+
+  file_should_have_jpeg_png: Die Datei sollte jpeg oder png Format. haben. 

@@ -1,0 +1,282 @@
+<script type="text/javascript">
+
+function addMembers(receiver)
+{	
+	var url = "{{path('fenchy_regular_user_user_groupprofile_joinclosedgrouprequest')}}";
+        {% if requestObj %}
+            $('#neighbor_request_send').click();
+            return false;
+        {% endif%}
+	
+        $.ajax({
+		url : url,
+		type : "post",
+		data : {
+			'neighborId': receiver,
+			},
+		beforeSend : function() {
+		},
+		success : function(response) {			
+			$('#neighbor_request_send').click();
+			$('.added_n').hide();
+			$('.requested_n').show();
+		},
+		error : function() {
+			alert('Something went wrong!');
+		},
+		complete : function() {							
+		}
+	}); 
+}
+
+function sendMsgToGroup()
+		{
+			var flag = true;
+			var title = $('#MsgTitle').val();
+			var content = $('#MsgContent').val();
+			
+			if(title == "" || content == "")
+			{
+				flag = false;
+				$('#MsgTitle').attr('placeholder', 'required*');
+				$('#MsgContent').attr('placeholder', 'required*');
+			}
+                        if(title.trim() == "" || content.trim() == "" )
+                        {
+                                flag = false;
+				$('#MsgTitle').val('');
+				$('#MsgContent').val('');
+                                $('#MsgTitle').attr('placeholder', 'required*');
+				$('#MsgContent').attr('placeholder', 'required*');
+                        }
+			var receiver = "{{ usergroup.user.id }}";
+			var groupId = "{{ groupId }}";
+			
+			if(flag)
+			{
+				var url = "{{path('fenchy_regular_user_sendmsgtogroupform')}}";
+				$.ajax({
+					url : url,
+					type : "post",
+					data : {
+						'receiverId': receiver,				
+						'title': title,
+						'content': content,
+						'groupId': groupId,										
+						},
+					beforeSend : function() {
+						
+					},
+					success : function(response) {
+						$('#dialog34').hide();
+						$('#successDialog2').click();
+					},
+					error : function() {
+						alert('Something went wrong!');
+					},
+					complete : function() {
+						$('#MsgTitle').val('');
+						$('#MsgContent').val('');					
+					}
+				}); 
+			}		
+		}
+</script>
+{% if 'join' in app.request.uri %}
+<script type="text/javascript">
+window.onload=function(){ $('.neighbor_success1').click(); 
+ $('.crop_me2').attr('src', '{{ absolute(asset(usergroup.webpath2)) }}').load(function() {  
+                    //alert('Image Loaded');  
+ });
+ $('.crop_me2').jWindowCrop({
+				targetWidth: 970, //Width of facebook cover division
+				targetHeight: 325, //Height of cover division
+				loadingText: ''
+			});
+                        
+                    var vcropY = 0;
+                    {% if usergroup.cropY %}
+                    vcropY = {{ usergroup.cropY }};
+                    {% endif %}
+                    
+		    var newCropY = 2.13 * vcropY;
+                    newCropY = Math.ceil(newCropY);
+                
+		    $('.crop_me2').css('left',{{ usergroup.cropX }}+'px');
+		    $('.crop_me2').css('top',-newCropY+'px');
+		    $('.crop_me').css('left',{{ usergroup.cropX }}+'px');
+		    $('.crop_me').css('top',-{{ usergroup.cropY }}+'px');
+                    $('#form_cropX').val({{ usergroup.cropX }});
+                    $('#form_cropY').val({{ usergroup.cropY }});  
+		    $('.placeholder').find('.jwc_controls').empty();
+};</script>
+{% endif %}
+{% if 'leave' in app.request.uri %}
+<script type="text/javascript">
+window.onload=function(){ $('.neighbor_success2').click(); 
+ $('.crop_me2').attr('src', '{{ absolute(asset(usergroup.webpath2)) }}').load(function() {  
+                    //alert('Image Loaded');  
+ });
+ $('.crop_me2').jWindowCrop({
+				targetWidth: 970, //Width of facebook cover division
+				targetHeight: 325, //Height of cover division
+				loadingText: ''
+			});
+                        
+                    var vcropY = 0;
+                    {% if usergroup.cropY %}
+                    vcropY = {{ usergroup.cropY }};
+                    {% endif %}
+                    
+		    var newCropY = 2.13 * vcropY;
+                    newCropY = Math.ceil(newCropY);
+                
+		    $('.crop_me2').css('left',{{ usergroup.cropX }}+'px');
+		    $('.crop_me2').css('top',-newCropY+'px');
+		    $('.crop_me').css('left',{{ usergroup.cropX }}+'px');
+		    $('.crop_me').css('top',-{{ usergroup.cropY }}+'px');
+                    $('#form_cropX').val({{ usergroup.cropX }});
+                    $('#form_cropY').val({{ usergroup.cropY }});  
+		    $('.placeholder').find('.jwc_controls').empty();
+};</script>
+{% endif %}
+<div class="rightside">
+                 <div class="right" >
+                    <div class="options">
+                        <h4>YOUR OPTIONS</h4>
+                        <div class="optionsdetail">
+                        
+                        	{% if(usergroup.user.id == displayUser.id or adminmember == 1) %}
+                        	<a href="{{path('fenchy_regular_user_notice_create1',{'groupId': groupId}) }}" class="blue_button">{{'frontend.create_listing'|trans}}</a>
+                            {% endif %}
+                            <a href="#dialog34" class="zoomthis blue_button" name="modal" id="vzoom_1944">{{ 'regularuser.send_new_message'|trans }}</a>  
+                            
+                            {% if(usergroup.user.id == displayUser.id) %}
+                                {% set lang = 'regularuser.message.are_you_sure_group'|trans %}
+                                <a href="{{ path('fenchy_regular_user_user_groupprofile_deletegroup',{'groupId': groupId }) }}"  class="blue_button " id="{{ 'regularuser.delete_group'|trans }}" onclick="return confirm('{{ lang }}');">{{ 'regularuser.delete_group'|trans }}</a>
+                            {% elseif(groupMember) %}
+                            <a href="{{ path('fenchy_regular_user_user_groupprofile_leavegroup',{'groupId': groupId,'msg':'leave','requestId': requestObj.id }) }}" class="blue_button">{{ 'regularuser.leave_group'|trans }}</a>
+                            {% else %}
+		                    <a href="{% if usergroup.status == 1 %}{{ path('fenchy_regular_user_user_groupprofile_joingroup',{'groupId': groupId,'msg':'join' }) }} {% else %}javascript:void(0){% endif %}" {% if usergroup.status == 2 %} onclick="addMembers({{ usergroup.id }});" {% endif %} class="blue_button">{{ 'regularuser.join_group'|trans }}</a>
+                            {% endif %}
+                            <a href="#" class="blue_button">{{ 'regularuser.block'|trans }}</a>               
+                            <a href="#" class="blue_button">{{ 'regularuser.flag'|trans }}</a>                
+                        </div>
+		            </div>
+		        </div>
+		            <div class="neighbour-comments" style="display: none;">
+                    	<div class="title">
+                        	<div class="left">Laura</div>
+                            <div class="right">Online</div>
+                        </div>
+                        <div class="commentsdetail">
+                            <div class="comments-scroll">
+                                <div class="data">
+                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
+                                    <div class="rightdetail">
+                                        <div class="name">Frank</div>
+                                        <div class="date">26.08.2013</div>
+                                        <div class="time">14:30</div>
+                                        <div class="clearfix"></div>
+                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
+                                    </div>
+                                </div>
+                                <div class="data">
+                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
+                                    <div class="rightdetail">
+                                        <div class="name">Frank</div>
+                                        <div class="date">26.08.2013</div>
+                                        <div class="time">14:30</div>
+                                        <div class="clearfix"></div>
+                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
+                                    </div>
+                                </div>
+                                <div class="data">
+                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
+                                    <div class="rightdetail">
+                                        <div class="name">Frank</div>
+                                        <div class="date">26.08.2013</div>
+                                        <div class="time">14:30</div>
+                                        <div class="clearfix"></div>
+                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
+                                    </div>
+                                </div>
+                                <div class="data">
+                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
+                                    <div class="rightdetail">
+                                        <div class="name">Frank</div>
+                                        <div class="date">26.08.2013</div>
+                                        <div class="time">14:30</div>
+                                        <div class="clearfix"></div>
+                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
+                                    </div>
+                                </div>
+                                <div class="data">
+                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
+                                    <div class="rightdetail">
+                                        <div class="name">Frank</div>
+                                        <div class="date">26.08.2013</div>
+                                        <div class="time">14:30</div>
+                                        <div class="clearfix"></div>
+                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
+                                    </div>
+                                </div>
+                                <div class="data">
+                                    <img src="{{ absolute(asset('images/person.png')) }}" width="23" height="23" alt="" />
+                                    <div class="rightdetail">
+                                        <div class="name">Frank</div>
+                                        <div class="date">26.08.2013</div>
+                                        <div class="time">14:30</div>
+                                        <div class="clearfix"></div>
+                                        <p>Lorem ipsum dolor sit amet, coetur sadipscing elitr, sed diam nonumy eirmod?</p>
+                                    </div>
+                                </div>
+                            </div>	                            
+						</div>                            
+                    </div>
+		         
+</div>
+<a id="successDialog2" href="#dialog35" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+<section id="boxes2">
+	<div id="dialog34" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+				<p>{{ 'regularuser.write_msg_to'|trans }} {{ usergroup.groupname}}</p>
+					<input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}"/>
+					<textarea id="MsgContent" placeholder="{{ 'message.content'|trans }}"></textarea>
+				<input class="blue_button" style="margin-left: 340px; margin-bottom: 10px;" type="button" id="continue" value="{{ 'btn.send'|trans }}" onclick="sendMsgToGroup();"/>
+		</div>
+		<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+	</div>
+	<div id="mask"></div>
+</section>
+<section id="boxes2">
+	<div id="dialog35" class="window">
+	   	<div class="big_popup">
+	      	<div class="big_popupclose"><a href="" class="close"></a></div>
+			<div id="messageForm">
+				<p>{{ 'regularuser.msg_send'|trans }}</p>
+			</div>
+		</div>
+	</div>
+	<div id="mask"></div>
+</section>
+<a id="neighbor_request_send" href="#dialog304" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">	
+	<section id="boxes2">
+		<div id="dialog304" class="window">
+		<div id="dialog45">
+		   	<div class="big_popup">
+		      	<div class="big_popupclose"><a href="" class="close"></a></div>
+				<div id="messageForm">
+                                    {% if requestObj %}
+                                        <p>{{ 'regularuser.join_group_requested'|trans }}</p>
+                                    {% else %}    
+					<p>{{ 'regularuser.your_request_send'|trans }}</p>
+                                    {% endif %}    
+				</div>
+			</div>
+			<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
+		</div>
+		</div>
+		<div id="mask"></div>
+	</section>

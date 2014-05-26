@@ -1,0 +1,354 @@
+{% extends 'FenchyGalleryBundle::galleryShowBase.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# any view specific stylesheets for this view #}    
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />        
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/jquery.tagit.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/tagit.ui-zendesk.css') }}" type="text/css" />       
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/article-box-v2.css')) }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/tabs-v2.css')) }}" type="text/css" />  
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
+     
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/user-profile-view-model.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('js/mvvm/listing-show-view-model.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.tinyscrollbar.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/fenchydropdown.js') }}"></script> 
+    <script type="text/javascript" src="{{ asset('js/jWindowCrop.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.timepicker.js') }}"></script>
+    <script type="text/javascript">
+        
+        var userProfileViewModel;
+        var spinnerHTML = '<div id="spinner-div"><i class="icon-spinner icon-spin"></i></div>';
+        var tabsJQ;
+
+        $(document).ready(function() {
+            $('#description-area').tinyscrollbar();
+            //$('.add-sticker').fancybox({type:'iframe'});
+            $('#tags').tagit({
+                readOnly: true
+            });
+            var geocoder = new google.maps.Geocoder();
+            var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';
+            var pagination = {{pagination}};
+            var usersOwnListing = {{ usersOwnListing ? 'true' : 'false' }};
+            {% if(app.security.token.user.id is defined) %}
+                var loggedInUserId = {{ app.security.token.user.id }};
+            {% else %}
+                var loggedInUserId = null;
+            {% endif %}
+            var initialReviewsP = {{ initialReviewsP | json_encode() | raw }};
+            var initialReviewsN = {{ initialReviewsN | json_encode() | raw }};
+            
+            var translations = {
+            
+            }
+            
+            var routes = {
+                fenchy_regular_user_reviewseditform: '{{  path('fenchy_regular_user_reviewseditform') }}',
+                fenchy_regular_user_reviewssave: '{{ path('fenchy_regular_user_reviewssave') }}',
+                fenchy_regular_user_reviewslist:'{{ path('fenchy_regular_user_reviewslist') }}',
+                fenchy_regular_user_listingslist: '{{ path('fenchy_regular_user_listingslist') }}'
+            }
+            
+            var displayUserId = {{ displayUser.id }};
+            
+            var listingId = {{ notice.id }};
+            
+            listingShowViewModel = new ListingShowViewModel(
+                geocoder,
+                baseSearchViewUri,
+                pagination,
+                usersOwnListing,
+                displayUserId,
+                loggedInUserId,
+                initialReviewsP,
+                initialReviewsN,
+                routes,
+                listingId
+            );
+            
+            
+            ko.applyBindings( listingShowViewModel, window.document.getElementsByTagName('body')[0] );
+            
+            autocomplete = new GApiAutocomplete(
+                document.getElementById('location'),
+                listingShowViewModel );
+
+            tabsJQ = $('.container .inner-content #reviews-tabs', document);
+            tabsJQ.tabs();
+            
+           	$('.reviewdata').hide();
+           	$('.writereviewdata').hide();
+           	$('#desc').css('background', 'url("/images/bg_description.png")');
+        });
+        function toggeleDiv(element1,element2)
+        {
+            $('#tabs').children().hide();
+            $("."+element2).show();
+            if(element1=='review')
+            {
+                $("#tab").children().css('background', 'url("/images/bg_description_blue.png") no-repeat');
+                $("#"+element1).css('background', 'url("/images/bg_reviews_red.png") no-repeat');        	
+            }
+            else
+            {
+                 $("#tab").children().css('background', 'url("/images/bg_reviews.png") no-repeat');
+                 $("#"+element1).css('background', 'url("/images/bg_description.png") no-repeat');
+            }
+        }
+        
+        
+        window.onload=function(){
+        $('.slides .slide_inner img.photo').css('width','970px');
+        
+	$('.slides .slide_inner .photo').jWindowCrop({
+
+                    targetWidth: 970, //Width of facebook cover division
+                    targetHeight: 326, //Height of cover division
+                    loadingText: '',
+                    onChange: function(result) {
+
+                            var strcropX = $(this).css('left');
+                            var strcropY = $(this).css('top');
+                            strcropX = strcropX.replace(/px/g, '');
+                            strcropX = strcropX.replace(/-/g, '');
+                            strcropY = strcropY.replace(/px/g, '');
+                            strcropY = strcropY.replace(/-/g, '');
+                            //alert($(this).parent().parent().parent('li.selected').index());
+                            
+                            /*console.log("separation from left- "+result.cropX);
+                            console.log("separation from left- "+result.cropY);
+                            console.log("width- "+result.cropW-455);
+                            console.log("Height- "+result.cropH-123);*/
+                    }
+                });
+                
+            $('.placeholder_listing').find('.jwc_controls').empty();
+            
+            {% set i=1 %}        
+            {% for image in notice.gallery.images %}
+                {{image.id}}
+                $('.slide_{{ i }} .slide_inner .photo').css('left',{{ image.cropX }}+'px');
+                $('.slide_{{ i }} .slide_inner .photo').css('top',-{{ image.cropY }}+'px');
+            {% set i = i+1 %}
+            {% endfor %}    
+	};
+    </script>
+     <script type="text/javascript">
+		
+		function postComment(){
+			var noticeId = {{ notice.id }};
+			var text = $('#commenttext').val();
+		    $.post('{{path('fenchy_notice_post_comment')}}',
+		                {noticeId: noticeId, text: text}, 
+		            function(response){
+		                $('.commentdata').html(response.success);
+		                $('#commenttext').val('');
+		                $('#commenttext').blur();
+
+		    }, "json");    
+		}
+	</script>
+    {# any view specific JS scripts for this view #}
+{% endblock %}
+
+{% block content %}
+	<style>
+	#gallery-show .agile_carousel {
+	 	height: 315px !important;
+	 	width: 964px !important;
+	}
+	#gallery-show .agile_carousel .slide_inner .photo.landscape {
+	    /*height: 315px !important;*/
+	    width: 134%;
+	}
+        .placeholder .jwc_frame, .placeholder_listing .jwc_frame
+	{
+		pointer-events: none !important;
+	}
+	#gallery-show .content_button img {
+	    height: 91px;	    
+	}
+                .thumbnails .thumbnail .crop_me4
+                {
+                    display:none !important;
+                }
+                .thumbnails .selected .crop_me4
+                {
+                    display:block !important;
+                }
+                .placeholder_listing {
+                display: block;
+                width: 970px;
+                margin: 0 auto;
+                position: relative;
+                }    
+                .placeholder .jwc_frame, .placeholder_listing .jwc_frame
+                {
+                cursor: move !important;
+                }
+                ._6_f {
+                max-width: 275px;
+                display: inline-block;
+                }
+                ._8_2 {
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-size: 24px;
+                line-height: 30px;
+                font-weight: bold;
+                display: inline-block;
+                padding-right: 30px;
+                }
+                ._8_2, .alternate {
+                color: #FFF;
+                text-rendering: optimizelegibility;
+                text-shadow: 0 0 3px rgba(0,0,0,0.8);
+                }
+                .alternate {
+                font-size: 20px;
+                font-weight: normal;
+                white-space: nowrap;
+                color: #fff;
+                }
+	</style>
+	<section id="contentinner" style="margin-top: 12px;">
+	<div class="wrapper">  
+	<div class="notice-title">
+		{{ notice.title }}
+	</div>
+	{% if app.user.id is defined and app.user.id != notice.user.id %}
+      	<a href="javascript:void(0);" class="add-sticker" style="float: right; margin: 20px; background: none repeat scroll 0px 0px rgb(81, 185, 212); color: rgb(255, 255, 255); font-size: 13px; z-index: 100; position: relative; padding: 0px 7px;">{{ 'notice.flag'|trans  }}</a>
+    {% endif %}  
+      	    
+   	<div class="post-content">
+    	{% if notice.gallery.hasImages %}
+        	<figure>
+			   	{% set gallery = notice.gallery %}
+				{{ block('galleryContainer') }}
+		    </figure>
+		{% else %}
+		   	<div class="image-spacer">NOT AVAILABLE</div>
+		{% endif %}
+	</div>
+	<div id="post watch-notice">
+		<div class="leftparts">
+			<div class="noticedata">
+				<div class="findmedata">
+					<div class="tagdata">
+		             	<div class="title">{{'listing.show.tags'|trans}}</div>
+		                <div class="likedata" style="margin-left: 50px;">
+		                	<ul>          	
+		                      	<div class="about_show">
+			                    	{% set varStack = notice.tags | split(',') %}
+										{% for value in varStack %}
+											{% if value %}
+										 		<li style="margin-top: -8px;"><a href="javascript:void(0);">{{ value }}</a></li>
+										    {% endif %}
+										{% endfor %}
+			                  	</div>
+		                    </ul>	                	
+		           		</div>
+		            </div>
+		            <div class="optionsdetail" id="tab">
+			        	<a id="desc" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('desc','descdata')">{{ 'listing.show.description'|trans }}</a>
+			        	{% if initialReviews %}
+			        	<a id="review" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('review','reviewdata')">{{ 'listing.show.reviews'|trans }}</a>
+			        	{% endif %}
+			        	<!--<a id="writereview" style="border-radius: 0 15px 0 0; margin: 0;" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('writereview','writereviewdata')">{{ 'listing.show.reviews'|trans }}</a>-->
+			        	
+			        </div>
+			        <div id="tabs">
+			            <div class="descdata">		            	
+			             	{{ notice.content }}
+			            </div>
+			            <div class="reviewdata">
+			            	{% set i=0 %}		            	
+							{% for initialReview in initialReviews %}
+				                {% if initialReview %}
+				               		<div class="data">                                      	 
+					              		<a href="{{ initialReview['author']['profileUrl'] }}">
+					               			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialReview['author']['id'] } %}
+					               		</a>
+					               		<div class="neighbor {{ reviewManagertype[i][2] }}">
+											<p>{{ reviewManagertype[i][1] }}</p>
+											<span>{{ initialReview['author']['activity'] }}</span>
+										</div> 
+					               		<p>{{ initialReview['text'] }}</p>
+					               	</div>
+				               	{% endif %}
+				               	{% set i = i+1 %}
+			                {% endfor %}
+			            </div>
+			                 {% include 'FenchyRegularUserBundle:Partials:listingReviews.html.twig' %}
+ 						{% if not usersOwnListing and app.security.token.user.id is defined and app.security.token.user.id != NULL %}
+ 						{% endif %}			            
+			        </div>
+		            <h4>{{ 'listing.show.comment'|trans }}</h4>
+		            <div class="commentdata">
+ 						{% if app.user.id is defined %}
+			            	<a href="javascript:void(0);" style="margin-top: 15px; position: absolute;">
+					        	{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': userLoggedIn.id } %}
+					        </a>
+					        <div class="neighbor {{ managertypeLoggedIn[2] }}" style="margin-top: 7px;">
+								<p style="color: #FFFFFF !important; font-size: 11px; margin-left: 9px; margin-top: 5px; position: absolute;">{{ managertypeLoggedIn[1] }}</p>
+								<span style="margin-top: 13px;">{{ userLoggedIn.activity }}</span>
+							</div> 
+			            	<div class="descdata" style="margin-left: 65px; width: 83% ! important; margin-top: 10px;">
+					         	<p><input id="commenttext" style="width: 80%" type="textarea" placeholder="{{ 'regularuser.post_comment'|trans }}"/></p>
+					        </div>
+					        <input style="float: right; margin-left: 16px; margin-top: -42px; position: relative; cursor: pointer;" class="blue_button" type="button" value="POST" onclick="postComment();"/>
+					        
+					    {% endif %}
+					    {% set i = 0 %}
+						{% for initialComment in initialComments %}
+			                {% if initialComment %}
+			               		<div class="data">
+				              		<a href="{{ initialComment['author']['profileUrl'] }}">
+				               			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialComment['author']['id'] } %}
+				               		</a>
+				               		<div class="neighbor {{ commentManagertype[i][2] }}">
+											<p>{{ commentManagertype[i][1] }}</p>
+											<span>{{ initialComment['author']['activity'] }}</span>
+									</div> 
+				               		<p>{{ initialComment['text']|nl2br }}</p>
+				               	</div>
+			               	{% endif %}
+			               	{% set i = i+1 %}
+		                {% endfor %}
+		            </div>
+				</div>
+				<div class="bgbottom-big"><img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}"></div>				
+			</div>			
+    	</div>
+    	{% include 'FenchyRegularUserBundle:Partials:listingSidebar.html.twig' %}
+   	</div>
+    <div class="clearfix"></div>
+    </div>
+    </section>
+    {% if app.user.id is defined and app.user.id != notice.user.id %}
+	<div id="flagwindow" class="flagwindow">
+		<img class="iconarrow" src="{{ asset('images/icon_arrow.png') }}" alt="" />
+		{% render 'FenchyUtilBundle:Sticker:noticeSticker' with {'id': notice.id} %}
+	</div>
+	{% endif %}
+	<script type="text/javascript">
+	$(function() {
+		$('.add-sticker').click(function(event) {
+			  event.preventDefault();
+				  $('#flagwindow').slideToggle('fast', function() {
+			  });
+		});
+	});
+	</script>
+{% endblock %}

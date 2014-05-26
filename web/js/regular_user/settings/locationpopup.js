@@ -31,11 +31,11 @@ $(document).ready(function() {
                         res = true;
 
                     } else {
-                        input.val('');
+                        //input.val('');
                         res = false;
 
                         //TODO: display error location etc.
-                        alert('Location is invalid !');
+                        //alert('Location is invalid !');
 
                         $(ajaxgif).remove();
                         $(submitBtn).removeAttr('disabled');

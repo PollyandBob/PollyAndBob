@@ -7,6 +7,10 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
+  		var PAYMILL_PUBLIC_KEY = '760970626785a3e7030d736d85bf1411';
+	</script>
+	<script type="text/javascript" src="https://bridge.paymill.com/"></script>
+    <script type="text/javascript">
     $(document).ready(function(){
 
     	$("div[id^='showInformationForm']").hide();
@@ -14,7 +18,8 @@
     	$("div[id^='PaymentForm']").hide();
     	$('.changeSettingButton').hide();
     	var noticeType = '{{ noticeType }}';
-    	if(noticeType !="")
+        var noticeId = '{{ noticeId }}';
+    	if(noticeType !="" || noticeId !=="")
     	{
         	$('#Active').addClass('selected');
     	}
@@ -82,7 +87,7 @@
 	}
 
     function savePaymentSetting(id,action)
-	{
+	{    
     	var account_holder = $('#debitcard1').val();
     	var account_no = $('#debitcard2').val();
     	var bank_code = $('#debitcard3').val();
@@ -94,22 +99,42 @@
     	var end_month = $("#creditcard4 option:selected").val();
     	var end_year = $("#creditcard5 option:selected").val();
     	var noticeType = '{{ noticeType }}';
+        var noticeId = '{{ noticeId }}';
 		var type="";
-    	//alert(account_holder+"  "+account_no+"    "+bank_code+"   "+paypal_email+"   "+card_type+"   "+card_no+"   "+card_holder+"  "+end_month+"   "+end_year);
+
+		//alert(account_holder+"  "+account_no+"    "+bank_code+"   "+paypal_email+"   "+card_type+"   "+card_no+"   "+card_holder+"  "+end_month+"   "+end_year);
     	var flag = true;
     	if(id == 1)
     	{
         	type = "debit";
 	    	if(!$("#debitcardcheck").is(':checked'))
 	    	{
-	        	alert('ACEEPT TERMS & CONDITION');
+                        var notification1 = '{{'payment.notify1'|trans}}';
+			alert(notification1);
+	        	//alert('ACEEPT TERMS & CONDITION');
 	        	flag = false;
 	    	}
 	    	if(account_holder =="" || account_no == "" || bank_code =="")
 	    	{
-	        	alert('ALL FILED ARE REQUIRED');
-	    	    flag = false;
+                        var notification2 = '{{'payment.notify2'|trans}}';
+			alert(notification2);
+	        	//alert('ALL FILED ARE REQUIRED');
+                        flag = false;
 	    	}
+	    	if(!paymill.validateAccountNumber(account_no))
+	    	{
+                        var notification3 = '{{'payment.notify3'|trans}}';
+			alert(notification3);
+		    	//alert('ENTER VALID ACCOUNT NUMBER');
+		    	flag = false;
+	    	}	
+	    	if(!paymill.validateBankCode(bank_code))
+	    	{
+                        var notification4 = '{{'payment.notify4'|trans}}';
+			alert(notification4);
+	    		//alert('NOT VALID BANK CODE');
+	    		flag = false;
+	    	}	
 	    	$('#paypal1').val('');
 		    $('#creditcard2').val('');
 		    $('#creditcard3').val('');
@@ -127,13 +152,16 @@
         	type="paypal";
 	    	if(!$("#paypalcheck").is(':checked'))
 	    	{
-	        	alert('ACEEPT TERMS & CONDITION');
+                        var notification1 = '{{'payment.notify1'|trans}}';
+			alert(notification1);
+	        	//alert('ACEEPT TERMS & CONDITION');
 	        	flag = false;
 	    	}
 	    	if(paypal_email =="")
 	    	{
-	        	alert('ALL FILED ARE REQUIRED');
-	    	    flag = false;
+                        var notification2 = '{{'payment.notify2'|trans}}';
+			alert(notification2);
+                        flag = false;
 	    	}
 	    	$('#debitcard1').val('');
 		    $('#debitcard2').val('');
@@ -156,14 +184,39 @@
         	type="credit";
 	    	if(!$("#creditcardcheck").is(':checked'))
 	    	{
-	        	alert('ACEEPT TERMS & CONDITION');
+                        var notification1 = '{{'payment.notify1'|trans}}';
+			alert(notification1);
+	        	//alert('ACEEPT TERMS & CONDITION');
 	        	flag = false;
 	    	}
 	    	if(card_holder =="" || card_no=="" || cvv_code=="" )
 	    	{
-	        	alert('ALL FILED ARE REQUIRED');
-	    	    flag = false;
+                        var notification2 = '{{'payment.notify2'|trans}}';
+			alert(notification2);
+	        	//alert('ALL FILED ARE REQUIRED');
+                        flag = false;
 	    	}
+	    	if(!paymill.validateCardNumber(card_no))
+	    	{
+                        var notification5 = '{{'payment.notify5'|trans}}';
+			alert(notification5);
+		    	//alert('ENTER VALID CARD NUMBER');
+		    	flag = false;
+	    	}
+	    	if(!paymill.validateExpiry(end_month, end_year))
+	    	{
+                        var notification6 = '{{'payment.notify6'|trans}}';
+			alert(notification6);
+	    		//alert('SELECT VALID EXPIRY DATE');
+		    	flag = false;
+	    	}
+	    	if(!paymill.validateCvc(cvv_code))
+	    	{
+                        var notification7 = '{{'payment.notify7'|trans}}';
+			alert(notification7);
+		    	//alert('NOT VALID CVC');
+		    	flag = false;
+	    	}	
 	    	$('#debitcard1').val('');
 		    $('#debitcard2').val('');
 		    $('#debitcard3').val('');
@@ -199,9 +252,20 @@
 				success : function(response) {					
 					$('#SetSetting').html(response);
 					$('#PaymentForm'+id).hide();
+                                        var url = $.session.get("watchlistingurl");
+                                        
+                                        if(url)
+                                        {
+                                            $.session.remove('watchlistingurl');
+                                            window.location.replace(url);
+                                        }
 					if( action =='return' && noticeType)
 					{					
 						$('#Return')[0].click();
+					}
+                                        else if( action =='return' && noticeId)
+					{					
+						$('#Return1')[0].click();
 					}
 					else
 					{	
@@ -383,7 +447,7 @@
 					<li	style="margin-bottom: 10px;">
 						<div class="paymentdetails">
 							<a class="payment-button" href="javascript:void(0);" style="margin-bottom: 10px; width: 15%;" onclick="savePaymentSetting(1,'stay')">{{ 'payment.save'|trans|upper }}</a>
-							{% if noticeType !="" %}
+							{% if noticeType !="" or noticeId !="" %}
 								<a class="payment-button" href="javascript:void(0);" style="width: 48%;" onclick="savePaymentSetting(1,'return')">{{ 'payment.save2'|trans|upper }}</a>
 							{% endif %}
 						</div>
@@ -412,7 +476,7 @@
 					<li style="margin-bottom: 10px;">
 						<div class="paymentdetails">
 							<a class="payment-button" href="javascript:void(0);" style="margin-bottom: 10px; width: 15%;" onclick="savePaymentSetting(2,'stay')">{{ 'payment.save'|trans|upper }}</a>
-							{% if noticeType !="" %}
+							{% if noticeType !=""  or noticeId !="" %}
 								<a class="payment-button" href="javascript:void(0);" style="width: 48%;" onclick="savePaymentSetting(2,'return')">{{ 'payment.save2'|trans|upper }}</a>
 							{% endif %}
 						</div>
@@ -451,8 +515,19 @@
 					</li><br>
 					<li style="margin-bottom: 10px;">
 						<select id="creditcard1">
-							<option>{{ 'payment.visa'|trans|upper }}</option>
+                                                    {% if payment %}
+                                                    {%  if payment.cardType == 'VISA' %}
+							<option selected="selected">{{ 'payment.visa'|trans|upper }}</option>
 							<option>{{ 'payment.master_card'|trans|upper }}</option>
+                                                    {% else %}
+                                                        <option>{{ 'payment.visa'|trans|upper }}</option>
+							<option selected="selected">{{ 'payment.master_card'|trans|upper }}</option>
+                                                    {% endif %}
+                                                    {% else %}                                                       
+                                                        <option>{{ 'payment.visa'|trans|upper }}</option>
+							<option selected="selected">{{ 'payment.master_card'|trans|upper }}</option>
+                                                    {% endif %}
+                                                        
 						</select>
 					</li>
 					<li>	
@@ -464,9 +539,9 @@
 					</li>
 					<li>
 						{% if app.request.locale == "de" %}
-							<input type="text" id="creditcard6" style="margin: 0 10px 0 -25px; -webkit-margin-end: 31px;" value="{% if payment %}{{payment.cvvCode}}{% endif %}"/>
+							<input type="text" id="creditcard6" style="margin: 0 10px 0 -25px; -webkit-margin-end: 31px;" value="{% if payment %}{{cvv_code}}{% endif %}"/>
 						{% else %}
-							<input type="text" id="creditcard6" style="margin: 0 10px 0 10px;" value="{% if payment %}{{payment.cvvCode}}{% endif %}"/>
+							<input type="text" id="creditcard6" style="margin: 0 10px 0 10px;" value="{% if payment %}{{cvv_code}}{% endif %}"/>
 						{% endif %}
 					</li>
 					<li>
@@ -478,17 +553,47 @@
 					</li>
 					<li>
 						<select id="creditcard4">
-							<option>01</option><option>02</option><option>03</option>
-							<option>04</option><option>05</option><option>06</option>
-							<option>07</option><option>08</option><option>09</option>
-							<option>10</option><option>11</option><option>12</option>
-						</select></hr>
+                                                    {% if payment %}
+                                                    {% for i in 1..12 %}
+                                                        {%if i != payment.endMonth %}
+                                                            {% if i<= 9 %}
+                                                                <option>0{{i}}</option>
+                                                            {% else %}
+                                                                <option>{{i}}</option>
+                                                            {% endif %}                                                        
+                                                        {% endif %}
+                                                        {% if i== payment.endMonth %}
+                                                                <option selected="selected">{{ payment.endMonth }}</option>
+                                                        {% endif %}
+                                                     {% endfor %}
+                                                     {% else %}
+                                                            {% for i in 1..12 %}
+                                                        
+                                                            {% if i<= 9 %}
+                                                                <option>0{{i}}</option>
+                                                            {% else %}
+                                                                <option>{{i}}</option>
+                                                            {% endif %}                                                        
+                                                     {% endfor %}
+                                                    {% endif %}
+						</select>
 					</li>
 					<li>	
 						<select id="creditcard5">
-							{% for i in 0..75 %}							
-								<option>{{ "now"|date("Y")+i }}</option>
+                                                    {% if payment %}
+							{% for i in 0..75 %}
+                                                            {% if "now"|date("Y")+i != payment.endYear %}
+                                                                <option>{{ "now"|date("Y")+i }}</option>
+                                                             {% endif %}
+                                                            {% if "now"|date("Y")+i == payment.endYear %}
+                                                                <option selected="selected">{{ payment.endYear }}</option>
+                                                            {% endif %}
 							{% endfor %}
+                                                  {%  else %}
+                                                            {% for i in 0..75 %}                                                            
+                                                                <option>{{ "now"|date("Y")+i }}</option>
+							{% endfor %}
+                                                  {% endif %}
 						</select>
 						
 					</li><br>
@@ -503,7 +608,7 @@
 					<li	style="margin-bottom: 10px;">
 						<div class="paymentdetails">
 							<a class="payment-button" href="javascript:void(0);" style="margin-bottom: 10px; width: 15%;" onclick="savePaymentSetting(3,'stay')">{{ 'payment.save'|trans|upper }}</a>
-							{% if noticeType !="" %}
+							{% if noticeType !="" or noticeId !="" %}
 								<a class="payment-button" href="javascript:void(0);" style="width: 48%;" onclick="savePaymentSetting(3,'return')">{{ 'payment.save2'|trans|upper }}</a>
 							{% endif %}
 						</div>
@@ -564,7 +669,12 @@
 			</div>
 		</div>
 	</div>
+        <div class="clearfix"></div>
+            <div class="bgbottom">
+            	<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
+            </div>
 	<a id="Return" href="{{ path('fenchy_regular_user_notice_create2', {'typename': noticeType, 'groupId': groupId}) }}"></a>
+        <a id="Return1" href="{{ path('fenchy_regular_user_notice_edit', {'id': noticeId}) }}"></a>
 	
 	<a id="SaveSettingMsg" href="#dialog47" name="modal" id="vzoom_1944" class="zoomthis blue-button"></a>
 	<section id="boxes2">		
@@ -572,7 +682,8 @@
 			<div class="big_popup">
 		   		<div class="big_popupclose"><a href="" class="close"></a></div>
 		  		<p>{{ 'payment.savemsg'|trans|upper }}</p>
-			</div>    
+			</div> 
+			<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">   
 		</div>		    
 		<div id="mask"></div>
 	</section>
@@ -582,7 +693,8 @@
 			<div class="big_popup">
 			   	<div class="big_popupclose"><a href="" class="close"></a></div>
 		  		<p>{{'payment.deletemsg'|trans|upper }}</p>
-			</div>    
+			</div> 
+			<img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">   
 		</div>
 		<div id="mask"></div>
 	</section>

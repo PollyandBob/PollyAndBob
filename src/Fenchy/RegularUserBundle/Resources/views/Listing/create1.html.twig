@@ -42,12 +42,13 @@
 		}		
 		.candolot span {
 		    color: #000000;
-		    display: block;
-		    font-family: code_boldregular;
-		    font-size: 14px;
-		    letter-spacing: 1px;
-		    margin-left: -54px;
-		    margin-top: 18px;
+                    display: block;
+                    font-family: code_boldregular;
+                    font-size: 14px;
+                    letter-spacing: 1px;
+                    line-height: 28px !important;
+                    margin-left: -54px;
+                    margin-top: 0;
 		}
 		.candolot a {
 		    background: none repeat scroll 0 0 #51B9D4;
@@ -80,7 +81,7 @@
                     <div class="candolot">
                         <div class="left">
                         	<h4 style="color: #444444;">{{ 'listing.create.1.find_something'|trans|upper }}
-                        	<span style="margin-bottom: 20px; text-align: center;">{{ 'listing.create.1.in_neighbourhood'|trans|upper }}</span></h4>
+                        	<span style="margin-bottom: 11px; text-align: center;">{{ 'listing.create.1.in_neighbourhood'|trans|upper }}</span></h4>
                         	<div class="clearfix"></div>
                         	{% for type in types|slice(0,7) %}                        		
                            		<a style="width:115px" href="{{path('fenchy_regular_user_notice_create2', {'typename':type.name, 'groupId': groupId})}}">
@@ -96,9 +97,18 @@
                         {% else %}
                         	<h4 style="color: #444444; margin-left: -5px;">{{ 'listing.create.1.offer_something'|trans|upper }}
                         {% endif %}
-                        	<span style="margin-bottom: 20px; text-align: center; margin-left: -33px;">{{ 'listing.create.1.to_neighbourhood'|trans|upper }}</span></h4>
+                        	<span style="margin-bottom: 11px; text-align: center; margin-left: -33px;">{{ 'listing.create.1.to_neighbourhood'|trans|upper }}</span></h4>
                         	<div class="clearfix"></div>
-                        	
+                        	{% set obj = app.user.roles | json_encode | raw %}
+                                {#{% if 'ROLE_ADMIN' in obj %}
+                                <a style="width:115px;padding: 5px 10px;" href="{{path('fenchy_regular_user_notice_create2', {'typename':'offergroups', 'groupId': groupId})}}?new=communitygroup">
+                                    {{ 'listing.community_group'|trans }}
+                                </a>
+                                <a style="width:115px;padding: 5px 10px;" href="{{path('fenchy_regular_user_notice_create2', {'typename':'offergroups', 'groupId': groupId})}}?new=neighborhoodgroup">
+                                    {{ 'listing.neighborhood_group'|trans }}
+                                </a>
+                                {% endif %}#}
+                                                        
                         	{% for type in types %}
                             	{% if loop.index > 7 %}
                             		{% if not alertmsg  and type == 'offergroups' and groupId == '' %}
@@ -110,8 +120,8 @@
  											{{ type|trans }} 
 			                           	</a>
                             		{% endif %}
-                            		{% if type != 'offergroups' %}
-	                                	<a style="width:115px" href="{{path('fenchy_regular_user_notice_create2', {'typename':type.name, 'groupId': groupId})}}">
+                                                {% if type != 'offergroups' %}
+                                                        <a style="width:115px" href="{{path('fenchy_regular_user_notice_create2', {'typename':type.name, 'groupId': groupId})}}">
 			                           		{{ type|trans }} 
 			                           	</a>
 			                        {% endif %}		                       		

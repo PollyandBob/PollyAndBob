@@ -1,4 +1,6 @@
 regularuser:
+  neighborhoodmsg: the whole neighborhood
+  
   leave_a_review: Gebe Feedback
 
   edit_review: Feedback ändern.
@@ -17,6 +19,8 @@ regularuser:
   
   closed: geschlossen
   
+  click_here: Klicken Sie hier
+  
   you_are_member: DU BIST MITGLIED
   
   you_are_not_member: DU BIST KEIN MITGLIED
@@ -25,12 +29,19 @@ regularuser:
   
   make_administrator: zum Administrator machen
   
+  profile_image: Profil Bild
+  
+  cover_image: Abdeckung Bild
+  
+  groupprofile_image: Gruppe bild
+  
+  groupcover_image: Gruppe Abdeckung Bild
+    
   remove: Entfernen
   
   remove_members: Mitglieder entfernen
   
   remove_admin: Administratoren entfernen
-
   
   all_trust_points: Reputation:
 
@@ -46,9 +57,19 @@ regularuser:
   
   remove_neighbor_success: Nachbar erfolgreich  aus Meine Nachbarn Liste entfernt.
 
+  added_member_success: Mitglied hinzugefügt.
+  
+  reject_member_success: Mitglied angefordert erfolgreich abgelehnt.
+  
+  block_neighbor_success: Nachbar erfolgreich  aus Meine Nachbarn Liste verstopft.
+  
+  unblock_neighbor_success: Nachbar erfolgreich  aus Meine Nachbarn Liste freigegeben.
+  
   reject_neighbor_success: Nachbar abgelehnt.
   
   requested_neighbor: Ihre Anfrage wird bereits zu senden. Bitte warten Sie, oder senden Mitteilung ihn erinnern.
+  
+  requested_neighbor1: %username% Sie hat bereits als Nachbar hinzufügen angefordert. Bitte akzeptieren Anfrage.
   
   your_request_send: Ihre Anfrage erfolgreich versandt.
   
@@ -57,6 +78,18 @@ regularuser:
   your_listing_success: Listing erfolgreich erstellt.
   
   invite_neighbor_to_listing: Möchtest du Nachbarn zu deinem Listing einladen?
+  
+  invite_friends_emails: Lade Freunde per E-Mail
+  
+  invite_now: Jetzt laden
+  
+  invite_friends_facebook: Invite friends by facebook
+  
+  invite_friends_twitter: Invite friends by twitter
+  
+  invited_successfully: Ihre Freunde per E-Mail erfolgreich eingeladen
+  
+  invited_by_facebook: Your friends invited successfully
   
   no_thank_you: Nein danke.
   
@@ -94,6 +127,8 @@ regularuser:
   
   block: Blockiern
   
+  unblock: entsperren
+  
   flag: Melden
 
   change_password: Passwort ändern
@@ -105,6 +140,8 @@ regularuser:
   write_your_message: Schreibe eine Nachricht
   
   post_comment: Kommentieren
+  
+  post_comment_group: posten sie ihre nachricht an die gruppe hier
   
   title: Titel
   
@@ -119,6 +156,8 @@ regularuser:
   join_group: Gruppe beitreten
   
   leave_group: Gruppe verlassen
+  
+  join_group_requested: Ihre Anfrage wird bereits zu senden. Bitte warten Sie, oder senden Mitteilung ihn daran zu erinnern,
   
   joined_group_success: Gruppe erfolgreich beigetreten. 
   
@@ -154,6 +193,8 @@ regularuser:
   
   change_pass_success: Das Passwort wurde erfolgreich geändert
   
+  wrong_old_password_or_new_confirm_not_matched: Altes Kennwort ist falsch oder Neues Passwort und Passwort bestätigen nicht abgestimmt
+  
   no_newsfeeds: Kein Eintrag zu Ihrer Suche. Was ist mit diesen Ergebnissen (sie sind in der Nähe):
   
   no_newsfeeds_in_given_circle: in der gegebenen Kreis keine Inserate, aber es gibt die Suchergebnisse in einem größeren Gebiet, schauen Sie bitte:
@@ -162,11 +203,19 @@ regularuser:
   
   find_neighbors: Find neighbors now
   
-  want_to_add_as_neighbour: möchte Sie als Nachbar hinzufügen  
+  blocked_neighbors: Unblock neighbors now
+  
+  want_to_add_as_neighbour: möchte Sie als Nachbar hinzufügen
+  
+  want_to_join_group: möchte Gruppe beitreten
   
   add_me_in_your_neighbor: Sie möchten hinzufügen
   
   to_your_neighborlist: um Ihre Nachbarliste
+
+  enter_location: Geben Sie Ort
+  
+  invite_facebook: Laden Sie Ihre Freunde zu Polly and Bob anzuschließen!
   
   message:
     sent: Nachricht gesendet!
@@ -207,6 +256,8 @@ regularuser:
     
     no_neighbors: Keine Nachbarn im gewählten Umkreis.
     
+    no_groups: Sie nicht ein Mitglied einer Gruppe sind
+    
     no_location: xxx
     
     group_created: Gruppe erfolgreich gegründet.
@@ -228,6 +279,12 @@ regularuser:
     subject_for_invitelistingby_mail: Neue Listing Einladung von Polly & Bob
     
     subject_for_buy_share_mail: Zeichne Anteile an Polly & Bob
+    
+    subject_for_invitefriendsby_mail: Einladung von Polly & Bob
+      
+    message_for_invitefriendsby_mail: Test Message
+    
+    invite_friends_emails_errors: Geben Sie gültige E-Mail-Adresse
     
     message_part: Hallo, %username%
     
@@ -257,6 +314,10 @@ regularuser:
   
   reject: Absagen
   
+  list_it_again: Liste wieder
+  
+  repost: Repost
+  
   write_review: Feedback schreiben
   
   mark_done: Erledigt
@@ -276,6 +337,8 @@ regularuser:
   my_community_ponts: MEINE COMMUNITY PUNKTE
   
   my_neighbours: MEINE NACHBARN
+  
+  my_groups: Meine Gruppen
   
   my_location: MEIN STANDORT
   
@@ -350,6 +413,8 @@ regularuser:
   verified_identity_message: Deine Identität ist jetzt verifiziert.
   verifing_identity_message: Danke für deine Anfrage. Wir verifizieren deine Anfrage, so schnell wie möglich.
   verifing_location_message: Danke für deine Anfrage. Ihr Standort ist in Überprüfung. Wir senden Ihnen Postkarte so bald wie möglich mit Ihrem Passwort.
+  verifing_location: Your location is in verification process. To change it please inform to admin.
+  verified_location: Your location is now verified. To change it please inform to admin.
   change_email: E-MAIL & PASSWORT
   
   back: zurück
@@ -382,6 +447,8 @@ regularuser:
   general: Generell
 
   notification: Benachrichtigung
+  
+  list_req: Anzeigen & Anträge
 
   image: Bild
 
@@ -425,6 +492,8 @@ regularuser:
   your_street: Deine Straße
 
   country: Land
+  
+  state: State
 
   your_country: Dein Land
 
@@ -618,9 +687,10 @@ arts: x
 music: x
 other: Sonstige
 contact_me: Kontakt 
-propose_time_price: Zeit und Preis vorschlagen. 
+propose_time_price: Zeit und Preis vorschlagen.
+propose_location: Einen Standort vorschlagen.
 reserve_spot: Einen Platz reservieren. 
-take_part: Kommen und teilnehmen.
+take_part: kommen und teilnehmen
 buy: Kaufen
 buy_a_spot: Einen Platz kaufen. 
 propose_price: Einen Preis vorschlagen
@@ -632,12 +702,27 @@ take_free: Es geschenkt nehmen.
 listing:
   my_listing: MEINE LISTINGS
   my_request: MEINE ANFRAGEN
-  
+  community_group: Group of community manager
   my_grouplisting: Gruppe LISTINGS
   my_grouprequest: Gruppe ANFRAGEN
   create:
     title: Listing Erstellen
-
+    createnote1: YOU MARKED IT FREE
+    createnote2: YOU MARKED ONLY ONE PIECE
+    createnote3: YOU MARKED UNLIMITED
+    createnote4: EITHER CHECK BUY OR CHECK FREE 
+    createnote5: EITHER CHECK SELL IT OR CHECK GIVE IT FOR FREE
+    createnote6: EITHER CHECK PROPOSEPRICE OR CHECK GIVE IT FOR FREE
+    createnote7: EITHER CHECK SELL IT OR CHECK FREE
+    createnote8: YOU MARKED IT FREE/TAKE IT FREE
+    createnote9: YOU MARKED IT FREE/GIVE IT FOR FREE
+    createnote10: YOU MARKED IT FREE/PROPOSE LOCATION
+    createnote11: EITHER CHECK PROPOSE A PRICE OR CHECK FREE
+    createnote12: EITHER CHECK PROPOSE A PRICE/BUY OR CHECK TAKE IT FREE
+    createnote13: EITHER CHECK PROPOSE A PRICE/BUY A SPOT OR RESERVE A SPOT
+    createnote14: EITHER CHECK BUY OR CHECK FREE/RESERVE A SPOT
+    createnote15: EITHER CHECK BUY OR CHECK FREE/PROPOSE A LOCATION
+    
     tab_title:
       1: Listing Kategorie
 
@@ -652,7 +737,7 @@ listing:
       in_neighbourhood: in der Nachbarschaft
       
       offer_something : Möchtest du etwas anbieten?
-      to_neighbourhood: in der Nachbarschaft
+      to_neighbourhood: auf die Nachbarschaft
       
       event_to_neighbour: Veranstaltung in der Nachbarschaft
       
@@ -660,20 +745,20 @@ listing:
 
     2:
       subtitle_neighbours: Du möchtest Nachbarn finden.
-      subtitle_help: Du suchst Hilfe.
-      subtitle_goods: Du brauchst einen Gegenstand.
-      subtitle_events: Du möchtest ein Event finden.
-      subtitle_others: Du möchtest etwas anderes anbieten.      
-      subtitle_service: Du suchst eine Dienstleistung.
-      subtitle_service1: Kostenlose Dienstleistungen findest du in der Kategorie Hilfe.
-      subtitle_service2: Wenn du eine Dienstleistung konstenlos anbietest, legen wir es automatisch in die Kategorie Hilfe. 
-      subtitle_groups: Du möchtest eine Gruppe finden.
-      subtitle_offerhelp: Du möchtest Hilfe anbieten.
-      subtitle_offergoods: Du möchtest eine Sache anbieten.
-      subtitle_offerevents: Du möchtest ein Event organisieren.
-      subtitle_offerothers: Du möchtest etwas anderes anbieten.
-      subtitle_offerservice: Du möchtest eine Dienstleistung anbieten.
-      subtitle_offergroups: Du möchtest eine Gruppe eröffnen.
+      subtitle_help: Du suchst Hilfe
+      subtitle_goods: Du brauchst einen Gegenstand
+      subtitle_events: Du möchtest ein Event finden
+      subtitle_others: Du möchtest etwas anderes anbieten      
+      subtitle_service: Du suchst eine Dienstleistung
+      subtitle_service1: Kostenlose Dienstleistungen findest du in der Kategorie Hilfe
+      subtitle_service2: Wenn du eine Dienstleistung konstenlos anbietest, legen wir es automatisch in die Kategorie Hilfe
+      subtitle_groups: Du möchtest eine Gruppe finden
+      subtitle_offerhelp: Du möchtest Hilfe anbieten
+      subtitle_offergoods: Du möchtest eine Sache anbieten
+      subtitle_offerevents: Du möchtest ein Event organisieren
+      subtitle_offerothers: Du möchtest etwas anderes anbieten
+      subtitle_offerservice: Du möchtest eine Dienstleistung anbieten
+      subtitle_offergroups: Du möchtest eine Gruppe eröffnen
       
       description: Erzähle uns mehr über dein Listing!
 
@@ -695,6 +780,8 @@ listing:
     
     pieces: Anzahl
     
+    piece: Stück
+    
     one_piece: nut 1 Stück
     
     price_piece: Preis/Stück
@@ -706,6 +793,8 @@ listing:
     total: Gesamtpreis
     
     spot: Plätze
+    
+    spots: Platz
     
     hour: Stunden
     
@@ -743,7 +832,8 @@ listing:
 
   no: Du hast noch keine Listings erstellt.
   noreq: Du hast noch keine Anfragen gestellt.
-
+  no1: You didn't add any listing yet nor you get any member request.
+  
   delete:
     msg: Möchtest du dieses Listing wirklich löschen?
 
@@ -845,17 +935,42 @@ request:
   send: Senden
   return_to_listing: zurück zum Listing
   your_list: Dies ist dein eigenes Listing. :-)
+  your_requested_msg: You already requested.
+  your_take_part_msg: You already Take part.
   price_propose: Schlage einen Preis vor:
+  time_propose: Schlage einen Zeit vor:
   login_require: Registrieren/Login nötig um fortzufahren. 
   left: verfügbar.
   how_many: Wieviele möchtest du?
+  how_many_pieces: Wie viele Stücke bieten Sie an?
   in_price: für den Preis von
   total_price: Gesamtpreis
   proposed: Vorgeschlagen
   want: möchte
+  offer: bieten
+  swap_msg: Was willst du tauschen?
+  location_msg: Which location will you prefer?
   message_to_user: Nachricht an
   write_a_review: Schreiben Sie einen Erfahrungsbericht
-  sorry_msg: Vielen Dank für den Besuch der Auflistung, es tut uns leid, aber es gibt nicht mehr  
+  sorry_msg: Vielen Dank für den Besuch der Auflistung, es tut uns leid, aber es gibt nicht mehr
+  sorry_msg1: Sie können mehr Anfrage nicht akzeptieren, weil es nicht mehr
+  listing_closed: Ihr Auflistung ist nun geschlossen, Sie können wieder Liste die gleiche Auflistung wieder.
+  listing_closed1: Die Auflistung, die Sie suchen ist nun geschlossen. Bitte beachten Sie die erneut eingestellt oder ähnlicher Anzeige, wenn eine.
+  repost_msg: Ihr Listing Reposted.
+  request_msg_part: You have got new request on Polly & bob from %requester%. Have a look at this link:
+  review_msg_part: You have got new review on Polly & bob from %requester%. Have a look at this link:
+  request_msg_part1: This is an automatic E-mail notification. No-reply possible. Please take further action on the platform.
+  sold_out: Sold out
+  wrong_paypal: Your provided paypal information is wrong.
+  notification1: SYSTEM IS ASKING TO ENTER MORE THAN ONE
+  notification2: GIVE PRICE OR SELECT THE FREE
+  notification3: SELECT CURRENCY
+  notification4: CHECK DEFAULT PAYMENT SETTINGS
+  notification5: THERE IS NO NEED TO CHECK DEFAULT PAYMENT SETTINGS IF YOU ARE SELECTING FREE
+  notification6: ONLY
+  notification7: REQUIRED
+  notification8: AVAILABLE
+  
 payment:
   default_payment: Voreingestellte Zahlungseinstellungen
   no_default: Keine Zahlungseinstellungen eingestellt. 
@@ -883,7 +998,7 @@ payment:
   you_can_invest: Du kannst in Polly & Bob investieren, indem du uns Geld leihst.
   invest: Unterstüze Polly & Bob
   donate: Du kannst auch Spenden!
-  donation: Spende
+  donation: Spenden Sie Polly & Bob
   account_holder: Kontoinhaber
   account: Kontonummer
   bank_code: Bankleitzahl
@@ -903,9 +1018,18 @@ payment:
   deletemsg: Keine Zahlungseinstellungen.
   savemsg: Zahlungseinstellungen erfogreich geändert.
   cvv: cvv code
+  notify1: ACEEPT TERMS AND CONDITION
+  notify2: ALL FIELDS ARE REQUIRED
+  notify3: ENTER VALID ACCOUNT NUMBER
+  notify4: NOT VALID BANK CODE
+  notify5: ENTER VALID CARD NUMBER
+  notify6: SELECT VALID EXPIRY DATE
+  notify7: NOT VALID CVC
+  
 account:
   old_pass: Altes Passwort
   new_pass: Neues Passwort
+  confirm_pass: Passwort bestätigen
   confirm: Bestätigen
   location_identity: Standort & Identität
   your_email: Your E-mail

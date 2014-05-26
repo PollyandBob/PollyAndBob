@@ -10,7 +10,19 @@
     <link rel="stylesheet" href="{{ absolute(asset('css/app/search-bar-v2.css')) }}" type="text/css" />
     <link rel="stylesheet" href="{{ absolute(asset('css/app/sidebar-v2.css')) }}" type="text/css" />
     <link rel="stylesheet" href="{{ absolute(asset('css/notice/globalfilter/global-filter-v2.css')) }}" type="text/css" />
-     
+    <style>
+    .typename
+        {
+            float:right;
+            font-weight: normal;
+            color:#000;
+            font-size: 12px;
+            position: relative;
+            margin-right: 0;
+            font-family: code_boldregular;
+            top:8px;
+        }
+        </style>
 {% endblock %}
 
 {% block javascripts %}
@@ -219,6 +231,16 @@
                 // End added for new dateslider 
             
         });
+        $(document).ready(function() {
+            var id = 0;
+            var count=0;
+            $( "div.optionsdetail a" ).each(function() {
+                id = $( this ).attr( "id" );
+                count= $('div.searchOptionsCalc'+id).length;
+                $('#span'+id).text("("+count+")");
+             });
+        });
+        	
 
         
 		// apply binding here
@@ -226,7 +248,7 @@
     <script type="text/javascript">
 		$(document).ready(function() {
 			$('#container > div.newsfeeds').sort(function(a,b) {
-			     return $(a).attr('id') < $(b).attr('id') ? 1 : -1;
+			     return parseInt($(a).attr('style')) < parseInt($(b).attr('style')) ? 1 : -1;
 			}).appendTo('#container');
 		});
 	</script>

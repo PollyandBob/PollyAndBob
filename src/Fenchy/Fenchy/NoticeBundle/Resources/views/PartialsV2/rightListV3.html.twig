@@ -1,0 +1,250 @@
+{# empty Twig template #}
+<div class="ajax_loader_info" style="display: none; padding: 108px 278px 0px 0px;">
+						<img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
+</div>
+
+<div class="feedsdetail" id="container">
+				{% set i=0 %}
+				{% for notice in notices %}
+                    
+                    <div class="newsfeeds feeds1" id="{{ notice.createdAt| date('U') }}">
+                        <span class="votes" style="display:none;"> </span>
+                        <div class="leftimg">
+                        	<a href="{{path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')  })}}">
+                        		<img width="200" height="135" alt="" src="{{ asset(notice.mainimagelanding)|replace({'square_l': "medium"})|raw }}"  onerror="imgError(this)">
+                        	</a>
+                        </div>
+                        <div class="rightimg"><img alt="" src="{{ asset('images/bgright_rightpart.png') }}"></div>
+                        <div class="right">
+                            <h3>{{notice.title|truncate(28)|truncate(28)|replace({'...': "..."})|raw}}</h3>
+                            <div class="clearfix"></div>
+                            <div class="otherdetail">
+                            </div>
+                            <div class="clearfix"></div>
+                            <p>{{ notice.content|truncate(130)|replace({'...': ". . ."})|raw }}</p>
+                            <b class="typename">
+                                {% if (notice.type.id==6) %}
+                                    {{ 'notice.event_wanted'|trans}}
+                                {% elseif (notice.type.id==12) %}
+                                    {{ 'notice.event_hosted'|trans}}
+                                {% else %}
+                                    {{ notice.type.altText|trans}}
+                                {% endif %}
+                            </b>
+                            {% if notice.usergroup %}
+                            <div class="persen">
+                                <a href="javascript:void(0);" >
+                                        {% if notice.usergroup.path %}
+                                        <img src="/{{ notice.usergroup.webpath }}" alt="" />
+                                        {% else %}
+                                        <img alt="" src="{{ absolute(asset('images/default_profile_picture.png')) }}">
+                                        {% endif %}
+                                </a>		                            
+                                </div>
+                            {% else %}
+                            <div class="persen">
+                                <a href="javascript:void(0);" >
+                                        {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': notice.user.id } %}
+                                        <div class="neighbor {{ managertype1[i][2] }}">
+                                            <p>{{ managertype1[i][1] }}</p>
+                                            {% set leftpx = 6 %}
+                                            {% if notice.user.activity|length == 1 %}
+                                                {% set leftpx = 12 %}
+                                            {% elseif notice.user.activity|length == 2 %}
+                                                {% set leftpx = 8 %}
+                                            {% elseif notice.user.activity|length == 3 %}
+                                                {% set leftpx = 6 %}
+                                            {% elseif notice.user.activity|length == 4 %}
+                                                {% set leftpx = 1 %}
+                                            {% endif %}
+                                            <span style="left:{{ leftpx}}px !important;">{{ notice.user.activity }}</span>
+                                        </div>
+                                    </a>		                            
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    
+                    {% set i=i+1 %}
+                    {% endfor %}
+                     <script>
+		  			 function imgError(url)
+		  			 {
+		  			   var img = new Image();
+		  			   img.src = url;
+		  			   var newsrc = $(url).attr('src');
+		  			   newsrc=newsrc.replace('square_l','medium');
+					   $(url).attr('src',newsrc);	   
+		  			 }
+		  			</script>
+		  			
+                    <!-- Start Added By Jignesh-->
+	                {% set k=0 %}
+					{% for usergroup in usergroups %}
+		                <div class="newsfeeds feeds2" id="{{ usergroup.createdAt| date('U') }}">
+							<span class="votes" style="display:none;"> </span>
+		                    <div class="leftimg">
+		                        	<a href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', {'groupId': usergroup.id }) }}" >
+		                        		{% if usergroup.path %}
+		                            	<img class="groupImage" onerror="imgError(this)" src="/uploads/profileimages/{{ usergroup.path }}" alt="">
+		                            	{% else %}
+		                            	<img class="groupImage" onerror="imgError(this)" src="{{ asset('images/default_listing_photo.png') }}" alt="">
+		                            	{% endif %}
+		                            </a>		                            
+		                            <div class="otherdetail">
+		                                <p  style="letter-spacing: 1px;">
+		                                {% if usergroup.location %}
+		                                	
+		                                {% endif %}	
+		                                </p>
+		                                {% set variable = 1+usergroup.usergroup|length %}
+		                                <span>{{ variable }}<br>
+		                                <b>
+		                                {% if variable==1 %}
+		                                {{ 'otherprofile.member'|trans }}
+		                                {% else %}
+		                                {{ 'otherprofile.members'|trans }}
+		                                {% endif %}
+		                                </b>
+		                                </span>
+		                            </div>
+		                        </div>
+		                        <div class="rightimg"><img alt="" src="{{ asset('images/bgright_rightpart.png') }}"></div>
+		                        <div class="right">
+		                            <div class="redtitle">
+                                                {% if usergroup.status==0 %}
+                                                    {{ 'notice.open_group'|trans|upper }}
+                                                {% elseif usergroup.status==1  %}
+                                                    {{ 'notice.closed_group'|trans|upper }}
+                                                {% endif %}    
+                                            </div>
+		                            <a href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo', {'groupId': usergroup.id }) }}" >
+		                            <h3>{{usergroup.groupname|truncate(28)|replace({'...': "..."})|raw}}</h3>
+		                            </a>
+		                            <div class="clearfix"></div>
+		                            <div class="clearfix"></div>
+		                            <p>{{ usergroup.aboutGroup|truncate(130)|replace({'...': ". . ."})|raw }}</p>
+		                                
+		                        </div>
+						</div> 
+	                {% set k=k+1 %}
+	                {% endfor %}
+	                
+	           {% if neighbours %}
+				{% set i=0 %}
+                    {% for neighbour in neighbours %}
+                       	<div class="newsfeeds neighb feeds2" id="{{ neighbour.createdAt| date('U') }}">
+                       		<span class="votes" style="display:none;"> </span>
+                            <div class="leftimg">
+                            	<div class="bg-gray"></div>
+                                <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice',{'userId': neighbour.id}) }}">
+					            	{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': neighbour.id } %}
+					            </a>
+                                <div class="neighbor {{ managertype[i][2] }}">
+                                    <p>{{ managertype[i][1] }}</p>
+                                    <span>{{ neighbour.activity }}</span>
+                                </div>		                            
+                                <div class="otherdetail">
+                                                                      
+                                </div>
+                            </div>
+                            <div class="rightimg"><img src="{{ absolute(asset('images/bgright_rightpart.png')) }}" alt="" /></div>
+                            <div class="right">
+                            	{% if managertype[i][0] !="" %}
+	                                <div class="redtitle">{{ ('otherprofile.'~managertype[i][0])|trans|upper }}</div>
+                                {% endif %}
+                                <a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice',{'userId': neighbour.id}) }}">
+                                	<h3>{{ neighbour.name|truncate(28)|replace({'...': "..."})|raw }}</h3>
+                                </a>
+                                <div class="clearfix"></div>
+                                <p>{{ neighbour.regularUser.aboutMe|truncate(130)|replace({'...': ". . ."})|raw }}</p>
+                            </div>
+                        </div>                        
+                        {%   set i=i+1 %}
+                     {% endfor %}
+                  {% else %}
+                         <h3 class="no_find_neighbor" style="display:none;">{{ 'regularuser.message.no_neighbors'|trans|upper }}</h3>
+                  {% endif %}
+	                
+	                <!-- End Added By Jignesh -->
+	               
+       </div>
+              
+
+
+<script type="text/html" id="list-template">
+    <div class="article-list-wrapper clearfix">
+    <!-- ko foreach: notices -->
+        <article data-bind="attr: { 'class': 'box smallbox'+' '+owner.business }">
+            <div class="clearfix">
+                <figure class="pull-left" data-bind="click: function(data,event) { $parent.loadListing(url) }">
+                    <div class="pull-left img"><img data-bind="attr: { src: image }" alt=""/></div>
+                    <figcaption class="pull-left">
+                        <div>
+                            <h3><a href="#" data-bind="{text: title, attr: {href: url}}" class="listing-details"></a></h3>
+                            {#<strong data-bind="text: location"></strong>#}
+                            <p  data-bind="text: content"></p>
+                        </div>                                        
+                    </figcaption>
+                </figure>
+                <div class="pull-left event-master clearfix listing-user-details" data-bind="click: function(data,event) { $parent.loadProfile(owner.url) }">
+                    <div class="img"><span class="image-container small-avatar  bordered"><img data-bind="attr: { src: owner.image, alt: owner.title}"/><span></div>
+                    <div class="event-master-info">
+                        <strong class="info-by-line"><a href="#" class="name" data-bind="{text: owner.title, attr: {href: owner.url}}"></a></strong>                                                    
+                        <strong class="info-by-line"><a href="#" class="location"><i class="icon-map-marker"></i><span data-bind="text: owner.location"></span></a></strong>                                                    
+                    </div>
+                </div>
+                <div class="activity">
+                    <a href="#" class="event"><i class="icon-calendar" data-bind="attr: { 'class': icon }"></i></a>
+                </div>
+            </div>
+        </article>
+    <!-- /ko -->
+    <!-- ko if: noticesLoadMore -->
+    <div class="load-more-button has-more-items stream-loading grey-button button"
+         data-bind="click: loadMoreNotices">
+        <a href="#" class="wrapper" data-bind="click: anchorNoOp">
+            <i class="icon-spinner icon-spin"></i>
+            <strong>{{ 'regularuser.load_more' | trans }}</strong></a>
+    </div>
+    <!-- /ko -->
+    </div>
+</script>
+
+
+<script type="text/html" id="tiles-template">
+    <div class="article-list-wrapper clearfix">
+    <!-- ko foreach: notices -->
+        <article class="box mediumbox">
+            <figure>
+                <img data-bind="attr: { src: image }" alt=""/>
+                <figcaption>
+                    <div>
+                        <h3><a href="#" data-bind="{text: title, attr: {href: url}}"></a></h3>
+                        {#<strong data-bind="text: location">Kreuzberg, Berlin</strong>#}
+                    </div>                                        
+                </figcaption>
+            </figure>
+            <div class="event-master">
+                <div class="img"><span class="image-container small-avatar"><img data-bind="attr: { src: owner.image, alt: owner.title}"/><span></div>
+                <div class="event-master-info">
+                    <strong class="info-by-line"><a href="#" class="name" data-bind="{text: owner.title, attr: {href: owner.url}}"></a></strong>                                                    
+                    <strong class="info-by-line"><a href="#" class="location"><i class="icon-map-marker"></i><span data-bind="text: owner.location"></span></a></strong>                                                    
+                </div>
+            </div>
+            <div class="activity">
+                <a href="#" class="event"><i class="icon-calendar" data-bind="attr: { 'class': icon }"></i></a>
+            </div>
+        </article>
+    <!-- /ko -->
+    <!-- ko if: noticesLoadMore -->
+    <div class="load-more-button has-more-items stream-loading grey-button button"
+         data-bind="click: loadMoreNotices">
+        <a href="#" class="wrapper" data-bind="click: anchorNoOp">
+            <i class="icon-spinner icon-spin"></i>
+            <strong>{{ 'regularuser.load_more' | trans }}</strong></a>
+    </div>
+    <!-- /ko -->    
+    </div>
+</script>

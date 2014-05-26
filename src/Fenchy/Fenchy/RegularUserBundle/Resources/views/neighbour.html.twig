@@ -1,0 +1,31 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/frontend/profile.css') }}" type="text/css" />    
+{% endblock %}
+{% block header %}
+    {% include 'FenchyFrontendBundle:Partials:headerPartialMenuBar.html.twig' %}
+{% endblock %}
+
+{% block content %}
+    <div id="profile_top_menu">    
+        {% include 'FenchyRegularUserBundle:Partials:topProfileMenu.html.twig' %}
+    </div>    
+
+    <div class="clear"></div>
+
+    <div id="profile_left_menu">
+        {% include 'FenchyRegularUserBundle:Partials:leftNeighbourMenu.html.twig' with {'regularUser':regularUser} %}
+    </div>
+
+    {% block profile_summary %}
+        {% include 'FenchyRegularUserBundle:Profile:myProfileMenu.html.twig' with {'user':regularUser} %}
+    {% endblock %}
+
+    {% block profil_content %}{% endblock %}
+    <div class="clear"></div>
+{% endblock %}
+
+{% block foot %}
+    {% include '::foot.html.twig' %}
+{% endblock %}

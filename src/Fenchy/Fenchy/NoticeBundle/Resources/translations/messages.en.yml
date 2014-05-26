@@ -1,0 +1,173 @@
+notice:
+  title: Title
+
+  content: Your description
+  
+  add_cover: Add Picture
+  
+  add_profile: Add Picture
+
+  no_limit: no limit
+
+  tags: Tags
+  
+  tags1: Tags to be found easy.
+  
+  description: description
+  
+  time: time
+  
+  start: Start
+  
+  end: End
+  
+  location: Location
+  
+  action: Action
+  
+  price_spots: Price & Spots
+  
+  price_pieces: Price & Pieces
+  
+  price_hours: Price / Hours
+
+  price: Price
+  
+  piece: Pieces
+  
+  flag: FLAG
+  
+  spot: Spots
+  
+  perspot: Per Spot
+  
+  perhour: Per Hour
+    
+  perpiece: Per Piece
+  
+  invite: Invite
+  
+  contact_request: Contact Request
+  
+  contact: Contact
+  
+  closed_group: closed local group
+    
+  open_group: open group
+  
+  event_wanted: Event wanted
+  
+  event_hosted: Event offer
+  
+  category:
+    help: Services/Help
+
+    goods: Goods
+
+    events: Events
+
+    others: Others
+
+  subcategory:
+    offer: Offers
+
+    need: Needs
+
+    to_sell: Sell it to you
+    
+    to_swap: Swap it
+
+    to_lend: Lend it to you
+
+    to_use: Let me use it
+
+    to_give: Give it for free
+
+    sports: Sports
+
+    party: Party
+
+    arts: Arts
+
+    music: Music
+
+    other: Others
+    
+    contact_me: Contact Me!
+    
+    propose_time_price: Propose a time and price
+    
+    reserve_spot: Reserve a spot (if free)
+    
+    take_part: Come and take part!
+    
+    buy: Buy
+    
+    buy_a_spot: Buy a spot
+    
+    propose_price: Propose a price
+    
+    borrow_bring: Borrow and bring back
+    
+    use_it: Use at my place
+    
+    swap_it: Make an offer to swap
+
+    take_free: Take it for free
+    
+  filter:
+    filters: YOUR SELECTED OPTIONS
+
+    user: User
+
+    distance: Distance
+
+    post_date: Pending Listings
+
+    location: Location
+
+    phrase: Search Phrase
+
+    categories: Categories
+
+    clear: Clear All
+    
+    select_options: Select Your Options
+
+    today: Today
+
+    yesterday: Yesterday
+
+    this_week: This Week
+
+    last_week: Last Week
+
+    past_month: Past Month
+
+    sort:
+      rel: Relevance
+
+      dist: Distance
+
+      time: Date
+      
+    around_you: Around You
+    
+    when: When
+
+  x_listings: listings
+
+  sort_by: Sort by
+  
+  options_around_you: options around you
+
+  similar_title: Similar listings
+
+  other_from: Other Listings from
+
+  other_from_title: Other Listings of
+  
+  what_other_person: what do you want the other person to do?
+euro: €
+dollar: $
+    

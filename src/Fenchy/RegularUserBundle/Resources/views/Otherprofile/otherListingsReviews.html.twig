@@ -22,6 +22,11 @@
         <script type="text/javascript" src="{{ asset('js/regular_user/settings/form.js') }}"></script>
         
     <script type="text/javascript">
+    $(document).ready(function() {
+
+    	nice = $(".feedsdetail .right p").niceScroll();
+    	nice = $(".feedsdetail .right h3").niceScroll();        	
+    });
 		function verifyLocation()
 		{
 			var url = "{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}";
@@ -48,6 +53,12 @@
 {% endblock %}
 
 {% block content %}
+<style>
+	.feedsdetail .right h3 {		   
+	    height: 30px;
+	    overflow: hidden;
+	}
+</style>
 	{% render 'FenchyRegularUserBundle:Otherprofile:otherAvatar' with {'userId': userId} %}
 	
 	{% include 'FenchyRegularUserBundle:Otherprofile:othermenu.html.twig' %}
@@ -59,7 +70,7 @@
 				{% if listings %}
 				{% set i=0 %}
                     {% for notice in listings %}
-                    {% if not notice.usergroup %}
+                    
                        	<div class="feeds2">
                             <div class="leftimg">
                                 	<a href="{{path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')  })}}">
@@ -87,10 +98,16 @@
                                                 {% if i < reviews %}                                    		
 	                    						{% for initialComment in initialComments[i] %}
 			                                    	{% if initialComment %}
-			                                    		<div class="data">                                      	 
-				                                      		<a href="{{ initialComment['author']['profileUrl'] }}">
+			                                    		<div class="data">  
+                                                                            {% if initialComment['author']['id'] in blockUser %}                                                                             
+				                                      		<a href="javascript:void(0);">
 				                                      			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialComment['author']['id'] } %}
 				                                      		</a>
+                                                                            {% else %}
+                                                                                <a href="{{ initialComment['author']['profileUrl'] }}">
+				                                      			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialComment['author']['id'] } %}
+				                                      		</a>
+                                                                            {% endif %}
 				                                      		<p>{{ initialComment['text'] }}</p>
 				                                     	</div>
 			                                      	{% endif %}
@@ -105,10 +122,16 @@
                                     		{% if i < reviews %}                                    		
 	                    						{% for initialReview in initialReviews[i] %}
 			                                    	{% if initialReview %}
-			                                    		<div class="data">                                      	 
-				                                      		<a href="{{ initialReview['author']['profileUrl'] }}">
+			                                    		<div class="data">
+                                                                            {% if initialReview['author']['id'] in blockUser %} 
+				                                      		<a href="javascript:void(0);">
 				                                      			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialReview['author']['id'] } %}
 				                                      		</a>
+                                                                            {% else %}
+                                                                                <a href="{{ initialReview['author']['profileUrl'] }}">
+				                                      			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': initialReview['author']['id'] } %}
+				                                      		</a>
+                                                                            {% endif %}
 				                                      		<p>{{ initialReview['text'] }}</p>
 				                                     	</div>
 			                                      	{% endif %}
@@ -120,7 +143,7 @@
                             </div>
                         </div>                        
                         {%   set i=i+1 %}
-                        {% endif %}
+                        
                      {% endfor %}
                   {% else %}
                         <h3>{{ 'regularuser.no_listing'|trans|upper }}</h3>	

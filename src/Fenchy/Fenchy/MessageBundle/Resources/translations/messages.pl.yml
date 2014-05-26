@@ -1,0 +1,24 @@
+message:
+  receiver: Adresat:
+
+  title: Temat
+
+  content: Napisz Treść
+
+  reply: Napisz Odpowiedź
+
+  welcome:
+    title: Witamy w Polly & Bob!
+
+    content: Witaj %firstname%,  Jestem Matthias, jeden z twórców Polly & Bob. Poprzez Polly & Bob chcemy zaoferować najprostszą możliwość połączenia Cię ze swoim sąsiedztwem. Są 3 rzeczy o których powinieneś wiedzieć:1. Jesteś jednym z pierwszych użytkowników Polly & Bob. Będziemy starali się stopniowo zwiększać funkcjonalność Polly & Bob. Możesz czuć się swobodnie wysyłając mi swoją opinię. 2. Możesz używać Polly & Bob z Twoimi przyjaciółmi z okolicy. Wystarczy, że klikniesz na odpowiednim przycisku by ich zaprosić do swoich kontaktów. 3. W celu uzyskania najlepszych wyników, możesz uzupełnić swój profil większą ilością informacji w sekcji ustawień swojego konta. Dziękuję za rejestrację i witaj w Polly & Bob ! Matthias
+
+  deleted_user:
+    firstname: Konto usunięte
+
+  notification:
+    email:
+      subject: Dostałeś wiadomość w Polly & Bob
+
+      body: Masz nową wiadomość w serwisie Polly & Bob
+
+      follow_link: Zobacz wiadomość w Polly & Bob

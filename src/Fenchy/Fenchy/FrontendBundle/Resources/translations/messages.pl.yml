@@ -1,0 +1,261 @@
+frontend:
+  about:
+    title: O nas
+
+    article:
+      par_1: Fenchy jest lokalną siecią łączącą ludzi z ich sąsiedztwem. Używając Fenchy możesz w łatwy sposób podzielić się swoimi zainteresowaniami, aktywnościami, wydarzeniami bądź też użytecznymi przedmiotami ze swoim sąsiedztwem
+
+      par_2: Wystarczy zaledwie jedno kliknięcie by połączyć Fenchy z Facebookiem bądź Twitterem
+
+      par_3: Fenchy jest dostępne wszędzie z użyciem przeglądarki internetowej.
+
+      par_4: Fenchy chce uprościć życie by to stało się weselsze oraz wykorzystując dostępne zasoby  by było bardziej efektywnie
+
+      par_5: Nie masz jeszcze darmowego konta?
+
+      sign_up_here: Zarejestruj się tutaj.
+
+  advertising:
+    article:
+      par_1: .
+
+      par_2: .
+
+      par_3: .
+
+    title: Reklama
+
+  facebook:
+    title: Facebook
+
+  imprint:
+    title: Wydawca
+
+    fenchy_gmbh: Fenchy GmbH
+
+    fenchy_address_1: Marchlewskistr. 16
+
+    fenchy_address_2: D-10243 Berlin
+
+    registered_office: Siedziba:Berlin
+
+    registered_court: Podmiot rejestrujący:HRB 143139 B Charlottenburg
+
+    managing_directiors: Dyrektorzy zarządzający:Matthias Eisele * Dr. Volker Siems * Simon Akstinat
+
+    contact: Kontakt
+
+    email: E:info@fenchy.com
+
+    disclaimer: Disclaimer:
+
+    disclaimer_body: Ta strona może zawierać linki do zewnętrznych witryn. Fenchy nie odpowiada za treść przedstawioną na zewnętrznych stronach, na które przechodzisz na własne ryzyko. Dostawcy tych stron internetowych są wyłącznie odpowiedzialni za treści prezentowane przez nich.
+
+    office: Biuro
+
+    office_address: Warchauerstr. 60*D-10245 Berlin
+
+    phone: T:+49 (0) 30 46 48 37 69
+
+  jobs:
+    title: Praca
+
+    header_1: Chcemy uwolnić zaufanie oraz jedność w sąsiedztwach na całym świecie
+
+    header_2: Chcesz pomóc? Sprawdź nasze wartości:
+
+    1:
+      par_1: Staramy się zrozumieć dlaczego naszym użytkownikom zależy
+
+      par_2: Wszystko co robimy chcemy by miało dużą wartość dla nich.
+
+    2:
+      par_1_1: Nie podążamy za instrukcjami z książek czy poradników.
+
+      par_1_2: Szukając najlepszego rozwiązania, tworzymy oraz działamy szybko.
+
+      par_2: W ten sposób ucząc się również na błędach.
+
+    3:
+      par_1: Próbujemy dzielić jak największą ilością pomysłów jak i informacji.
+
+      par_2: 
+
+    4:
+      par_1: Cenimy wielkość innych i szanujemy.
+
+      par_2: Wierzymy w bardzo ciepłe, szczere jak i bezpośrednie stosunki międzyludzkie - wewnątrz jak i poza Fenchy
+
+    5:
+      par_1: Tworzomy Fenchy by uwolnić zaufanie oraz jedność w sąsiedztwach na całym świecie
+
+      par_2: 
+
+    bottom:
+      text: Myślisz, że możesz się wpasować ? Skontaktuj się z nami !
+
+      current_positions: Obecne formy współpracy
+
+      apply_now: Aplikuj teraz !
+
+  languages:
+    title: Języki
+
+  privacy:
+    title: Prywatność
+
+  terms:
+    title: Warunki
+
+  logo_alt: Fenchy
+
+  my_profile: Mój profil
+
+  manage_listings: Zarządzaj wpisami
+
+  settings: Ustawienia
+
+  log_out: Wyloguj się
+     
+  myprofile: My Profile
+  
+  create_group: Create Group
+  
+  newsfeeds: Newsfeeds
+
+  admin: Panel Admina
+
+  sign_in: Zaloguj się
+
+  sign_up: Zarejestruj się
+
+  english: Angielski
+
+  deutsch: Niemiecki
+
+  polski: Polski
+
+  header:
+    slogan: Znajdź wszystko i wszystkich w sąsiedztwie.
+
+    photo_sign: Festsaal Kreuzberg, Berlin
+
+  foot:
+    slogan1: Masz coś do zaoferowania swoim sąsiadom?
+
+    slogan2: Może coś na sprzedaż bądź wymianę?
+
+  create_listing_now: Utwórz swój wpis teraz!
+
+  search: Wyszukaj
+
+  so_what_is: A... więc
+
+  right_sidebar:
+    what_we_do1: Łączymy cię ze wszystkim w Twojej okolicy.
+
+    what_we_do2: Integrujemy Cię z wydarzeniami i ludźmi z Twojej okolicy.
+
+    what_we_do3: Masz nieskończenie wiele możliwości wykorzystania Fenchy dla swoich potrzeb.
+
+    summary:
+      1: To jest
+
+      2: Twoje
+
+      3: sąsiedztwo.
+
+  create_listing: Utwórz wpis
+
+  sign_in_facebook: Facebook - Zaloguj się
+
+  sign_in_twitter: Twitter - Zaloguj się
+
+  placeholder_what: What are you looking for in your neighborhood?
+  
+  placeholder_where: Where
+  
+  take_the_time: Take the time
+  
+  enrich_your_life: Enrich your life!
+  
+  welcome_to_neighborhood: Welcome to the new Neighborhood!
+
+  404:
+    par_1: Wygląda na to, że wybrałeś złą ścieżkę
+
+    par_2: Nie martw się.. To zdarza się nawet najlepszym.
+
+    link: powróć do strony głównej
+
+  choose_your_language: Wybierz język
+    
+  slider:
+    discovery:
+      name: Discovery
+      title: Discover your Neighborhood.
+      content: Your neighborhood waits to be discovered. So many interesting people around you, that you don‘t know. So many fun things we could do together, if we would know. Easy help, so many goods and useful items we could use together, if we could do. Discover the opportunities.Llog on .
+
+    trust:
+      name: Trust
+      title: Whom can we trust today?
+      content: What’s wrong with the world these days? So much fake, make up, stalking, fishing, spam, hidden traps and unwanted add ups to the bills. To make collaborative consumption happen, we have to rely on: „oh, don’t worry. I bring your car back tomorrow!“ On  we want to establish a culture of trust. We count contribution to the community in community points and we exclude trolls and abusers (the few that disturb the system) Once we trust each other we can let go more easy.
+
+    sharing:
+      name: Sharing
+      title: Sharing economy on .
+      content: Use what others have. Share what you have. „Who lends me his car, for small money?“ „Who needs  a  babysitter tonight?“ „Who finishes the food I cant eat before holydays?“ Swap, sell, share, give, hire, rent, take, use stuff around you. Hire or offer talents and services in the neighborhood.  brings good people together.
+
+    new_neighborhood:
+      name: New Neighborhood
+      title: Welcome to New Neighborhood.
+      content: A new neighborhood is a place where I can belong to.
+    
+    our_neighborhood:
+      name: Our Neighborhood
+      title: Our platform.
+      content: Take part and take your part. The users create the value of the platform. The profits shall be shared between us, the users. Budgets shall be redirected to our neighbor-hoods, the place where profits appear. Everybody can buy his share of the company and take part in the decision making.  is the first social network which is owned by its users. Buy your share of 50 € now.
+      
+    small_data:
+      name: Small Data
+      title: Small data is not watching you.
+      content: Big Data is centralized data. Centralized information that can be abused to control and spam everybody with centralized information, and advertisement.   aims to be small data as much as possible. Data should be on local servers. You own your data. What is erased is erased for ever. We don‘t encourage to post private pictures which are meant only to friends. Small data is stored locally not accesable centrally. This is still a challenge for us, please help us to make it happen.
+    
+    community:
+      name: Community
+      title: Create your own community.
+      content:  is a new way of living together with the people around you. It is not the muggy and airless neighborhood we know. The New Neighborhood community doesn’t have beraucracy and fixed structures. It is fresh air and individualized. Everybody can start, everybody can join. Everybody has his own crowd and community around him.  communities are not bound to destricts or local areas. You can do that. Make your own local community. Connect with whomever you want. Build your own ass-hole-free-zone (afz). An individual but not individualized or alone.
+
+    real_life:
+      name: Real Life
+      title: What is the human being about?
+      content: Eyes can only meet in real life. On  we do clickclickclick and touch-screentouch. But we do it in order to get together offline. We say: ‘Take the time. Enrich your life’, because we believe the human condition is about to meet and spend time with other people. We know it is easier to sit on a couch and watch. But we know also that it is much more rewarding to meet in Real life. This is what life really is about.
+    
+    fun:
+      name: Fun
+      title: What's up around me tonight?
+      content: Where is something going on now? Who is free for having a coffee? Who joins in for the football match tonight? Who wants to explore the city together? Who organizes exciting stuff on the weekend? Who is having dinner with me today? Fun, around me, any time, accessible on .
+
+    access:
+      name: Access
+      title: So much stuff lying around unused.
+      content: Millions of cars standing in the streets. So much stuff collects dust in the junk room, self storages and even living rooms of our world. Why not use it? Why do we have to own it? Everything we need is access. The 21st century will see a dramatic change in the way we consume. The economy will turn from a possession economy to an access economy. We can organize this on .
+
+  footer:
+    blog:
+      title: Blog
+
+    story:
+      title: The Story of 
+
+    what:
+      title: What we want
+
+    shares:
+      title: Get shares of 
+
+    firstcrowd:
+      title: First Crowd
+
+    about:
+      title: About  

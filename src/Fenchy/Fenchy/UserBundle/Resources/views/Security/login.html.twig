@@ -1,0 +1,11 @@
+<form action="{{ path("fos_user_security_check") }}" method="post">
+    
+            <input id="user-login-email" name="_username" value="{{ last_username }}" onBlur="myBlur(this);" onFocus="myFocus(this);" required="required" type="text" placeholder="{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}"/>
+            <input id="user-login-pass" type="password" name="_password" required="required" onBlur="myBlur(this);" onFocus="myFocus(this);" placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}" />
+        	<p id="WrongPass" style="display: none">{{ 'frontend.wrong'|trans }}</p>
+        	
+        	<a class="forgotpassword zoomthis" href="#dialog37" name="modal" id="vzoom_1944" style="line-height: 1;">{{ 'user.forgot_your_password'|trans }}</a>
+           
+            <button type="submit" id="_submit" name="_submit" >{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}</button>
+    		<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+</form>

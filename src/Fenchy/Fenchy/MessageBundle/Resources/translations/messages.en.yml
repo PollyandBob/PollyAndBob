@@ -1,0 +1,25 @@
+message:
+  receiver: Receiver:
+
+  title: Title
+
+  content: Write a Message
+
+  reply: Write a Reply
+
+  deleted_user:
+    firstname: This account was deleted.
+
+  notification:
+    email:
+      subject: New message from %username%
+
+      body: You have got new message on Polly & Bob.
+
+      follow_link: View conversation on Polly & Bob
+  
+  req_notification:
+    email:
+      subject: New request from %username%
+      
+      body: You have got new Request on Polly & Bob.

@@ -1,0 +1,38 @@
+<div class="writereviewdata">
+{% if not usersOwnListing and app.security.token.user.id is defined and app.security.token.user.id != NULL %}
+	<div id="leave-review-button" class="edit-btn" data-bind="click: loadLeaveReviewFrom">
+    	<a href="javascript:void(0);" style="margin-bottom: 10px" class="blue_button" data-bind="click: anchorNoOp">
+        	{{ 'regularuser.leave_a_review' | trans }}
+        </a>
+    </div>
+{% endif %}                          
+
+<div id="tabs-1" class="tabs-reviews">
+  	<!-- ko template: {name: 'review-list-template', foreach: reviewsP} -->
+    <!-- /ko -->
+    <!-- ko if: reviewsPLoadMore -->
+        <div class="load-more-button has-more-items stream-loading grey-button button"
+             data-bind="click: loadMorePReviews">
+            <a href="#" class="wrapper" data-bind="click: anchorNoOp">
+                <i class="icon-spinner icon-spin"></i>
+                <strong>{{ 'regularuser.load_more' | trans }}</strong>
+            </a>
+        </div>
+    <!-- /ko -->  
+</div>
+   
+<script type="text/html" id="review-list-template">
+    <article class="clearfix">
+        <div class="data">           
+           <a data-bind="attr: { href: author.profileUrl,}"> <img width="23" height="23" data-bind="attr: { src: author.image, alt: author.name }" /></a>
+        
+        <div class="pull-left post">
+            <p data-bind="text: text"></p>
+        </div>        
+            <!-- ko if: author.id==$parent.loggedInUserId -->
+                <a style="float: right; margin-left: 16px; margin-top: -18px;" class="blue_button" href="#" data-bind="click: function(data,event) { $parent.loadEditReview(data, event, $parent) }">{{ 'regularuser.edit_review' | trans }}</a>
+            <!-- /ko -->
+		</div>
+    </article>
+</script>
+</div>

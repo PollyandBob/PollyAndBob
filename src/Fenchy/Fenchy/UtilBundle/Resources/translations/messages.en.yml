@@ -1,0 +1,106 @@
+util:
+  relative:
+    now: Now
+
+    just_now: Less than minute ago
+
+    a_minute_ago: A minute ago
+
+    x_minutes_ago: '{0,1}A minute ago|[2,Inf]%number% minutes ago'
+
+    an_hour_ago: An hour ago
+
+    x_hours_ago: '{0,1}An hour ago|[2,Inf]%number% hours ago'
+
+    today: Today
+
+    yesterday: Yesterday
+
+    x_days_ago: '{0,1}Yesterday|[2,Inf]%number% days ago'
+
+    x_weeks_ago: '{0,1}one week ago|[2,Inf]%number% weeks ago'
+
+    last_month: Last month
+
+    in_a_minute: In a minute
+
+    in_x_minutes: '{0,1}In a minute|[2,Inf]In %number% minutes'
+
+    in_an_hour: In an hour
+
+    in_x_hours: '{0,1}In an hour|[2,Inf]In %number% hours'
+
+    tomorrow: Tomorrow
+
+    monday: Monday
+
+    tuesday: Tuesday
+
+    wednesday: Wednesday
+
+    thursday: Thursday
+
+    friday: Friday
+
+    saturday: Saturday
+
+    sunday: Sunday
+
+    next_week: Next week
+
+    in_x_weeks: '{0,1}Next week|[2,Inf]In %number% weeks'
+
+    next_month: Next month
+    
+    flag: Flag
+    
+    why: Why do you want to flag this?
+btn:
+  continue: Continue
+
+  back: Go Back
+
+  ok: OK
+
+  cancel: Cancel
+
+  save: Save
+
+  confirm: Confirm
+
+  login: Login
+
+  send: Send
+
+  delete: Delete
+
+  yes: Yes
+
+  no: No
+
+  edit: Edit
+
+  send_message: Send Message
+harass: Attacks person or group
+spam: Spam
+commercial: Commercial trafic on wrong place
+forbidden: Pornographie, violence or nakedness
+behaviour: Violence of property rights
+notpollynbob: Not Polly & Bob like 
+other_type: Others
+sticker:
+  added_title: Your report has been sent!
+
+  reasons: Reasons
+
+  description: Additional comments
+male: male
+female: female
+or: or
+load_more: Load more
+never: Never
+immediately: Immediately
+daily: Daily
+positive: Positive
+negative: Negative
+review_type: 

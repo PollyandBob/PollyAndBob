@@ -70,7 +70,7 @@ class Review
      * @var Notice
      * 
      * @ORM\ManyToOne(targetEntity="Fenchy\NoticeBundle\Entity\Notice", inversedBy="reviews")
-     * @ORM\JoinColumn(name="notice_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(name="notice_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $aboutNotice;
     
@@ -96,6 +96,14 @@ class Review
      * @ORM\Column(type="boolean", nullable=false)
      */
     private $is_read = false;
+    
+    /**
+     *
+     * @var boolean $is_read_status
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $is_read_status = false;
+    
 	
     public function __construct() {
         
@@ -392,4 +400,27 @@ class Review
 
 
 
+
+    /**
+     * Set is_read_status
+     *
+     * @param boolean $isReadStatus
+     * @return Review
+     */
+    public function setIsReadStatus($isReadStatus)
+    {
+        $this->is_read_status = $isReadStatus;
+    
+        return $this;
+    }
+
+    /**
+     * Get is_read_status
+     *
+     * @return boolean 
+     */
+    public function getIsReadStatus()
+    {
+        return $this->is_read_status;
+    }
 }

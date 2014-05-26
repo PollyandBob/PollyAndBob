@@ -1,0 +1,256 @@
+{% extends 'FenchyRegularUserBundle::messages.html.twig' %}
+{% if form %}
+{% form_theme form '::labelForm.html.twig' %}
+{% endif %}
+{% block message_content %}
+<style>
+.message .right .profilei img
+{
+	border-radius: 50% 50% 50% 50%;
+    float: left;
+    height: 50px;
+    margin-right: 10px;
+    width: 50px;
+}
+.message .right form input[type="submit"] {
+    float: right;
+    padding: 1px 5px 0;
+    margin-top: 15px;
+}
+.message .right form .profilei {
+    height: 50px;
+    left: 23px;
+    position: absolute;
+    top: 10px;
+    width: 50px;
+}
+#fenchy_message_reply label
+{
+	display:none;
+}
+.read_arrow, .unread_arrow 
+{
+	top:0px !important;
+}
+div.flash-message {
+    margin-bottom: -20px;
+    margin-left: 370px;
+    margin-top: -30px;
+    min-height: 36px;
+    padding-top: 7px;
+}
+</style>
+<script type="text/javascript">
+
+function sendMsg()
+		{
+			var flag = true;
+			var title = $('#MsgTitle').val();
+			var content = $('#MsgContent').val();
+			//alert(title + content);
+			
+			if(title == "" || content == "")
+			{
+				flag = false;
+				$('#MsgTitle').attr('placeholder', 'required*');
+				$('#MsgContent').attr('placeholder', 'required*');
+			}
+                        if(title.trim() == "" || content.trim() == "" )
+                        {
+                                flag = false;
+				$('#MsgTitle').val('');
+				$('#MsgContent').val('');
+                                $('#MsgTitle').attr('placeholder', 'required*');
+				$('#MsgContent').attr('placeholder', 'required*');
+                        }
+			var receiver = $('#select_receiver').val();
+			
+			if(flag)
+			{	
+				var url = "{{path('fenchy_regular_user_sendmsgform')}}";
+				$.ajax({
+					url : url,
+					type : "post",
+					data : {
+						'receiverId': receiver,				
+						'title': title,
+						'content': content,										
+						},
+					beforeSend : function() {
+						
+					},
+					success : function(response) {
+						$('#successDialog2').click();
+					},
+					error : function() {
+						alert('Something went wrong!');
+					},
+					complete : function() {
+						$('#MsgTitle').val('');
+						$('#MsgContent').val('');					
+					}
+				}); 
+			}		
+		}
+</script> 
+
+		<div class="message">
+				<div class="left">
+                	<a href="{{ path('fenchy_regular_user_messages_index') }}" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>
+                    <div class="clearfix"></div>
+                    <div class="messagedetail">
+                    	{% if messages %}
+                          {% for message in messagesLeft %}
+                          	{% if message.id in app.request.pathInfo %} 
+                          		{% set a_style= 'style="background-color: #51B9D4;padding: 4px 0 4px 1px;"' %} 
+                          	{% endif %} 
+                          	<a href="{{ path('fenchy_regular_user_messages_view', {'id': message.id}) }}" {% if not message.read %} {% if message.receiver != app.user %} class="message-read" {% else %} class="message-unread" {% endif %} {% endif %}>
+	                    	<div {% if message.read %}class="message-read"{% endif %}>
+	                            <div class="profilei">
+                                        {% if message.sender.id == app.user.id %}
+                                            {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.receiver.id } %}
+                                        {% else %}
+                                            {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.id } %}
+                                        {% endif %}
+                          		</div>
+	                            {% if message.receiver != app.user %}
+	                            <img class="read_arrow" src="{{ asset('images/message-arrow1.png') }}" alt="" />
+	                            {% elseif message.receiver == app.user %}
+	                            <img class="read_arrow" src="{{ asset('images/message-arrow2.png') }}" alt="" />
+	                            {% endif %}
+                                     {% if message.sender.id == app.user.id %}
+	                            <p>{{ message.receiver.userregular.firstname }}</p>
+                                    {% else %}
+                                    <p>{{ message.sender.userregular.firstname }}</p>
+                                    {% endif %}
+	                            <p>{{ message.title }}</p>
+	                        </div>
+	                        </a>
+	                    	
+                    	 {% endfor %}
+                      {% else %}
+                         	{{'regularuser.message.no_messages'|trans}}</td>
+                      {% endif %}
+                    </div>
+                <div class="bgbottom"><img alt="" src="{{ asset('images/bgbottom_leftpart.png') }}"></div>
+                </div>
+                
+                <div class="right">
+                	{% for message in messages %}
+                				{% if message.sender.id == app.user.id %}
+                					{% set userurl = 'fenchy_regular_user_user_myprofile_aboutmychoice' %}
+								{% else %}
+									{% set userurl = 'fenchy_regular_user_user_otherprofile_aboutotherchoice' %}
+								{% endif %}
+								<a href="{{path(userurl, {'userId': message.sender.id})}}">
+					            <div class="profilei">	
+							 
+                                                            {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.id } %}
+                                                         
+					            </div>
+					            </a>
+					        
+                                                    <p class="name">{{ message.sender.userregular.firstname }}</p>
+                                               
+		                    <div class="clearfix"></div>
+                                    {% set msgcontent =  message.content%}
+                                    {% set link = msgcontent|split('|') %}
+                                    {% if '|' in msgcontent %}
+		                    <p class="message-all">{{ link[0]|nl2br }}<br><br><a style="color:#51B9D4;" href="{{ link[1] }}">{{'regularuser.click_here'|trans }}</a><br><br>{{ link[2]|nl2br }}</p>
+                                    {% else %}
+                                    <p class="message-all">{{ msgcontent|nl2br }}</p>
+                                    {% endif %}   
+                    <br/><br/><br/> 
+                    {% endfor %}
+                    
+                    {% if messages.first.replyable %}
+                    <form action="{{ path('fenchy_regular_user_messages_send', {'prev_id':messages.last.id}) }}" method="post" {{ form_enctype(form) }}>
+                    	
+                    	{{ form_widget(form) }}
+                    	<div class="profilei">
+                    	    		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': app.user.id } %}
+                    	</div>
+                    	{{ form_rest(form) }}
+                    	
+                        <input type="submit" id="continue" class="blue_button" value="{{ 'btn.send'|trans }}"/>
+                    </form>
+                     {% endif %}
+                    <div class="bgbottom_right"><img alt="" src="{{ asset('images/bgbottom_contantinner.png') }}"></div>
+                    
+					     
+						
+                </div>
+            </div>
+		
+		
+        {% for message in messages %}
+        <!--  <div class="message clearfix">
+            <div class="message_image">
+                <div class="message_image_avatar">
+                    {% if message.request %}
+                        <a href="{{ path('fenchy_regular_user_notice', {'id':message.notice.id}) }}">
+                            <img src="{{message.notice.avatar }}"/>
+                        </a>
+                    {% elseif message.system %}
+                        <span class="image-container big-avatar bordered"><img src='/images/logo.png'/></span>
+                    {% else %}
+                        <a href="{{path('fenchy_regular_user_user_profilev2', {'userId': message.sender.id})}}">
+                            <span class="image-container big-avatar bordered"><img src="{{ message.sender.regularuser.avatar(false) }}"/></span>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+                
+            <div class="message_right">    
+                <div class="message_header">
+                    <h2>
+                        {% if message.system %}
+                            Fenchy
+                        {% else %}
+                            {% if message.sender.id %}
+                                <a href="{{path('fenchy_regular_user_user_profilev2', {'userId': message.sender.id})}}">
+                                    {{ message.sender.userregular.firstname }}
+                                </a>
+                            {% else %}
+                                {{ message.sender.userregular.firstname }}
+                            {% endif %}
+                        {% endif %}
+                        <span class="date">| {{ message.createdAt|relative }}</span></h2>
+                    <h3>{{ message.title }}</h3>
+                </div>
+
+                <div class="message_content">
+                    <p>
+                        {{ message.content|nl2br }}
+                    </p>
+                </div>    
+            </div>                      
+        </div> -->
+        {% endfor %}
+            
+        {% if messages.first.replyable %}
+		<!-- 
+            <div class="new-reply-message-box reply-box">
+                <form action="{{ path('fenchy_regular_user_messages_send', {'prev_id':messages.last.id}) }}" method="post" {{ form_enctype(form) }}>
+                    {{ form_widget(form) }}
+                    {{ form_rest(form) }}
+
+                    <footer class="clearfix">
+                        <div class="button grey-button pull-left" id="buttons">
+                            <a id="back" class="wrapper" href="{{path('fenchy_regular_user_messages_index')}}">
+                                <strong>{{ 'btn.back'|trans }}</strong>
+                            </a>                            
+                        </div>
+                        <div class="button submit pull-right">
+                            <div>
+                                <input type="submit" id="continue" value="{{ 'btn.send'|trans }}"/>                                
+                            </div>
+                        </div>
+                    </footer> 
+                </form>
+            </div>
+             -->
+        {% endif %}
+
+{% endblock %}
+    

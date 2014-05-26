@@ -1,0 +1,620 @@
+<?php
+
+namespace Fenchy\UtilBundle\Entity;
+
+use Fenchy\RegularUserBundle\Entity\UserGroup;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Fenchy\UserBundle\Entity\User,
+    Fenchy\NoticeBundle\Entity\Notice;
+
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Table(name="location")
+ * @ORM\Entity(repositoryClass="Fenchy\UtilBundle\Entity\LocationRepository")
+ */
+class Location {
+    
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $location;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $printable;
+    
+    /**
+     * Goe-localization stored in PostGIS GEOGRAPHY type
+     * PHP value in turn will be stored as GeoJSON.
+     * 
+     * @ORM\Column(type="geography", nullable=true)
+     */
+    private $pgisGeog = array();
+
+    /**
+     * Geo-localization stored in PostGIS GEOMETRY type
+     * PHP value in turn will be stored as GeoJSON.
+     * 
+     * @ORM\Column(type="geometry", nullable=true)
+     */
+    private $pgisGeom = array();
+
+    /**
+     * @var User $user; 
+     * @ORM\OneToOne(targetEntity="Fenchy\UserBundle\Entity\User", inversedBy="location")
+     */
+    private $user;
+    
+    /**
+     * @var UserGroup $usergroup;
+     * @ORM\OneToOne(targetEntity="Fenchy\RegularUserBundle\Entity\UserGroup", inversedBy="location")
+     */
+    private $usergroup;
+    
+    /**
+     * @var Notice $notice; 
+     * @ORM\OneToOne(targetEntity="Fenchy\NoticeBundle\Entity\Notice", inversedBy="location")
+     */
+    private $notice;
+    
+    
+     /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $street_number;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $route;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $locality;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $sublocality;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $administrative_area_level_1;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $administrative_area_level_2;
+    
+     /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $postal_code;
+    
+     /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $country;
+    
+    /**
+     *
+     * @var String 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\MaxLength(255)
+     */
+    private $street_address;
+    
+    
+    public function __construct() {}
+    
+    public function __clone() {
+        
+        $this->id       = NULL;
+        $this->user     = NULL;
+        $this->usergroup= NULL;
+        $this->notice   = NULL;
+        $this->printable = NULL;
+    }
+    
+    public function __toString() {
+        return ''.($this->printable ? $this->printable : $this->location);
+    }
+    
+    /**
+     * Set ID
+     * @param Integer $id
+     * @return Location 
+     */
+    public function setId($id) {
+        
+        $this->id = $id;
+        
+        return $this;
+    }
+    
+    /**
+     * Get ID
+     * @return Integer 
+     */
+    public function getId() {
+        
+        return $this->id;
+    }
+    
+    /**
+     * Get Latitude
+     * @return type 
+     */
+    public function getLatitude()
+    {
+        if ($this->hasPoint())
+            return $this->pgisGeog['coordinates'][1];
+        else
+            return 0;
+    }    
+    
+    /**
+     * Set Latitude
+     * @param type $latitude 
+     * @return Location
+     */
+    public function setLatitude($latitude)
+    {
+        $this->pgisGeog['coordinates'][1] = $latitude;
+        $this->pgisGeom['coordinates'][1] = $latitude;
+        return $this;
+    }  
+    
+    /**
+     * Get Longitude
+     * @return type 
+     */
+    public function getLongitude()
+    {
+        if ($this->hasPoint()) {
+            return $this->pgisGeog['coordinates'][0];
+        } else 
+            return 0;
+    }    
+    
+    /**
+     * Set Longitude
+     * @param type $longitude
+     * @return Location 
+     */
+    public function setLongitude($longitude)
+    {
+        $this->pgisGeog['coordinates'][0] = $longitude;
+        $this->pgisGeom['coordinates'][0] = $longitude;
+        return $this;
+    }
+    
+    /**
+     * Returns public address (city and district) as string
+     * @return String 
+     */
+    public function getAddress() {
+        
+        return $this->printable ? $this->printable : $this->location;
+    }
+    
+    /**
+     * Returns form input text for location element.
+     * @return String
+     */
+    public function getGapiAddress() {
+        
+        return $this->location;
+    }
+    
+    public function setGapiAddress() {
+        
+    }
+    /**
+     * Set User
+     * @param User $user
+     * @return Location 
+     */
+    public function setUser(User $user) {
+        
+        $this->user = $user;
+        
+        return $this;
+    }
+    
+    
+    /**
+     * Get User
+     * @return User 
+     */
+    public function getUser() {
+        
+        return $this->user;
+    }
+    
+    /**
+     * Set UserGroup
+     * @param UserGroup $usergroup
+     * @return Location
+     */
+    public function setUserGroup(UserGroup $usergroup) {
+    
+    	$this->usergroup = $usergroup;
+    
+    	return $this;
+    }
+    
+    
+    /**
+     * Get UserGroup
+     * @return UserGroup
+     */
+    public function getUserGroup() {
+    
+    	return $this->usergroup;
+    }
+    
+    /**
+     * Set Notice
+     * @param Notice $notice
+     * @return Location 
+     */
+    public function setNotice(Notice $notice) {
+        
+        $this->notice = $notice;
+        
+        return $this;
+    }
+    
+    /**
+     * Get Notice
+     * @return Notice 
+     */
+    public function getNotice() {
+        
+        return $this->notice;
+    }
+    
+    /**
+     * Returns TRUE if all required location data is set. False otherwise.
+     * @return bool
+     */
+    public function hasPoint() {
+        
+        if(empty($this->pgisGeog))
+            return FALSE;
+        
+        if(!array_key_exists('coordinates', $this->pgisGeog))
+            return FALSE;
+        
+        if(!array_key_exists(0, $this->pgisGeog['coordinates']) || !array_key_exists(1, $this->pgisGeog['coordinates']))
+            return FALSE;
+        
+        return TRUE;
+    }
+    
+    public function hasLocation() {
+        if(empty($this->location)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    
+    /**
+     * Setter method for pgisGeog property will be throwing exception
+     * by assumption that only get/setLatitude, get/setLongitude methods 
+     * have access to location coordinates.
+     */
+    public function setPgisGeog($pgisGeog)
+    {
+        throw new \Exception(
+            "Coordinates of entity are accessible only by setLatitude, setLongitude methods");
+        return false;
+    }
+    
+    /**
+     * Setter method for pgisGeog property will be throwing exception
+     * by assumption that only get/setLatitude, get/setLongitude methods 
+     * have access to location coordinates.
+     */
+    public function getPgisGeog()
+    {
+        throw new \Exception(
+            "Coordinates of entity are accessible only by getLatitude, getLongitude methods");
+        return false;
+    }
+
+    /**
+     * Setter method for pgisGeom property will be throwing exception
+     * by assumption that only get/setLatitude, get/setLongitude methods 
+     * have access to location coordinates.
+     */
+    public function setPgisGeom($pgisGeom)
+    {
+        throw new \Exception(
+            "Coordinates of entity are accessible only by setLatitude, setLongitude methods");
+        return false;
+    }
+
+    /**
+     * Setter method for pgisGeom property will be throwing exception
+     * by assumption that only get/setLatitude, get/setLongitude methods 
+     * have access to location coordinates.
+     */
+    public function getPgisGeom()
+    {
+        throw new \Exception(
+            "Coordinates of entity are accessible only by getLatitude, getLongitude methods");
+        return false;
+    }
+    
+    /**
+     * Gets location represented by string
+     * @return String
+     */
+    public function getLocation() {
+        return $this->location;
+    }
+
+    /**
+     * Sets location represented by string
+     * @param String $location
+     */
+    public function setLocation($location) {
+        $this->location = $location;
+    }
+    
+    /**
+     * Get printable location
+     * @return String
+     */
+    public function getPrintable() {
+        
+        return $this->printable;
+    }
+    
+    /**
+     * Set printable location
+     * @param String $location
+     * @return \Fenchy\UtilBundle\Entity\Location
+     */
+    public function setPrintable($location) {
+        
+        $this->printable = $location;
+        
+        return $this;
+    }
+
+
+
+    /**
+     * Set street_number
+     *
+     * @param string $streetNumber
+     * @return Location
+     */
+    public function setStreetNumber($streetNumber)
+    {
+        $this->street_number = $streetNumber;
+    
+        return $this;
+    }
+
+    /**
+     * Get street_number
+     *
+     * @return string 
+     */
+    public function getStreetNumber()
+    {
+        return $this->street_number;
+    }
+
+    /**
+     * Set route
+     *
+     * @param string $route
+     * @return Location
+     */
+    public function setRoute($route)
+    {
+        $this->route = $route;
+    
+        return $this;
+    }
+
+    /**
+     * Get route
+     *
+     * @return string 
+     */
+    public function getRoute()
+    {
+        return $this->route;
+    }
+
+    /**
+     * Set locality
+     *
+     * @param string $locality
+     * @return Location
+     */
+    public function setLocality($locality)
+    {
+        $this->locality = $locality;
+    
+        return $this;
+    }
+
+    /**
+     * Get locality
+     *
+     * @return string 
+     */
+    public function getLocality()
+    {
+        return $this->locality;
+    }
+
+    /**
+     * Set administrative_area_level_1
+     *
+     * @param string $administrativeAreaLevel1
+     * @return Location
+     */
+    public function setAdministrativeAreaLevel1($administrativeAreaLevel1)
+    {
+        $this->administrative_area_level_1 = $administrativeAreaLevel1;
+    
+        return $this;
+    }
+
+    /**
+     * Get administrative_area_level_1
+     *
+     * @return string 
+     */
+    public function getAdministrativeAreaLevel1()
+    {
+        return $this->administrative_area_level_1;
+    }
+
+    /**
+     * Set postal_code
+     *
+     * @param string $postalCode
+     * @return Location
+     */
+    public function setPostalCode($postalCode)
+    {
+        $this->postal_code = $postalCode;
+    
+        return $this;
+    }
+
+    /**
+     * Get postal_code
+     *
+     * @return string 
+     */
+    public function getPostalCode()
+    {
+        return $this->postal_code;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     * @return Location
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string 
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * Set street_address
+     *
+     * @param string $streetAddress
+     * @return Location
+     */
+    public function setStreetAddress($streetAddress)
+    {
+        $this->street_address = $streetAddress;
+    
+        return $this;
+    }
+
+    /**
+     * Get street_address
+     *
+     * @return string 
+     */
+    public function getStreetAddress()
+    {
+        return $this->street_address;
+    }
+
+
+    /**
+     * Set sublocality
+     *
+     * @param string $sublocality
+     * @return Location
+     */
+    public function setSublocality($sublocality)
+    {
+        $this->sublocality = $sublocality;
+    
+        return $this;
+    }
+
+    /**
+     * Get sublocality
+     *
+     * @return string 
+     */
+    public function getSublocality()
+    {
+        return $this->sublocality;
+    }
+}

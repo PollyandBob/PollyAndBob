@@ -9,53 +9,107 @@
  
 {% block message_content %}
 <script type="text/javascript">
+$(document).ready(function()
+{
+    {% if receiver %}
+        var receiverid = "{{ receiver }}";            
+        $('#select_receiver').val(receiverid);
+    {% endif %}
+    {% if messagesToNeighbors %}
+        // Code here
+    {% else %}
+        $('#continue').css('opacity','0.5');
+        $('#continue').css('pointer-events','none');
+    {% endif %}    
+        nice = $(".message .messagedetail").niceScroll();
+     
+    var receiver = $('#select_receiver option:selected').val();
+                        
+});
 
 function sendMsg()
-		{
-			var flag = true;
-			var title = $('#MsgTitle').val();
-			var content = $('#MsgContent').val();
-			//alert(title + content);
-			
-			if(title == "" || content == "")
-			{
-				flag = false;
-				$('#MsgTitle').attr('placeholder', 'required*');
-				$('#MsgContent').attr('placeholder', 'required*');
-			}
-			var receiver = $('#select_receiver').val();
-			
-			if(flag)
-			{	
-				var url = "{{path('fenchy_regular_user_sendmsgform')}}";
-				$.ajax({
-					url : url,
-					type : "post",
-					data : {
-						'receiverId': receiver,				
-						'title': title,
-						'content': content,										
-						},
-					beforeSend : function() {
-						
-					},
-					success : function(response) {
-						$('#successDialog2').click();
-					},
-					error : function() {
-						alert('Something went wrong!');
-					},
-					complete : function() {
-						$('#MsgTitle').val('');
-						$('#MsgContent').val('');					
-					}
-				}); 
-			}		
-		}
-</script>   
+{
+    var flag = true;
+    var title = '';
+{#    var titleDisp = $('#MsgTitle').css('display');#}
+    var content = $('#MsgContent').val();
+    //alert(title + content);
+
+    if(content == "")
+    {
+            flag = false;
+    {#				$('#MsgTitle').attr('placeholder', 'required*');#}
+            $('#MsgContent').attr('placeholder', 'required*');
+    }
+    var receiver = $('#select_receiver').val();
+    if(content.trim() == "" )
+    {
+            flag = false;
+    {#				$('#MsgTitle').val('');#}
+            $('#MsgContent').val('');
+    {#                                $('#MsgTitle').attr('placeholder', 'required*');#}
+            $('#MsgContent').attr('placeholder', 'required*');
+    }
+   {# if(titleDisp == 'inline-block')
+    {
+        title = $('#MsgTitle').val();
+        if(title.trim() == "" )
+        {
+            flag = false;
+            $('#MsgTitle').val('');				
+            $('#MsgTitle').attr('placeholder', 'required*');
+        }
+    }#}
+    if(flag)
+    {	
+            var url = "{{path('fenchy_regular_user_sendmsgform')}}";
+            $.ajax({
+                    url : url,
+                    type : "post",
+                    data : {
+                            'receiverId': receiver,				
+{#                            'title': title,#}
+                            'content': content,										
+                            },
+                    beforeSend : function() {
+
+                    },
+                    success : function(response) {
+                            $('#successDialog2').click();
+                    },
+                    error : function() {
+                            alert('Something went wrong!');
+                    },
+                    complete : function() {
+{#                            $('#MsgTitle').val('');#}
+                            $('#MsgContent').val('');
+                    }
+            }); 
+    }		
+}
+
+{#$(function(){
+   $('#select_receiver').change(function(){
+       receiver = $('#select_receiver option:selected').val();
+       //alert(receiver);
+       if(receiver == 'all')
+       {
+           $('#MsgTitle').css('display','inline-block');
+       }
+       else
+           $('#MsgTitle').css('display','none');
+   });
+});#}
+</script>  
+<style>
+    .message .messagedetail{
+         max-height: 800px;
+         overflow: hidden;
+    }
+</style>
 			<div class="message">
 				<div class="left">
-                	<a href="javascript:void(0);" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>
+{#                	<a href="javascript:void(0);" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>#}
                     <div class="clearfix"></div>
                     <div class="messagedetail">
                     	{% if messages %}
@@ -63,15 +117,39 @@ function sendMsg()
 	                    	<a href="{{ path('fenchy_regular_user_messages_view', {'id': message.id}) }}" {% if not message.read %} {% if message.receiver != app.user %} class="message-read" {% else %} class="message-unread" {% endif %} {% endif %}>
 	                    	<div {% if message.read %}class="message-read"{% endif %}>
 	                            <div class="profilei">
-                          			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.id } %}
+                                        {% if message.sender == app.user %}
+                                            {% if message.usergroup %}
+                                                <img src=" {% if not message.usergroup.webPath %} {{ absolute(asset('images/default_profile_picture.png')) }} {% else %} {{ absolute(asset(message.usergroup.webPath)) }}{% endif %}" alt=""/>
+                                            {% else %}
+                                                {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.receiver.id } %}
+                                            {% endif %}
+                                        {% else %}
+                                            {% if message.fromgroup %}
+                                                <img src=" {% if not message.fromgroup.webPath %} {{ absolute(asset('images/default_profile_picture.png')) }} {% else %} {{ absolute(asset(message.fromgroup.webPath)) }}{% endif %}" alt=""/>
+                                            {% else %}
+                                                {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.id } %}
+                                            {% endif %}
+                                        {% endif %}
                           		</div>
 	                            {% if message.receiver != app.user %}
 	                            <img class="read_arrow" src="{{ asset('images/message-arrow1.png') }}" alt="" />
 	                            {% elseif message.receiver == app.user %}
 	                            <img class="read_arrow" src="{{ asset('images/message-arrow2.png') }}" alt="" />
 	                            {% endif %}
-	                            <p>{{ message.sender.userregular.firstname }}</p>
-	                            <p>{{ message.title }}</p>
+                                    {% if message.receiver != app.user %}
+                                        {% if message.usergroup %}
+                                            <p>{{ message.usergroup.groupname }}</p>
+                                        {% else %}
+                                            <p>{{ message.receiver.userregular.firstname }}</p>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if message.fromgroup %}
+                                            <p>{{ message.fromgroup.groupname }}</p>
+                                        {% else %}
+                                            <p>{{ message.sender.userregular.firstname }}</p>
+                                        {% endif %}
+                                    {% endif %}
+                                        <p>{{ message.content|truncate(70) }}</p>
 	                        </div>
 	                        </a>
 	                    	
@@ -91,7 +169,7 @@ function sendMsg()
                     
 			     	<p>{{ 'regularuser.write_msg_to'|trans }} 
 			     	
-			     	<select name="select_receiver" id="select_receiver">
+                                    <select name="select_receiver" id="select_receiver" style="font-family: code_boldregular;">
 			     	{% if messagesToNeighbors %}
 			     		{% for messagesToNeighbor in messagesToNeighbors %}
 			     			<option value="{{ messagesToNeighbor.id }}">{{ messagesToNeighbor.regularuser.firstname }} {{ messagesToNeighbor.regularuser.lastname }}</option>
@@ -99,16 +177,18 @@ function sendMsg()
 			     	{% else %}
 			     	<option>No neighbors</option>
 			     	{% endif %}
+                                <option value="all">the whole neighborhood</option>
 			     	</select>
 			     	</p>
 			     	
 			     	<br>
 			     	<br>
-					<input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}"/>
-					<br>
-					<textarea id="MsgContent" style="padding: 5px;" placeholder="{{ 'message.content'|trans }}"></textarea>
+{#					<input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}" style="display: none;"/>#}
+                                <br>
+					<textarea id="MsgContent" style="padding: 5px;"></textarea>
+{#                                        placeholder="{{ 'message.content'|trans }}"#}
 					
-					<input class="blue_button" type="button" id="continue" value="{{ 'btn.send'|trans }}" onclick="sendMsg();"/>
+					<input class="blue_button" type="button" id="continue" value="{{ 'btn.send_msg'|trans }}" onclick="sendMsg();" style="float: right; margin-right: 11px; padding: 1px 5px 0;"/>
                     
                     <div class="bgbottom_right"><img src="{{ asset('images/bgbottom_contantinner.png') }}" alt="" /></div>
                 </div>
@@ -120,10 +200,11 @@ function sendMsg()
 				<div id="dialog35" class="window">
 				   	<div class="big_popup">
 				      	<div class="big_popupclose"><a href="" class="close"></a></div>
-						<div id="messageForm">
-							<p>{{ 'regularuser.msg_send'|trans }}</p>
-						</div>
+                                                    <div class="title">
+							{{ 'regularuser.msg_send'|trans }}
+                                                    </div>
 					</div>
+                                    <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
 				</div>
 				<div id="mask"></div>
 			</section>
@@ -210,6 +291,7 @@ function sendMsg()
         });
         new messageLoader($('#messages-list tbody'), '{{ path('fenchy_regular_user_messages_index', {_format: 'json', type: 'unread'}) }}');
     });
+ 
 </script>
 {% endblock %}
 

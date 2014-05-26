@@ -81,20 +81,13 @@ class NoticeRepository extends EntityRepository
     	}
     
     	if($filter->title) {
-    		$query->where('n.title like :title')
-    		->setParameter('title', '%'.$filter->title.'%');
+    		$query->where('LOWER(n.title) like :title')
+    		->setParameter('title', strtolower('%'.$filter->title.'%'));
     	}
-    
-    	if($filter->created_after) {
-    		$query->andWhere('n.created_at > :after')
-    		->setParameter('after', $filter->created_after);
+        if($filter->type) {
+    		$query->where('LOWER(t.name) like :type')
+    		->setParameter('type', strtolower('%'.$filter->type.'%'));
     	}
-    
-    	if($filter->created_before) {
-    		$query->andWhere('n.created_at < :before')
-    		->setParameter('before', $filter->created_before);
-    	}
-    
     	if($filter->sort === 'stickersQ') {
     		return $query
     		->orderBy($filter->sort, $filter->order)
@@ -169,6 +162,7 @@ class NoticeRepository extends EntityRepository
     	}
     	else if($flag==true && $when=='' && $now=='')
     	{
+            
     		return $this->getEntityManager()
     		->createQuery('SELECT ug,u,l FROM FenchyRegularUserBundle:UserGroup ug
     				   LEFT JOIN ug.user u LEFT JOIN ug.location l ORDER BY ug.id DESC')
@@ -212,11 +206,12 @@ class NoticeRepository extends EntityRepository
      * 
      * @uses AdminBundle
      */
-    public function getFullDetailedList($filter = NULL,$types,$sortby, $aroundyou,$when, $now, $keyword, $userSearchedTypes) {
+    public function getFullDetailedList($userLoggedIn,$filter = NULL,$types,$sortby, $aroundyou,$when, $now, $keyword, $userSearchedTypes) {
 
-    	
+    	//$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+        
         if(!($filter instanceof \Fenchy\AdminBundle\Entity\NoticesFilter) and empty($types) and (!$sortby) and (!$aroundyou)  and (!$when) and (!$now) and (!$keyword) ) {
-            
+           
            $query = $this->createQueryBuilder('n')
                     ->select("n, p, v, t, u, l, s, su")
                     ->leftJoin('n.values', 'v')
@@ -226,8 +221,10 @@ class NoticeRepository extends EntityRepository
                     ->leftJoin('n.type', 't')
                     ->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
                     ->leftJoin('s.reported_by', 'su')
-                    ->where('n.draft = false');
-            
+                    ->andWhere('n.completed = false')
+                    ->andWhere('n.closed = false')  
+                    ->andWhere('n.draft = false');
+           
            if(!empty($userSearchedTypes))
            {
      		if($userSearchedTypes[0])
@@ -237,9 +234,10 @@ class NoticeRepository extends EntityRepository
      		}	
            }
             $notices =  $query->getQuery()
-            				  ->getResult();
+                              ->getResult();
            
             $usergroups = $this->getAllUserGroups();
+           
             $result[0] = $notices;
             $result[1] = $usergroups;
             
@@ -258,7 +256,20 @@ class NoticeRepository extends EntityRepository
                     ->join('n.user', 'u')
                     ->join('n.location', 'l')
                     ->leftJoin('n.type', 't')
-        			->where('n.draft = false');
+                    ->andWhere('n.completed = false')
+                    ->andWhere('n.closed = false')    
+                    ->andwhere('n.draft = false');
+        
+        $query2 = $this->createQueryBuilder('n')
+                    ->select("n, p, v, t, u, l, (".$sub->getDQL().") as HIDDEN stickersQ")
+                    ->leftJoin('n.values', 'v')
+                    ->leftJoin('v.property', 'p')
+                    ->join('n.user', 'u')
+                    ->join('n.location', 'l')
+                    ->leftJoin('n.type', 't')
+                    ->andWhere('n.completed = false')
+                    ->andWhere('n.closed = false')    
+                    ->andwhere('n.draft = false');
         // here in above query removed s,su from select part
        
         if($keyword)
@@ -284,6 +295,7 @@ class NoticeRepository extends EntityRepository
         }
         $flag = false;
         if($types) {
+            
         	$query->andWhere('n.type in (:type)')
         	->setParameter('type', $types);
         	
@@ -296,7 +308,10 @@ class NoticeRepository extends EntityRepository
         {
         	$flag=true;
         }
-        
+        if(!$aroundyou) {
+        	$query2->andWhere('n.type not in (:type)')
+        	->setParameter('type', $types);
+        }
         if($when or $now)
         {
         	$date = explode('to',$when);
@@ -315,36 +330,16 @@ class NoticeRepository extends EntityRepository
         	}
 	        
 	        if($types)
-	        {	
-	        	if(in_array(6, $types))
-	        	{
-		        	$query->orWhere('n.start_date >= :start AND n.start_date <= :end')
-		        	->setParameter('start', $startdate)
-		        	->setParameter('end', $enddate);
-	        	}
-	        	elseif(in_array(12, $types))
-	        	{
-	        		$query->orWhere('n.start_date >= :start AND n.start_date <= :end')
-	        		->setParameter('start', $startdate)
-	        		->setParameter('end', $enddate);
-	        	}
-	        	else
-	        	{
-	        		$query->andWhere('n.created_at >= :start AND n.created_at <= :end')
-	        		->setParameter('start', $startdate)
-	        		->setParameter('end', $enddate);
-	        	}
+	        {  
+//	          $query->andWhere('n.created_at >= :start AND n.created_at <= :end AND n.type not in (:type) ' )
+//	        	->setParameter('start', $startdate)
+//	        	->setParameter('end', $enddate)
+//                        ->setParameter('type', $types);
+	        	
 	        }
-	        else
-	        {
-	        	$query->andWhere('n.created_at >= :start AND n.created_at <= :end')
-	        	->setParameter('start', $startdate)
-	        	->setParameter('end', $enddate);
-	        }
+	        
         
         }
-        
-        
         
         if($sortby=="relevance")
         {
@@ -355,11 +350,25 @@ class NoticeRepository extends EntityRepository
         //echo $query->getQuery()->getSQL();
         $notices = $query->getQuery()
                     ->getResult();
-       
-        $usergroups = $this->getAllUserGroups($keyword,$flag,$when,$now);
+        $notices2 = $query2->getQuery()
+                    ->getResult();
+        $usergroups2 = array();
         
+        $usergroups = $this->getAllUserGroups($keyword,$flag,$when,$now);
+        if(!$aroundyou) {
+            if(in_array(8, $types))
+            {
+                    $flag=false;
+            }
+            else
+            {
+                $usergroups2 = $this->getAllUserGroups($keyword,$flag=true,$when,$now);
+            }
+        }
         $result[0] = $notices;
         $result[1] = $usergroups;
+        $result[2] = $notices2;
+        $result[3] = $usergroups2;
         
         return $result;
     }
@@ -381,7 +390,10 @@ class NoticeRepository extends EntityRepository
 		    	->leftJoin('v.property', 'p')
 		    	->join('n.user', 'u')
 		    	->join('n.location', 'l')
-		    	->leftJoin('n.type', 't');    	
+		    	->leftJoin('n.type', 't')
+                        ->andWhere('n.completed = false')
+                        ->andWhere('n.closed = false')
+                        ->andwhere('n.draft = false');    	
     			
     			// here in above query removed s,su from select part
     		
@@ -406,7 +418,7 @@ class NoticeRepository extends EntityRepository
     		$query->andWhere('n.draft = false');
     		
     		$result[0] = $query->getQuery()
-    						   ->getResult();
+                                   ->getResult();
     		
     		$result[1] = $this->getAllUserGroups($searchword);
     		
@@ -426,7 +438,31 @@ class NoticeRepository extends EntityRepository
     	->leftJoin('n.type', 't')
     	->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
     	->leftJoin('s.reported_by', 'su')
+        ->andWhere('n.completed = false')
+        ->andWhere('n.closed = false')  
+        ->andWhere('n.draft = false')
     	->orderBy('n.created_at', "ASC")
+    	->getQuery()
+    	->getResult();
+    }
+    
+    public function getFirstRecordOfEvents() {
+    	$userSearchedTypes = array(6,12);
+    	return $this->createQueryBuilder('n')
+    	->select("n, p, v, t, u, l, s, su")
+    	->leftJoin('n.values', 'v')
+    	->leftJoin('v.property', 'p')
+    	->join('n.user', 'u')
+    	->join('n.location', 'l')
+    	->leftJoin('n.type', 't')
+    	->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
+    	->leftJoin('s.reported_by', 'su')
+        ->andWhere('n.completed = false')
+        ->andWhere('n.closed = false')  
+        ->andWhere('n.draft = false')
+        ->andWhere('n.type in (:type)')
+        ->setParameter('type', $userSearchedTypes)    
+    	->orderBy('n.start_date', "ASC")
     	->getQuery()
     	->getResult();
     }
@@ -442,7 +478,11 @@ class NoticeRepository extends EntityRepository
     	->leftJoin('n.type', 't')
     	->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
     	->leftJoin('s.reported_by', 'su')
-    	->orderBy('n.created_at', "DESC")
+        ->andWhere('n.start_date IS NOT NULL')
+        ->andWhere('n.completed = false')
+        ->andWhere('n.closed = false')  
+        ->andWhere('n.draft = false')    
+    	->orderBy('n.start_date', "DESC")
     	->getQuery()
     	->getResult();
     }
@@ -531,12 +571,41 @@ class NoticeRepository extends EntityRepository
                 ->join('n.user', 'u')
                 ->join('u.user_regular', 'ur')
                 ->join('n.location', 'l')
-                ->where('n.draft = false and u.id = :user and n.id != :notice')
+                ->where('n.draft = false and u.id = :user and n.usergroup IS NULL and n.id != :notice')
                 ->setMaxResults($num)
                 ->orderBy('n.created_at', "DESC")
                 ->getQuery();
         $query->setParameter('notice', $notice->getId());
         $query->setParameter('user', $notice->getUser());
+        
+        return $query->getResult();
+                
+    }
+    
+    /**
+     * Returns listings other than given one but belongs to same user.
+     * 
+     * @param integer $num limit of returned elements
+     * @param \Fenchy\NoticeBundle\Entity\Notice $notice
+     * @return array
+     * @author Mateusz Krowiak <mkrowiak@pgs-soft.com>
+     */
+    public function getUserGroupRecentListings($num, Notice $notice) {
+        
+        $num++;
+        $query = $this->createQueryBuilder('n')
+                ->select("n, l, g, i")
+                ->join('n.gallery', 'g')
+                ->leftJoin('g.images', 'i')
+                ->join('n.usergroup', 'ug')
+                ->join('n.location', 'l')
+                ->where('n.draft = false  and ug.id = :usergroup and n.id != :notice')
+                ->setMaxResults($num)
+                ->orderBy('n.created_at', "DESC")
+                ->getQuery();
+        $query->setParameter('notice', $notice->getId());
+        //$query->setParameter('user', $notice->getUser());
+        $query->setParameter('usergroup', $notice->getUserGroup());
         
         return $query->getResult();
                 

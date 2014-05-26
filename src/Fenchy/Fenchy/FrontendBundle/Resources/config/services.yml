@@ -1,0 +1,7 @@
+parameters:
+#    fenchy_frontend.example.class: Fenchy\FrontendBundle\Example
+
+services:
+#    fenchy_frontend.example:
+#        class: %fenchy_frontend.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

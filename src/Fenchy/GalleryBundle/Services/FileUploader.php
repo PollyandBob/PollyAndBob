@@ -108,6 +108,68 @@ class FileUploader extends base {
         return $upload_handler->getInfo();
     }
     
+    
+    /**
+     * 
+     * @param type $options
+     * @return type
+     * @throws \Exception
+     */
+    public function createFolder($options = array())
+    {
+                
+        if (!isset($options['folder']))
+        {
+            throw new \Exception("You must pass the 'folder' option to distinguish this set of files from others");
+        }
+        
+        if(isset($options['max']) && is_numeric($options['max'])) {
+            $max = $options['max'];
+        } else {
+            $max = NULL;
+        }
+
+        $options = array_merge($this->options, $options);
+
+        $allowedExtensions = $options['allowed_extensions'];
+
+        // Build a regular expression like /(\.gif|\.jpg|\.jpeg|\.png)$/i
+        $allowedExtensionsRegex = '/(' . implode('|', array_map(function($extension) { return '\.' . $extension; }, $allowedExtensions)) . ')$/i';
+
+        $sizes = (isset($options['sizes']) && is_array($options['sizes'])) ? $options['sizes'] : array();
+
+        $filePath = $options['file_base_path'] . '/' . $options['folder'];
+        $webPath = $options['web_base_path'] . '/' . $options['folder'];
+
+        foreach ($sizes as &$size)
+        {
+            $size['upload_dir'] = $filePath . '/' . $size['folder'] . '/';
+            $size['upload_url'] = $webPath . '/' . $size['folder'] . '/';
+        }
+
+        $originals = $options['originals'];
+
+        $uploadDir = $filePath . '/' . $originals['folder'] . '/';
+
+        foreach ($sizes as &$size)
+        {
+            @mkdir($size['upload_dir'], 0777, true);
+        }
+
+        @mkdir($uploadDir, 0777, true);
+
+        $upload_handler = new UploadHandler(
+            array(
+                'upload_dir' => $uploadDir, 
+                'upload_url' => $webPath . '/' . $originals['folder'] . '/', 
+                'script_url' => $options['request']->getUri(),
+                'image_versions' => $sizes,
+                'accept_file_types' => $allowedExtensionsRegex,
+                'max_number_of_files' => $max
+            ));
+
+        return;
+    }
     public function updateGallery($options) {
         
         $options = array_merge($this->options, $options);

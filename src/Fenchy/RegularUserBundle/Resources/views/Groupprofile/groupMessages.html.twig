@@ -18,13 +18,66 @@
 <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/mvvm/user-settings-view-model.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+<script type="text/javascript">
 
+function sendMsg()
+		{
+			var flag = true;
+{#			var title = $('#MsgTitle').val();#}
+			var content = $('#MsgContent').val();
+			//alert(title + content);
+			
+			if(content == "")
+			{
+				flag = false;
+{#				$('#MsgTitle').attr('placeholder', 'required*');#}
+				$('#MsgContent').attr('placeholder', 'required*');
+			}
+                        if(content.trim() == "" )
+                        {
+                                flag = false;
+{#				$('#MsgTitle').val('');#}
+				$('#MsgContent').val('');
+{#                                $('#MsgTitle').attr('placeholder', 'required*');#}
+				$('#MsgContent').attr('placeholder', 'required*');
+                        }
+			var receiver = $('#select_receiver').val();
+                        var groupId = '{{ groupId }}';
+			
+			if(flag)
+			{	
+				var url = "{{path('fenchy_regular_user_sendmsgform')}}";
+				$.ajax({
+					url : url,
+					type : "post",
+					data : {
+						'receiverId': receiver,
+						'content': content,
+                                                'groupFrom': groupId
+						},
+					beforeSend : function() {
+						
+					},
+					success : function(response) {
+						$('#successDialog2').click();
+					},
+					error : function() {
+						alert('Something went wrong!');
+					},
+					complete : function() {
+{#						$('#MsgTitle').val('');#}
+						$('#MsgContent').val('');					
+					}
+				}); 
+			}		
+		}
+</script>   
 <script type="text/javascript">
 
     userSettingsViewModel = null;
 
     $(document).ready(function() {
-        geocoder = new google.maps.Geocoder();
+        {#geocoder = new google.maps.Geocoder();
         var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';
 
         userSettingsViewModel = new UserSettingsViewModel(geocoder, baseSearchViewUri);
@@ -33,61 +86,16 @@
 
         autocomplete = new GApiAutocomplete(
                 document.getElementById('fenchy_userbundle_user_locationtype_location_location'),
-                userSettingsViewModel);
-
+                userSettingsViewModel);#}
+    {% if not groupmembers %}
+        $('#continue').css('opacity','0.5');
+        $('#continue').css('pointer-events','none');
+    {% endif %} 
 
     });
-    function hasCoordinates()
-    {
-    	{% if app.user.hasRequiredLocation %}
-        	return true;
-        {% endif %}
-
-        return false;
-    }
-
-    function getLatitude()
-    {
-        return '{{ app.user.location.latitude }}'
-    }
-
-    function getLongitude()
-    {
-        return '{{ app.user.location.longitude }}';
-    }
-    </script>
     
-    <script src="{{ asset('js/geolocalization.js') }}"></script>
-    <script type="text/javascript">
-    $(document).ready(function() {
-        initialize();
-    });
-        </script>
-        <script type="text/javascript" src="{{ asset('js/regular_user/settings/form.js') }}"></script>
-        
-    <script type="text/javascript">
-		function verifyLocation()
-		{
-			var url = "{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}";
-			$.ajax({
-				url : url,
-				type : "post",
-				data : {
-					},
-				beforeSend : function() {
-					
-				},
-				success : function(response) {
-					alert(response);
-				},
-				error : function() {
-					alert('Something went wrong!');
-				},
-				complete : function() {					
-				}
-			});
-		}		
-	</script>
+    </script>
+   
 {% endblock %}
 
 {% block content %}
@@ -97,23 +105,34 @@
 		
        <div class="message">
 				<div class="left">
-                	<a href="#" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>
+{#                	<a href="javascript:void(0);" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>#}
                     <div class="clearfix"></div>
                     <div class="messagedetail">
                     	{% if messages %}
                           {% for message in messages %}
-	                    	<a href="{{ path('fenchy_regular_user_user_groupprofile_groupmessages_view', {'groupId': groupId ,'id': message.id}) }}" {% if not message.read %} {% if message.receiver != app.user %} class="message-read" {% else %} class="message-unread" {% endif %} {% endif %}>
-	                    	<div {% if message.read %}class="message-read"{% endif %}>
+	                    	<a href="{{ path('fenchy_regular_user_user_groupprofile_groupmessages_view', {'groupId': groupId ,'id': message.id}) }}" {% if not message.read %} {% if message.fromgroup %} class="message-read" {% else %} class="message-unread" {% endif %} {% endif %}>
+	                    	<div  {% if message.read %}class="message-read"{% endif %}>
 	                            <div class="profilei">
-                          			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
+                                        
+                                        {% if message.fromgroup %}
+                                                {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.receiver.userregular.id } %}
+{#                                                <img src=" {% if not usergroup.webPath %} {{ absolute(asset('images/default_profile_picture.png')) }} {% else %} {{ absolute(asset(usergroup.webPath)) }}{% endif %}" alt=""/>#}
+                                        {% else %}
+                                                {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
+                                        {% endif %}
                           		</div>
 	                            {% if message.receiver != userObj %}
 	                            <img class="read_arrow" src="{{ asset('images/message-arrow1.png') }}" alt="" />
 	                            {% elseif message.receiver == userObj %}
 	                            <img class="read_arrow" src="{{ asset('images/message-arrow2.png') }}" alt="" />
 	                            {% endif %}
-	                            <p>{{ message.sender.userregular.firstname }}</p>
-	                            <p>{{ message.title }}</p>
+                                    {% if message.fromgroup %}
+                                        <p>{{ message.receiver.userregular.firstname }}</p>
+                                    {% else %}
+                                        <p>{{ message.sender.userregular.firstname }}</p>
+                                    {% endif %}
+	                            
+                                    <p>{{ message.content|truncate(40) }}</p>
 	                        </div>
 	                        </a>
 	                    	
@@ -136,8 +155,13 @@
 			     	<select name="select_receiver" id="select_receiver">
 			     	{% if groupmembers %}
 			     		{% for groupmember in groupmembers %}
+                                                {% if groupmember.neighbor.id != app.user.id %}
 			     			<option value="{{ groupmember.neighbor.id }}">{{ groupmember.neighbor.regularuser.firstname }} {{ groupmember.neighbor.regularuser.lastname }}</option>
+                                                {% endif %}
 			     		{% endfor %}
+                                        {% if usergroup.user.id != app.user.id %}
+                                                <option value="{{ usergroup.user.id }}">{{ usergroup.user.regularuser.firstname }} {{ usergroup.user.regularuser.lastname }}</option>
+                                        {% endif %}
 			     	{% else %}
 			     	<option>No members</option>
 			     	{% endif %}
@@ -146,8 +170,8 @@
 			     	
 			     	<br>
 			     	<br>
-					<input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}"/>
-					<br>
+{#					<input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}"/>#}
+                                <br>
 					<textarea id="MsgContent" style="padding: 5px;" placeholder="{{ 'message.content'|trans }}"></textarea>
 					
 					<input class="blue_button" type="button" id="continue" value="{{ 'btn.send'|trans }}" onclick="sendMsg();"/>
@@ -156,16 +180,17 @@
                 </div>
             </div>
             
-         <a id="successDialog2" href="#dialog35" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;">
+        <a id="successDialog2" href="#dialog35" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="display: none;"></a>
             
         <section id="boxes2">
 				<div id="dialog35" class="window">
 				   	<div class="big_popup">
 				      	<div class="big_popupclose"><a href="" class="close"></a></div>
-						<div id="messageForm">
+						<div class="title">
 							<p>{{ 'regularuser.msg_send'|trans }}</p>
 					</div>
 				</div>
+                                <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
 			</div>
 			<div id="mask"></div>
 		</section>    
@@ -178,7 +203,8 @@
             		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
 						<button>{{ 'regularuser.ok'|trans|upper }}</button>
     	        	</form>
-        		</div>    
+        		</div> 
+                        <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
     		</div>    
     		<div id="mask"></div>
     	</section>

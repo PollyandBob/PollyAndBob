@@ -6,16 +6,15 @@
 {# Include this file once in the page. You can instantiate many file uploaders. #}
 {# Each one must receive a distinct uploadUrl option. You can also pass #}
 {# an existingFiles option with a list of filenames that should appear in the #}
-{# editor as having been previously uploaded. #}
-
-<script type="text/template" id="file-uploader-template">
+{# editor as having been previously uploaded. #}        
+<script type="text/template" id="file-uploader-template">            
     <!--[if IE]>
         <label for="gallery-file" style="display:block;">
     <![endif]-->
     <div class="uploader" data-dropzone="1">
       <div class="controls">
         {# No name attribute please, that would cause it to submit with a regular form #}
-        <input id="gallery-file" type="file" data-files="1" multiple style="visibility:hidden;"/>
+        <input id="gallery-file" type="file" data-files="1" multiple style="visibility:hidden;" onchange="checkFile(this);"/>
         <div class="spinner" data-spinner="1" style="display: none">
           <span>Uploading...</span><img src="{{ asset('bundles/punkavefileuploader/images/spinner.gif') }}" />         
         </div>
@@ -29,7 +28,24 @@
         </label>
     <![endif]-->
 </script>
+<script>
 
+    function checkFile(fieldObj)
+    {        
+        var FileName  = fieldObj.value;
+        var FileExt = FileName.substr(FileName.lastIndexOf('.')+1);
+        //var FileSize = fieldObj.files[0].size;
+        //var FileSizeMB = (FileSize/10485760).toFixed(2);
+
+        if ( (FileExt.toLowerCase() != "gif" && FileExt.toLowerCase() != "png" && FileExt.toLowerCase() != "jpg" && FileExt.toLowerCase() != "jpeg"))
+        {            
+            var error = "Please make sure your file is in gif, png, jpg or jpeg format.\n\n";
+            alert("{{ 'regularuser.alert_for_wrong_file'|trans }}");
+            return false;
+        }
+        return true;
+    }
+</script>
 {# parameters to underscore template: name, thumbnail_url, original_url #}
 <script type="text/template" id="file-uploader-file-template">
     <li data-name="<%- name %>" class="thumbnail">
@@ -41,22 +57,22 @@
             <input type="hidden" name="original" value="<%- url %>" />
        
         <div class="caption">
-            <a rel="tooltip" title="Delete" data-action="delete" class="delete thumbnail-action btn" href="#delete"><i class="icon-remove-sign"></i></a>
+            <a rel="tooltip" title="Delete" data-action="delete" class="delete thumbnail-action btn" href="#delete"><i style="color: #51B9D4;" class="icon-remove-sign"></i></a>
         </div>            
     </li>
 </script>
 
 <script type="text/template" id="file-uploader-file-template-original">
-    <li data-name="<%- name %>" class="thumbnail">
+    <li data-name="<%- name %>" class="thumbnail" id="<%- name %>">
         {# Some things can be thumbnailed, some things not #}
         {# ACHTUNG: regular expression literals fail in Underscore templates #}
-        
+           <div class="placeholder_listing">
             <img src="<%- thumbnail_url %>" class="thumbnail-image" rel="<%- name %>" />
-            <img src="<%- url %>" class="medium-image" rel="<%- name %>" />
+            <img src="<%- url %>" class="medium-image crop_me4" style="width: 100%;" rel="<%- name %>" />
             <input type="hidden" name="original" value="<%- url %>" />
-       
+            </div>
         <div class="caption">
-            <a rel="tooltip" title="Delete" data-action="delete" class="delete thumbnail-action btn" href="#delete"><i class="icon-remove-sign"></i></a>
+            <a rel="tooltip" title="Delete" data-action="delete" class="delete thumbnail-action btn" href="#delete"><i style="color: #51B9D4;" class="icon-remove-sign"></i></a>
         </div>            
     </li>
 </script>

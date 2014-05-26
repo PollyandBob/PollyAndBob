@@ -1,0 +1,39 @@
+<div class="big_popup">
+     <div class="big_popupclose"><a href="" class="close"></a></div>
+     <!-- Your custom code here -->
+     <div class="title">{{ 'register.title'|trans }}</div>
+     <div class="clearfix"></div>
+                    
+     <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="post" autocomplete="off" class="register-form">
+        
+		<div class="form-error" style="padding-left: 14px;">
+		    {{form_errors(form) }}
+            {{form_errors(form.user_regular.firstname)}}
+            {{form_errors(form.user_regular.postcode)}}
+            {{form_errors(form.email)}}
+            {{form_errors(form.plainPassword.first)}}
+            {{form_errors(form.plainPassword.second)}}
+        </div> 
+        <div class="ajax_loader_info" style="display: none;">
+						<img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
+		</div>       
+                {{ form_widget(form.user_regular.firstname) }}
+                
+                {{ form_widget(form.user_regular.postcode) }}
+            
+                {{ form_widget(form.email) }}
+            
+                {{ form_widget(form.plainPassword.first) }}
+            
+                {{ form_widget(form.plainPassword.second) }}
+                                   
+                {{ form_rest(form) }}
+           
+          <!-- <p>{{ 'register.footer_message.1'|trans }} <a href="#terms">{{ 'register.footer_message.2'|trans }}</a> {{ 'register.footer_message.3'|trans }} <a href="#privacy">{{ 'register.footer_message.4'|trans }}</a></p> -->
+                                                                   
+            <input type="button" class="blue_button" id="register-form" value="{{ 'register.save_button'|trans }}" onclick="registerFormsubmit(this);" />
+           
+       
+    </form>
+                    <!-- Your custom code end -->
+</div>

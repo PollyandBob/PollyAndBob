@@ -1,0 +1,52 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# any view specific stylesheets for this view #}
+<link rel="stylesheet" href="{{ absolute(asset('css/app/sidebar-v2.css')) }}" type="text/css" />
+<link rel="stylesheet" href="{{ absolute(asset('css/app/search-bar-v2.css')) }}" type="text/css" />
+<link rel="stylesheet" href="{{ absolute(asset('css/app/inner-content-v2.css')) }}" type="text/css" />    
+<link rel="stylesheet" href="{{ absolute(asset('css/app/article-box-v2.css')) }}" type="text/css" />   
+<link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+{% endblock %}
+
+{% block content %}
+<section class="main content-rtl" data-role="main">
+    <div class="wrapper-inner-content">
+        <div class="clearfix">
+
+
+            <section class="sidebar pull-left large-padding-top">
+                    {% include 'FenchyRegularUserBundle:Partials:userProfileLeftMenuV2.html.twig' %}
+                </section>
+
+
+                <section class="content pull-right">                
+                    {% include '::searchBarV2.html.twig' %}
+
+                        <div class="inner-content">
+                            <div class="article-list-wrapper clearfix">
+                                <form action="{{path('fenchy_regular_user_friend_delete_confirm', {'friendId': friend.id})}}" method="post">
+                                    <h2 class="delete-msg">{{'regularuser.friends.delete.1'|trans({'%user%': '<span>'~friend.name~'</span>' })|raw}}</h2>
+                                    <div style="display: none">{{form_rest(form)}}</div>
+                                <footer class="clearfix">
+                                    <div class="button grey-button pull-left" id="buttons">
+                                        <a id="back" class="wrapper" href="{{path('fenchy_regular_user_friend_invitations')}}">
+                                            <strong>{{ 'btn.no'|trans }}</strong>
+                                        </a>                            
+                                    </div>
+                                    <div class="button submit pull-right">
+                                        <div>
+                                            <input type="submit" id="continue" value="{{ 'btn.yes'|trans }}"/>                                
+                                        </div>
+                                    </div>
+                                </footer>                                
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}

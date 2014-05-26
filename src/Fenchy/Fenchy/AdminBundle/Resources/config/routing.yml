@@ -1,0 +1,134 @@
+fenchy_admin_users:
+    pattern:  /users/
+    defaults: { _controller: FenchyAdminBundle:Default:users }
+    
+fenchy_admin_user:
+    pattern:  /user/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:user }
+
+fenchy_admin_user_delete:
+    pattern: /user/delete/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:userDelete }
+    requirements:
+        id: \d+
+
+fenchy_admin_user_sendmsg:
+    pattern: /user/sendmsg/
+    defaults: { _controller: FenchyAdminBundle:Default:sendMsg }
+
+fenchy_admin_flag_delete:
+    pattern: /flag/delete/{id}/{type}
+    defaults: { _controller: FenchyAdminBundle:Default:flagDelete }
+    requirements:
+        id: \d+
+
+fenchy_admin_search:
+    pattern:  /search/
+    defaults: { _controller: FenchyAdminBundle:Default:search }
+    
+fenchy_admin_dictionary_switch:
+    pattern: /dictionary/switch
+    defaults: { _controller: FenchyAdminBundle:Default:dictionarySwitch }
+
+fenchy_admin_notices:
+    pattern: /notices/
+    defaults: { _controller: FenchyAdminBundle:Default:notices }
+
+fenchy_admin_location:
+    pattern: /location/
+    defaults: { _controller: FenchyAdminBundle:Default:location }
+
+fenchy_admin_identity:
+    pattern: /identity/
+    defaults: { _controller: FenchyAdminBundle:Default:identity }
+
+fenchy_admin_identity_switch:
+    pattern: /identity/switch
+    defaults: { _controller: FenchyAdminBundle:Default:identitySwitch }
+
+fenchy_admin_location:
+    pattern: /location/
+    defaults: { _controller: FenchyAdminBundle:Default:location }
+
+fenchy_admin_location_switch:
+    pattern: /location/switch
+    defaults: { _controller: FenchyAdminBundle:Default:locationSwitch }
+    
+fenchy_admin_notice_add_to_dashboard:
+    pattern: /notices/add-to-dashboard/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:addToDashboard }
+    
+fenchy_admin_notice_remove_from_dashboard:
+    pattern: /notices/remove-from-dashboard/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:removeFromDashboard }    
+
+fenchy_admin_notice:
+    pattern:  /notice/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:notice }
+    
+fenchy_admin_reviews:
+    pattern: /reviews/
+    defaults: { _controller: FenchyAdminBundle:Default:reviews }
+    
+fenchy_admin_review:
+    pattern: /review/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:review }
+
+fenchy_admin_review_delete:
+    pattern: /review/delete/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:reviewDelete }
+    requirements:
+        id: \d+
+
+fenchy_admin_comments:
+    pattern: /comments/
+    defaults: { _controller: FenchyAdminBundle:Default:comments }
+
+fenchy_admin_comment:
+    pattern: /comment/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:comment }
+
+fenchy_admin_comment_delete:
+    pattern: /comment/delete/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:commentDelete }
+    requirements:
+        id: \d+
+
+fenchy_admin_requests:
+    pattern: /requests/
+    defaults: { _controller: FenchyAdminBundle:Default:requests }
+    
+fenchy_admin_request:
+    pattern: /request/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:request }
+
+fenchy_admin_request_delete:
+    pattern: /request/delete/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:requestDelete }
+    requirements:
+        id: \d+
+
+fenchy_admin_notice_delete:
+    pattern: /notice/delete/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:noticeDelete }
+    requirements:
+        id: \d+
+        
+fenchy_admin_categories:
+    pattern: /categories/
+    defaults: { _controller: FenchyAdminBundle:Default:categories }
+    
+fenchy_admin_category:
+    pattern: /category/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:category }
+
+fenchy_admin_category_new:
+    pattern: /categories/new
+    defaults: { _controller: FenchyAdminBundle:Default:categoryNew }
+
+    
+fenchy_admin_category_delete:
+    pattern: /category/delete/{id}
+    defaults: { _controller: FenchyAdminBundle:Default:categoryDelete }
+    requirements:
+        id: \d+

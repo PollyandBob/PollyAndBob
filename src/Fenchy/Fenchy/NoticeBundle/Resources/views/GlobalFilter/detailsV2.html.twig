@@ -1,0 +1,22 @@
+{% extends 'FenchyNoticeBundle::layoutV2.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# any view specific stylesheets for this view #}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# any view specific JS scripts for this view #}
+{% endblock %}
+
+{% block content %}
+    {# put view specific content here #}
+
+    {% include '::searchBarV2.html.twig' %}
+
+    {% include 'FenchyNoticeBundle:PartialsV2:listingDetailsV2.html.twig' %}
+
+    {% include 'FenchyNoticeBundle:PartialsV2:listingDetailsRightMenuV2.html.twig' %}
+
+{% endblock %}

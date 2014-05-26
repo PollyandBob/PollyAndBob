@@ -1,3 +1,13 @@
+<script type="text/javascript">
+function logout()
+{
+	$.post('{{path('fenchy_set_logout_status')}}',
+            {}, 
+        function(response){
+            	window.location.replace('{{ app.request.getSchemeAndHttpHost() }}{{ path('fos_user_security_logout') }}');                	          
+		}, "json"); 
+} 
+</script>
 <style>
 .loginwindow2 {
     background: none repeat scroll 0 0 #FFFFFF;
@@ -35,16 +45,16 @@
                     	<a class="myprofilelink1" href="javascript:void(0)">
 	                    	<img alt="" src="{{ absolute(asset('images/icon_home.png')) }}">
 				            {% set countInv = countInvitations() %}
-				            {% if req_unread_count or countInv or my_req_count%}
-				                <div class="requestcount">{{req_unread_count+countInv+my_req_count}}</div>
+				            {% if req_unread_count or countInv or my_req_count or review_count or requestmessage_count or comment_count %}
+                                <div class="requestcount"><span style="top: 3px; position: relative;">{{ req_unread_count+countInv+my_req_count+review_count+requestmessage_count+comment_count }}</span></div>
 				            {% endif %}
 	                    </a>
                     {% else %}
 	                    <a href="{{ path('fenchy_regular_user_listing_manage') }}">
 	                    	<img alt="" src="{{ absolute(asset('images/icon_home.png')) }}">
 				            {% set countInv = countInvitations() %}
-				            {% if req_unread_count or countInv or my_req_count%}
-				                <div class="requestcount">{{req_unread_count+countInv+my_req_count}}</div>
+				            {% if req_unread_count or countInv or my_req_count or review_count or requestmessage_count or comment_count%}
+                                <div class="requestcount"><span style="top: 3px; position: relative;">{{ req_unread_count+countInv+my_req_count+review_count+requestmessage_count+comment_count }}</span></div>
 				            {% endif %}
 	                    </a>
 	                {% endif %}
@@ -52,8 +62,10 @@
                     <li>
 				        <a href="#" class="wrapper-badge">
 				            {% set count = countUnread() %}
-				            {% if count > 0 %}
-				                <div class="mailcount">{{count}}</div>
+				            {% if msg_count > 0 %}
+                                                <div class="mailcount"><span style="top: 3px; position: relative;">{{ msg_count }}</span></div>
+                                            {% else %}
+                                                <div class="mailcount" style="display: none;"><span style="top: 3px; position: relative;"></span></div>
 				            {% endif %}
 				        </a>
 				        {% if location == "" %}
@@ -66,6 +78,11 @@
 	                    	</a>
 	                   	{% endif %}
                     </li>
+                    <li class="righ_to_right">
+            			<a href="{{ path('fenchy_regular_user_user_myprofile_aboutmychoice') }}"><span>{{ app.user.regularuser.firstname }}</span></a>
+            			&nbsp;<a href="{{ path('fenchy_notice_indexv2') }}"><span>{{ 'main.home'|trans }}</span></a>
+                    </li> 
+                    
                     <li>
                     	{% if location == "" %}
                     	<a class="myprofilelink" href="javascript:void(0)">
@@ -91,16 +108,16 @@
 		                    	</li>
 		                    	
 		                    	<br>
-		                    	{% if alertmsg or managertype == 'pioneer'%}
-       							<li><a {% if app.request.get('_route') == 'fenchy_regular_user_user_groupprofile_creategroup' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_notice_create2',{'typename' : 'offergroups'}) }}" >
-       								{{ 'frontend.create_group'|trans }}</a>
-       							</li>
-       							{% endif %}
-       						    {% render "FenchyNoticeBundle:GlobalFilter:myGroupsCode" with { 'userId': app.user.id } %}
-    						{% endif %}
-       							<li><a {% if app.request.get('_route') == 'fos_user_security_logout' %} class="selected" {% endif %} href="{{ path('fos_user_security_logout') }}" >
-       								{{ 'frontend.log_out'|trans }}</a>
-       							</li>
+                                            {% if alertmsg or managertype == 'pioneer'%}
+                                                            <li><a {% if app.request.get('_route') == 'fenchy_regular_user_user_groupprofile_creategroup' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_notice_create2',{'typename' : 'offergroups'}) }}" >
+                                                                    {{ 'frontend.create_group'|trans }}</a>
+                                                            </li>
+                                            {% endif %}
+       					{# {% render "FenchyNoticeBundle:GlobalFilter:myGroupsCode" with { 'userId': app.user.id } %} #}
+    					{% endif %}
+                                        <li><a {% if app.request.get('_route') == 'fos_user_security_logout' %} class="selected" {% endif %} onclick="logout()" style="cursor: pointer;" >
+       						{{ 'frontend.log_out'|trans }}</a>
+       					</li>
 		                </div>
                     </li>
                 </ul>

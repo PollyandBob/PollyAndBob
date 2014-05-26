@@ -61,10 +61,42 @@ class LocationVerification
 	 * @var string $lastname
 	 *
 	 * @ORM\Column(type="string", length=255, nullable=true)
-	 * @Assert\NotBlank
+	 * 
 	 */
-	private $lastname;	
+	private $lastname;
+        
+        /**
+	 * @var string $city
+	 *
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * 
+	 */
+	private $city;	
 	
+         /**
+	 * @var string $district
+	 *
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * 
+	 */
+	private $district;	
+        
+        /**
+	 * @var string $state
+	 *
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * 
+	 */
+	private $state;	
+        
+         /**
+	 * @var string $state
+	 *
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * 
+	 */
+	private $country;	
+        
 	/**
 	 * @var string $pincode
 	 *
@@ -340,5 +372,97 @@ class LocationVerification
     public function getAdditionalAddress()
     {
         return $this->additionalAddress;
+    }
+
+    /**
+     * Set city
+     *
+     * @param string $city
+     * @return LocationVerification
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return string 
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set state
+     *
+     * @param string $state
+     * @return LocationVerification
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return string 
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     * @return LocationVerification
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string 
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * Set district
+     *
+     * @param string $district
+     * @return LocationVerification
+     */
+    public function setDistrict($district)
+    {
+        $this->district = $district;
+    
+        return $this;
+    }
+
+    /**
+     * Get district
+     *
+     * @return string 
+     */
+    public function getDistrict()
+    {
+        return $this->district;
     }
 }

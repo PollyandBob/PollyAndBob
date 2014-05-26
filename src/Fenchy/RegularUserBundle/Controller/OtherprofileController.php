@@ -44,7 +44,7 @@ class OtherprofileController extends Controller
 		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
 		$em = $this->getDoctrine()->getEntityManager();
 				
-		if ( $userId != NULL ) 
+		if ( $userId != NULL )
 		{
 			
 			$userOther = $em->getRepository('UserBundle:User')->getAllData( $userId );
@@ -105,12 +105,16 @@ class OtherprofileController extends Controller
 		{
 			$proimg = $result->getWebPath();
 			$covrimg = $result->getWebPath2();
+                        $cropX = $result->getCropX();
+			$cropY = $result->getCropY();
 		
 		}
 		else
 		{
 			$proimg = '';
 			$covrimg = '';
+                        $cropX = 0;
+			$cropY = 0;
 		
 		}
 		
@@ -131,7 +135,8 @@ class OtherprofileController extends Controller
 			->getManagerType($userRepository->find($displayUser));
 		
 		// Added By jignesh for Manager type
-
+                $data['cropX'] = $cropX;
+		$data['cropY'] = $cropY;    
 		return $this->render('FenchyRegularUserBundle:Otherprofile:otherAvatar.html.twig',
 				array(
 						'locale' => $this->getRequest()->getLocale(),
@@ -141,7 +146,9 @@ class OtherprofileController extends Controller
 						'identity'	 => $identity,
 						'managertype'=>$managertype,
 						'profilepath'	 => $proimg,
-						'coverpath'	 	 => $covrimg,
+						'coverpath'	 => $covrimg,
+                                                'cropX'          => $cropX,
+                                                'cropY'          => $cropY,
 				));
 	}
 	public function otherNeighborsAction($userId)
@@ -179,6 +186,7 @@ class OtherprofileController extends Controller
 		foreach ($users as $user) {
 				
 			//$avatar = $user->getRegularUser()->getAvatar(false);
+                        $avatar = '';
 			$em = $this->getDoctrine()->getEntityManager();
 			$neighbor = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findById($currentuid,$user->getId());
 			if(!$neighbor)
@@ -197,15 +205,17 @@ class OtherprofileController extends Controller
 			$em = $this->getDoctrine()->getEntityManager();
 			$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
 				
-			if($result)
-			{
-				$avatar = $result->getWebPath();
-					
-			}
-			else
-			{
-				$avatar = 'images/default_profile_picture.png';
-			}
+			if($result){
+
+                            if($result->getWebPath())
+                            {
+                                    $avatar = $result->getWebPath();
+                            }
+                        }    
+                        else
+                        {
+                                    $avatar = 'images/default_profile_picture.png';
+                        }
 			
 			$firstname= $user->getRegularUser()->getFirstname();
 			$destination = str_replace(" ", "", $user->getLocation());
@@ -329,6 +339,7 @@ class OtherprofileController extends Controller
 		foreach ($users as $user) {
 			
 			//$avatar = $user->getRegularUser()->getAvatar(false);
+                        $avatar = '';
 			$em = $this->getDoctrine()->getEntityManager();
 			$neighbor = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findById($currentuid,$user->getId());
 			if(!$neighbor)
@@ -340,23 +351,29 @@ class OtherprofileController extends Controller
 			{
 				$neighbors = $neighbor->getId();
 			}
-		 if($neighbors)
-		 {
+		if($neighbors)
+		{
 			
-			$document = new Document();
-			$em = $this->getDoctrine()->getEntityManager();
-			$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
-				
-			if($result)
-			{
-				$avatar = $result->getWebPath();
-					
-			}
-			else
-			{
-				$avatar = 'images/default_profile_picture.png';
-			}
-			
+                $document = new Document();
+                $em = $this->getDoctrine()->getEntityManager();
+                $result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
+                
+                if($result){
+                    
+                    if($result->getWebPath())
+                    {
+                            $avatar = $result->getWebPath();
+                    }
+                    else
+                    {
+                            $avatar = 'images/default_profile_picture.png';
+                    }
+                }    
+                else
+                {
+                            $avatar = 'images/default_profile_picture.png';
+                }
+              	
 		$firstname= $user->getRegularUser()->getFirstname();
 		$destination = str_replace(" ", "", $user->getLocation());
 		$userid= $user->getId();
@@ -515,7 +532,8 @@ class OtherprofileController extends Controller
 		}
 		$reputationPoints['profile'] = $reputationPoints['profilePercent'] * 20;
 		$reputationPoints['profilePercent'] = ($reputationPoints['profilePercent'] *100) .'%';
-		
+		$inviteFriendPoint  = $em->getRepository('UserBundle:TellFriend')->getPoint($displayUser);
+                
 		return $this->render('FenchyRegularUserBundle:Otherprofile:otherCommunityPoints.html.twig',
 				array(
 						'repBreakdown' => $reputationBreakdown,
@@ -527,6 +545,7 @@ class OtherprofileController extends Controller
 						'completedAcitivities' => $completedAcitivities,
 						'verified'		=> $verified,
 						'identity'		=> $identity,
+                                                'inviteFriendPoint' => $inviteFriendPoint
 				));
 	}
 	public function otherListingsReviewsAction($userId)
@@ -547,15 +566,17 @@ class OtherprofileController extends Controller
 		$em = $this->getDoctrine()->getEntityManager();
 		$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
 		
-		if($result)
-		{
-			$avatar = $result->getWebPath();
-				
-		}
-		else
-		{
-			$avatar = 'images/default_profile_picture.png';
-		}
+		if($result){
+                    
+                    if($result->getWebPath())
+                    {
+                            $avatar = $result->getWebPath();
+                    }
+                }    
+                else
+                {
+                            $avatar = 'images/default_profile_picture.png';
+                }
 		$user->setTwitterUsername($avatar);
         
 		// Added By bhumi for Manager type
@@ -583,6 +604,13 @@ class OtherprofileController extends Controller
         $initialReviews[] = array();
         $initialComments[] = array();
         $i=0;
+        foreach ($listings as $k => $listing)
+    	{
+            if($listing->getUserGroup()!=null)
+            {
+    		unset($listings[$k]);
+            }
+    	}
        	foreach ($listings as $listing)
        	{
 	        $notice1 = $this->getDoctrine()
@@ -608,6 +636,25 @@ class OtherprofileController extends Controller
 	        			array('created_at'=>'DESC'), $pagination+1, 0);
 	        $i++;
        	}
+        
+        $blockUser = array();
+        $index=0;
+        $userLoggedIn = $this->get('security.context')->getToken()->getUser();
+        
+        $blockneighbors = $em->getRepository('FenchyRegularUserBundle:BlockedNeighbor')->findByMe($userLoggedIn->getId());
+	foreach ($blockneighbors as $blockneighbor)
+        {
+            
+            if($blockneighbor->getBlocker()->getId() == $userLoggedIn->getId())
+            {
+                $blockUser[$index++] = $blockneighbor->getBlocked()->getId();
+            }
+            if($blockneighbor->getBlocked()->getId() == $userLoggedIn->getId())
+            {
+                $blockUser[$index++] = $blockneighbor->getBlocker()->getId();
+            }
+        }
+        
         return $this->render(
                     'FenchyRegularUserBundle:Otherprofile:otherListingsReviews.html.twig', array(
                     	'form' 				=> $form->createView(),
@@ -617,7 +664,8 @@ class OtherprofileController extends Controller
                     	'initialReviews' 	=> $initialReviews,
                     	'initialComments'	=> $initialComments,
                     	'reviews'			=> sizeof($initialReviews),
-                    	'managarType'		=> $managertype
+                    	'managarType'		=> $managertype,
+                        'blockUser' => $blockUser
                     	)
         			);	
 	}
@@ -690,6 +738,8 @@ class OtherprofileController extends Controller
 					$requestObj = $em->getRepository('FenchyNoticeBundle:Request')->find($neighborRequestId);
 					$requestObj->setStatus('accepted');
 					$requestObj->setIsReadStatus(false);
+                                        $requestObj->setBlue(true);
+                                        $requestObj->setRequestBlue(false);
 					$requestObj->setRequeststatus('accepted');
 					$em->persist($requestObj);
 					
@@ -701,7 +751,130 @@ class OtherprofileController extends Controller
 		exit;
 	
 	}
-	
+	public function unblockNeighborsAction()
+        {
+            $user = $this->get('security.context')->getToken()->getUser();
+            
+            $request = $this->getRequest();
+            $blockNeighbors = $request->get('selected_neighbors');
+            $em = $this->getDoctrine()->getManager();
+            if (!empty($blockNeighbors))
+            {
+    		foreach ($blockNeighbors as $key => $neighbor)
+    		{
+    			$blockedneighbor = $em->getRepository('FenchyRegularUserBundle:BlockedNeighbor')->findById($neighbor,$user);
+    			$em->remove($blockedneighbor);
+                                            
+                }
+                $em->flush();
+            }
+            return $this->redirect($this->generateUrl('fenchy_regular_user_user_myprofile_myneighbors'));
+        }
+
+        public function blockNeighborsAction()
+	{
+		
+		$user = $this->get('security.context')->getToken()->getUser();
+		$request = $this->getRequest();
+		$targetNeighborId = $request->get('neighborId');
+		
+		$neighborRequestId = $request->get('neighbourRequestId');		
+		$block_unblock = $request->get('obj');
+//		$rejectN = $request->get('rejectN');
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		if($neighborRequestId !=0)
+		{
+			$requestObj = $em->getRepository('FenchyNoticeBundle:Request')->find($neighborRequestId);
+			$em->remove($requestObj);
+			$em->flush();
+		} 
+		$user_regular = $user->getRegularUser();
+		 
+		
+		
+		$neighborforPoint = $em->getRepository('UserBundle:User')->find($targetNeighborId);	
+		
+		$blockneighbor = $em->getRepository('FenchyRegularUserBundle:BlockedNeighbor')->findById($targetNeighborId,$user->getId());
+		if(!$blockneighbor)
+		{
+			$blockneighbor = $em->getRepository('FenchyRegularUserBundle:BlockedNeighbor')->findById($user->getId(),$targetNeighborId);
+		}
+		$neighbor_info = $em->getRepository('UserBundle:User')->getAllData( $targetNeighborId );
+		
+                
+                $neighbor = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findById($targetNeighborId,$user->getId());
+		if(!$neighbor)
+		{
+			$neighbor = $em->getRepository('FenchyRegularUserBundle:Neighbors')->findById($user->getId(),$targetNeighborId);
+		}
+                
+		if(!$blockneighbor && $block_unblock == 'Block')
+		{
+			$blockneighbor = new \Fenchy\RegularUserBundle\Entity\BlockedNeighbor();
+		}
+		
+		
+		if ($targetNeighborId !='' && $user->getId() != $targetNeighborId) 
+                {			
+				if($block_unblock == 'unBlock')
+				{
+                                        if($blockneighbor)
+                                            $em->remove($blockneighbor);
+                                            $em->flush();
+                                            echo 'unblocked';
+                                            exit;
+				}
+				else
+				{
+                                        $blockneighbor->setBlocker($user);
+                                        $blockneighbor->setBlocked($neighbor_info);
+					$em->persist($blockneighbor);
+                                        if($neighbor)
+                                        {
+                                            $em->remove($neighbor);
+                                            $neighborforPoint->setActivity($neighborforPoint->getActivity()-2);
+                                            $em->persist($neighborforPoint);
+
+                                            $user->setActivity($user->getActivity()-2);
+                                            $em->persist($user);
+					}
+                                        
+                                        $groups = $em->getRepository('FenchyRegularUserBundle:UserGroup')->findAllById($user->getId());
+                                        if($groups)
+                                        {
+                                            foreach ($groups as $group)
+                                            {
+                                                $member = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findMemberByGroupId($group->getId(),$targetNeighborId);
+                                                if($member)
+                                                {
+                                                    $em->remove($member);
+                                                }
+                                            }
+                                        }
+                                        
+                                        $groups1 = $em->getRepository('FenchyRegularUserBundle:UserGroup')->findAllById($targetNeighborId);
+                                        if($groups1)
+                                        {
+                                            foreach ($groups1 as $group1)
+                                            {
+                                                $member1 = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findMemberByGroupId($group1->getId(),$user->getId());
+                                                if($member1)
+                                                {
+                                                    $em->remove($member1);
+                                                }
+                                            }
+                                        }
+                                        
+                                        $em->flush();
+                                        echo 'blocked';
+                                        exit;
+				}
+		}
+		exit;
+	}
+        
 	public function addNeighborRequestAction()
 	{
 	
@@ -720,20 +893,24 @@ class OtherprofileController extends Controller
 			
 		if ( ! ($userLoggedIn instanceof \Fenchy\UserBundle\Entity\User) )
 			return new Response('',401);
-		
-		$noticerequest = new \Fenchy\NoticeBundle\Entity\Request();
-		$noticerequest->setTitle($userLoggedIn->getRegularUser()->getFirstName(). " ". $this->get('translator')->trans('regularuser.want_to_add_as_neighbour'));
-		$userLoggedIn->addOwnRequest($noticerequest);
-		$em->persist($userLoggedIn);
-		$noticerequest->setAuthor($userLoggedIn);
-		//$noticerequest->setAboutNotice(null);
-		$noticerequest->setText($this->get('translator')->trans('regularuser.add_me_in_your_neighbor'). " " .$targetUser->getRegularUser()->getFirstName()." ".$this->get('translator')->trans('regularuser.to_your_neighborlist'));
-		$noticerequest->setStatus('pending');
-		$noticerequest->setRequeststatus('pending');
-		$noticerequest->setAboutUser($targetUser);
-		$em->persist($noticerequest);
-		$em->flush();
-				
+		$oneRequest = $em->getRepository('FenchyNoticeBundle:Request')->getOneRequest($userLoggedIn,$targetUser);
+                if(!$oneRequest)
+                {
+                    $noticerequest = new \Fenchy\NoticeBundle\Entity\Request();
+                    $noticerequest->setTitle($userLoggedIn->getRegularUser()->getFirstName(). " ". $this->get('translator')->trans('regularuser.want_to_add_as_neighbour'));
+                    $userLoggedIn->addOwnRequest($noticerequest);
+                    $em->persist($userLoggedIn);
+                    $noticerequest->setAuthor($userLoggedIn);
+                    //$noticerequest->setAboutNotice(null);
+                    $noticerequest->setText($this->get('translator')->trans('regularuser.add_me_in_your_neighbor'). " " .$targetUser->getRegularUser()->getFirstName()." ".$this->get('translator')->trans('regularuser.to_your_neighborlist'));
+                    $noticerequest->setStatus('pending');
+                    $noticerequest->setRequeststatus('pending');
+                    $noticerequest->setRequestBlue('true');
+                    $noticerequest->setIsReadStatus('true');
+                    $noticerequest->setAboutUser($targetUser);
+                    $em->persist($noticerequest);
+                    $em->flush();
+                }		
 		return new Response();	
 	
 	}
@@ -744,12 +921,20 @@ class OtherprofileController extends Controller
 		$requestRepo = $em->getRepository('FenchyNoticeBundle:Request');
 		$aboutuser = $em->getRepository('UserBundle:User')->find($neighborId);
 		$neighbourRequests = $requestRepo->getSingleNeighbourRequeste($userLogged,$aboutuser);
-		if(!$neighbourRequests)
-			$neighbourRequests = $requestRepo->getNeighboursRequests($userLogged);
 		$requestObj = null;
 		foreach ($neighbourRequests as $k =>$neighbourRequest)
 		{
 			if($neighbourRequest->getAboutNotice())			
+				unset($neighbourRequests[$k]);
+			else
+				$requestObj = $neighbourRequest;
+		}
+		if(!$requestObj)				
+			$neighbourRequests = $requestRepo->getSingleNeighbourRequeste($aboutuser,$userLogged);
+			
+		foreach ($neighbourRequests as $k =>$neighbourRequest)
+		{
+			if($neighbourRequest->getAboutNotice())
 				unset($neighbourRequests[$k]);
 			else
 				$requestObj = $neighbourRequest;
@@ -803,17 +988,13 @@ class OtherprofileController extends Controller
 		$distance = $distance * 60 * 1.1515;
 		$gmap_distance = round(($distance * 1609.34), 0);//miles to meter rounded to 0
 		
-		
-// 		$origin = str_replace(" ", "", $userLogged->getLocation());
-		
-// 		$destination = str_replace(" ", "", $neighbor_info->getLocation());
-		
-// 		$url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='.$origin.'&destinations='.$destination.'&mode=driving&language=en&sensor=false';
-// 		$data = file_get_contents($url);
-// 		//$data = utf8_decode($data);
-// 		$obj = json_decode($data);
-		 
-				
+                $blockedNeighbor = $em->getRepository('FenchyRegularUserBundle:BlockedNeighbor')->findById($neighborId,$userLogged->getId());
+                
+                if(!$blockedNeighbor)
+		{
+			$blockedNeighbor = $em->getRepository('FenchyRegularUserBundle:BlockedNeighbor')->findById($userLogged->getId(),$neighborId);
+		}
+                
 		return $this->render(
 				'FenchyRegularUserBundle:Otherprofile:otherLeftSidebar.html.twig', array(
 						'check'		=> $valId,
@@ -821,7 +1002,8 @@ class OtherprofileController extends Controller
 						'distanceBetween' => $gmap_distance,
 						'userLogged' => $userLogged,
 						'displayUser' => $displayUser,
-						'requestObj' =>$requestObj
+						'requestObj' =>$requestObj,
+                                                'blocked' => $blockedNeighbor
 				)
 		);
 		

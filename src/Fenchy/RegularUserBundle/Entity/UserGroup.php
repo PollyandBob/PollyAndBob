@@ -12,7 +12,9 @@ use Fenchy\GalleryBundle\Entity\Gallery;
 use Fenchy\RegularUserBundle\Entity\GroupMembers;
 use Fenchy\UtilBundle\Entity\Location;
 use Fenchy\NoticeBundle\Entity\Notice;
-
+use Fenchy\NoticeBundle\Entity\Request;
+use Fenchy\NoticeBundle\Entity\RequestMessages;
+use Fenchy\UtilBundle\Entity\Sticker;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -24,8 +26,8 @@ class UserGroup
 {
 	const STATUS_OPEN   = 1;
 	const STATUS_CLOSED = 2;
-	const OPEN          = 'open';
-	const CLOSED        = 'closed';
+	const OPEN          = 'regularuser.open';
+	const CLOSED        = 'regularuser.closed';
 	
 	static public $statusMap = array(
 			self::STATUS_OPEN   => self::OPEN,
@@ -45,6 +47,13 @@ class UserGroup
      * @ORM\ManyToOne(targetEntity="Fenchy\UserBundle\Entity\User", inversedBy="user_group")
      */
     private $user;
+    
+     /**
+     * @var Payment $payment_id
+     *
+     * @ORM\OneToOne(targetEntity="Fenchy\UserBundle\Entity\GroupPayment", mappedBy="group", cascade={"persist", "remove"})
+     */
+    protected $payment_id;
     
     /**
      * @var string $groupname
@@ -81,14 +90,22 @@ class UserGroup
     /**
      * @var ArrayCollection $messages
      *
-     * @ORM\OneToMany(targetEntity="Fenchy\MessageBundle\Entity\Message", mappedBy="usergroup")
+     * @ORM\OneToMany(targetEntity="Fenchy\MessageBundle\Entity\Message", mappedBy="usergroup", cascade={"remove"})
      */
     private $messages;
+    
+     
+    /**
+     * @var ArrayCollection $frommessages
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\MessageBundle\Entity\Message", mappedBy="fromgroup", cascade={"remove"})
+     */
+    private $frommessages;
     
     /**
      * @var Location $location
      *
-     * @ORM\OneToOne(targetEntity="Fenchy\UtilBundle\Entity\Location", mappedBy="usergroup", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Fenchy\UtilBundle\Entity\Location", mappedBy="usergroup", cascade={"persist"}, orphanRemoval=true)
      */
     protected $location;
     
@@ -136,6 +153,14 @@ class UserGroup
     private $comments;
     
     /**
+     * @var ArrayCollection $requestmessage
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\RequestMessages", mappedBy="aboutUserGroup")
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $requestmessage;
+    
+    /**
      * @var ArrayCollection $notices
      *
      * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Notice", mappedBy="usergroup", cascade={"remove", "persist"})
@@ -143,16 +168,54 @@ class UserGroup
      */
     private $notices;
     
+    /**
+     * Requests about this usergroup
+     * @var ArrayCollection $request
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Request", mappedBy="aboutUserGroup", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $requests;
+    
+    
     protected $prevNoticesQuantity = FALSE;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $cropX;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $cropY;
+    
+     /**
+     * @var ArrayCollection $stickers
+     * 
+     * @ORM\OneToMany(targetEntity="Fenchy\UtilBundle\Entity\Sticker", mappedBy="group", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $stickers;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $managerGroup;
+    
     
     public function __construct()
     {
     	
-    	$this->user       = new ArrayCollection();
-    	$this->usergroup  = new ArrayCollection();    	
-    	$this->messages   = new ArrayCollection();
-    	$this->comments   = new ArrayCollection();
-    	$this->notices   = new ArrayCollection();
+    	$this->user             = new ArrayCollection();
+    	$this->usergroup        = new ArrayCollection();    	
+    	$this->messages         = new ArrayCollection();
+        $this->frommessages     = new ArrayCollection();
+    	$this->comments         = new ArrayCollection();
+        $this->requestmessage   = new ArrayCollection();
+    	$this->notices          = new ArrayCollection();
+        $this->requests         = new ArrayCollection();
+        $this->stickers         = new ArrayCollection();
     }
     
     public function getId()
@@ -182,6 +245,118 @@ class UserGroup
     	return $this->comments;
     }
     
+    public function getRequests($status = NULL) {
+    
+    	if(NULL === $status)
+    		return $this->requests;
+    
+    	if($status == 'running') {
+    		$filtered = new ArrayCollection();
+    		foreach($this->requests as $request) {
+    			if($request->getStatus() === Request::STATUS_RUNNING) {
+    				$filtered[] = $request;
+    			}
+    		}
+    		return $filtered;
+    	} else if($status == 'accepted'){
+    		$filtered = new ArrayCollection();
+    		foreach($this->requests as $request) {
+    			if($request->getStatus() === Request::STATUS_ACCEPTED) {
+    				$filtered[] = $request;
+    			}
+    		}
+    		return $filtered;
+    	} else if($status == 'pendding'){
+    		$filtered = new ArrayCollection();
+    		foreach($this->requests as $request) {
+    			if($request->getStatus() === Request::STATUS_PENDING) {
+    				$filtered[] = $request;
+    			}
+    		}
+    		return $filtered;
+    	} else if($status == 'rejected'){
+    		$filtered = new ArrayCollection();
+    		foreach($this->requests as $request) {
+    			if($request->getStatus() === Request::STATUS_REJECTED) {
+    				$filtered[] = $request;
+    			}
+    		}
+    		return $filtered;
+    	} else if($status == 'agreed'){
+    		$filtered = new ArrayCollection();
+    		foreach($this->requests as $request) {
+    			if($request->getStatus() === Request::STATUS_AGREED) {
+    				$filtered[] = $request;
+    			}
+    		}
+    		return $filtered;
+    	} else if($status == 'done'){
+    		$filtered = new ArrayCollection();
+    		foreach($this->requests as $request) {
+    			if($request->getStatus() === Request::STATUS_DONE) {
+    				$filtered[] = $request;
+    			}
+    		}
+    		return $filtered;
+    	}
+    }
+    
+    /**
+     * Set Own Requests
+     * @param \Doctrine\Common\Collections\ArrayCollection $requests
+     * @return \Fenchy\RegularUserBundle\Entity\UserGroup
+     */
+    public function setOwnRequests(ArrayCollection $requests) {
+    	$this->prevOwnRequestsQuantity = $this->ownRequests->count();
+    	$this->ownRequests = $requests;
+    
+    	return $this;
+    }
+    
+    /**
+     * Add Own Request
+     * @param \Fenchy\NoticeBundle\Entity\Request $request
+     * @return \Fenchy\RegularUserBundle\Entity\UserGroup
+     */
+    public function addOwnRequest(Request $request) {
+    	$this->prevOwnRequestsQuantity = $this->ownRequests->count();
+    	$this->ownRequests->add($request);
+    
+    	return $this;
+    }
+    
+    /**
+     * Remove Own Request
+     * @param \Fenchy\NoticeBundle\Entity\Request $request
+     * @return \Fenchy\RegularUserBundle\Entity\UserGroup
+     */
+    public function removeOwnRequest(Request $request) {
+    	$this->prevOwnRequestsQuantity = $this->ownRequests->count();
+    	$this->ownRequests->removeElement($request);
+    
+    	return $this;
+    }
+    
+    /**
+     * Get Own Requests
+     * @return Request
+     */
+    public function getOwnRequests() {
+    
+    	return $this->ownRequests;
+    }
+    
+    public function getPrevRequestsQuantity() {
+    
+    	return $this->prevRequestsQuantity;
+    }
+    
+    public function getPrevOwnRequestsQuantity() {
+    
+    	return $this->prevOwnRequestsQuantity;
+    }
+    
+       
     /**
      * Sets prevNoticesQuantity value to current notices quantity.
      * This function should be called each time when one of user listings draft status must be changed (before it).
@@ -264,6 +439,18 @@ class UserGroup
     public function getMessages()
     {
     	return $this->messages();
+    }  
+    
+    public function setFrommessages(ArrayCollection $frommessages) {
+    
+    	$this->frommessages = $frommessages;
+    
+    	return $this;
+    }
+    
+    public function getFrommessages()
+    {
+    	return $this->frommessages();
     }  
     
     public function getGroupname()
@@ -410,6 +597,26 @@ class UserGroup
     	return $this->file2;
     }
     
+    public function setCropX($cropX)
+    {
+    	return $this->cropX = $cropX;
+    }
+    
+    public function getCropX()
+    {
+    	return $this->cropX;
+    }
+    
+    public function setCropY($cropY)
+    {
+    	return $this->cropY = $cropY;
+    }
+    
+    public function getCropY()
+    {
+    	return $this->cropY;
+    }
+    
     public function upload()
     {
     	// the file property can be empty if the field is not required
@@ -518,28 +725,7 @@ class UserGroup
         return $this->path2;
     }
 
-    /**
-     * Set locSave
-     *
-     * @param integer $locSave
-     * @return UserGroup
-     */
-    public function setLocsave($locSave)
-    {
-        $this->locSave = $locSave;
     
-        return $this;
-    }
-
-    /**
-     * Get locSave
-     *
-     * @return integer 
-     */
-    public function getLocsave()
-    {
-        return $this->locSave;
-    }
 
     /**
      * Add usergroup
@@ -564,16 +750,7 @@ class UserGroup
         $this->usergroup->removeElement($usergroup);
     }
 
-    /**
-     * Get usergroup
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getUserGroup()
-    {
-        return $this->usergroup;
-    }
-
+    
     /**
      * Add messages
      *
@@ -628,5 +805,197 @@ class UserGroup
     public function removeNotice(\Fenchy\NoticeBundle\Entity\Notice $notices)
     {
         $this->notices->removeElement($notices);
+    }
+    
+    /**
+     * Set payment_id
+     *
+     * @param Fenchy\UserBundle\Entity\GroupPayment $paymentId
+     * @return UserGroup
+     */
+    public function setPaymentId(\Fenchy\UserBundle\Entity\GroupPayment $paymentId = null)
+    {
+    	$this->payment_id = $paymentId;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get payment_id
+     *
+     * @return Fenchy\UserBundle\Entity\GroupPayment
+     */
+    public function getPaymentId()
+    {
+    	return $this->payment_id;
+    }
+
+    
+    /**
+     * Add requests
+     *
+     * @param Fenchy\NoticeBundle\Entity\Request $requests
+     * @return UserGroup
+     */
+    public function addRequest(\Fenchy\NoticeBundle\Entity\Request $requests)
+    {
+        $this->requests[] = $requests;
+    
+        return $this;
+    }
+
+    /**
+     * Remove requests
+     *
+     * @param Fenchy\NoticeBundle\Entity\Request $requests
+     */
+    public function removeRequest(\Fenchy\NoticeBundle\Entity\Request $requests)
+    {
+        $this->requests->removeElement($requests);
+    }
+  
+    /**
+     * Add stickers
+     *
+     * @param Fenchy\UtilBundle\Entity\Sticker $stickers
+     * @return UserGroup
+     */
+    public function addSticker(\Fenchy\UtilBundle\Entity\Sticker $stickers)
+    {
+        $this->stickers[] = $stickers;
+    
+        return $this;
+    }
+
+    /**
+     * Remove stickers
+     *
+     * @param Fenchy\UtilBundle\Entity\Sticker $stickers
+     */
+    public function removeSticker(\Fenchy\UtilBundle\Entity\Sticker $stickers)
+    {
+        $this->stickers->removeElement($stickers);
+    }
+
+    /**
+     * Get stickers
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getStickers()
+    {
+        return $this->stickers;
+    }
+   
+    /**
+     * Add requestmessage
+     *
+     * @param Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage
+     * @return UserGroup
+     */
+    public function addRequestmessage(\Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage)
+    {
+        $this->requestmessage[] = $requestmessage;
+    
+        return $this;
+    }
+
+    /**
+     * Remove requestmessage
+     *
+     * @param Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage
+     */
+    public function removeRequestmessage(\Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage)
+    {
+        $this->requestmessage->removeElement($requestmessage);
+    }
+
+    /**
+     * Get requestmessage
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getRequestmessage()
+    {
+        return $this->requestmessage;
+    }
+
+    /**
+     * Set locSave
+     *
+     * @param integer $locSave
+     * @return UserGroup
+     */
+    public function setLocSave($locSave)
+    {
+        $this->locSave = $locSave;
+    
+        return $this;
+    }
+
+    /**
+     * Get locSave
+     *
+     * @return integer 
+     */
+    public function getLocSave()
+    {
+        return $this->locSave;
+    }
+
+    /**
+     * Set managerGroup
+     *
+     * @param string $managerGroup
+     * @return UserGroup
+     */
+    public function setManagerGroup($managerGroup)
+    {
+        $this->managerGroup = $managerGroup;
+    
+        return $this;
+    }
+
+    /**
+     * Get managerGroup
+     *
+     * @return string 
+     */
+    public function getManagerGroup()
+    {
+        return $this->managerGroup;
+    }
+
+    /**
+     * Get usergroup
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getUsergroup()
+    {
+        return $this->usergroup;
+    }
+
+    /**
+     * Add frommessages
+     *
+     * @param Fenchy\MessageBundle\Entity\Message $frommessages
+     * @return UserGroup
+     */
+    public function addFrommessage(\Fenchy\MessageBundle\Entity\Message $frommessages)
+    {
+        $this->frommessages[] = $frommessages;
+    
+        return $this;
+    }
+
+    /**
+     * Remove frommessages
+     *
+     * @param Fenchy\MessageBundle\Entity\Message $frommessages
+     */
+    public function removeFrommessage(\Fenchy\MessageBundle\Entity\Message $frommessages)
+    {
+        $this->frommessages->removeElement($frommessages);
     }
 }

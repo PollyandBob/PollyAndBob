@@ -24,19 +24,23 @@
     <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery.tinyscrollbar.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/fenchydropdown.js') }}"></script> 
+    <script type="text/javascript" src="{{ asset('js/jWindowCrop.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.timepicker.js') }}"></script>
     <script type="text/javascript">
         
-        var userProfileViewModel;
+       {# var userProfileViewModel;
         var spinnerHTML = '<div id="spinner-div"><i class="icon-spinner icon-spin"></i></div>';
-        var tabsJQ;
+        var tabsJQ;#}
 
         $(document).ready(function() {
             $('#description-area').tinyscrollbar();
+            $(".commentdata .data p").niceScroll();
             //$('.add-sticker').fancybox({type:'iframe'});
             $('#tags').tagit({
                 readOnly: true
             });
-            var geocoder = new google.maps.Geocoder();
+             
+            {#var geocoder = new google.maps.Geocoder();
             var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';
             var pagination = {{pagination}};
             var usersOwnListing = {{ usersOwnListing ? 'true' : 'false' }};
@@ -61,9 +65,9 @@
             
             var displayUserId = {{ displayUser.id }};
             
-            var listingId = {{ notice.id }};
+            var listingId = {{ notice.id }};#}
             
-            listingShowViewModel = new ListingShowViewModel(
+           {# listingShowViewModel = new ListingShowViewModel(
                 geocoder,
                 baseSearchViewUri,
                 pagination,
@@ -81,37 +85,86 @@
             
             autocomplete = new GApiAutocomplete(
                 document.getElementById('location'),
-                listingShowViewModel );
+                listingShowViewModel );#}
 
-            tabsJQ = $('.container .inner-content #reviews-tabs', document);
-            tabsJQ.tabs();
+          {#  tabsJQ = $('.container .inner-content #reviews-tabs', document);
+            tabsJQ.tabs();#}
             
            	$('.reviewdata').hide();
            	$('.writereviewdata').hide();
-           	$('#desc').css('background', '#E14F45');
+{#           	$('#desc').css('background', 'url("/images/bg_description.png")');#}
         });
         function toggeleDiv(element1,element2)
         {
             $('#tabs').children().hide();
             $("."+element2).show();
-            $("#tab").children().css('background', '#51B9D4');
-            $("#"+element1).css('background', '#E14F45');        	
+            if(element1=='review')
+            {
+                $("#tab").children().css('background', 'url("/images/bg_description_blue.png") no-repeat');
+                $("#"+element1).css('background', 'url("/images/bg_reviews_red.png") no-repeat');        	
+            }
+            else
+            {
+                 $("#tab").children().css('background', 'url("/images/bg_reviews.png") no-repeat');
+                 $("#"+element1).css('background', 'url("/images/bg_description.png") no-repeat');
+            }
         }
         
+        
+        window.onload=function(){
+        $('.slides .slide_inner img.photo').css('width','970px');
+        
+	$('.slides .slide_inner .photo').jWindowCrop({
+
+                    targetWidth: 970, //Width of facebook cover division
+                    targetHeight: 326, //Height of cover division
+                    loadingText: '',
+                    onChange: function(result) {
+
+                            var strcropX = $(this).css('left');
+                            var strcropY = $(this).css('top');
+                            strcropX = strcropX.replace(/px/g, '');
+                            strcropX = strcropX.replace(/-/g, '');
+                            strcropY = strcropY.replace(/px/g, '');
+                            strcropY = strcropY.replace(/-/g, '');
+                           
+                    }
+                });
+                
+            $('.placeholder_listing').find('.jwc_controls').empty();
+            
+            {% set i=1 %}        
+            {% for image in notice.gallery.images %}
+                {{image.id}}
+                $('.slide_{{ i }} .slide_inner .photo').css('left',{{ image.cropX }}+'px');
+                $('.slide_{{ i }} .slide_inner .photo').css('top',-{{ image.cropY }}+'px');
+            {% set i = i+1 %}
+            {% endfor %}    
+	};
     </script>
      <script type="text/javascript">
 		
 		function postComment(){
+                        var flag = true;
 			var noticeId = {{ notice.id }};
 			var text = $('#commenttext').val();
-		    $.post('{{path('fenchy_notice_post_comment')}}',
-		                {noticeId: noticeId, text: text}, 
-		            function(response){
-		                $('.commentdata').html(response.success);
-		                $('#commenttext').val('');
-		                $('#commenttext').blur();
+                        if(text.trim() == "")
+                        {
+                                flag = false;
+				$('#commenttext').val('');
+				$('#commenttext').attr('placeholder', 'required*');
+                        }
+                        if(flag)
+			{
+                            $.post('{{path('fenchy_notice_post_comment')}}',
+                                        {noticeId: noticeId, text: text}, 
+                                    function(response){
+                                        $('.commentdata').html(response.success);
+                                        $('#commenttext').val('');
+                                        $('#commenttext').blur();
 
-		    }, "json");    
+                            }, "json");  
+                        }
 		}
 	</script>
     {# any view specific JS scripts for this view #}
@@ -119,17 +172,80 @@
 
 {% block content %}
 	<style>
+        .noticedata .commentdata .neighbor
+        {
+            left:45px !important;
+        }
+        .options .optionsdetail
+        {
+            margin-bottom:40px !important;
+        }
+        
+        .descdata #commenttext{
+            border: medium none !important;
+            font-family: code_boldregular;
+            font-size: 13px;
+            height: 30px;
+            width: 402px;
+            margin-bottom:0px;
+        }
+        .commentdata .data p{ height: 28px;}
 	#gallery-show .agile_carousel {
 	 	height: 315px !important;
 	 	width: 964px !important;
 	}
 	#gallery-show .agile_carousel .slide_inner .photo.landscape {
-	    height: 315px !important;
+	    /*height: 315px !important;*/
 	    width: 134%;
+	}
+        .placeholder .jwc_frame, .placeholder_listing .jwc_frame
+	{
+		pointer-events: none !important;
 	}
 	#gallery-show .content_button img {
 	    height: 91px;	    
 	}
+                .thumbnails .thumbnail .crop_me4
+                {
+                    display:none !important;
+                }
+                .thumbnails .selected .crop_me4
+                {
+                    display:block !important;
+                }
+                .placeholder_listing {
+                display: block;
+                width: 970px;
+                margin: 0 auto;
+                position: relative;
+                }    
+                .placeholder .jwc_frame, .placeholder_listing .jwc_frame
+                {
+                cursor: move !important;
+                }
+                ._6_f {
+                max-width: 275px;
+                display: inline-block;
+                }
+                ._8_2 {
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-size: 24px;
+                line-height: 30px;
+                font-weight: bold;
+                display: inline-block;
+                padding-right: 30px;
+                }
+                ._8_2, .alternate {
+                color: #FFF;
+                text-rendering: optimizelegibility;
+                text-shadow: 0 0 3px rgba(0,0,0,0.8);
+                }
+                .alternate {
+                font-size: 20px;
+                font-weight: normal;
+                white-space: nowrap;
+                color: #fff;
+                }
 	</style>
 	<section id="contentinner" style="margin-top: 12px;">
 	<div class="wrapper">  
@@ -147,7 +263,9 @@
 				{{ block('galleryContainer') }}
 		    </figure>
 		{% else %}
-		   	<div class="image-spacer">NOT AVAILABLE</div>
+		   	<div class="image-spacer">
+                            <img src="{{ asset('images/bg_newsfeedheader.png')}}" style="position: absolute;" alt="Not available" />
+                        </div>
 		{% endif %}
 	</div>
 	<div id="post watch-notice">
@@ -170,11 +288,11 @@
 		           		</div>
 		            </div>
 		            <div class="optionsdetail" id="tab">
-			        	<a id="desc" style="border-radius: 0 15px 0 0; margin: 0;" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('desc','descdata')">{{ 'listing.show.description'|trans }}</a>
+			        	<a id="desc" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('desc','descdata')">{{ 'listing.show.description'|trans }}</a>
 			        	{% if initialReviews %}
-			        	<a id="review" style="border-radius: 0 15px 0 0; margin: 0;" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('review','reviewdata')">{{ 'listing.show.reviews'|trans }}</a>
+			        	<a id="review" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('review','reviewdata')">{{ 'listing.show.reviews'|trans }}</a>
 			        	{% endif %}
-			        	<!--<a id="writereview" style="border-radius: 0 15px 0 0; margin: 0;" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('writereview','writereviewdata')">{{ 'listing.show.reviews'|trans }}</a>-->
+{#			        	<!--<a id="writereview" style="border-radius: 0 15px 0 0; margin: 0;" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('writereview','writereviewdata')">{{ 'listing.show.reviews'|trans }}</a>-->#}
 			        	
 			        </div>
 			        <div id="tabs">
@@ -199,24 +317,25 @@
 				               	{% set i = i+1 %}
 			                {% endfor %}
 			            </div>
-			                 {% include 'FenchyRegularUserBundle:Partials:listingReviews.html.twig' %}
+{#			                 {% include 'FenchyRegularUserBundle:Partials:listingReviews.html.twig' %}#}
  						{% if not usersOwnListing and app.security.token.user.id is defined and app.security.token.user.id != NULL %}
  						{% endif %}			            
 			        </div>
 		            <h4>{{ 'listing.show.comment'|trans }}</h4>
-		            <div class="commentdata">
+		            <div class="commentdata" style="position: relative;">
  						{% if app.user.id is defined %}
 			            	<a href="javascript:void(0);" style="margin-top: 15px; position: absolute;">
 					        	{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': userLoggedIn.id } %}
 					        </a>
 					        <div class="neighbor {{ managertypeLoggedIn[2] }}" style="margin-top: 7px;">
-								<p style="color: #FFFFFF !important; font-size: 11px; margin-left: 9px; margin-top: 5px; position: absolute;">{{ managertypeLoggedIn[1] }}</p>
-								<span style="margin-top: 13px;">{{ userLoggedIn.activity }}</span>
+								<p style="color: #FFFFFF !important; font-size: 11px; margin-left: 9px; margin-top: 4px; position: absolute;">{{ managertypeLoggedIn[1] }}</p>
+								<span style="margin-top: 10px;">{{ userLoggedIn.activity }}</span>
 							</div> 
 			            	<div class="descdata" style="margin-left: 65px; width: 83% ! important; margin-top: 10px;">
-					         	<p><input id="commenttext" style="width: 80%" type="textarea" placeholder="{{ 'regularuser.post_comment'|trans }}"/></p>
+					         	<p>
+                                                            <textarea id="commenttext" cols=5 placeholder="{{ 'regularuser.post_comment'|trans }}"></textarea> </p>
 					        </div>
-					        <input style="float: right; margin-left: 16px; margin-top: -42px; position: relative; cursor: pointer;" class="blue_button" type="button" value="POST" onclick="postComment();"/>
+					        <input style="float: right; margin-left: 16px; margin-top: -56px; position: relative; cursor: pointer;" class="blue_button" type="button" value="POST" onclick="postComment();"/>
 					        
 					    {% endif %}
 					    {% set i = 0 %}

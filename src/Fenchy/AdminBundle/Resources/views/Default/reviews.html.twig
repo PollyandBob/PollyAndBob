@@ -1,26 +1,59 @@
 {% extends 'FenchyAdminBundle::layout.html.twig' %}
 {% form_theme filter '::filterForm.html.twig' %}
 {% block admincontent %}
-    <form action="{{ path('fenchy_admin_reviews') }}" method="post" {{ form_enctype(filter) }}>
-        {{ form_widget(filter) }}
-        <br/>
-        <input type="submit" value="Search"/>
-    </form>
-    <table class="admin-table">
+ 
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+             <tr>
+                    <td align="center">
+                        <form action="{{ path('fenchy_admin_reviews') }}" method="post" {{ form_enctype(filter) }}>
+                        <table width="100%" border="1" cellspacing="0" cellpadding="0" class="searchuser">
+                        <tr>
+                            <td width="60">{{ form_label(filter.text) }}:</td>
+                            <td width="150">{{ form_widget(filter.text) }}</td>
+                            <td width="75">{{ form_label(filter.author) }}:</td>
+                            <td width="150">{{ form_widget(filter.author) }}</td>
+                            <td width="90">{{ form_label(filter.receiver) }}:</td>
+                            <td width="150">{{ form_widget(filter.receiver) }}</td>
+                            <td width="70">{{ form_label(filter.target) }}:</td>
+                            <td width="150">{{ form_widget(filter.target) }}</td>
+                            <td width="60">{{ form_label(filter.sort) }}</td>
+                            <td width="130">{{ form_widget(filter.sort) }}</td>
+                            <td width="90">{{ form_label(filter.order) }}</td>
+                            <td width="110">{{ form_widget(filter.order) }}</td>
+                            <td width="100"><input type="submit" value="Search" class="searchoptions"/></td>
+                            <td>&nbsp;</td>
+                            {{ form_rest(filter) }}
+                      </tr>
+                      </table>
+                      </form>
+                    </td>
+              </tr>
+        </table>
+    
+    <div class="clearfix"></div>
+    <div class="sTableWrapper">
+    <table class="sTable" id="userlist" cellpadding="0" cellspacing="0" width="100%">
         <thead>
-            <tr><th>ID</th><th>Tex</th><th>Type</th><th>Stickers</th><th>Created at</th><th>Author</th><th>actions</th></tr>
+            <tr>
+                <th class="head0" width="5%" align="center">ID</th>
+                <th class="head1" width="20%">Text</th>
+                <th class="head0" width="20%">Created at</th>
+                <th class="head1" width="20%">Author</th>
+                <th class="head0" width="20%">Target User</th>
+                <th class="head1" width="20%">actions</th>
+            </tr>
         </thead>
         <tbody>
-            {% for review in reviews %}
+            {% for review in pagination %}
                 <tr class="has-subrow">
-                    <td>#{{ review.id }}</td>
-                    <td>{{ review.text }}</td>
-                    <td>{{ review.typeName }}</td>
-                    <td>{{ review.stickers.count }}</td>
-                    <td>{{ review.createdAt|date('Y-m-d H:i') }}</td>
-                    <td><a href="{{ url('fenchy_admin_user', {id: review.author.id}) }}" style="color:black">{{ review.author }}</a></td>
-                    <td>
-                        <a href="{{ url('fenchy_admin_review', {id: review.id}) }}" style="color:black">Edit</a>
+                    <td class="con0" width="5%" align="center">{{ review.id }}</td>
+                    <td class="con1" width="20%">{{ review.text }}</td>                    
+                    <td class="con0" width="20%">{{ review.createdAt|date('Y-m-d H:i') }}</td>
+                    <td class="con1" width="20%">{{ review.author }}</td>
+                    <td class="con0" width="20%">{{ review.aboutuser }}</td>
+                    <td class="con1" width="20%">
+                        <!--<a href="{{ url('fenchy_admin_review', {id: review.id}) }}" style="color:black">Edit</a> <br>-->
+                        <a href="{{ url('fenchy_admin_review_delete', {id : review.id}) }}" onclick="return confirm('Are you sure you want to delete this Review?');" style="color:black">Delete</a>
                     </td>
                 </tr>
                 <tr class="subrow displayNone">
@@ -28,18 +61,15 @@
                     <td colspan="7">
                         <table>
                             <tbody>
-                                <tr class="has-subrow"><td>Target</td></tr>
+                                <tr class="has-subrow"><td>Target Notice:</td></tr>
                                 <tr class="subrow displayNone">
                                     <td>
                                         <table>
                                             <tbody>
                                                 <tr>
                                                     <td>
-                                                        {% if review.aboutUser %}
-                                                            USER: {{ review.aboutUser }}
-                                                            {{ review.aboutUser.userRegular }}
-                                                        {% else %}
-                                                            Notice: #{{ review.aboutNotice.id }}
+                                                        {% if review.aboutNotice %}                                                                                                                         
+                                                            {{ review.aboutNotice.id }}:
                                                             {{ review.aboutNotice.title }}<br/>
                                                             <p>{{ review.aboutNotice.content }}</p>
                                                         {% endif %}
@@ -49,7 +79,7 @@
                                         </table>
                                     </td>
                                 </tr>
-                                <tr class="has-subrow"><td>Stickers</td></tr>
+                                <!--<tr class="has-subrow"><td>Stickers</td></tr>
                                 <tr class="subrow displayNone">
                                     <td>
                                         <table>
@@ -68,7 +98,7 @@
                                             </tbody>
                                         </table>
                                     </td>
-                                </tr>
+                                </tr>-->
                             </tbody>
                         </table>
                     </td>
@@ -76,5 +106,11 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
+        <div class="sTableOptions">
+            <div class="pagination pgright">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
 {% endblock %}
     

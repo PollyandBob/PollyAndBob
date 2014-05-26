@@ -1,5 +1,5 @@
 <nav>
 	<ul>
-       	<li><a {% if app.request.get('_route') == 'fenchy_regular_user_listing_manage' %} class="selected"" {% endif %} href="{{ path('fenchy_regular_user_listing_manage') }}">{{ 'listing.my_listing' |trans|upper}}</a></li>
-      	<li><a {% if app.request.get('_route') == 'fenchy_regular_user_listing_requests' %} class="selected"" {% endif %} href="{{ path('fenchy_regular_user_listing_requests') }}">{{ 'listing.my_request'|trans|upper }}</a></li>   </ul>
+       	<li><a {% if link == 'fenchy_regular_user_listing_manage' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_listing_manage') }}">{{ 'listing.my_listing' |trans|upper}}{% if req_count %} ({{ req_count }}){% endif %}</a></li>
+      	<li><a {% if link == 'fenchy_regular_user_listing_requests' %} class="selected" {% endif %} href="{{ path('fenchy_regular_user_listing_requests') }}">{{ 'listing.my_request'|trans|upper }}{% if my_req_count  %} ({{ my_req_count }}){% endif %}</a></li>   </ul>
 </nav>

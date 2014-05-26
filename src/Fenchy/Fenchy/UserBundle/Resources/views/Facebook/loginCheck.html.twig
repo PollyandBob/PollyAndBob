@@ -1,0 +1,58 @@
+{% extends "FenchyFrontendBundle::layout.html.twig" %}
+{% form_theme form '::tableRegisterForm.html.twig' %}
+
+{% block javascripts %}
+{{ parent() }}
+    <script type="text/javascript">
+        function hasCoordinates()
+        {
+            return null;
+        }
+        
+        function getLatitude()
+        {
+            return null;
+        }
+
+        function getLongitude()
+        {
+            return null;
+        }
+    </script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    <script src="{{ asset('js/facebook_geolocalization.js') }}"></script>
+{% endblock %}
+    
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/frontend/login.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/frontend/register.css') }}" type="text/css" />
+{% endblock %}
+    
+{% block header %}
+    {% include 'FenchyFrontendBundle:Partials:headerLogo.html.twig' %}
+{% endblock %}
+    
+{% block content %}
+    <div id="addressDataRegisterForm">
+        <div>
+            <form action="{{ path('fenchy_facebook_login_finalize') }}" method="post" {{ form_enctype(form) }} class="course-form">    
+                <div class="msgUser" id="addressDataRegisterMsg">
+                    <p>{{'user.register_welcome_msg'|trans}}</p>
+                    {% if exists_note is defined and not ( exists_note is empty )%}
+                      <p class="error">{{ exists_note }}</p>
+                    {% endif %}
+                </div>    
+                    
+                <div id="map_reg">
+                    <div id="map_canvas"></div>
+                    <span id="location_info">{{ 'user.location_info'|trans }}</span>
+                    <div style="clear:both;"></div>
+                    <input type="submit" value="{{ 'main.start_fenchy'|trans }}"/>
+                </div>    
+                {{ form_widget(form) }}    
+            </form>
+                
+        </div>       
+    </div><br />
+{% endblock %}

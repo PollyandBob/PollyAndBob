@@ -1,0 +1,29 @@
+{% extends 'FenchyRegularUserBundle::layout.html.twig' %}
+
+{% block profil_content %}
+<div class="rounded">
+    <div id="my_profile">
+        <div id="aboutMe">
+            <div id="aboutMe-left">
+                <div class="rounded description">
+                    {{ user.aboutMe }}
+                </div>
+                {% if user.link %}
+                <div class="rounded link">
+                    {% set link="http://" %}
+                    {% if("http://" in user.link) %}
+                        {% set link="" %}
+                    {% endif %}
+                    <a href="{{ link }}{{ user.link }}">{{ user.link }}</a>
+                </div>
+                {% endif %}
+            </div>
+            <div id="aboutMe-right">
+                {% include 'FenchyGalleryBundle:Default:display.html.twig' with {'gallery':user.gallery} %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+    

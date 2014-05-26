@@ -1,0 +1,227 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('plugins/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/moment-js/moment.min.js') }}"> </script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-slider.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/global-filter-view-model.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ absolute(asset('js/global-filter-widgets.js')) }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.tinyscrollbar.js') }}"></script>
+    <script type="text/javascript">
+    
+        // model object instantination here
+        var globalFilterViewModel;
+        var autocomplete;
+        var geocoder;
+        var emptyCategories = {{ filterEmptyCat | json_encode() | raw }};
+        var emptyPostDates = {{ filterEmptyPD | json_encode() | raw }};
+        var baseViewUri = '{{ path(app.request.attributes.get('_route')) }}';
+        var pagination = {{ listingsPagination }};
+        var paramDistDefaults = {
+            'distanceSliderMin': {{ filterDistanceSliderMinUser }},
+            'distanceSliderMax': {{ filterDistanceSliderMaxUser }},
+            'distanceSliderDefault': {{ filterDistanceSliderDefaultUser }},
+            'distanceSliderSnap': {{ filterDistanceSliderSnapUser }}
+        };
+        var notice_tinyscroll;
+        
+        window.translations = {
+            'no_limit': '{{ 'notice.no_limit' | trans }}',
+            'sort_rel': '{{ 'notice.filter.sort.rel' | trans }}',
+            'sort_dist': '{{ 'notice.filter.sort.dist' | trans }}',
+            'sort_time': '{{ 'notice.filter.sort.time' | trans }}'
+        };
+
+
+        $(document).ready(function() {
+
+        	$(document).on({
+        	    "mouseup touchend": function () {
+					//alert("bye");
+					var distance = $(this).find('span .tooltip-value').text();
+					//alert($(this).find('span .tooltip-value').text());
+					$("#distance_m").text(distance);
+        	    	filterUsers(distance);
+        	    }
+        	}, ".ui-slider-handle");
+			
+            notice_tinyscroll = $('#scrollable').tinyscrollbar();
+            ko.bindingHandlers['class'] = {
+                'update': function(element, valueAccessor) {
+                    if (element['__ko__previousClassValue__']) {
+                        $(element).removeClass(element['__ko__previousClassValue__']);
+                    }
+                    var value = ko.utils.unwrapObservable(valueAccessor());
+                    $(element).addClass(value);
+                    element['__ko__previousClassValue__'] = value;
+                }
+            };
+            
+            geocoder = new google.maps.Geocoder();
+            
+            var routes = {
+                fenchy_filter_content: '{{path('fenchy_filter_content')}}',
+                fenchy_what_autocomplete_suggestions: '{{path('fenchy_what_autocomplete_suggestions')}}',
+            };
+            
+            var filterLastUrl = '{{ filterLastUrl }}';
+            
+            globalFilterViewModel = new GlobalFilterViewModel(geocoder, baseViewUri, routes, pagination, emptyCategories, emptyPostDates, paramDistDefaults, translations, filterLastUrl);
+            
+                  
+            ko.applyBindings( globalFilterViewModel, document.getElementById('globalFilter'));
+            globalFilterViewModel.retrieveFilterContent( true );
+            
+            autocomplete = new GApiAutocomplete(
+                document.getElementById('location'),
+                globalFilterViewModel );
+            
+                var _default_location = '';
+                
+                {% if app.user and not app.user.location.location %}
+                    _default_location = '{{default_location}}';
+                {% elseif app.user and app.user.location.location %}
+                    _default_location = '{{app.user.location.location|replace({"\n": ''})}}';
+                {% else %}
+                    _default_location = '{{default_location}}';     
+                {% endif %}
+                    
+                $('input#location').val(_default_location);
+
+                		          
+            
+        });
+        function filterUsers(dis)
+		{
+        	var dist = dis.slice(0,-2)
+			dist = dist*1000;
+			var url = "{{ path('fenchy_regular_user_user_myprofile_filterusers') }}";
+			$.ajax({
+				url : url+'?dist='+dist,
+				type : "post",
+				data : {
+					},
+				beforeSend : function() {
+					$(".ajax_loader_info").show();
+					$("#no_neighbours").hide();
+					$(".filters_data").hide();
+				},
+				success : function(response) {
+					//alert(response);
+					if(!response)
+					{
+						$("#no_neighbours").show();
+					}
+					else
+					{
+						$("#no_neighbours").hide();
+					}
+					$(".filters_data").html(response);
+				},
+				error : function() {
+					alert('Something went wrong!');
+				},
+				complete : function() {
+					$(".ajax_loader_info").hide();
+					$(".filters_data").show();			
+				}
+			});
+		}
+        // apply binding here
+    </script>
+    {# any view specific JS scripts for this view #}
+{% endblock %}
+
+{% block content %}	
+	{% render 'FenchyRegularUserBundle:Myprofile:myAvatar' %}
+	{% include 'FenchyRegularUserBundle:Myprofile:menu.html.twig' %}
+	
+	<style>
+	#filter-distance-slider .ui-state-hover
+	{
+		border:none !important;
+	}
+	</style>
+	<div class="member">
+	
+            <div style="float:left;font-size: 11px;">{{ 'regularuser.around_you'|trans }}</div><div id="distance_m" style="float:right;color: #e14f45;font-size: 11px;"></div>
+            <div class="" style="text-align: center">
+                <div id="filter-distance-slider" 
+                data-bind="jqSlider: {
+                    value: {{ filterDistanceSliderDefaultUser }}, 
+                    min: {{ filterDistanceSliderMinUser }}, 
+                    max: {{ filterDistanceSliderMaxUser }}, 
+                    step: {{ filterDistanceSliderSnapUser }}
+                },
+                jqSliderValue: fcDistance" class="bord ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all jq-slider">
+                    <a href="#" class="ui-slider-handle ui-state-default ui-corner-all">
+                        <i class="icon-align-justify"></i>
+                        <span class="inner-tooltip">
+                            <strong class="tooltip-value" data-bind="text: fcDistanceText"></strong>
+                            <span class="tooltip-arrow">
+                            </span>
+                        </span>                                            
+                    </a>
+                </div>
+                <div class="slider-value">
+                    <strong class="pull-left">&lt; 100m</strong>
+                    <strong class="pull-right">&gt; 30km</strong>
+                </div>
+                                                          
+            </div>
+	</div>
+   	
+			
+			<div class="myneighbors">
+				<div id="no_neighbours" style="display: none; padding: 18px 0px 0px 230px;position: absolute;"><h4>{{ 'regularuser.message.no_neighbors'|trans }}</h4></div>
+				<div class="ajax_loader_info" style="display: none; padding: 118px 0px 0px 438px;">
+						<img alt="" src="{{ absolute(asset('images/ajax-loader-info.gif')) }}">
+				</div>
+				<div class="filters_data">
+				{% if users2 %}
+				{% set i=0 %}
+				{% for user in users2 %}
+		                <div class="persen">
+		                	<a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice') }}/{{ user.id }}" class="my_neighbour">
+		                    {% if user.twitterusername %}
+                                    <img src="/{{ user.twitterusername }}" alt="" />
+                                    {% else %}
+				    <img alt="" src="{{ absolute(asset('images/default_profile_picture.png')) }}">
+				    {% endif %}
+		                    <div class="persenname">
+		                        <p>{{ user.userRegular.firstname }}</p>
+		                    </div>		                    
+		                    <div class="neighbor {{ managertype[i][2] }}">
+		                        <p>{{ managertype[i][1] }}</p>
+		                        <span>{{ user.activity }}</span>
+		                    </div>
+		                    </a>
+		                </div>
+		                {% set i= i+1 %}
+		         {% endfor %}
+		         {% else %}
+			         <div id="no_neighbours_onload" style="padding: 18px 0px 0px 230px;position: absolute;"><h4>{{ 'regularuser.message.no_neighbors'|trans }}</h4></div>
+			     {% endif %}
+		         
+		         </div>
+		         <nav>
+                                    <ul>
+				       	<li><a class="paddingset" href="{{ path('fenchy_notice_indexv2',{ 'slug':'search','find':'neighbors'}) }}">{{ 'regularuser.find_neighbors'|trans }}</a></li>
+				    </ul>
+				 </nav>
+         
+         	</div>
+         	
+            <div class="clearfix"></div>
+            <div class="bgbottom">
+            	<img src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}" alt="" />
+            </div>    	
+   	
+
+{% endblock %}

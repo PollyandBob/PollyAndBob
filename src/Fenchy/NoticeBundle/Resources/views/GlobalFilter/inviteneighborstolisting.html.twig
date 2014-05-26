@@ -1,5 +1,9 @@
 {# empty Twig template #}
 <script type="text/javascript">
+    $(document).ready(function()
+    {
+       nice = $(".invite_single .left").niceScroll(); 
+    });
 	$(function()
 	{
 		$("#all_neighbors").click(function () {
@@ -39,18 +43,18 @@
 {% endfor %}
 
 				
-				<form action="{{ path('fenchy_notice_invite_to_listing',{'noticeId': noticeId}) }}" name="inviteForListing" method="post">
+               <form action="{{ path('fenchy_notice_invite_to_listing',{'noticeId': noticeId}) }}" name="inviteForListing" method="post">
                     <div class="invite_neighbors">
                     <div class="title">{{ 'regularuser.invite_neighbor'|trans|upper }}</div>	
                         <div class="invite_group">
                             <div class="left">
-                                <div class="invite_checkbox">
+                                <div class="checkbox" style="margin-top:0px !important; padding-top:0px !important;">
                                     <input type="checkbox" name="" id="all_neighbors" value="{{ allneighbor }}" />
                                     <label>{{ 'regularuser.invite_myneighbors'|trans }}</label>
                                 </div>
                             </div>
                             <div class="right">
-                                <div class="invite_checkbox">
+                                <div class="checkbox">
                                     <input type="checkbox" name="invite_neighborsnext50">
                                     <label>{{ 'regularuser.invite_next_50_around'|trans }}</label>
                                 </div>
@@ -64,7 +68,7 @@
                             		<a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice') }}/{{ user.id }}" target="_blank">
                                     <img width="50" height="50" src="/{{ user.twitterusername }}" alt="{{ user.email }}" />
                                     </a>
-                                    <div class="invite_checkbox">
+                                    <div class="checkbox">
                                         <input type="checkbox" name="invite_neighbors[]" value="{{ user.id }}" />
                                         <label>{{ 'regularuser.invite_this_neighbor'|trans }}</label>
                                     </div>

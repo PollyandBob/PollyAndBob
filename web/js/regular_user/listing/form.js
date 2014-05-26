@@ -27,8 +27,8 @@ $(document).ready(function() {
                     if (status == 'OK') {
 
                         $('#fenchy_noticebundle_noticetype_location_location').val(results[0].formatted_address);
-                        $('#fenchy_noticebundle_noticetype_location_latitude').val(results[0].geometry.location.lat);
-                        $('#fenchy_noticebundle_noticetype_location_longitude').val(results[0].geometry.location.lng);
+                        $('#fenchy_noticebundle_noticetype_location_latitude').val(results[0].geometry.location.lat());
+                        $('#fenchy_noticebundle_noticetype_location_longitude').val(results[0].geometry.location.lng());
 
                         $(ajaxgif).remove();
                         submitForm();
@@ -36,7 +36,7 @@ $(document).ready(function() {
                         res = true;
 
                     } else {
-                        $('#location_gapi').val('');
+                        //$('#location_gapi').val('');
                         res = false;
 
                         //TODO: display error location etc.
@@ -63,6 +63,13 @@ $(document).ready(function() {
         
         return res;
 
+    });
+    
+     $(window).keydown(function(event){
+      if(event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+      }
     });
     
     function refreshSelectCategory(selector) {

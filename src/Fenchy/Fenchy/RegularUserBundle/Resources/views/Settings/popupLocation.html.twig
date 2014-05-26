@@ -1,0 +1,88 @@
+{% form_theme form '::tableFormWithoutSubmit.html.twig' %}
+<html xmlns:fb="http://www.facebook.com/2008/fbml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>{{ 'main.title_suffix'|trans }}</title>
+        
+        <link rel="stylesheet" href="{{ asset('css/reset.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('css/frontend/fonts.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('css/frontend/buttons.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('css/frontend/settings.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('css/frontend/form.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('css/frontend/popuplocation.css') }}" type="text/css" />
+        
+        <style>
+            .button1 {
+                 float: left;
+                 margin-left: 60px;
+                 width: auto;
+             }
+        </style>
+        
+        <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('plugins/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js') }}"></script>
+        {% include '::gmapsApiAsset.html.twig' %}
+        <script src="{{ asset('js/popup_geolocalization.js') }}"></script>
+        <script type="text/javascript">
+            function hasCoordinates()
+            {
+                {% if app.user.userregular is defined and true == app.user.userregular.latitude %}
+                    return true;
+                {% endif %}
+
+                return false;
+            }
+
+            function getLatitude()
+            {
+                return '{{ app.user.userregular.latitude }}'
+            }
+
+            function getLongitude()
+            {
+                return '{{ app.user.userregular.longitude }}';
+            }
+            
+            $(function(){
+                $('#fenchy_userbundle_user_locationtype_location_location').change(function(e){
+
+                    //alert('AAA');
+
+                    setLocation();
+
+                });            
+            });
+        </script>
+        
+    </head>
+    <body>
+
+        <div class="rounded">
+            <p style="margin-top: 20; text-align: center;">
+                {% if not app.user.regularUser.hasRequiredLocation %}
+                    {{ 'regularuser.locationpopup.required_location_message'|trans }}
+                {% endif %}<br/>
+                {% if app.user.confirmationToken %}
+                    {{ 'regularuser.locationpopup.required_confirmation_message'|trans }}
+                {% endif %}<br/>
+            </p>
+            <form action="{{ path('fenchy_regular_user_settings_popuplocation') }}" method="post" {{ form_enctype(form) }} class="course-form">
+            <div id="settings_loc" style="width: 400px; float: left;">
+                    {{ form_widget(form) }}
+                <div class="pin_button">
+                    <a class="button3" href="#" id="dropPin" >{{ 'regularuser.put_pin'|trans }}<img src="{{ asset('/images/pin.png') }}"></a> 
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div id="map_loc" style="width: 450px; float: left;">
+                <div id="map_canvas" style="width: 450px; height: 310px;"></div>
+                <div class="not_shown_location">{{ 'regularuser.not_shown_publicy'|trans }}</div> 
+            </div>
+            <div id="start_fenchy_button" class=" button1">
+                <input type="submit" value="{{ 'regularuser.start_fenchy'|trans }}" /> 
+            </div>
+            </form> 
+        </div>
+
+    </body>
+</html>

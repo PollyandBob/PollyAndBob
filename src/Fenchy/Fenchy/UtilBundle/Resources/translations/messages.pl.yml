@@ -1,0 +1,100 @@
+util:
+  relative:
+    now: Teraz
+
+    just_now: Mniej niż minutę temu
+
+    a_minute_ago: minutę temu
+
+    x_minutes_ago: '{0,1}minutę temu|[2,4]%number% minut temu|[5,Inf]%number% minut temu'
+
+    an_hour_ago: godzinę temu
+
+    x_hours_ago: '{0,1}godzinę temu|[2,4]%number% godziny temu|[5,Inf]%number% godzin temu'
+
+    today: Dzisiaj
+
+    yesterday: Wczoraj
+
+    x_days_ago: '{0,1}Wczoraj|[2,Inf]%number% dni temu'
+
+    x_weeks_ago: '{0,1}tydzień temu|[2,Inf]%number% tygodnie temu'
+
+    last_month: W osatnim miesiącu
+
+    in_a_minute: W ciągu ostatniej minuty
+
+    in_x_minutes: '{0,1}W ciągu ostatniej minuty|[2,Inf]W ciągu %number% minut'
+
+    in_an_hour: W ostatniej godzinie
+
+    in_x_hours: '{0,1}W ostatniej godzinie|[2,Inf]W ciągu ostatnich %number% godzin'
+
+    tomorrow: Jutro
+
+    monday: Poniedziałek
+
+    tuesday: Wtorek
+
+    wednesday: Środa
+
+    thursday: Czwartek
+
+    friday: Piątek
+
+    saturday: Sobota
+
+    sunday: Niedziele
+
+    next_week: Następnego tygodnia
+
+    in_x_weeks: '{0,1}Następnego tygodnia|[2,Inf]W ciągu %number% tygodni'
+
+    next_month: Następnego miesiąca
+btn:
+  continue: Dalej
+
+  back: Powrót
+
+  ok: OK
+
+  cancel: Anuluj
+
+  save: Zapisz
+
+  confirm: Potwierdź
+
+  login: Zaloguj
+
+  send: Wyślij
+
+  delete: Usuń
+
+  yes: Tak
+
+  no: Nie
+
+  edit: Edytuj
+
+  send_message: Wyślij Wiadomość
+harass: nęka mnie lub mojego znajomego.
+spam: spamuje lub oszukuje.
+commercial: publikuje treści komercyjne.
+forbidden: publikuje treści seksualne, polityczne lub religijne.
+behaviour: jest szkodliwy lub agresywny.
+sticker:
+  added_title: Notka została dodana!
+
+  reasons: Powody
+
+  description: Dodatkowy opis
+male: Mężczyzna
+female: Kobieta
+or: lub
+load_more: Wczytaj Więcej
+never: Nigdy
+immediately: Natychmiast
+daily: Codziennie
+positive: Pozytywna
+negative: Negatywna
+review_type: Typ

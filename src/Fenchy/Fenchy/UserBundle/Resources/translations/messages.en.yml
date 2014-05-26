@@ -1,0 +1,63 @@
+user:
+  rest_pass_msg: Please enter your new password!
+
+  enter_pass_again: Please enter your password again!
+
+  forgot_your_password: Forgot your password?
+
+  password_changed_msg: Your password has been changed successfully.
+
+  password_changed_link_msg: Click here to continue.
+
+  password_changed_alternative: or
+
+  sign_in: Sign in
+
+  back_to_login: Back to login
+
+  password_reset:
+    name: Reset your password
+
+  account_deleted: Account has been deleted successfully.
+
+  could_not_get_token: Sorry, something went wrong. Please try it again.
+
+  could_not_verify_credentials_twitter: Sorry, we could not verify the credentials or your Twitter account is in use.
+
+  could_not_sign_in_via_facebook: Sorry, we could not sign in via Facebook, please try it again.
+
+  problem_with_logging_try_again:
+    : Sorry, a problem appeared, please try it again.
+
+  user_with_confirmation_token_not_exist: The user with confirmation token %s% does not exist
+
+  new_user_created: The account has been created.
+
+  token_expired: Token has been used or expired
+
+  registration: Registration
+
+  go_to_main_page: Go to main page
+change_password:
+  facebook_user_exists:
+    submit: Change password
+
+    flash:
+      success: The password has been changed
+register:
+  footer_message:
+    1: By clicking Sign Up, you agree to the
+
+    2: Terms 
+
+    3: and our
+
+    4: Privacy Policy
+
+  save_button: Sign Up
+
+  title: Register now as a Test User!
+
+  with_fb: Sign Up with Facebook
+
+  with_twitter: Sign Up with Twitter

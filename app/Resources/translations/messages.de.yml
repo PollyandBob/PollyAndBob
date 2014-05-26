@@ -28,6 +28,80 @@ main:
   we_need_your_location: Gib bitte deinen Standort ein, damit wir die Suche in deiner Gegend starten können.
   save_location_form_msg: xxxs
   back: zurück
+  
+front:
+    you_can_do_a_lot: Entdecke die unzähligen Möglichkeiten in deiner Nachbarschaft!
+    find_some_thing: Finde etwas!
+    neighbors: Nachbarn
+    groups: Gruppen
+    help: Hilfe
+    goods: Sachen
+    service: Dienste
+    events: Veranstal tungen
+    something_else: Sonstiges
+    offer_something: Biete etwas an!
+    yourself: Dich selbst!
+    find_neighbors: Finde Nachbarn!
+    blackboard: Blackboard
+    you_need_a_chess_player: Du brauchst einen Schach Spieler?
+    you_need_people_like_you: Du suchst Freunde oder hast Lust auf ein Date?
+    you_want_to_meet_people_for_xy: Du brauchst jemanden, um irgendwas zu machen?
+    connects_you_to_your_neighborhood: Polly & Bob verbindet dich mit deiner Nachbarschaft.
+    find_help: Finde Hilfe bei Nachbarn!
+    you_need_help_to_solve_your_computer_problem: Dein PC läuft nicht richtig?
+    you_want_to_paint_your_corridor_and_need_helping_hand: Du möchtest deine Wohnung streichen und könntest Hilfe gebrauchen?
+    you_need_somenoe_to_sit_your_dog: Wer gießt deine Blumen im Urlaub?
+    make_listing: Gib ein Gesuch auf!
+    find_services: Finde Dienstleistungen in der Nähe!
+    you_need_reliable_babysitter_tonight: Du brauchst einen zuverlässigen Babysitter heute Nacht?
+    you_need_some_guys_for_your_move_for_small_money: Du brauchst einen günstigen Umzugshelfer?
+    you_need_any_service_and_want_somebody_reliable_from_the_neighborhood: Du brauchst eine Dienstleistung von einem zuverlässigen Nachbarn?
+    find_groups: Finde Gruppen!
+    you_need_running_group: Lust auf eine Laufgruppe?
+    you_want_to_meet_people_regularly_to_certain_topic: Lust auf einen Stammtisch zu einem bestimmten Thema?
+    you_want_to_discuss_local_political_stuff_with_neighbors: Gibt es Lokalpolitische Themen?
+    find_goods: Finde Sachen!
+    you_need_certain_good: Du brauchst eine bestimmte Sache?
+    you_need_car_for_weekend: Du brauchst ein Auto für eine Besorgung?
+    you_need_certain_tool: Brauchst du vielleicht gerade ein bestimmtes Werkzeug?
+    find_something_else: Finde alles andere!
+    you_have_lost_your_keys: Du hast deine Schlüssel verloren?
+    you_want_to_find_the_best_currywurst_in_your_neighborhood: Du möchtest die beste Currywurst in deiner Nachbarschaft finden?
+    you_are_in_need_of_anything: Du brauchst etwas, das nicht in Hilfe, Dienste, Sachen, Nachbarn oder Gruppe past?
+    offer_groups: Eröffne eine Gruppe!
+    you_want_to_gather_people_in_group_to_certain_topic: Du möchtest eine Gruppe zu einem bestimmten Thema gründen?
+    you_want_to_share_news_with_certain_neighbors?: Du möchtest bestimmte Neuigkeiten mit bestimmten Nachbarn austauschen?
+    offer_Goods: Biete deine Sachen an!
+    you_want_to_lend_your_car_to_neighbord_on_paid_bases: Möchtest du dein Auto gegen Geld verleihen?
+    you_want_to_lend_your_drilling_machine_to_neighbors_for_free: Du möchtest deine Bohrmaschine kostenlos anbieten?
+    you_want_to_give_away_some_cd_or_music_for_free: Du möchtest deine alten CD’s verschenken oder Musik mit Nachbarn teilen?
+    you_want_to_swap_clothes: Du möchtest Klamotten tauschen?
+    offer_events: Organisiere Veranstaltungen!
+    you_want_to_organize_event_with_neighbors: Du möchtest ein Event mit Nachbarn veranstalten?
+    you_want_to_invite_some_people_for_dinner: Du möchtest ein paar Leute zum Abdenessen einladen?
+    you_want_to_make_barbecue_in_the_neighborhood: Möchtest du ein Barbecue in der Nachbarschaft veranstalten?
+    offer_something_else: Biete etwas anderes an!
+    you_want_to_offer_anything: Du möchtest etwas anbieten, das nicht in Hilfe, Dienste, Sachen, Nachbarn oder Gruppe past?
+    offer_yourself: Biete dich selbst an!
+    you_want_to_offer_services: Möchtest du eine Dienstleistung anbieten?
+    you_want_to_offer_help: Möchtest du Nachbarn helfen?
+    you_want_to_offer_goods: Möchtest du deine Sachen anbieten?
+    offer_help: Biete deine Hilfe an!
+    you_are_native_english_speaker_and_like_to_help_out_neighbor: Du möchstest deine Hilfe anbieten?
+    you_like_dogs_and_like_to_offer_dog_sitting_because_you_cant_have_your_own: Du liebst Hunde, kannst aber keinen eigenen Hund halten und bietest dogsitting an?
+    you_are_expert_in_xy_and_like_to_offer_hand_if_needed: Du bist eine Experte für Steuersachen und hilfst gerne mal einem Nachbarn?
+    offer_service: Biete deine Dienste an!
+    you_want_to_earn_some_money_on_talent_that_you_have: Du möchtest ein bisschen Geld mit deinen Talenten verdienen?
+    you_are_babysitter_and_want_to_offer_your_services_here_for_money: Du bist Babysitter und suchst neue Kunden? 
+    you_want_to_offer_paid_service_to_neighbors: Du möchtest deine kostenpflichtigen Dienste in der Nachbarschaft anbieten?
+    find_events:  Finde Events!
+    where_is_the_next_neighborhood_meetup: Wo findet der nächste Nachbarschaftsdtammtisch statt?
+    what_is_going_on_around_me: Was passiert in meiner Nähe?
+    what_is_the_next_football_game_taking_place: Wo findet das nächste Fußballspielen statt?
+    where_can_meet_neighbors_easily: Wo kann ich nette Nachbarn kennenlernen?
+    page_not_found: Page not found
+    error_four: Error 404
+    back_to_home: Back to homepage
 schema:
 # related to "db schema"  
   events: Veranstaltungen

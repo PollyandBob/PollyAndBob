@@ -1,0 +1,206 @@
+{% extends 'FenchyRegularUserBundle::settings.html.twig' %}
+
+{% form_theme form _self %}
+
+
+{% block form_label %}
+{% spaceless %}
+    {% if not compound %}
+        {% set label_attr = label_attr|merge({'for': id}) %}
+    {% endif %}
+    {% if required %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+    {% endif %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+<label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ ('schema.'~label )|trans }}</label>
+{% endspaceless %}
+{% endblock form_label %}
+
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{ asset('css/app/settings-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+{% endblock %}
+        
+
+{% block settings_content %}
+
+		<div class="mycommunitypoints">
+						            
+            <form action="{{ path('fenchy_regular_user_settings_account') }}" method="post" {{ form_enctype(form) }} class="form-settings general">
+
+                <div class="form-box-wrapper">
+                    <h2 style="text-align: left;">{{ 'regularuser.change_email'|trans }}</h2>
+
+                    <div class="row input-wrapper">
+                            {{ form_row(form.email) }}
+                    </div>
+
+					<!--<div class="row input-wrapper">
+                            <label>{{'regularuser.change_password'|trans}}</label>
+
+                                <a href="{{path('fos_user_change_password')}}" class="button">{{'regularuser.change_your_password'|trans}}</a>
+
+                        </div>                
+					
+                    	<div class="row input-wrapper">
+                            <label>{{'regularuser.delete_account'|trans}}</label>
+
+                                <a href="{{path('fenchy_regular_user_settings_deleteaccount')}}" class="button">{{'regularuser.delete_your_account'|trans}}</a>
+
+                        </div>                                
+					-->
+                    <div style="display:none;">{{ form_rest(form) }}</div>                                        
+                    <div class="clearfix">
+                                <!-- <div class="button grey-button pull-left" style="float: right;" id="buttons">
+                                    <a id="back"  class="blue_button" href="{{path('fenchy_frontend_indexv2')}}">
+                                        <strong>{{ 'btn.cancel'|trans }}</strong>
+                                    </a>                            
+                               	 </div>
+                                -->
+                       	<input type="submit" class="blue_button" style="float: right;margin-right: 17px;" id="continue" value="{{ 'regularuser.change'|trans }}"/>
+                    </div>
+                </div>   
+            </form>
+            
+            
+     	    <form action="{{ path('fenchy_regular_user_settings_changepassword') }}" {{ form_enctype(form) }} method="POST" class="form-settings change-password">                   
+                <div class="form-box-wrapper">
+                    <h2 style="text-align: left;">{{'settings.account.change_password_name'|trans}}</h2>
+                    <div class="row input-wrapper">
+			            {{ form_row(form1.current_password) }}
+			        </div>
+			
+			        <div class="row input-wrapper">
+			        	{{ form_row(form1.new.first) }}
+			        </div>
+			        <div class="row input-wrapper">
+			            {{ form_row(form1.new.second) }}
+			        </div>
+			        <div style="display:none;">
+			        	{{form_rest(form1)}}
+			        </div>
+			   
+                 <div class="button grey-button pull-left" id="buttons">
+                       <!-- <a id="back" class="wrapper" href="{{path('fenchy_frontend_indexv2')}}">
+                              <strong>{{ 'btn.cancel'|trans }}</strong>
+                        </a> -->                            
+	            	</div>
+              	  	<div class="clearfix">
+                		<input type="submit" class="blue_button" id="continue" style="float: right;margin-right: 17px;" value="{{ 'regularuser.change'|trans }}"/>                                
+                    </div>
+                </div>                             
+         	</form>      
+         	<a href="#dialog8" name="modal" id="vzoom_1944" class="zoomthis button">{{ 'regularuser.verify_this_location'|trans }}</a>
+         	<a href="#dialog2" name="modal" id="vzoom_1944" class="zoomthis button">{{ 'regularuser.verify_your_passport_now'|trans }}</a>
+         	
+         	<!-- Email Notification -->
+         
+            <form action="{{ path('fenchy_regular_user_settings_notifications') }}" method="post" {{ form_enctype(form) }} class="course-form">
+                <div class="form-box-wrapper">
+                    <h2 style="text-align: left;">{{ 'settings.emailnotifications.name'|trans }}</h2>
+                    <ul class="list-form">
+                        <div>
+                            {% for child in form2.notification_group_intervals %}
+	                            <li class="row options"><label>{{ ( 'regularuser.' ~ child.vars.value ) | trans }}</label> 
+	                                <div class="input-element">
+	                                    <div>
+	                                    {% for group in child %} 
+	                                        {% for option in child %}
+	                                            {% for o in option %} {{ form_widget(o) }}{{ form_label(o) }} {% endfor %} 
+	                                        {% endfor %}
+	                                    {% endfor %}
+	                                    </div>
+	                                </div>
+	                            </li>
+                			{% endfor %}
+                        </div>
+                		<div class="row list-row">
+
+			                {% for child in form2.notifications %}
+                                <li>
+			                        {{ form_widget(child) }} {{ form_label(child) }}
+                                </li>
+			                {% endfor %}
+        	            </div>                                    
+                     </ul>
+            		{{ form_widget(form2) }}
+                    
+                    <div class="clearfix">
+                         <!-- <div class="button grey-button pull-left" style="float: right;" id="buttons">
+                             <a id="back"  class="blue_button" href="{{path('fenchy_frontend_indexv2')}}">
+                                  <strong>{{ 'btn.cancel'|trans }}</strong>
+                             </a>                            
+                    	 </div>-->
+                         <input type="submit" class="blue_button" style="float: right;margin-right: 17px;" id="continue" value="{{ 'btn.save'|trans }}"/>
+                    </div>                            
+            	</div>                                     
+			</form>
+                    	
+         	<!-- End of EmailNotification -->
+     		<div class="form-box-wrapper">
+      			<h2 style="text-align: left;">{{'regularuser.delete_account'|trans}}</h2>      		
+ 				<div class="row input-wrapper">
+             		{{'regularuser.delete_your_account'|trans}} <a href="#dialog9" name="modal" id="vzoom_1944" class="zoomthis blue_button" style="float: right;margin-right: 577px;">Now!</a>
+    			</div>
+    		</div>
+    	 </div>
+     
+     	<section id="boxes2">
+		    <div id="dialog8" class="window"> 
+		        <div class="big_popup">
+		            <div class="big_popupclose"><a href="" class="close"></a></div>
+		            
+						{% if verified %}
+		            		<p>{{ 'regularuser.verified_location_message'|trans|upper }}</p>            								   	        		
+		    	        {% else %}
+							<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>			
+		            		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
+								<button>{{ 'regularuser.ok'|trans|upper }}</button>
+		    	        	</form>
+		    	        {% endif %}
+		        </div>    
+		    </div>    
+		    <div id="mask"></div>
+   		</section>
+    
+	    <section id="boxes2">
+	    	<div id="dialog2" class="window"> 
+	        	<div class="big_popup">
+		           	<div class="big_popupclose"><a href="" class="close"></a></div>            
+	            		{% if identity %}
+	            			<p>{{ 'regularuser.verified_identity_message'|trans|upper }}</p>
+	    	        	{% else %}
+	    	        		{% if verifyIdentity %}
+	    		        		<p>{{ 'regularuser.verify_identity_message'|trans|upper }}</p>
+								<button onclick="verifyYourIdentity()">{{ 'regularuser.ok'|trans|upper }}</button>
+							{% else %}
+								<p>{{ 'regularuser.verifing_identity_message'|trans|upper }}</p>
+							{% endif %}
+	    	        	{% endif %}
+	        		</div>    
+	    		</div>    
+	    	<div id="mask"></div>
+	    </section>
+    	<section id="boxes2">
+    		<div id="dialog9" class="window"> 
+    	    	<div class="big_popup">
+	            	<div class="big_popupclose"><a href="" class="close"></a></div>
+	            		<p>{{'settings.account.delete_confirm_action'|trans}}</p>
+               			<form action="{{ path('fenchy_regular_user_settings_deleteaccount') }}" method="post">
+			                {{ form_widget(form) }}
+			                
+  			            		<a href="{{ url('fenchy_regular_user_settings_account')}}">
+			                    	{{ 'btn.cancel'|trans|upper }}
+				                </a>		                                         
+				                <input type="submit" value="{{ 'btn.confirm'|trans|upper }}"/>
+				            
+           				</form>  	        
+        			</div>    
+    			</div>    
+    		<div id="mask"></div>
+    	</section>
+{% endblock %}

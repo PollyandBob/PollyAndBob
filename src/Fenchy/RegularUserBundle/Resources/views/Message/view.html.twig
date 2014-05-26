@@ -39,22 +39,45 @@ div.flash-message {
     min-height: 36px;
     padding-top: 7px;
 }
+
+.message .messagedetail{
+    max-height: 800px;
+    overflow: hidden;
+}
+.message .right #scroll{
+    max-height: 550px;
+    overflow: hidden;
+}
+
 </style>
 <script type="text/javascript">
-
+$(document).ready(function()
+{
+   nice = $(".message .messagedetail").niceScroll();
+   nice = $(".message .right #scroll").niceScroll();
+        
+});
 function sendMsg()
 		{
 			var flag = true;
-			var title = $('#MsgTitle').val();
+{#			var title = $('#MsgTitle').val();#}
 			var content = $('#MsgContent').val();
 			//alert(title + content);
 			
-			if(title == "" || content == "")
+			if(content == "")
 			{
 				flag = false;
-				$('#MsgTitle').attr('placeholder', 'required*');
+				{#$('#MsgTitle').attr('placeholder', 'required*');#}
 				$('#MsgContent').attr('placeholder', 'required*');
 			}
+                        if(title.trim() == "" || content.trim() == "" )
+                        {
+                                flag = false;
+{#				$('#MsgTitle').val('');#}
+				$('#MsgContent').val('');
+{#                                $('#MsgTitle').attr('placeholder', 'required*');#}
+				$('#MsgContent').attr('placeholder', 'required*');
+                        }
 			var receiver = $('#select_receiver').val();
 			
 			if(flag)
@@ -65,7 +88,7 @@ function sendMsg()
 					type : "post",
 					data : {
 						'receiverId': receiver,				
-						'title': title,
+{#						'title': title,#}
 						'content': content,										
 						},
 					beforeSend : function() {
@@ -78,7 +101,7 @@ function sendMsg()
 						alert('Something went wrong!');
 					},
 					complete : function() {
-						$('#MsgTitle').val('');
+{#						$('#MsgTitle').val('');#}
 						$('#MsgContent').val('');					
 					}
 				}); 
@@ -99,15 +122,39 @@ function sendMsg()
                           	<a href="{{ path('fenchy_regular_user_messages_view', {'id': message.id}) }}" {% if not message.read %} {% if message.receiver != app.user %} class="message-read" {% else %} class="message-unread" {% endif %} {% endif %}>
 	                    	<div {% if message.read %}class="message-read"{% endif %}>
 	                            <div class="profilei">
-                          			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.id } %}
+                                        {% if message.sender == app.user %}
+                                            {% if message.usergroup %}
+                                                <img src=" {% if not message.usergroup.webPath %} {{ absolute(asset('images/default_profile_picture.png')) }} {% else %} {{ absolute(asset(message.usergroup.webPath)) }}{% endif %}" alt=""/>
+                                            {% else %}
+                                                {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.receiver.id } %}
+                                            {% endif %}
+                                        {% else %}
+                                            {% if message.fromgroup %}
+                                                <img src=" {% if not message.fromgroup.webPath %} {{ absolute(asset('images/default_profile_picture.png')) }} {% else %} {{ absolute(asset(message.fromgroup.webPath)) }}{% endif %}" alt=""/>
+                                            {% else %}
+                                                {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.id } %}
+                                            {% endif %}
+                                        {% endif %}
                           		</div>
 	                            {% if message.receiver != app.user %}
 	                            <img class="read_arrow" src="{{ asset('images/message-arrow1.png') }}" alt="" />
 	                            {% elseif message.receiver == app.user %}
 	                            <img class="read_arrow" src="{{ asset('images/message-arrow2.png') }}" alt="" />
 	                            {% endif %}
-	                            <p>{{ message.sender.userregular.firstname }}</p>
-	                            <p>{{ message.title }}</p>
+                                    {% if message.sender.id == app.user.id %}
+                                        {% if message.usergroup %}
+                                            <p>{{ message.usergroup.groupname }}</p>
+                                        {% else %}
+                                            <p>{{ message.receiver.userregular.firstname }}</p>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if message.fromgroup %}
+                                            <p>{{ message.fromgroup.groupname }}</p>
+                                        {% else %}
+                                            <p>{{ message.sender.userregular.firstname }}</p>
+                                        {% endif %}
+                                    {% endif %}
+                                    <p>{{ message.content|truncate(70) }}</p>
 	                        </div>
 	                        </a>
 	                    	
@@ -120,41 +167,78 @@ function sendMsg()
                 </div>
                 
                 <div class="right">
-                	{% for message in messages %}
+                    <div id="scroll"> 
+                	{% for message in messages %}                                                
                 				{% if message.sender.id == app.user.id %}
                 					{% set userurl = 'fenchy_regular_user_user_myprofile_aboutmychoice' %}
-								{% else %}
-									{% set userurl = 'fenchy_regular_user_user_otherprofile_aboutotherchoice' %}
-								{% endif %}
-								<a href="{{path(userurl, {'userId': message.sender.id})}}">
-					            <div class="profilei">	
-									{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.id } %}
-					            </div>
-					            </a>
-					            
-					        <p class="name">{{ message.sender.userregular.firstname }}</p>
+						{% else %}
+							{% set userurl = 'fenchy_regular_user_user_otherprofile_aboutotherchoice' %}
+						{% endif %}
+                                                
+                                                        {% set userurl = 'fenchy_regular_user_user_otherprofile_aboutotherchoice' %}
+                                                
+                                                        {% if message.sender.id in blockUser %}        
+                                                            <a href="javascript:void(0);">
+                                                                <div class="profilei">
+                                                                    {% if message.fromgroup %}
+                                                                        <img src=" {% if not message.fromgroup.webPath %} {{ absolute(asset('images/default_profile_picture.png')) }} {% else %} {{ absolute(asset(message.fromgroup.webPath)) }}{% endif %}" alt=""/>
+                                                                    {% else %}
+                                                                        {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.id } %}
+                                                                    {% endif %}
+                                                                </div>
+                				            </a>
+                                                        {% else %}
+                                                        {% if message.fromgroup %}
+                                                            <a href="{{ path('fenchy_regular_user_user_groupprofile_groupinfo',{ 'groupId' : message.fromgroup.id}) }}">
+                                                        {% else %}
+                                                            <a href="{{path(userurl, {'userId': message.sender.id})}}">
+                                                        {% endif %}       
+                                                                <div class="profilei">
+                                                                    {% if message.fromgroup %}
+                                                                        <img src=" {% if not message.fromgroup.webPath %} {{ absolute(asset('images/default_profile_picture.png')) }} {% else %} {{ absolute(asset(message.fromgroup.webPath)) }}{% endif %}" alt=""/>
+                                                                    {% else %}
+                                                                        {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.id } %}
+                                                                    {% endif %}
+                                                                </div>
+                				            </a>
+                                                        {% endif %}
+                                                        {% if message.fromgroup %}
+                                                            <p class="name">{{ message.fromgroup.groupname }}</p>
+                                                        {% else %}
+                                                            <p class="name">{{ message.sender.userregular.firstname }}</p>
+                                                        {% endif %}
+                                               
 		                    <div class="clearfix"></div>
-		                    <p class="message-all">{{ message.content|nl2br }}</p>
-                    <br/><br/><br/>
+                                    {% set msgcontent =  message.content%}
+                                    {% set link = msgcontent|split('|') %}
+                                    {% if '|' in msgcontent %}
+		                    <p class="message-all">{{ link[0]|nl2br }}<br><br><a style="color:#51B9D4;" href="{{ link[1] }}">{{'regularuser.click_here'|trans }}</a><br><br>{{ link[2]|nl2br }}</p>
+                                    {% else %}
+                                    <p class="message-all">{{ msgcontent|nl2br }}</p>
+                                    {% endif %}  
+                                    <div class="clearfix"></div>
+                                   
                     {% endfor %}
-                    
-                    {% if messages.first.replyable %}
-                    <form action="{{ path('fenchy_regular_user_messages_send', {'prev_id':messages.last.id}) }}" method="post" {{ form_enctype(form) }}>
-                    	
-                    	{{ form_widget(form) }}
-                    	<div class="profilei">
-                    		{% if messages.first.sender.id ==  app.user.id %}
-	                    		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': messages.first.receiver.id } %}
-                    		{% else %}
-                    			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': messages.first.sender.id } %}
-                    		{% endif %}
-                    	</div>
-                    	{{ form_rest(form) }}
-                    	
-                        <input type="submit" id="continue" class="blue_button" value="{{ 'btn.send'|trans }}"/>
-                    </form>
-                     {% endif %}
-                    <div class="bgbottom_right"><img alt="" src="{{ asset('images/bgbottom_contantinner.png') }}"></div>
+                    </div>
+                    {% set flag = 'false' %}
+                    {% for message in messages %}
+                        {% if message.sender.id in blockUser or message.receiver.id in blockUser %}
+                            {% set flag = 'true' %}
+                        {% endif %}
+                    {% endfor %}
+                        {% if messages.first.replyable and flag == 'false' %}
+                        <form action="{{ path('fenchy_regular_user_messages_send', {'prev_id':messages.last.id}) }}" method="post" {{ form_enctype(form) }}>
+
+                            {{ form_widget(form) }}
+                            <div class="profilei">
+                                            {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': app.user.id } %}
+                            </div>
+                            {{ form_rest(form) }}
+
+                            <input type="submit" id="continue" class="blue_button" value="{{ 'btn.send_msg'|trans }}"/>
+                        </form>
+                         {% endif %}
+                        <div class="bgbottom_right"><img alt="" src="{{ asset('images/bgbottom_contantinner.png') }}"></div>
                     
 					     
 						

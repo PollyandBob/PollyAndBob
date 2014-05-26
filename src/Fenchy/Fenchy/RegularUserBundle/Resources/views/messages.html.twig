@@ -1,0 +1,23 @@
+{% extends '::baseV3.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+    
+{% block javascripts %}
+    {{parent()}}
+    <script type="text/javascript" src="{{asset('js/regular_user/messages/scripts.js')}}"></script>
+{% endblock %}
+
+    
+{% block content %}
+
+	<div class="message-title">
+           		<a href="{{ path('fenchy_regular_user_messages_index') }}">
+         			{{ 'regularuser.message.message_center'|trans }}
+          		</a>
+    </div>
+           	{% block message_content %}
+                {% endblock %}
+         
+{% endblock %}

@@ -4,8 +4,17 @@
 
 {{message.title}}
 
-{{message.content}}
+    {% set msgcontent =  message.content%}
+        {% set link = msgcontent|split('|') %}
+              {% if '|' in msgcontent %}
+                    <p class="message-all">{{ link[0]|nl2br }}<br><br><a style="color:#51B9D4;" href="{{ link[1] }}">{{'regularuser.click_here'|trans }}</a><br><br>{{ link[2]|nl2br }}</p>
+              {% else %}
+                     <p class="message-all">{{ msgcontent|nl2br }}</p>
+              {% endif %}   
+
                                               
 {{'message.notification.email.follow_link'|trans}}:
 {{absolute(path('fenchy_regular_user_messages_view', {'id':message.first.id}))}}
+<p>{{'regularuser.message.message_last_part'|trans}}</p>
+<p>{{'request.request_msg_part1'|trans}}</p>
 {% endautoescape %}

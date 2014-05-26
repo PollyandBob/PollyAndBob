@@ -1,0 +1,27 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# any view specific stylesheets for this view #}
+<link rel="stylesheet" href="{{ absolute(asset('css/app/sidebar-v2.css')) }}" type="text/css" />
+<link rel="stylesheet" href="{{ absolute(asset('css/app/search-bar-v2.css')) }}" type="text/css" />
+<link rel="stylesheet" href="{{ absolute(asset('css/app/inner-content-v2.css')) }}" type="text/css" />    
+<link rel="stylesheet" href="{{ absolute(asset('css/app/article-box-v2.css')) }}" type="text/css" />   
+<link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+{% endblock %}
+
+{% block content %}
+
+<div id="watch-notice">
+   		<form action="{{path('fenchy_regular_user_listing_delete_confirm', {'id': notice.id})}}" method="post">
+           	<h2>{{'listing.delete.msg'|trans({'%notice%': '<span>'~notice.title~'</span>' })|raw}}</h2>
+            <div style="display: none">{{form_rest(form)}}</div>
+            <a class="blue-button" href="{{path('fenchy_regular_user_listing_manage')}}">
+            	{{ 'btn.no'|trans }}
+           	</a>                            
+           	<div>
+            	<input class="blue-button" type="submit" id="continue" value="{{ 'btn.yes'|trans }}"/>                                
+            </div>
+     	</form>
+  	</div>
+{% endblock %}

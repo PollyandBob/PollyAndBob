@@ -10,7 +10,7 @@ use Fenchy\UserBundle\Entity\User,
     Fenchy\UtilBundle\Entity\Location,
     Fenchy\UtilBundle\Entity\Sticker,
 	Fenchy\RegularUserBundle\Entity\UserGroup;
-
+use Fenchy\NoticeBundle\Entity\RequestMessages;
 use Gedmo\Mapping\Annotation as Gedmo; // gedmo annotations
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -279,7 +279,7 @@ class Notice
     /**
      * @var ArrayCollection $reviews
      * 
-     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Review", mappedBy="aboutNotice")
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Review", mappedBy="aboutNotice", cascade={"remove"})
      * @ORM\OrderBy({"created_at"="DESC"})
      */
     private $reviews;
@@ -287,7 +287,7 @@ class Notice
     /**
      * @var ArrayCollection $request
      *
-     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Request", mappedBy="aboutNotice")
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Request", mappedBy="aboutNotice", cascade={"remove"})
      * @ORM\OrderBy({"created_at"="DESC"})
      */
     private $requests;
@@ -295,10 +295,18 @@ class Notice
     /**
      * @var ArrayCollection $comments
      *
-     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Comment", mappedBy="aboutNotice")
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\Comment", mappedBy="aboutNotice", cascade={"remove"})
      * @ORM\OrderBy({"created_at"="DESC"})
      */
     private $comments;
+    
+    /**
+     * @var ArrayCollection $requestmessage
+     *
+     * @ORM\OneToMany(targetEntity="Fenchy\NoticeBundle\Entity\RequestMessages", mappedBy="aboutNotice", cascade={"remove"})
+     * @ORM\OrderBy({"created_at"="DESC"})
+     */
+    private $requestmessage;
     
     /**
      * @var boolean
@@ -327,6 +335,12 @@ class Notice
      */
     private $completed = false;
     
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $closed = false;
+    
     
     public function __construct() {
         
@@ -339,6 +353,7 @@ class Notice
         $this->reviews      = new ArrayCollection();
         $this->requests      = new ArrayCollection();
         $this->comments      = new ArrayCollection();
+        $this->requestmessage      = new ArrayCollection();
         $this->gallery      = new Gallery();
         $this->gallery->setNotice($this);
         $this->dictionaries = new ArrayCollection();
@@ -1525,4 +1540,61 @@ class Notice
     {
         return $this->completed;
     }    
+
+    /**
+     * Set closed
+     *
+     * @param boolean $closed
+     * @return Notice
+     */
+    public function setClosed($closed)
+    {
+        $this->closed = $closed;
+    
+        return $this;
+    }
+
+    /**
+     * Get closed
+     *
+     * @return boolean 
+     */
+    public function getClosed()
+    {
+        return $this->closed;
+    }
+    
+    /**
+     * Add requestmessage
+     *
+     * @param Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage
+     * @return Notice
+     */
+    public function addRequestmessage(\Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage)
+    {
+        $this->requestmessage[] = $requestmessage;
+    
+        return $this;
+    }
+
+    /**
+     * Remove requestmessage
+     *
+     * @param Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage
+     */
+    public function removeRequestmessage(\Fenchy\NoticeBundle\Entity\RequestMessages $requestmessage)
+    {
+        $this->requestmessage->removeElement($requestmessage);
+    }
+
+    /**
+     * Get requestmessage
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getRequestmessage()
+    {
+        return $this->requestmessage;
+    }
+
 }

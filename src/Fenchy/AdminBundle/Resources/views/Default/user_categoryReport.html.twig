@@ -1,0 +1,151 @@
+{% extends 'FenchyAdminBundle::layout.html.twig' %}
+{% block admincontent %}
+<div class="maincontent">
+     <div class="left">
+            <menu>	       
+                {{ getlink('By Postal Code', 'fenchy_admin_kpi', {}, {'class': 'dark'})|raw }}
+                {{ getlink('By Age', 'fenchy_admin_reviews', {}, {'class': 'dark'})|raw }}
+                {{ getlink('By Acitivity', 'fenchy_admin_requests', {}, {'class': 'dark'})|raw }}
+                {{ getlink('Pear users By Distance', 'fenchy_admin_comments', {}, {'class': 'dark'})|raw }}
+                {{ getlink('By User Category', 'fenchy_admin_kpi_user_category', {}, {'class': 'dark'})|raw }}
+                {{ getlink('By Query', 'fenchy_admin_identity', {}, {'class': 'dark'})|raw }}
+            </menu>
+    </div>
+</div>
+
+
+ {#<table width="100%" border="0" cellspacing="0" cellpadding="0">
+             <tr>
+                    <td align="center">
+                        <form action="{{ path('fenchy_admin_users') }}" method="post" {{ form_enctype(filter) }}>
+                        <table width="100%" border="1" cellspacing="0" cellpadding="0" class="searchuser">
+                        <tr>
+                            <td width="20">&nbsp;</td>
+                            <td width="125">{{ form_label(filter.reported_only) }}</td>
+                            <td width="35">{{ form_widget(filter.reported_only) }}</td>
+                            <td width="100">{{ form_label(filter.first_name) }}</td>
+                            <td width="150">{{ form_widget(filter.first_name) }}</td>
+                            <td width="100">{{ form_label(filter.last_name) }}</td>
+                            <td width="150">{{ form_widget(filter.last_name) }}</td>
+                            <td width="70">{{ form_label(filter.location) }}</td>
+                            <td width="150">{{ form_widget(filter.location) }}</td>
+                            <td width="70">{{ form_label(filter.postcode) }}</td>
+                            <td width="150">{{ form_widget(filter.postcode) }}</td>
+                            <td width="60">{{ form_label(filter.sort) }}</td>
+                            <td width="150">{{ form_widget(filter.sort) }}</td>
+                            <td width="90">{{ form_label(filter.order) }}</td>
+                            <td width="110">{{ form_widget(filter.order) }}</td>
+                            <td width="100"><input type="submit" value="Search" class="searchoptions"/></td>
+                            <td>&nbsp;</td>
+                            {{ form_rest(filter) }}
+                      </tr>
+                      </table>
+                      </form>
+                    </td>
+              </tr>
+        </table>#}
+        {% set i = 0 %}
+
+    <div class="clearfix"></div>
+{#    <a href="#dialog44" class="zoomthis blue_button" name="modal" id="vzoom_1944" style="background: none repeat scroll 0px 0px rgb(0, 0, 0); float: right; font-size: 15px; border-radius: 3px 3px 3px 3px; padding: 5px 10px;">Send Message</a>#}
+    <div class="clearfix"></div>
+    <br>
+    <div class="sTableWrapper">
+    <table class="sTable" id="userlist" cellpadding="0" cellspacing="0" width="100%">
+        {% if i==0 %}
+        <thead>
+            <tr>
+                <th class="head0" width="5%" align="center">ID</th>
+                <th class="head1" width="10%">Firstname</th>
+                <th class="head0" width="10%">Lastname</th>
+                <th class="head1" width="15%">E-mail</th>
+                <th class="head0" width="10%">Last login</th>
+                <th class="head1" width="5%">Flags</th>
+                <th class="head0" width="10%">Community Point</th>
+                <th class="head1" width="10%">Location</th>
+                <th class="head0" width="10%">Postal Code</th>
+                <th class="head1" width="10%">Birth date</th>
+                <th class="head0" width="10%">Actions</th>
+            </tr>
+        </thead>
+        {% endif %}
+        <tbody>
+            {% set temp='' %}
+            {% for user in pagination %}               
+                    {% if user.regularuser.postcode != temp %}
+                        <tr>
+                            <td class="con0" width="5%" align="center">{{ user.regularuser.postcode }}</td>
+                        </tr>
+                        {% set temp = user.regularuser.postcode %}
+                    {% endif %}
+                
+                <tr class="has-subrow">
+                    <td class="con0" width="5%" align="center">{{ user.id }}</td>
+                    <td class="con1" width="10%">{{ user.userRegular.firstname }}</td>
+                    <td class="con0" width="10%">{{ user.userRegular.lastname }}</td>
+                    <td class="con1" width="15%">{{ user.email }}</td>
+                    <td class="con0" width="10%">{{ user.lastLogin|date('Y-m-d H:i') }}</td>
+                    <td class="con1" width="5%">{{ user.stickers.count }}</td>
+                    <td class="con0" width="10%">{{ user.activity }}</td>
+                    <td class="con1" width="10%">{{ user.location.location }}</td>
+                    <td class="con0" width="10%">{{ user.regularuser.postcode }}</td>
+                    <td class="con1" width="10%">{{ user.regularuser.birthday|date('Y-m-d') }}</td>
+                    <td class="con0" width="10%">
+                        <a href="{{ url('fenchy_admin_user_delete', {id : user.id}) }}" onclick="return confirm('Are you sure you want to delete this User?');" style="color:black">Delete</a>
+                    </td>
+                </tr>
+                <tr class="subrow displayNone">
+                    <td>&nbsp;</td>
+                    <td colspan="6">
+                        <table style="border: 1px solid #bbb;">
+                            <thead>
+                                <tr>
+                                    <th class="head0">Reporter</th>
+                                    <th class="head1">Reason</th>
+                                    <th class="head0">Created at</th>
+                                    <th class="head1">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for sticker in user.stickers %}
+                                    <tr>
+                                        <td class="con0">{{ sticker.reportedBy }}</td>
+                                        <td class="con1"><ul class="reasons">
+                                                            {% for reason in sticker.reason %}
+                                                                <li class="con1">{{ sticker.reasonName(reason)|trans }}</li>
+                                                            {% endfor %}
+                                                        </ul></td>                    
+                                        
+                                        <td class="con0">{{ sticker.createdAt|date('Y-m-d H:i') }}</td>
+                                        <td class="con1">
+                                            <a href="{{ url('fenchy_admin_flag_delete', {id : sticker.id, type : 'user'}) }}" onclick="return confirm('Are you sure you want to delete this Flag?');" style="color:black">Delete</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <section id="boxes2">
+                    <div id="dialog44" class="window">
+                            <div class="big_popup">
+                            <div class="big_popupclose"><a href="" class="close"></a></div>
+                                            <p>WRITE MESSAGE</p>
+                                                <input type="text" id="MsgTitle" placeholder="{{ 'message.title'|trans }}"/>
+                                                <textarea id="MsgContent" placeholder="{{ 'message.content'|trans }}" style="margin-left: -212px; margin-top: 40px;"></textarea>
+                                            <input class="blue_button" style="margin-bottom: 10px; margin-left: -71px; margin-top: 130px; background: #000000" type="button" id="continue" value="{{ 'btn.send'|trans }}" onclick="sendAdminMsg('{{ user.id }}');"/>
+                            </div>
+                            <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width:100%">
+                    </div>
+                    <div id="mask"></div>
+                </section>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+     <div class="sTableOptions">
+            <div class="pagination pgright">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+     </div>
+{% endblock %}

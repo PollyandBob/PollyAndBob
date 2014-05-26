@@ -19,6 +19,6 @@ message:
       follow_link: Schau dir die gesamte Konversation auf Polly & Bob an.
   req_notification:
     email:
-      subject: Neue anfordern von %username%
+      subject: Neue anfordern/rezension von %username%
       
-      body: Du hast eine neue anfordern von Polly & Bob.
+      body: Du hast eine neue anfordern/rezension von Polly & Bob.

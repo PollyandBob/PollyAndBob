@@ -1,0 +1,969 @@
+regularuser:
+  leave_a_review: Leave a review
+
+  edit_review: Edit Review
+
+  load_more: Load more
+
+  positives: Positive
+
+  negatives: Negative
+
+  positive: Positive
+
+  negative: Negative
+    
+  open: Open
+  
+  closed: Closed
+  
+  click_here: Click here
+  
+  you_are_member: YOU ARE A MEMBER
+  
+  you_are_not_member: YOU ARE NOT A MEMBER
+
+  you_are_admin: YOU ARE ADMINISTRATOR
+  
+  make_administrator: Make Administrator
+  
+  profile_image: Profile Image
+  
+  cover_image: Cover Image
+  
+  groupprofile_image: Group Image
+  
+  groupcover_image: Group Cover Image
+  
+  remove: Remove
+  
+  remove_members: Remove Members
+  
+  remove_admin: Remove Administrators
+  
+  all_trust_points: Reputation:
+
+  dont_ask: Don't ask this question again.
+
+  disable_connect: Don't ask this question again.
+
+  no_contacts: You don't have any contacts yet. Just connect your account to invite your Facebook or Twitter friends.
+  
+  only_community_Neighborhood_manager: Only Community Managers or Neighborhood Managers are allowed to create groups.
+  
+  added_neighbor_success: Neighbor added successfully.
+  
+  remove_neighbor_success: Neighbor removed successfully.
+
+  reject_neighbor_success: Neighbor rejected.
+  
+  requested_neighbor: Your request is already send. Please wait or send message him to remind.
+  
+  requested_neighbor1: %username% has already requested you to add as neighbour. Please accept request.
+  
+  your_request_send: Your request send successfully.
+  
+  references: References
+  
+  your_listing_success: Your listing has been published succesfully.
+  
+  invite_neighbor_to_listing: You want to invite neighbors to your listing?
+  
+  invite_friends_emails: Invite friends by Email
+  
+  invite_now: Invite Now
+  
+  invite_friends_facebook: Invite friends by facebook
+  
+  invite_friends_twitter: Invite friends by twitter
+  
+  invited_successfully: Your friends invited by email successfully
+  
+  no_thank_you: No thank you.
+  
+  let_me_go_newsfeed: Let me go to the newsfeed.
+
+  reviews_: 
+
+  contacts: Contacts
+
+  completed: Completed
+
+  facebook_friends: Facebook Friends
+
+  email: E-mail
+
+  invite: Invite to Polly & Bob
+  
+  invite_neighbor: Invite neighbors to your listing
+
+  join_to_fenchy: Join Polly & Bob
+
+  all: All
+
+  unread: Unread
+
+  unreplied: Unreplied
+
+  sent: Sent
+
+  send_new_message: Send message
+  
+  add_neighbor: Add To My Neighbors
+  
+  remove_neighbor: Remove From My Neighbors
+  
+  block: Block
+  
+  flag: Flag
+
+  change_password: Change password
+
+  delete_account: Delete account
+
+  write_your_review: write your review
+  
+  write_your_message: write your message
+  
+  post_comment: post a comment
+  
+  post_comment_group: post your message to the group here
+  
+  title: title
+  
+  invite_myneighbors: Invite all my neighbors
+  
+  invite_next_50_around: invite next 50 around me
+  
+  invite_this_neighbor: invite this neighbor
+  
+  invite_another_friends: invite other friends by email
+  
+  join_group: Join the group
+  
+  leave_group: Leave the Group
+  
+  join_group_requested: Your request is already send. Please wait or send message him to remind
+
+  joined_group_success: Group joined successfully. 
+  
+  left_group_success: You are removed from the group.
+  
+  members_removed_success: Selected members removed successfully.
+  
+  msg_send: Your message has been sent. 
+  
+  group_messages: Messages
+  
+  there_no_members: No members yet
+  
+  delete_group: Delete the Group
+
+  write_message: Write new message
+  
+  write_msg_to: Write a message to
+  
+  payment_settings: Set your payment settings first.
+  
+  female: female
+  
+  male: male
+  
+  setpayment: Paymentsettings
+  
+  black_board: Black Board
+  
+  need_your_location: You need to set you location before proceeding to Polly & Bob.
+  
+  listing_deleted: Your listing deleted successfully.
+  
+  change_pass_success: The password has been changed
+
+  wrong_old_password_or_new_confirm_not_matched: Old password is wrong or New password & Confirm password not matched
+  
+  find_neighbors: Find neighbors now
+  
+  no_newsfeeds: No match to your search. What about these results (they are the closest):
+  
+  no_newsfeeds_in_given_circle: no listings in your given circle, but there are search results in a wider area, please look:
+  
+  no_newsfeeds_with_exact_match: we dont find no exact nor similar match to your search, here are other results in your search area, or please create a listing according to your search.
+  
+  want_to_add_as_neighbour: wants to add you to as neighbor
+  
+  add_me_in_your_neighbor: You want to add 
+  
+  to_your_neighborlist: to your neighbours list
+  
+  message:
+    sent: Your message has been sent!
+
+    deleted: Message deleted!
+
+    about_pre_title: "About:"
+
+    no_messages: You don't have any messages in your inbox.
+
+    check_any_message: Please select at least one message.
+
+    messages_has_been_deleted: The messages have been deleted successfully.
+
+    to: to
+
+    from: From
+    
+    new_message: New message
+
+    delete_selected: Delete selected messages
+
+    sender: Sender
+
+    subject: Subject
+
+    date: Date
+
+    read: All messages have been marked as read.
+
+    mark_all_as_read: Mark all messages as read.
+
+    refresh: Refresh
+
+    show_dd: Show
+
+    message_center: Your Messages
+    
+    no_neighbors: There are no Neighbours within chosen radius.
+    
+    no_groups: you are not a member of any group
+    
+    no_location: There is no location for this user.
+    
+    group_created: Your Group is created successfully!
+    
+    are_you_sure_group: Are you sure to delete this Group ???
+    
+    group_deleted: Group is deleted successfully.
+    
+    all_group_members_remove_first: Please remove all members from the Group before you delete the group.
+    
+    subject_group: New created Group invitation
+    
+    subject_notice: New created Listing invitation
+    
+    subject_members: %groupname% administrator send a message
+    
+    subject_for_invitegroupby_mail: New created Group invitation by Polly & Bob
+    
+    subject_for_invitelistingby_mail: New created Listing invitation by Polly & Bob
+    
+    subject_for_invitefriendsby_mail: Invitation from Polly & Bob
+      
+    message_for_invitefriendsby_mail: Test Message
+    
+    invite_friends_emails_errors: Enter valid E-mail address
+    
+    subject_for_buy_share_mail: Buy shares of Polly & Bob.
+    
+    message_part: Hello %username%,
+    
+    message_first_part:  The Group %groupname% on Polly & Bob was created lately by %administrator%. 
+    
+    message_first_part1: %user% invited you to this Listing on Polly & Bob.
+    
+    message_first_part_members: ???
+    
+    message_second_part_members:  The Group %groupname% on Polly & Bob was created lately by %administrator%. Have a look at this link: 
+    
+    message_last_part: From Polly & Bob 
+    
+    dear_user: Dear User,
+
+  save: Save
+
+  cancel: Cancel
+
+  add: Add
+
+  edit: Edit
+
+  delete: Delete
+
+  accept: Accept
+  
+  reject: Reject
+  
+  list_it_again: List it again
+  
+  repost: Repost
+  
+  write_review: Write Review
+  
+  mark_done: Mark as Done
+  
+  write_msg: Message
+  
+  view_detail: View Detail
+  
+  mark_read: Mark as Read
+  
+  show: Show
+
+  change: Change
+  
+  about_me: About Me
+
+  my_community_ponts: MY COMMUNITY POINTS
+  
+  my_neighbours: MY NEIGHBOURS
+  
+  my_groups: MY Groups
+  
+  my_location: MY LOCATION
+  
+  other_community_ponts: COMMUNITY POINTS
+  
+  other_neighbours: NEIGHBOURS
+  
+  other_listingsreviews: Listings & Reviews
+  
+  group_settings: Group Settings
+  
+  group_info: Info
+  
+  find_me_by_what_i_like: Find Me by what i like
+
+  i_like: I Like
+
+  hot_places: Hot Places in the neighborhood
+
+  promoted_initiaives: Promoted Initiatives in the neighborhood
+
+  my_languages: My Languages
+
+  not_shown_information: Not shown information
+
+  neighbours: Neighbors
+  
+  listing_reviews: Listing and Reviews
+  
+  around_you: Around you
+  
+  total_community_points: TOTAL COMUNITY POINTS
+  
+  profile_completion: PROFILE COMPLETION
+  
+  my_neighbors: MY NEIGHBORS
+  
+  listings_posted: LISTINGS POSTED
+  
+  neighbors_served: Activity by Listing
+  
+  reviews_received: REVIEWES RECEIVED
+  
+  completed_activities: Activity by request
+
+  written_reviews: WRITTEN REVIEWS
+
+  invited_and_registered_users: INVITED AND REGISTERED USERS
+  
+  shareholder: MEMBER OF BOARD OF NEIGHBORS
+  
+  location_verified: LOCATION VERIFIED
+  
+  passport_verified: PASSPORT VERIFIED
+  
+  fill_my_profile_now: FILL MY PROFILE NOW!
+  find_new_neighbours_now: FIND NEW NEIGHBOURS NOW!
+  create_listing: CREATE LISTINGS!
+  update_your_listings_now: UPDATE YOUR LISTINGS NOW!
+  ask_for_reviews: ASK FOR REVIEWS!
+  search_new_activity: SEARCH NEW ACIVITY!
+  write_review_now: WRITE REVIEW NOW!
+  tell_friend_about_pollyandbob_now: TELL A FRIEND ABOUT POLLY & BOB NOW!
+  become_shareholder_now: BECOME MEMBER NOW!
+  verify_your_location_now: VERIFY YOUR LOCATION NOW!
+  verify_your_passport_now: VERYFY YOUR PASSPORT NOW!
+  verify_this_location: VERIFY THIS LOCATION!
+  no_listing: There is no Listing.
+  verify_location_message: A poscard has been sent to your address. Please follow the instructions in order to verify your location.
+  verified_location_message: Your location is already verified or in verification process.
+  verify_identity_message: Press Ok and submit your identity verification request. Admin will verify this and update your status as soon as possible.
+  verified_identity_message: Your identity is now verified.
+  verifing_identity_message: Thanks for your request. We will verify your identity as soon as possible.
+  verifing_location_message: Thanks for your request. Your location is in verification process. We will send you postcard as soon as possible with your password.
+  
+  change_email: E-MAIL & PASSWORD
+  
+  back: back
+  ok: ok
+  enter_password: ENTER PASSWORD
+  location_verification: LOCATION VERIFICATION
+  continue: publish
+  disconnect_twitter: Disconnect Twitter
+
+  connect_to_twitter: Connect to Twitter
+
+  connect_to_facebook: Connect to Facebook
+
+  disconnect_facebook: Disconnect Facebook
+
+  add_to_timeline: Post on Timeline
+
+  disconnect_timeline: Disconnect from Timeline
+
+  only_jpg_png_maximum2m: Please use only .jpg and .png files. Maximum 5MB
+
+  put_pin: set pin on map
+
+  location: Your detailed location
+
+  printable_location_description: Will be shown to all neighbors.
+
+  printable_location: Your neighborhood
+
+  general: General
+
+  notification: Notification
+
+  image: Image
+
+  connect: Connect
+
+  submit: Submit
+
+  ivitation_to_fenchy_sent: An Invitation to Polly & Bob has been sent!
+
+  no_search_results_for_criteria: We could not find any results that matched your search criteria.
+
+  about_him: About him
+
+  put_on_fb: Publish on Facebook Timeline.
+
+  filter_notSelected: Filter
+
+  category_notSelected: Category
+
+  about_you: About You
+
+  link_to_your_page: Link to your page
+
+  postcode1: Postcode
+
+  em: Email
+  your_postal_code: Your postal code
+
+  city: City
+
+  street: Street
+  
+  your_city: Your city
+
+  district: District
+
+  your_district: Your district
+
+  street: Street
+
+  your_street: Your street
+
+  country: Country
+
+  your_country: Your country
+
+  firstname: First name:
+  
+  birthdate: birth date
+  
+  postcode: "Postalcode:"
+
+  your_firstname: Your first name
+
+  lastname: Last name:
+
+  additional_address: Your additional address
+  
+  your_lastname: Your last name
+
+  gender: Gender:
+
+  age: Age:
+
+  your_age: Your age
+  
+  your_groupname: Your Group
+  
+  your_aboutgroup: About Group
+  
+  groupname: Group Title
+  
+  aboutgroup: Description
+  
+  groupStatus: Group is:
+
+  neighbours_filter:
+    today: Today
+
+    contacts: Contacts
+
+    these_days: These days
+
+  notice:
+    deleted: The listing has been deleted.
+
+  filter:
+    yesterday: Yesterday
+
+    today: Today
+
+    tomorrow: Tomorrow
+
+  not_shown_publicy: Your location will not be shown publicly.
+
+  start_fenchy: Start Polly & Bob
+
+  locationpopup:
+    required_confirmation_message: Please confirm your account
+
+    required_location_message: Enter your location
+
+  languages: Your Language(s)
+
+  your_languages: Language or languages separated by comma
+
+  about_me_placeholder: Short text describing yourself.
+
+  change_your_password: Change your password
+
+  delete_your_account: Delete your account
+
+
+  additional_info: Additional Info
+
+  validation:
+    invalid__firstname: Your first name contains invalid signs.
+
+  settings_delete: Delete Account
+
+  reviews_tab: Reviews
+
+  listings_tab: Listings
+
+  reviews_of_others_tab: Reviews written 
+
+  about: About
+  
+  status: Group is:
+
+  read_all_messages: Mark all as read.
+
+  settings: Account Settings
+
+  interests_and_activities: "Interests & Activities:"
+
+  a_place_near_you: A place near You
+
+  interest_or_activity:
+    deleted: Interest or activity has been deleted
+
+  edit_I_or_A: Edit interest or activity
+
+  reviews:
+    email:
+      subject: %username% wrote a review
+
+      1: Hi %username%,
+
+      2: "%username% wrote a review to your listing %listing%. To reply to this review, please follow the url below:"
+
+    form:
+      title: Title of listing
+
+      text: Text
+emailchange:
+  flash:
+    change_requested: To confirm the change of your email address, please click on the confirmation link we just sent to your new email address.
+
+    request_denied: You have already requested to change your email address within the last %ttlh% hours. Please confirm the link we sent to your new email address. Please check your spam folder, in case you did not receive the mail.
+
+    token_expired: The change of your email address was requested more than %ttlh% hours ago and is unfortunately expired. Please submit a new reqest to change your email address.
+
+    change_success: Your email address has been changed successfully.
+
+    change_aborted: The process of changing your email address was stopped.
+
+  email:
+    subject: Change email address
+
+    1: Hi %username%,
+
+    2: To change your Polly & Bob email, please click on the following link:
+
+    3: Change Email address
+
+    4: If this link doesn't work, please copy the following URL and paste it into your browser:
+
+    6: Stop process of changing the email address.
+
+    7: or copy the following link and paste it into your browser:
+
+    8: You did not ask for changing the Email address on your Polly & Bob account ? Please ignore this mail.
+
+    9: Probably somebody used your e-mail address accidentally.
+
+    10: Thank you,
+
+    11: Your Polly & Bob team
+
+    5: To stop your Polly & Bob e-mail change, please click on the following link:
+help: Help
+need_help: Need Help
+goods: Goods
+events: Event
+_events: Events
+others: Something Else
+_others: others
+neighbours: Neighbours
+service: Service
+demand_service: Demand Service
+groups: Groups
+offerhelp: Help
+offer_help: Offer Help
+offergoods: Goods
+need_goods: Need Goods
+offer_goods: Offer Goods
+offerevents: Event
+offerothers: Something Else
+offer_others: others
+offerservice: Service
+offer_service: Offer Service
+
+offergroups: Group
+help_prefix: ''
+goods_prefix: ''
+events_prefix: ''
+others_prefix: ''
+offer: Offer
+need: Needed
+find_help: Find help in the Neighbourhood.
+find: Find
+ask_for: Ask for
+service1: If you want to demand a service for free you have to ask for help.
+service2: If you want to offer a service for free you have to offer help.
+to_sell: I Sell It
+to_swap: I Swap it
+to_lend: I lend it
+to_use: I let it use
+to_give: I give it for free
+sports: Sports
+party: Party
+arts: Arts
+music: Music
+other: Others
+contact_me: Contact 
+propose_time_price: Propose a time and price
+reserve_spot: Reserve a spot (if free)
+take_part: Come and take part
+take_part1: You take part
+buy: Buy
+buy_a_spot: Buy a spot
+propose_price: Propose a price
+borrow_bring: Borrow and bring back
+use_it: Use at my place
+swap_it: Make an offer to swap
+take_free: Take it for free
+
+listing:
+  my_listing: MY LISTINGS
+  my_request: MY REQUESTS
+  
+  my_grouplisting: Group LISTINGS
+  my_grouprequest: Group REQUESTS
+  create:
+    title: Create Your Listing
+
+    tab_title:
+      1: Listing Category
+
+      2: Listing Details
+
+    1:
+      subtitle: What do you want to do? 
+
+      description: Pick the category that best describe your listing.
+      
+      find_something : Find something?
+      in_neighbourhood: in the Neighbourhood
+      
+      offer_something : Offer something?
+      to_neighbourhood: to the Neighbourhood
+      
+      event_to_neighbour: Event to the Neighbourhood
+      
+      something_else: You want to do something else.
+
+    2:
+      subtitle_neighbours: You want to find Neighbours.
+      subtitle_help: You search for Help.
+      subtitle_goods: You need a Good.
+      subtitle_events: You want to find an Event.
+      subtitle_others: You want to offer Something Else.      
+      subtitle_service: You are looking for a Service.
+      subtitle_service1: If you want to demand a service for free you have to ask for help.
+      subtitle_service2: If you want to offer a service for free you have to offer help.
+      subtitle_groups: You want to find a group.
+      subtitle_offerhelp: You want to offer Help.
+      subtitle_offergoods: You want to offer a Good.
+      subtitle_offerevents: You want to organize an Event.
+      subtitle_offerothers: You want to offer Something Else.
+      subtitle_offerservice: You want to offer a Service.
+      subtitle_offergroups: You want to open a Group.
+      
+      description: Tell us more about your listing!
+
+    date_arrange: Date has to be arranged.
+    
+    start_date: Date
+
+    end_date: Date
+
+    end_time: Time
+    
+    start_time: Time
+    
+    start_time_arrange: Time has to be arranged.
+    
+    end_time_arrange: Time has to be arranged.
+    
+    location_arrange: Location has to be arranged.
+    
+    pieces: Pieces
+    
+    piece: Piece
+    
+    one_piece: Only 1 piece
+    
+    price_piece: Price/piece
+    
+    price_hour: Price/hour
+    
+    price_spot: Price/spot
+    
+    total: Total price
+    
+    spot: Spots
+    
+    spots: Spot
+    
+    hour: Hours
+    
+    unlimited: Unlimited 
+    
+    currency: Currency
+    
+    price: Price
+    
+    free: Free
+    
+    default_setting: Use default payment setting
+    
+    for_free: For free.
+    learn_more: Learn more about payment settings
+
+  show:
+    tags: Tags
+
+    description: Description
+    
+    reviews: Reviews
+    
+    writereviews: Write Review
+    comment: Comment
+
+  edit:
+    title: Edit Your Listing
+
+    back_to_management: Back to list
+
+    flash_success: The changes has been saved successfully.
+
+  manage_listings: My listings
+
+  no: You didn't add any listing yet.
+  noreq: You didn't requested on any listing yet.
+
+  delete:
+    msg: Do you really want to delete your listing %notice% ?
+
+  manage:
+    flash:
+      delete: The Listing has been deleted successfully.
+
+  category: Category
+settings:
+  general:
+    name: Profile information
+
+    profile_photo: Profile Picture
+    
+    cover_photo: Cover Picture
+
+  location:
+    name: Location
+
+    label: Your location
+
+  emailnotifications:
+    name: E-mail notifications
+
+  socialnetworks:
+    name: Social networks
+
+  account:
+    name: Account Settings
+
+    delete_confirm_action: Please confirm the deletion of your account. Once your account is deleted, it can't be restored.
+
+    change_password_name: Password
+      
+    payment: Payment Settings
+
+  flash:
+    data_saved: The profile information has been changed.
+
+    form_errors: An error occured in submitted form.
+    
+    group_location_saved: The Group location saved successfully 
+    
+    location_twice_a_year: Location can not be change more than two times in a year
+    
+    first_entry_as_pioneer: Oh, congratulations! Your are the first one in this particular area. You are granted Pioneer Status, which means you can act like a community manager from the start.
+
+  locationpopup:
+    success: Thank you for providing us with your location.
+
+    name: Please provide your current location.
+
+    description: Please provide your current location to have full access to the search.
+reputation:
+  title: Reputation
+
+  listings: Listings
+
+  positive_reviews: Positive Reviews
+
+  written_reviews: Reviews Written
+
+  facebook: Facebook Connect
+
+  contacts: Contacts
+
+  profile: Profile information  
+member_since: Member Since
+invitations:
+  email:
+    subject: %username% sent a contact request
+
+    1: Hi %username%,
+
+    2: "%username% sent you a contact request on Polly & Bob. To confirm %username% as a contact, just follow the link below:"
+
+  buttons:
+    accept: Accept
+
+    reject: Reject
+    
+otherprofile:
+  members: Members
+  
+  member: Member
+  
+  community_m: Community Manager
+    
+  house_m: House Manager
+  
+  neighbor: Neighborhood Manager
+  
+  pioneer: Pioneer
+
+request:
+  msg1: Thanks for connecting to the hood.
+  msg2: Thanks for requesting to
+  send: Send
+  return_to_listing: Return to Listing
+  your_list: This is your listing!
+  price_propose: Make your price proposal:
+  time_propose: Make your time proposal:
+  login_require: In order to proceed please register/login first.
+  left: available.
+  how_many: How many do you want?
+  how_many_pieces: How many pieces do you offer?
+  in_price: In price of
+  total_price: Total Price
+  proposed: Proposed
+  want: want
+  offer: offer
+  swap_msg: What do you want to swap?
+  message_to_user: Message to  
+  write_a_review: Write a review about
+  sorry_msg: Thanks for visiting the listing, we are sorry, but there are no more
+  sorry_msg1: You can't accept more request, because there are no more
+  listing_closed: Your listing is closed now, You can re-list the same listing again.
+  listing_closed1: The listing you are looking for is closed now.  Please see the relisted or similar listing if any.
+  repost_msg: Your Listing Reposted.
+payment:
+  default_payment: Default payment settings
+  no_default: No default payment settings installed..
+  choose_default: Choose your default payment method.
+  direct_debit: Direct debit
+  paypal: Paypal
+  credit_card: Credit Card
+  why_payment_setting: Why payment settings?
+  why_payment_setting1: To run a platform like Polly & Bob you need a complex server infrastructure and people who do the job.
+  why_payment_setting2: In order to keep Polly & Bob run, we take a 10% commission only on a money invited transactions.
+  why_payment_setting3: All other transactions are for free.
+  why_payment_setting4: We kindly ask you to make a contribution to Polly & Bob by selling old stuff to neighbours via Polly & Bob 
+  why_payment_setting5: rather than going to our commercial competitors.
+  why_payment_setting6: Help Polly & Bob, support your neighbourhood by selling via Polly & Bob.
+  why_payment_setting7: Some part of the money will be redirected to users which are neighbourhood managers, to support them to contribute to the neighbourhood.   
+  how_decide_term: How can I decide on the terms?
+  board_neighbour: Board of Neighbours
+  how_support: How else can I support Polly & Bob?
+  you_can_msg: You can sell stuff on polly & bob and we take 10%.
+  become_member: Become a member of the board of neighbours. 
+  place: That is the place where you can join in to discuss topics like how we finance Polly & Bob.
+  offer_good: Offer a Good
+  offer_service: Offer a Service
+  offer_event: Offer an Event
+  you_can_invest: You can invest in us by lending us some money.
+  invest: Invest in Polly & Bob
+  donate: You can donate!
+  donation: Donation
+  account_holder: Account Holder
+  account: Account
+  bank_code: Bank Code
+  term_condition: I authorized Polly & Bob to take 10% commission to everything I sell via Polly & Bob.
+  save: Save Settings
+  save2: Save Settings and let me go to back my listing
+  sepa: SEPA
+  email_to_paypal: E-mail Paypal Account
+  type_of_card: Type of Card
+  card: Card
+  card_holder: Card Holder
+  valid_till: Valid till
+  visa: Visa
+  master_card: Master Card
+  change: change
+  delete: delete
+  deletemsg: Your payment settings are uninstalled.
+  savemsg: You installed your payment settings successfully.
+  cvv: cvv code
+  
+account:
+  old_pass: Old Password
+  new_pass: New Password
+  confirm_pass: Confirm Password
+  confirm: confirm
+  location_identity: Location & Identity
+  your_email: Your E-mail
+  msg0: Send Email when somebody sents a message
+  msg1: Send Email when somebody sents a request or review

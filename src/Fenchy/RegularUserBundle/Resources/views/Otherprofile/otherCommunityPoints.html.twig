@@ -68,8 +68,8 @@
                       
                       <tr>
                         <td width="40%">{{ 'regularuser.invited_and_registered_users'|trans }}</td>
-                        <td width="10%"></td>
-                        <td width="10%"></td>
+                        <td width="10%">{{ inviteFriendPoint }}</td>
+                        <td width="10%">{{ inviteFriendPoint }}</td>
                         {# <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.tell_friend_about_pollyandbob_now'|trans }}</a></td> #}
                       </tr>
                       
@@ -97,7 +97,7 @@
                       
                     </table>
                 </div>
-                <div class="bgbottom-big"  style="top: 60px; position: relative;">
+                <div class="bgbottom-big">
             	<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
             	</div>
             </div>
@@ -110,18 +110,6 @@
 			{% render 'FenchyRegularUserBundle:Otherprofile:checkNeighbor' with {'neighborId': userId} %}
 	 
 	 </div>
-			<section id="boxes2">
-		    <div id="dialog2" class="window"> 
-		        <div class="big_popup">
-		            <div class="big_popupclose"><a href="" class="close"></a></div>
-		            
-					<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>            
-		            <form>
-						<button>{{ 'regularuser.ok'|trans|upper }}</button>
-		            </form>
-		        </div>    
-		    </div>    
-		    <div id="mask"></div>
-		    </section>
+			
 	
 {% endblock %}

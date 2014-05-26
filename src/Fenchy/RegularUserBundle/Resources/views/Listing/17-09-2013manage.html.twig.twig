@@ -1,0 +1,145 @@
+{% extends 'FenchyRegularUserBundle::layoutV2.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# any view specific stylesheets for this view #}
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/sidebar-v2.css')) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/search-bar-v2.css')) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/inner-content-v2.css')) }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/article-box-v2.css')) }}" type="text/css" />    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/landing-page-view-model.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('http://connect.facebook.net/en_US/all.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script> 
+
+    <script type="text/javascript">
+        
+        var userProfileViewModel;
+        var spinnerHTML = '<div id="spinner-div"><i class="icon-spinner icon-spin"></i></div>';
+        var tabsJQ;
+
+        $(document).ready(function() {
+            
+            $('.add-sticker').fancybox({type:'iframe'});
+
+            geocoder = new google.maps.Geocoder();
+            var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';
+
+            landingPageViewModel = new LandingPageViewModel(geocoder, baseSearchViewUri);
+            
+            ko.applyBindings( landingPageViewModel, document.getElementsByTagName('body')[0] );
+            
+            autocomplete = new GApiAutocomplete(
+                document.getElementById('location'),
+                landingPageViewModel );
+ 
+   
+            autocomplete = new GApiAutocomplete(
+                document.getElementById('location'),
+                userProfileViewModel );
+                   
+            $('a.facebook-invite-button').click(function(){
+                sendInvitationsFacebook();
+            });
+            
+            function sendInvitationsFacebook() {
+              FB.ui({method: 'apprequests',
+                message: '{{'regularuser.social.invite_facebook'|trans}}'
+              }, requestCallback);
+            }    
+            
+ 
+            function requestCallback(response) {
+                
+            }   
+            
+            $('#spoken-languages').tagit({
+                readOnly: true
+            });             
+            
+        });
+        
+    </script>
+    {# any view specific JS scripts for this view #}
+{% endblock %}
+
+{% block content %}
+    {# put view specific content here #}
+    {{ facebook_initialize({'frictionlessRequests': true }) }}
+    <section class="main content-rtl" data-role="main">
+        <div class="wrapper-inner-content">
+            <div class="clearfix">
+                
+                <section class="sidebar pull-left large-padding-top">
+                    {% include 'FenchyRegularUserBundle:Partials:userProfileLeftMenuV2.html.twig' %}
+                </section>
+                
+                <section class="content pull-right">
+                    {% include '::searchBarV2.html.twig' %}
+                    
+                    <div class="inner-content">
+                        <div class="article-list-wrapper clearfix">
+                            {% if listings %}
+                                {% for notice in listings %}
+                                    <article class="box smallbox ">
+                                        <div class="clearfix">
+                                            <figure class="pull-left">
+                                                <div class="pull-left img"><img alt="" src="{{notice.avatar}}"></div>
+                                                <figcaption class="pull-left">
+                                                    <div>
+                                                        <h3>
+                                                            <a href="{{path('fenchy_notice_show_slug', {'slug': notice.slug, 'year': notice.createdAt|date('Y'), 'month': notice.createdAt|date('m'), 'day': notice.createdAt|date('d')  })}}">
+                                                                {{notice.title}}
+                                                            </a>
+                                                        </h3>
+                                                        <strong>{{notice.location.location}}</strong>
+                                                        <p>{{notice.content}}</p>
+                                                    </div>                                        
+                                                </figcaption>
+                                            </figure>
+                                            <div class="pull-left event-master">
+                                                <div class="button green-button">
+                                                    <a href="{{path('fenchy_regular_user_notice_edit', {'id': notice.id})}}" class="wrapper manage-button">
+                                                        <i class="icon-edit"></i>
+                                                        <strong>{{'btn.edit'|trans}}</strong>
+                                                    </a>
+                                                </div>
+                                                <div class="button green-button clear button-top-margin">
+                                                    <a href="{{path('fenchy_regular_user_listing_delete', {'id': notice.id})}}" class="wrapper manage-button">
+                                                        <i class="icon-remove"></i>
+                                                        <strong>{{'btn.delete'|trans}}</strong>
+                                                    </a>
+                                                </div>                                                    
+                                                    
+                                            </div>
+                                            <div class="activity">
+                                                <a href="#" class="event"><i class="{{notice.getIcon}}"></i></a>
+                                            </div>
+                                        </div>
+                                    </article>                        
+                                {% endfor %}
+                            {% else %}
+                                <p>{{'listing.no'|trans}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </section>
+                
+            </div>
+        </div>
+    </section>
+
+    
+
+    
+
+{% endblock %}{# empty Twig template #}

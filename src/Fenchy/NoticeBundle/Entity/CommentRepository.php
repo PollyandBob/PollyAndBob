@@ -16,6 +16,81 @@ use Fenchy\UserBundle\Entity\User;
  */
 class CommentRepository extends EntityRepository
 {
+        public function getFullDetailedList ($filter = NULL) {
+
+            if(!($filter instanceof \Fenchy\AdminBundle\Entity\CommentsFilter)) {
+
+                return $this->createQueryBuilder('r')
+                        ->select('r, a, n, u, s, su')
+                        ->join('r.author', 'a')
+                        ->leftJoin('r.aboutNotice', 'n')
+                        ->leftJoin('r.aboutUser', 'u')
+                        ->leftJoin('r.aboutUserGroup', 'ug')
+                        ->leftJoin('n.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
+                        ->leftJoin('s.reported_by', 'su')
+                        ->getQuery()
+                        ->getResult();
+            } 
+
+            $sub = $this->getEntityManager()->createQuery("
+                            SELECT count(s2.id) FROM FenchyUtilBundle:Sticker s2
+                            WHERE s2.review = r AND s2.discarded_at IS NULL"
+                        );
+
+            $query = $this->createQueryBuilder('r')
+                        ->select('r, a, s, su, ('.$sub->getDQL().') as HIDDEN stickersQ')
+                        ->join('r.author', 'a');
+            $query->join('r.aboutUser', 'u');
+
+
+            $query->leftJoin('r.stickers', 's', Expr\Join::WITH, 's.discarded_at IS NULL')
+                    ->leftJoin('s.reported_by', 'su');
+
+             if($filter->text) {
+                $query->where('LOWER(r.text) like :text')
+                        ->setParameter('text', strtolower('%'.$filter->text.'%'));
+            }
+
+            if($filter->author) {
+                $query->andWhere('LOWER(a.email) like :email')
+                        ->setParameter('email', strtolower('%'.$filter->author.'%'));
+            }
+
+            if($filter->receiver) {               
+                $query->andWhere('LOWER(u.email) like :email1')
+                        ->setParameter('email1', strtolower('%'.$filter->receiver.'%'));
+            }
+
+            if($filter->target === 'user') {
+                $query->addSelect('u');
+
+            } elseif($filter->target === 'notice') {
+                $query->join('r.aboutNotice', 'n')
+                        ->addSelect('n');
+            }
+
+
+
+
+            if($filter->sort === 'stickersQ') {
+                return $query
+                        ->orderBy($filter->sort, $filter->order)
+                        ->getQuery()
+                        ->getResult();
+            }
+            if($filter->sort === 'receiver') {
+                return $query
+                        ->orderBy('r.aboutUser', $filter->order)
+                        ->getQuery()
+                        ->getResult();
+            }
+
+            return $query
+                        ->orderBy('r.'.$filter->sort, $filter->order)
+                        ->getQuery()
+                        ->getResult();
+        }
+        
 	public function findByInJSON($router, array $criteria, array $orderBy, $limit, $offset) {
 		$comments = $this->findBy($criteria,$orderBy,$limit,$offset);
 		$commentsJSON = array();
@@ -68,14 +143,27 @@ class CommentRepository extends EntityRepository
 					'id' => $oneComment->getId(),
 					'type' => $oneComment->getType(),
 					'text' => $oneComment->getText(),
-					'title' => $oneComment->getTitle()
+					'title' => $oneComment->getTitle(),
+                                        'is_read' => $oneComment->getIsRead(),
+                                        'is_read_status' => $oneComment->getIsReadStatus(),
+                                        'blue' => $oneComment->getBlue(),
+                                        'request_blue' => $oneComment->getRequestBlue()
 			);
 		}
 
 		return $commentsJSON;
 	}
-	
-	public function findGroupCommentsByInJSON($router, array $criteria, array $orderBy, $limit, $offset) {
+	public function getAllCommentsWithNotice($notice)
+        { 
+          return  $this->createQueryBuilder('c')
+				->where('c.aboutNotice = :notice')
+				->setParameter('notice', $notice)
+				->getQuery()
+				->getResult();
+    
+        }
+
+        public function findGroupCommentsByInJSON($router, array $criteria, array $orderBy, $limit, $offset) {
 		$comments = $this->findBy($criteria,$orderBy,$limit,$offset);
 		$commentsJSON = array();
 	
@@ -120,6 +208,8 @@ class CommentRepository extends EntityRepository
 					'text' => $oneComment->getText(),
 					'title' => $oneComment->getTitle(),
 					'createdAt' => $oneComment->getCreatedAt(),
+                                        'is_read' => $oneComment->getIsRead(),
+                                        'is_read_status' => $oneComment->getIsReadStatus()
 			);
 		}
 	
@@ -169,7 +259,56 @@ class CommentRepository extends EntityRepository
 		return $total;
 
 	}
+        
+        public function countComment(User $user)
+        {
+            $query = $this->createQueryBuilder('r')
+                            ->select('COUNT(r.id)')
+                            ->where('r.is_read = :read and r.aboutUser = :user')
+                            ->setParameters(array(
+                                            'read' => 'false',
+                                            'user' => $user
+                            ))
+                            ->getQuery();
 
+            $query1 = $this->createQueryBuilder('r')
+                            ->select('COUNT(r.id)')
+                            ->where('r.is_read_status = :read and r.aboutUser = :user')
+                            ->setParameters(array(
+                                            'read' => 'false',
+                                            'user' => $user
+                            ))
+                            ->getQuery();
+
+
+            return $query->getSingleScalarResult() + $query1->getSingleScalarResult();
+        }
+
+        public function updateCommentCount(User $user)
+        {
+            $query = $this->createQueryBuilder('r')
+                    ->update()
+                    ->set('r.is_read_status', 'true')
+                    ->where('r.aboutUser = :user')
+                    ->getQuery();
+
+                    $query->setParameter('user', $user);
+
+                    return $query->execute();
+        }
+        public function updateCommentCount1(User $user)
+        {
+            $query = $this->createQueryBuilder('r')
+                    ->update()
+                    ->set('r.is_read', 'true')
+                    ->where('r.aboutUser = :user')
+                    ->getQuery();
+
+                    $query->setParameter('user', $user);
+
+                    return $query->execute();
+        }
+        
 	public function findCount( $criteria ) {
 		$query =  $this->createQueryBuilder('r')
 		->select('COUNT(r.id)');

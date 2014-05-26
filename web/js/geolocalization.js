@@ -7,6 +7,17 @@ var typingTimeout;
 
 var geoFormId = 'fenchy_userbundle_user_locationtype_location';
 
+var componentForm = {
+    street_number: 'long_name',
+    route: 'long_name',
+    locality: 'long_name',
+    sublocality: 'long_name',
+    administrative_area_level_1: 'long_name',
+    administrative_area_level_2: 'long_name',
+    country: 'long_name',
+    postal_code: 'long_name'
+};
+        
 function initialize() {
     geocoder = new google.maps.Geocoder();    
     var mapOptions = {
@@ -30,6 +41,42 @@ function initialize() {
 //    $('#'+geoFormId+'_street').keypress(mapTypingUpdate);
     
     setLocation();
+}
+function fillInAddress() {
+        
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+        //console.log(place);
+        // Get each component of the address from the place details
+        // and fill the corresponding field on the form.
+        document.getElementById(geoFormId+'_street_number').value = '';
+        document.getElementById(geoFormId+'_route').value = '';
+        document.getElementById(geoFormId+'_locality').value = '';
+        document.getElementById(geoFormId+'_sublocality').value = '';
+        document.getElementById(geoFormId+'_administrative_area_level_1').value = '';
+        document.getElementById(geoFormId+'_administrative_area_level_2').value = '';
+        document.getElementById(geoFormId+'_country').value = '';
+        document.getElementById(geoFormId+'_postal_code').value = '';
+        
+        for (var i = 0; i < place.address_components.length; i++) {
+            var addressType = place.address_components[i].types[0];
+            
+            if (componentForm[addressType]) {
+                var val = place.address_components[i][componentForm[addressType]];
+                if(val !='')
+                    document.getElementById(geoFormId+'_'+addressType).value = val;
+                else
+                    document.getElementById(geoFormId+'_'+addressType).value = null;
+            }
+            else
+            {
+                document.getElementById(geoFormId+'_street_address').value = val;
+            }
+//               console.log( place.address_components[i]);
+//               console.log(place.address_components[i].types[0]);
+                //document.getElementById(addressType).value = val;
+            
+        }
 }
 
 function callback(results, status) {
@@ -58,8 +105,42 @@ function createMarker(place, info, startPosition) {
     });
         
     if (info) {
+        $('#fenchy_userbundle_user_locationtype_location_location').val(place.formatted_address);
         infowindow.setContent(place.formatted_address);
-        infowindow.open(map, marker);           
+        infowindow.open(map, marker);
+        
+        document.getElementById(geoFormId+'_location').value = place.formatted_address;
+        
+        document.getElementById(geoFormId+'_street_number').value = '';
+        document.getElementById(geoFormId+'_route').value = '';
+        document.getElementById(geoFormId+'_locality').value = '';
+        document.getElementById(geoFormId+'_sublocality').value = '';
+        document.getElementById(geoFormId+'_administrative_area_level_1').value = '';
+        document.getElementById(geoFormId+'_administrative_area_level_2').value = '';
+        document.getElementById(geoFormId+'_country').value = '';
+        document.getElementById(geoFormId+'_postal_code').value = '';
+        
+        
+        for (var i = 0; i < place.address_components.length; i++) {
+            var addressType = place.address_components[i].types[0];
+            
+            if (componentForm[addressType]) {
+                var val = place.address_components[i][componentForm[addressType]];
+                if(val != '')
+                    document.getElementById(geoFormId+'_'+addressType).value = val;
+                else
+                    document.getElementById(geoFormId+'_'+addressType).value = null;
+            }
+            else
+            {
+                var val = place.address_components[i][undefined];
+                document.getElementById(geoFormId+'_street_address').value = val;
+            }
+               //console.log( place.address_components[i]);
+               //console.log(place.address_components[i].types[0]);
+                //document.getElementById(addressType).value = val;
+            
+        }
     }
        
     markersArray.push(marker);
@@ -142,7 +223,7 @@ function fillLocationField(object) {
         address = tmp.join(", ");
     }
     
-    $('#fenchy_userbundle_user_locationtype_location_location').val(address);
+    //$('#fenchy_userbundle_user_locationtype_location_location').val(address);
     
 }
 

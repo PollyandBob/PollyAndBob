@@ -9,6 +9,82 @@
     <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />    
     <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('css/gallery/punkave/editSmall.css') }}" type="text/css" />
+    <style>
+    #placeholder {
+    display: block;
+    height: 123px;
+    width: 455px;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 0 81px;
+    top: 20px;
+    }
+    .placeholder {
+    display: block;
+    height: 262px;
+    width: 970px;
+    margin: 0 auto;
+    position: relative;
+    }
+    .placeholder .crop_me2 {
+        pointer-events: none !important;
+    }
+    .crop_me
+    {
+        display: block !important;
+    }
+    #placeholder img {
+    margin: auto;
+    display: block;
+    height: auto;
+    position: absolute;
+    width: 100%;
+    }
+
+    #placeholder .jwc_frame
+    {
+    cursor: move !important;
+    }
+    .jwc_controls .dragger {
+        background: url("{{ asset('images/drag.png') }}") no-repeat scroll 9px 8px rgba(84, 97, 133, 0.4);
+        border-radius: 2px 2px 2px 2px;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12) inset;
+        color: #FFFFFF;
+        display: inline;
+        font-family: mathletebulky;
+    font-size: 17px;
+        padding: 4px 9px 6px 24px;
+        letter-spacing: 1px;
+    }
+    ._6_f {
+    max-width: 275px;
+    display: inline-block;
+    }
+    ._8_2 {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: bold;
+    display: inline-block;
+    padding-right: 30px;
+    }
+    ._8_2, .alternate {
+    color: #FFF;
+    text-rendering: optimizelegibility;
+    text-shadow: 0 0 3px rgba(0,0,0,0.8);
+    }
+    .alternate {
+    font-size: 20px;
+    font-weight: normal;
+    white-space: nowrap;
+    color: #fff;
+    }
+    #other-profile .right .bgbottom  {
+    width: auto !important;
+    }
+    </style>
+    
+    
 {% endblock %}
         
 {% block javascripts %}    
@@ -21,16 +97,48 @@
     <script type="text/javascript" src="{{ asset('plugins/tapmodo-Jcrop-1902fbc/js/jquery.Jcrop.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/gallery/punkave/editSmall.js') }}"></script>
     <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jWindowCrop.js') }}"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+                $('.crop_me2').attr('src', '{{ absolute(asset(coverpath)) }}').load(function() {  
+		  //alert('Image Loaded');  
+		});
+                $('.crop_me2').jWindowCrop({
+                            targetWidth: 970, //Width of facebook cover division
+                            targetHeight: 262, //Height of cover division
+                            loadingText: ''
+                    });
+
+                var vcropY = 0;
+                {% if cropY %}
+                vcropY = {{ cropY }};
+                {% endif %}
+
+                var newCropY = 2.13 * vcropY;
+                newCropY = Math.ceil(newCropY);
+                $('.crop_me2').css('left',{{ cropX }}+'px');
+                $('.crop_me2').css('top',-newCropY+'px');
+                $('.crop_me').css('left',{{ cropX }}+'px');
+                $('.crop_me').css('top',-{{ cropY }}+'px');
+
+                $('.placeholder').find('.jwc_controls').empty();
+
+            });
+    </script>
+            
 {% endblock %}
 
 {% block content %}
 	<div class="profile">
 				<div class="profile_bak" >
-				{%  if coverpath %}
-					<img alt="" width="970" height="262" src="{{ absolute(asset(coverpath)) }}">
-				{% else %}
-						<img alt="" src="{{ absolute(asset('images/bg_profileheader.png')) }}">
-				{% endif %}
+                                    <div class="placeholder">
+                                        {%  if coverpath %}
+                                                <img alt="" width="970" class="crop_me2" src="">
+                                        {% else %}
+                                                <img alt="" src="{{ absolute(asset('images/bg_profileheader.png')) }}">
+                                        {% endif %}
+                                    </div>    
 				</div>
                 <div class="left">
                     <div class="persen">

@@ -1,0 +1,106 @@
+util:
+  relative:
+    now: jetzt
+
+    just_now: vor weniger als einer Minute
+
+    a_minute_ago: vor einer Minute
+
+    x_minutes_ago: '{0,1} vor einer Minute |[2,Inf]Vor%number% Minuten'
+
+    an_hour_ago: vor einer Stunde
+
+    x_hours_ago: '{0,1}vor einer Stunde|[2,Inf]Vor%number% Stunden'
+
+    today: Heute
+
+    yesterday: Gestern
+
+    x_days_ago: '{0,1}Gestern|[2,Inf]Vor %number% Tagen'
+
+    x_weeks_ago: '{0,1} vor einer Woche|[2,Inf]Vor %number% Wochen'
+
+    last_month: Letzten Monat
+
+    in_a_minute: In einer Minute
+
+    in_x_minutes: '{0,1} In einer Minute|[2,Inf]In %number% Minuten'
+
+    in_an_hour: In einer Stunde
+
+    in_x_hours: '{0,1}In einer Stunde|[2,Inf]In %number% Stunden'
+
+    tomorrow: Gestern 
+
+    monday: Montag
+
+    tuesday: Dienstag
+
+    wednesday: Mittwoch
+
+    thursday: Donnerstag
+
+    friday: Freitag
+
+    saturday: Samstag
+
+    sunday: Sonntag
+
+    next_week: Nächste Woche
+
+    in_x_weeks: '{0,1}Nächste|[2,Inf]In %number% wochen'
+
+    next_month: Nächsten Monat
+
+    flag: Flag
+    
+    why: Why do you want to flag this?
+btn:
+  continue: weiter
+
+  back: zurück
+
+  ok: OK
+
+  cancel: beenden
+
+  save: speichern
+
+  confirm: Bestätigen
+
+  login: Login
+
+  send: Senden
+
+  delete: Löschen
+
+  yes: Ja
+
+  no: Nein
+
+  edit: Ändern
+
+  send_message: Nachricht senden
+harass: Gewalt gegen Person oder eine Gruppe
+spam: Spam
+commercial: Kommerziele Inhalte
+forbidden: Pornographie, Gewalt oder Naktheit
+behaviour: Eigentumsrecht missachtet
+notpollynbob: Nicht Polly & Bob Style
+other_type: Sonstige
+sticker:
+  added_title: Deine Meldung ist bei uns angekommen.
+
+  reasons: Gründe
+
+  description: weitere Bemerkungen
+male: männlich
+female: weiblich
+or: oder
+load_more: mehr
+never: niemals
+immediately: unverzüglich
+daily: täglich
+positive: x
+negative: x
+review_type: 

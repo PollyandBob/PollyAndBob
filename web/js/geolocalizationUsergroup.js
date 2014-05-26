@@ -58,6 +58,7 @@ function createMarker(place, info, startPosition) {
     });
         
     if (info) {
+        $('#fenchy_regularuserbundle_usergroup_locationtype_location_location').val(place.formatted_address);
         infowindow.setContent(place.formatted_address);
         infowindow.open(map, marker);           
     }

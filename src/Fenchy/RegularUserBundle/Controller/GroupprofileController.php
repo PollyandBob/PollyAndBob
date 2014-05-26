@@ -51,6 +51,7 @@ class GroupprofileController extends Controller
 		$usersOwnProfile = 1;
 		$request = $this->getRequest();
 		$groupId = $request->get('group_ids');
+                $managerGroup = $request->get('managergroup');
 		// invited neighbors array
 		$inviteNeighbors = $request->get('invite_neighbors');
 		$inviteNeighborsNext50 = $request->get('invite_neighborsnext50');
@@ -73,33 +74,63 @@ class GroupprofileController extends Controller
 		// Create form for info save of Group Profile
 		$form = $this->createFormBuilder($usergroup)->add('groupname', null, array(
 				'attr' => array(
-						'placeholder' => 'regularuser.your_groupname')))->add('aboutGroup', 'textarea', array(
+						'placeholder' => 'regularuser.your_groupname'), 'max_length'=>25))->add('aboutGroup', 'textarea', array(
 				'attr' => array(
 						'placeholder' => 'regularuser.your_aboutgroup')))->add('status', 'choice', array(
 				'label' => 'regularuser.status',
 				'choices' => UserGroup::$statusMap))->add('file', null, array(
 				'label' => 'settings.general.profile_photo'))->add('file2', null, array(
-				'label' => 'settings.general.cover_photo'))->getForm();
+				'label' => 'settings.general.cover_photo'))
+                ->add('cropX','hidden',array(
+                      'data' => $usergroup->getCropX(),))
+                ->add('cropY','hidden',array(
+                      'data' => $usergroup->getCropY(),))
+                ->getForm();
 
 		$neighborsNext50 = $this->neighborsNext50();
 
 		if ('POST' == $request->getMethod())
 		{
-			$form->bindRequest($request);
-
+		$form->bindRequest($request);
+                $vcropX = $form->get('cropX')->getData();
+                $vcropY = $form->get('cropY')->getData();
+                if($request->get('onCreate') == 1 and $vcropY > 0)
+                {
+                    $vcropY = $vcropY/2.13;
+                }
+    		
+    		if(!$vcropX)
+    		{
+    			$vcropX = 0;
+    		}
+    		if(!$vcropY)
+    		{
+    			$vcropY = 0;
+    		}
+            
 			if ($form->isValid())
 			{
 				$em = $this->getDoctrine()->getEntityManager();
 				
 				$location = new Location();
-				$data_saved = $this->get('translator')->trans('settings.flash.data_saved');
+				$data_saved = $this->get('translator')->trans('regularuser.message.group_created');
 				$this->get('session')->setFlash('positive', $data_saved);
 
 				$usergroup->setUser($displayUser);
-				$location->setLocation($displayUser->getLocation());
+				$location->setLocation($displayUser->getLocation()->getLocation());
+                                $location->setLatitude($displayUser->getLocation()->getLatitude());
+                                $location->setLongitude($displayUser->getLocation()->getLongitude());
 				$usergroup->setLocation($location);
 				$usergroup->upload();
 				$usergroup->uploadcover();
+                
+                                $usergroup->setCropX($vcropX);
+                                $usergroup->setCropY($vcropY);
+//                                if($managerGroup)
+//                                {
+//                                    if($managerGroup=='communitygroup' or $managerGroup=='neighborhoodgroup')
+//                                        $usergroup->setManagerGroup(ucfirst($managerGroup[0]));
+//                                }
 
 				$em->persist($usergroup);
 				$em->flush();
@@ -136,11 +167,12 @@ class GroupprofileController extends Controller
 						$content .= '                                                                    ';
 						//$content .= $this->get('translator')->trans('regularuser.message.message_first_part');
 						$content .= $this->get('translator')->trans('regularuser.message.message_first_part', array(
-								'%administrator%' => $userOther->getRegularUser()->getFirstname(),
-								'%groupname%' => $groupn));
-						//$content .= $link;
+                                                                '%groupname%' => $groupn,
+								'%administrator%' => $usergroup->getUser()->getRegularUser()->getFirstname()
+								));
+						$content .= "|".$link."|";
 						$content .= '                                                                    ';
-						$content .= $this->get('translator')->trans('regularuser.message.message_last_part');
+						//$content .= $this->get('translator')->trans('regularuser.message.message_last_part');
 						$messageObject->setTitle($title);
 
 						$messageObject->setContent($content);
@@ -187,10 +219,12 @@ class GroupprofileController extends Controller
 							$content .= '                                                                    ';
 							$content .= $this->get('translator')->trans('regularuser.message.message_first_part');
 							$content .= $this->get('translator')->trans('regularuser.message.message_first_part', array(
-								'%administrator%' => $userOther->getRegularUser()->getFirstname(),
-								'%groupname%' => $groupn));
+								'%groupname%' => $groupn,
+								'%administrator%' => $usergroup->getUser()->getRegularUser()->getFirstname()
+								));
+                                                        $content .= "|".$link."|";
 							$content .= '                                                                    ';
-							$content .= $this->get('translator')->trans('regularuser.message.message_last_part');
+							//$content .= $this->get('translator')->trans('regularuser.message.message_last_part');
 							$messageObject->setTitle($title);
 
 							$messageObject->setContent($content);
@@ -290,7 +324,7 @@ class GroupprofileController extends Controller
 				'msg' => $msg)));
 	}
 
-	public function leaveGroupAction($groupId, $msg)
+	public function leaveGroupAction($groupId, $msg,$requestId)
 	{
 		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
 		$em = $this->getDoctrine()->getEntityManager();
@@ -306,7 +340,13 @@ class GroupprofileController extends Controller
 
 		$em->remove($groupmembers);
 		$em->flush();
-
+                if($requestId != 0 )
+                {
+                    $requestObj = $em->getRepository('FenchyNoticeBundle:Request')->find($requestId);
+                    $em->remove($requestObj);
+                    $em->flush();
+                }
+                
 		return $this->redirect($this->generateUrl('fenchy_regular_user_user_groupprofile_groupinfo', array(
 				'groupId' => $groupId,
 				'msg' => $msg)));
@@ -317,6 +357,25 @@ class GroupprofileController extends Controller
 		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
 		$em = $this->getDoctrine()->getEntityManager();
 		$groupMembers = '';
+                $requestRepo = $em->getRepository('FenchyNoticeBundle:Request');
+		$aboutusergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
+		$neighbourRequests = $requestRepo->getSingleUserGroupRequests($userLoggedIn,$aboutusergroup);
+		$requestObj = null;
+		foreach ($neighbourRequests as $k =>$neighbourRequest)
+		{
+			if($neighbourRequest->getAboutNotice())			
+				unset($neighbourRequests[$k]);
+			else
+				$requestObj = $neighbourRequest;
+		}
+			
+		foreach ($neighbourRequests as $k =>$neighbourRequest)
+		{
+			if($neighbourRequest->getAboutNotice())
+				unset($neighbourRequests[$k]);
+			else
+				$requestObj = $neighbourRequest;
+		}
 
 		if ($groupId)
 		{
@@ -340,8 +399,102 @@ class GroupprofileController extends Controller
 				'groupMember' => $groupMembers,
 				'groupId' => $groupId,
 				'usergroup' => $usergroup,
-				'adminmember' => $adminmember));
+				'adminmember' => $adminmember,
+                                'requestObj' =>$requestObj,
+                                ));
 
+	}
+        
+        public function joinClosedGroupRequestAction()
+	{
+	
+		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
+		$request = $this->getRequest();
+		$targetGroupId = $request->get('neighborId');
+		//$remove = $request->get('remove');
+				
+		$user_regular = $userLoggedIn->getRegularUser();
+			
+		$em = $this->getDoctrine()->getManager();
+		if ( !$request->isMethod('POST') ) {
+			return new Response('',401);
+		}
+		$targetUserGroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($targetGroupId);
+			
+		if ( ! ($userLoggedIn instanceof \Fenchy\UserBundle\Entity\User) )
+			return new Response('',401);
+		
+		$noticerequest = new \Fenchy\NoticeBundle\Entity\Request();
+		$noticerequest->setTitle($userLoggedIn->getRegularUser()->getFirstName(). " ". $this->get('translator')->trans('regularuser.want_to_join_group'));
+		$userLoggedIn->addOwnRequest($noticerequest);
+		$em->persist($userLoggedIn);
+		$noticerequest->setAuthor($userLoggedIn);
+		//$noticerequest->setAboutNotice(null);
+		$noticerequest->setText($this->get('translator')->trans('regularuser.want_to_join_group'). " " .$targetUserGroup->getGroupname() );
+		$noticerequest->setStatus('pending');
+		$noticerequest->setRequeststatus('pending');
+                $noticerequest->setRequestBlue('true');
+                $noticerequest->setIsReadStatus('true');
+		$noticerequest->setAboutUserGroup($targetUserGroup);
+		$em->persist($noticerequest);
+		$em->flush();
+				
+		return new Response();	
+	
+	}
+        
+        public function joinClosedGroupAction()
+	{
+		
+		$user = $this->get('security.context')->getToken()->getUser();
+		$request = $this->getRequest();
+		$targetNeighborId = $request->get('neighborId');
+		
+		$neighborRequestId = $request->get('neighbourRequestId');		
+		$remove = $request->get('remove');
+		$rejectN = $request->get('rejectN');
+		$groupId = $request->get('groupId');
+                
+		$em = $this->getDoctrine()->getManager();
+		
+		if($rejectN)
+		{
+			$requestObj = $em->getRepository('FenchyNoticeBundle:Request')->find($neighborRequestId);
+			$em->remove($requestObj);
+			$em->flush();
+			echo "rejected";
+			exit;
+		} 
+		$user_regular = $user->getRegularUser();
+		 
+		
+		$neighborpoint = $em->getRepository('UserBundle:User');
+		$neighborforPoint = $neighborpoint->find($targetNeighborId);	
+		
+		if ($groupId)
+		{
+			$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
+		}
+                $displayUser2 = $em->getRepository('UserBundle:User')->find($targetNeighborId);
+		$groupmembers = new GroupMembers();
+
+		$groupmembers->setCurrent($usergroup);
+		$groupmembers->setNeighbor($displayUser2);
+
+		$em->persist($groupmembers);
+		$em->flush();
+                
+                $requestObj = $em->getRepository('FenchyNoticeBundle:Request')->find($neighborRequestId);
+                $requestObj->setStatus('accepted');
+                $requestObj->setIsReadStatus(false);
+                $requestObj->setBlue(true);
+                $requestObj->setRequestBlue(false);
+                $requestObj->setRequeststatus('accepted');
+                $em->persist($requestObj);
+                $em->flush();
+		
+		exit;
+	
 	}
 
 	public function deleteGroupAction($groupId)
@@ -352,6 +505,8 @@ class GroupprofileController extends Controller
 			$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
 		}
 		
+                $em->getRepository('FenchyRegularUserBundle:GroupMembers')->removeAllById($groupId);
+                
 		$members = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findAllById($groupId);
 		
 		if(!$members)
@@ -405,7 +560,12 @@ class GroupprofileController extends Controller
 			{
 				$neighbors = $neighbor->getId();
 			}
-			if (!$neighbors)
+                        $blockneighbor = $em->getRepository('FenchyRegularUserBundle:BlockedNeighbor')->findById($user->getId(), $displayUser->getId());
+                        if(!$blockneighbor)
+                        {
+                                $blockneighbor = $em->getRepository('FenchyRegularUserBundle:BlockedNeighbor')->findById($displayUser->getId(), $user->getId());
+                        }
+			if (!$neighbors && !$blockneighbor)
 			{
 				$document = new Document();
 				$result = $em->getRepository('FenchyRegularUserBundle:Document')->findById($user->getId());
@@ -461,7 +621,7 @@ class GroupprofileController extends Controller
 						$dist = 30000; // slider distance
 					}
 
-					if ($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
+					if ($gmap_distance >= $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
 					{
 						// Added By jignesh for Manager type
 
@@ -556,6 +716,7 @@ class GroupprofileController extends Controller
 				$toQueue->setSendAfter($send_after)->setFromAddress($this->container->getParameter('from_email'))->setFromName($this->container->getParameter('from_name'))->setToAddress($receiver->getEmail())->setSubject($this->get('translator')->trans('message.notification.email.subject', array(
 						'%username%' => $sender->getRegularUser()->getFirstname())))->setBodyHtml($this->renderView('FenchyMessageBundle:Notifications:messageEmailHTML.html.twig', array(
 						'sender' => $sender,
+                                                'avatar' => $avatar,    
 						'message' => $message)))->setBodyPlain($this->renderView('FenchyMessageBundle:Notifications:messageEmailPlain.html.twig', array(
 						'sender' => $sender,
 						'message' => $message,
@@ -570,6 +731,7 @@ class GroupprofileController extends Controller
 				$emailNotification = \Swift_Message::newInstance()->setFrom($this->container->getParameter('from_email'), $this->container->getParameter('from_name'))->setTo($receiver->getEmail())->setSubject($this->get('translator')->trans('message.notification.email.subject', array(
 						'%username%' => $sender->getRegularUser()->getFirstname())))->setBody($this->renderView('FenchyMessageBundle:Notifications:messageEmailHTML.html.twig', array(
 						'sender' => $sender,
+                                                'avatar' => $avatar,    
 						'message' => $message)), 'text/html')->addPart($this->renderView('FenchyMessageBundle:Notifications:messageEmailPlain.html.twig', array(
 						'sender' => $sender,
 						'message' => $message,
@@ -599,13 +761,30 @@ class GroupprofileController extends Controller
 		{
 			$usergroup = new UserGroup();
 		}
-		$form = $this->createFormBuilder($usergroup)->add('groupname', null, array(
+                $imagesave = $this->getRequest()->get('imagesave');
+                if($imagesave)
+                {
+                    $form = $this->createFormBuilder($usergroup)->add('file',null,array('label' => 'settings.general.profile_photo'))
+                    ->add('file2',null,array('label' => 'settings.general.cover_photo'))
+                    ->add('cropX','hidden',array(
+                          'data' => $usergroup->getCropX(),))
+                    ->add('cropY','hidden',array(
+                          'data' => $usergroup->getCropY(),))
+                    ->getForm();
+                    
+                }
+                else
+                {
+                    $form = $this->createFormBuilder($usergroup)->add('groupname', null, array('max_length'=>25,
 				'attr' => array(
 						'placeholder' => 'regularuser.your_groupname')))->add('aboutGroup', 'textarea', array(
 				'attr' => array(
 						'placeholder' => 'regularuser.your_aboutgroup')))->add('status', 'choice', array(
 				'label' => 'regularuser.status',
 				'choices' => UserGroup::$statusMap))->getForm();
+                }
+		
+                
 
 		$administrators = array();
 		$administrators2 = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findAllAdministrators($groupId);
@@ -643,7 +822,10 @@ class GroupprofileController extends Controller
 				$location = new Location();
 				$data_saved = $this->get('translator')->trans('settings.flash.data_saved');
 				$this->get('session')->setFlash('positive', $data_saved);
-		
+                                $usergroup->upload();
+				$usergroup->uploadcover();
+                                
+                                
 				$em->persist($usergroup);
 				$em->flush();
 				if (!$groupId)
@@ -679,11 +861,17 @@ class GroupprofileController extends Controller
 		
 		// Only Group Member & Owner shows comments
 		$groupMembers = '';
+                $isAdmin = 0;
 		$groupMember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $displayUser->getId());
 		
 		if ($groupMember)
 		{
 			$groupMembers = 1;
+                        if($groupMember->getAdmin()==1)
+                        {
+                            $isAdmin = 1;
+                        }
+                        
 		}
 		
 		return $this->render('FenchyRegularUserBundle:Groupprofile:createGroup.html.twig', array(
@@ -695,7 +883,8 @@ class GroupprofileController extends Controller
 				'groupmembers' => $groupmembers,
 				'administrators' => $administrators,
 				'initialComments' => $initialComments,
-				'groupMember' => $groupMembers,));
+				'groupMember' => $groupMembers,
+                                'isAdmin'  => $isAdmin,));
 
 	}
 
@@ -794,7 +983,7 @@ class GroupprofileController extends Controller
 	{
 		$em = $this->getDoctrine()->getEntityManager();
 		$userLoggedIn = $this->get('security.context')->getToken()->getUser();
-
+                    
 		if ($userLoggedIn)
 		{
 			$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
@@ -807,7 +996,14 @@ class GroupprofileController extends Controller
 			$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
 			$displayUser = $userLoggedIn;
 		}
-
+                $form = $this->createFormBuilder($usergroup)->add('file',null,array('label' => 'settings.general.profile_photo'))
+                ->add('file2',null,array('label' => 'settings.general.cover_photo'))
+                ->add('cropX','hidden',array(
+                      'data' => $usergroup->getCropX(),))
+                ->add('cropY','hidden',array(
+                      'data' => $usergroup->getCropY(),))
+                ->getForm();
+                
 		$groupMembers = '';
 		$groupMember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $userLoggedIn->getId());
 		$adminmember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $userLoggedIn->getId());
@@ -831,7 +1027,11 @@ class GroupprofileController extends Controller
 				'coverpath' => $usergroup->getWebpath2(),
 				'groupId' => $groupId,
 				'groupMember' => $groupMembers,
-				'adminmember' => $adminmember,));
+				'adminmember' => $adminmember,
+                                'cropX' => $usergroup->getCropX(),
+                                'cropY' => $usergroup->getCropY(),
+                                'form'  => $form->createView(),
+                ));
 	}
 
 	public function groupmenuAction($groupId)
@@ -865,7 +1065,10 @@ class GroupprofileController extends Controller
 		$membersIds = array();
 		foreach ($groupmembers as $member)
 		{
+                        if(!$member->getAdmin())
+                        {
 			$membersIds[] = $member->getNeighbor();
+                        }
 		}
 
 		if ($groupmembers)
@@ -895,7 +1098,7 @@ class GroupprofileController extends Controller
 		$type = null;
 		$userObj = $usergroup->getUser();
 		if($this->getRequest()->get('_format') == 'json') {
-			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type, $this->getRequest()->get('ids'),$userObj);
+			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type, $this->getRequest()->get('ids'),$usergroup);
 			$m = array();
 			foreach($messages as $msg) {
 				$m[] = array(
@@ -910,7 +1113,7 @@ class GroupprofileController extends Controller
 			}
 			$messages = $m;
 		} else {
-			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type,null,$userObj);
+			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type,null,$usergroup);
 		}
 		$groupMessages = array();
 		foreach ($messages as $message)
@@ -920,6 +1123,11 @@ class GroupprofileController extends Controller
 				$groupMessages[] = $message;
 			}
 		}
+                $req_count = $em->getRepository('FenchyNoticeBundle:Request')->countUnreadUsersRequestsInGroup($groupId);
+                $req_count += $em->getRepository('FenchyNoticeBundle:RequestMessages')->countUnreadMessageInGroup($groupId);
+                //$req_count += $em->getRepository('FenchyNoticeBundle:Review')->countUnreadReviewInGroup($groupId);
+                $msg_count = $em->getRepository('FenchyMessageBundle:Message')->countGroupHeader($usergroup);
+                 
 		return $this->render('FenchyRegularUserBundle:Groupprofile:groupmenu.html.twig', array(
 				'locale' => $this->getRequest()->getLocale(),
 				'displayUser' => $displayUser,
@@ -931,6 +1139,8 @@ class GroupprofileController extends Controller
 				'messages' => $groupMessages,
 				'adminmember'=> $adminmember,
 				'link' => $link,
+                                'req_count' => $req_count,
+                                'msg_count' => $msg_count
 				));
 				
 	}
@@ -998,6 +1208,19 @@ class GroupprofileController extends Controller
 					array('created_at'=>'DESC'), $pagination+1, 0);
 			$i++;
 		}
+                $userLoggedIn = $this->get('security.context')->getToken()->getUser();
+                
+                $blockUser = array();
+                $index=0;
+                $blockneighbors = $em->getRepository('FenchyRegularUserBundle:BlockedNeighbor')->findByMe($userLoggedIn->getId());
+                foreach ($blockneighbors as $blockneighbor)
+                {
+                    if($blockneighbor->getBlocker()->getId() == $userLoggedIn->getId())                 
+                        $blockUser[$index++] = $blockneighbor->getBlocked()->getId();
+                    
+                    if($blockneighbor->getBlocked()->getId() == $userLoggedIn->getId())                    
+                        $blockUser[$index++] = $blockneighbor->getBlocker()->getId();
+                }
 		return $this->render(
 				'FenchyRegularUserBundle:Groupprofile:groupListingsReviews.html.twig', array(
 						'form' 				=> $form->createView(),
@@ -1008,6 +1231,7 @@ class GroupprofileController extends Controller
 						'initialComments'	=> $initialComments,
 						'reviews'			=> sizeof($initialReviews),
 						'groupId'			=> $groupId,
+                                                'blockUser'                     => $blockUser
 				)
 		);
 	}
@@ -1023,6 +1247,7 @@ class GroupprofileController extends Controller
 		$displayUser = $userLoggedIn;
 		$select_action =  $request->get('select_action');
 		$selected_members = $request->get('selected_members');
+                $group_msg =  $request->get('group_message');
 
 		$usergroup = $em->getRepository('FenchyRegularUserBundle:UserGroup')->getAllData($groupId);
 		$groupn = $usergroup->getGroupname();
@@ -1040,16 +1265,25 @@ class GroupprofileController extends Controller
 				foreach ($selected_members as $key=>$val)
 				{
 					$groupmember = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findById($groupId, $val);
-					if ($groupmember)
-					{
-						$em->remove($groupmember);
-						$em->flush();
-						$members_removed = 1;
-					}
+                                        if($groupmember->getAdmin()==false)
+                                        {
+                                            $requestObjs = $em->getRepository('FenchyNoticeBundle:Request')->findBy(array('author'=> $groupmember->getNeighbor()->getId(), 'aboutUserGroup' => $groupId, 'aboutNotice'=> NULL));
+                                            foreach ($requestObjs as $requestObj)                                           
+                                                    $em->remove($requestObj);
+                                                $em->flush();
+                                            if ($groupmember)
+                                            {
+                                                    $em->remove($groupmember);
+                                                    $em->flush();
+                                                    $members_removed = 1;
+                                            }
+                                        }
 				}
 			}
 		}
-		
+		$link = $this->generateUrl('fenchy_regular_user_user_groupprofile_groupinfo', array(
+						'groupId' => $groupId));
+
 		if($select_action=="send_message")
 		{
 			if(!empty($selected_members))
@@ -1063,26 +1297,29 @@ class GroupprofileController extends Controller
 					$messenger = $this->get('fenchy.messenger');
 					$messageObject = new Message();
 					$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($neighbor_id);
-					if (null === $receiver || $receiver === $this->getUser())
+					if (null !== $receiver && $receiver !== $this->getUser())
 					{
-						throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
-					}
+						//throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+					
 					$messenger->setReceiver($receiver);
 					$title = $this->get('translator')->trans('regularuser.message.subject_members', array(
 							'%groupname%' => $groupn)) . "";
 					$content = '';
-					$content .= $this->get('translator')->trans('regularuser.message.message_part', array(
-							'%username%' => $userOther->getRegularUser()->getFirstname()));
-					$content .= '                                                                    ';
-					$content .= $this->get('translator')->trans('regularuser.message.message_first_part_members');
-					$content .= $this->get('translator')->trans('regularuser.message.message_second_part_members', array(
-							'%groupname%' => $groupn));
-					$content .= '                                                                    ';
-					$content .= $this->get('translator')->trans('regularuser.message.message_last_part');
+					$content .= $group_msg;
+                                        
+					//$content .= '                                                                    ';
+					//$content .= $this->get('translator')->trans('regularuser.message.message_first_part_members');
+					//$content .= $this->get('translator')->trans('regularuser.message.message_second_part_members', array(
+					//		'%groupname%' => $groupn, '%administrator%' => $usergroup->getUser()->getRegularUser()->getFirstName()));
+                                        
+                                        //$content .= "|".$link."|";
+					//$content .= '                                                                    ';
+					//$content .= $this->get('translator')->trans('regularuser.message.message_last_part');
+                                        
 					$messageObject->setTitle($title);
 					
 					$messageObject->setContent($content);
-					
+					$messageObject->setFromgroup($usergroup);
 					$messageObject->setSender($displayUser);
 					$messageObject->setReceiver($receiver);
 					
@@ -1090,6 +1327,7 @@ class GroupprofileController extends Controller
 					
 					if ($this->container->getParameter('notifications_enabled')) $this->messageNotification($message, $displayUser);
 					$this->get('session')->setFlash('positive', 'regularuser.msg_send');
+                                        }
 				}
 			}
 		}
@@ -1107,6 +1345,33 @@ class GroupprofileController extends Controller
 						$groupmember->setAdmin(true);
 						$em->persist($groupmember);
 						$em->flush();
+                                                
+                                                $messenger = $this->get('fenchy.messenger');
+                                                $messageObject = new Message();
+                                                $receiver = $this->getDoctrine()->getRepository('UserBundle:User')->find($groupmember->getNeighbor()->getId());
+                                                if (null !== $receiver && $receiver !== $this->getUser())
+                                                {
+                                                        //throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+
+                                                $messenger->setReceiver($receiver);
+                                                $title = $this->get('translator')->trans('regularuser.message.subject_members', array(
+                                                                '%groupname%' => $groupn)) . "";
+                                                $content = '';
+                                                $content .= $usergroup->getUser()->getRegularUser()->getFirstName().' set you as admin of group \''.$groupn.'\'';
+                                                $content .= '                                                                    ';
+                                                //$content .= $this->get('translator')->trans('regularuser.message.message_last_part');
+                                                $messageObject->setTitle($title);
+
+                                                $messageObject->setContent($content);
+
+                                                $messageObject->setSender($displayUser);
+                                                $messageObject->setReceiver($receiver);
+
+                                                $message = $messenger->send($messageObject);
+
+                                                if ($this->container->getParameter('notifications_enabled')) $this->messageNotification($message, $displayUser);
+                                                //$this->get('session')->setFlash('positive', 'regularuser.msg_send');
+                                                }
 					}
 				}
 			}	
@@ -1146,6 +1411,22 @@ class GroupprofileController extends Controller
 			$groupmembers2[] = $groupmember1;
 		}
 
+                $index =0;
+                $blockUser = array();
+                $blockneighbors = $em->getRepository('FenchyRegularUserBundle:BlockedNeighbor')->findByMe($userLoggedIn->getId());
+                foreach ($blockneighbors as $blockneighbor)
+                {
+
+                    if($blockneighbor->getBlocker()->getId() == $userLoggedIn->getId())
+                    {
+                        $blockUser[$index++] = $blockneighbor->getBlocked()->getId();
+                    }
+                    if($blockneighbor->getBlocked()->getId() == $userLoggedIn->getId())
+                    {
+                        $blockUser[$index++] = $blockneighbor->getBlocker()->getId();
+                    }
+                }
+        
 		return $this->render('FenchyRegularUserBundle:Groupprofile:groupMembers.html.twig', array(
 				'displayUser' => $displayUser,
 				'groupId' => $groupId,
@@ -1157,7 +1438,7 @@ class GroupprofileController extends Controller
 				'adminmember1' => $adminmember1,
 				'adminManagertype' => $adminManagertype,
 				'managertype' => $managertype,
-				
+				'blockUser' => $blockUser
 			));
 
 	}
@@ -1423,7 +1704,7 @@ class GroupprofileController extends Controller
 				$dist = $request->query->get('dist'); // slider distance
 				$gmap_distance = $obj->rows[0]->elements[0]->distance->value; // location with gmap api distance
 
-				if ($gmap_distance > $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
+				if ($gmap_distance >= $mindist && $gmap_distance < $maxdist && $gmap_distance <= $dist)
 				{
 					// Added By jignesh for Manager type
 
@@ -1511,6 +1792,22 @@ class GroupprofileController extends Controller
 		
 		$requests = $requestRepo->getGroupNoticeIds($user);
 		
+                $blockUser[] = array();
+                $index = 0;
+                $blockneighbors = $em->getRepository('FenchyRegularUserBundle:BlockedNeighbor')->findByMe($user->getId());
+                foreach ($blockneighbors as $blockneighbor)
+                {
+
+                    if($blockneighbor->getBlocker()->getId() == $user->getId())
+                    {
+                        $blockUser[$index++] = $blockneighbor->getBlocked()->getId();
+                    }
+                    if($blockneighbor->getBlocked()->getId() == $user->getId())
+                    {
+                        $blockUser[$index++] = $blockneighbor->getBlocker()->getId();
+                    }
+                }
+                
 		$listings2 = array();
 		$j = 0; $k = 0;
 		foreach ($requests as $request)
@@ -1563,13 +1860,15 @@ class GroupprofileController extends Controller
 		$form1 = $this->createForm(new UserLocationType(), $displayUser);
 		
 		$requestRepo = $em->getRepository('FenchyNoticeBundle:Request');
-		$my_req_count = $requestRepo->countUnreadUsersStatusRequestsInGroup($listings2);
-		$req_count = $requestRepo->countUnreadUsersRequestsInGroup($listings);
+		//$my_req_count = $requestRepo->countUnreadUsersStatusRequestsInGroup($listings);
+		//$req_count = $requestRepo->countUnreadUsersRequestsInGroup($groupId);
 	
 		$initialReviews[] = array();
 		$initialComments[] = array();
 		$initialRequests[] = array();
+                $messages[] = array();
 		$forms[][] = array();
+                $blue = array();
 		$count[] = array();
 		$statusflag = true;
 		$i=0;$j=0;
@@ -1606,12 +1905,14 @@ class GroupprofileController extends Controller
 			 
 			$j=0;
 			$forms[][] = array();
+                        $blue[$i] = 'true';
 			$managertype[] = array();
 			$c = 0;$status='';$statusflag = true;
 			foreach ( $initialRequests[$i] as $initialRequest )
 			{
 				if ($initialRequest)
 				{
+                                        $messages[$i][$j] = $em->getRepository('FenchyNoticeBundle:RequestMessages')->findByGroupRequest($initialRequest['id'],$initialRequest['author']['id'],$initialRequest['aboutuser']['id']);
 					$userRepository = $this->getDoctrine()
 					->getRepository('UserBundle:User');
 					 
@@ -1619,14 +1920,14 @@ class GroupprofileController extends Controller
 					->getRepository('FenchyRegularUserBundle:UserRegular')
 					->getManagerType($userRepository->find($initialRequest['author']['id']));
 					 
-					$messenger = $this->get('fenchy.messenger');
-					$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($initialRequest['author']['id']);
-					if (null === $receiver || $receiver === $this->getUser()) {
-						throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
-					}
-					$messenger->setReceiver($receiver);
-					$form = $messenger->createForm();
-					$forms[$i][$j] = $form->createView();
+//					$messenger = $this->get('fenchy.messenger');
+//					$receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($initialRequest['author']['id']);
+//					if (null === $receiver || $receiver === $this->getUser()) {
+//						//throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+//					}
+//					$messenger->setReceiver($receiver);
+//					$form = $messenger->createForm();
+//					$forms[$i][$j] = $form->createView();
 					 
 					if($initialRequest['status'] != 'pending')
 					{
@@ -1634,29 +1935,82 @@ class GroupprofileController extends Controller
 						if($initialRequest['status'] != "rejected")
 							if ($initialRequest['status'] == "done")
 							$status = 'done';
-						//else if($status != 'done')
-						//$status = $initialRequest['status'];
+						else if($status != 'done')
+						$status = $initialRequest['status'];
 					}
 					else
 						$c++;
 	
 					$j++;
+                                        if(!$initialRequest['blue'])
+                                        {
+                                            $blue[$i]= 'false';
+                                        }
 				}
 			}
 			if($statusflag)
 			{
 				if($c == 0)
-					$count[$i] = 'PENDING';
+					$count[$i] = 'pending';
 				else
-					$count[$i] = $c." RUNNING";
+					$count[$i] = $c." running";
 			}
 			else
 			{
+                            if($status == '')
+        			$status = 'rejected';
 				$count[$i] = $status;
 			}
+                        foreach ( $initialComments[$i] as $initialComment )
+                        {
+                            if(!$initialComment['blue'])
+                            {
+                                $blue[$i]= 'false';
+                            }
+                        }
 			$i++;
 		}
-	
+                
+                // The Closed group Join Requests
+                $requestRepo = $em->getRepository('FenchyNoticeBundle:Request');
+                $groupmessages[] = array();
+                $neighbourRequests = $requestRepo->getJoinClosedGroupsRequests($usergroup);
+                $i=0;$msgForms[] = array();
+                foreach ($neighbourRequests as $k =>$neighbourRequest)
+                {
+                        if($neighbourRequest->getAboutNotice())
+                        {
+                                unset($neighbourRequests[$k]);
+                        }
+                        else
+                        {
+                                //$neighbourRequest->setIsRead(true);
+                                $em->persist($neighbourRequest);
+                                $em->flush($neighbourRequest);
+                                $groupmessages[$i] = $em->getRepository('FenchyNoticeBundle:RequestMessages')->findByGroup($neighbourRequest->getId(),$neighbourRequest->getAboutUserGroup()->getUser()->getId(), $neighbourRequest->getAuthor()->getId(),$neighbourRequest->getAboutUserGroup()->getId());
+                                $i++;
+                        }
+
+//                        $messenger = $this->get('fenchy.messenger');
+//                        $receiver = $this->getDoctrine()->getRepository('UserBundle:User')->findOneById($neighbourRequest->getAuthor()->getId());
+//                        if (null === $receiver || $receiver === $this->getUser()) {
+//                                //throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+//                        }
+//                        $messenger->setReceiver($receiver);
+//                        $msgForm = $messenger->createForm();
+//                                $msgForms[$i] = $msgForm->createView();
+                               
+
+                }
+
+                if($usergroup->getPaymentId())        	
+                    $cvv_code = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5('!p@a#b$o'), base64_decode($usergroup->getPaymentId()->getCvvCode()), MCRYPT_MODE_CBC, md5(md5('!p@a#b$o'))), "\0");
+                else 
+                    $cvv_code =0;
+                
+                $em->getRepository('FenchyNoticeBundle:Request')->updateGroupRequestReadStatus($groupId);
+                $em->getRepository('FenchyNoticeBundle:RequestMessages')->updateRequestMessageInGroup($groupId);
+                
 		//echo "sssss<pre>";print_r($form1[5][0]);exit;
 		//        echo "<pre>";print_r($initialRequests[5]);exit;
 		return $this->render('FenchyRegularUserBundle:Groupprofile:groupNotifications.html.twig', array(
@@ -1669,11 +2023,18 @@ class GroupprofileController extends Controller
 				'initialComments'=>	$initialComments,
 				'initialRequests' => $initialRequests,
 				'managerTypes'	=> $managertype,
+                                'neighbourRequests' => $neighbourRequests,
+                                'msgForm' => $msgForms,
 				'reviews'	=> sizeof($initialReviews),
-						'forms' => $forms,
-						'count' => $count,
-						'my_req_count' => $my_req_count,
-						'req_count' => $req_count,
+				'forms' => $forms,
+				'count' => $count,
+				'messages' => $messages,
+                                'groupmessages' => $groupmessages,
+                                'usergroup' => $usergroup,
+                                'cvv_code' => $cvv_code,
+                                'blue' => $blue,
+                                'blockUser'=> $blockUser
+                                                
 				));
 	
 	}
@@ -1734,8 +2095,8 @@ class GroupprofileController extends Controller
 	
 		}
 		$form1 = $this->createForm(new UserLocationType(), $displayUser);
-		$my_req_count = $requestRepo->countUnreadUsersStatusRequestsInGroup($listings);
-		$req_count = $requestRepo->countUnreadUsersRequestsInGroup($listings2);
+		//$my_req_count = $requestRepo->countUnreadUsersStatusRequestsInGroup($listings);
+		//$req_count = $requestRepo->countUnreadUsersRequestsInGroup($groupId);
 			
 		$initialReviews[] = array();
 		$initialComments[] = array();
@@ -1866,7 +2227,7 @@ class GroupprofileController extends Controller
 		
 		$userObj = $usergroup->getUser();
 		if($this->getRequest()->get('_format') == 'json') {
-			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type, $this->getRequest()->get('ids'),$userObj);
+			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type, $this->getRequest()->get('ids'),$usergroup);
 			$m = array();
 			foreach($messages as $msg) {
 				$m[] = array(
@@ -1881,7 +2242,7 @@ class GroupprofileController extends Controller
 			}
 			$messages = $m;
 		} else {
-			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type,null,$userObj);
+			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type,null,$usergroup);
 		}
 		
 		$groupMessages = array();
@@ -1897,6 +2258,8 @@ class GroupprofileController extends Controller
 		
 		$groupmembers = $em->getRepository('FenchyRegularUserBundle:GroupMembers')->findAllById($groupId);
 		
+                $em->getRepository('FenchyMessageBundle:Message')->updateGroupCountHeader($usergroup);
+                
 		return $this->render('FenchyRegularUserBundle:Groupprofile:groupMessages.html.twig', array(
 				'displayUser' => $displayUser,
 				'form' => $form->createView(),
@@ -1904,12 +2267,13 @@ class GroupprofileController extends Controller
 				'userId' => $displayUser->getId(),
 				'groupId' => $groupId,
 				'usergroup' => $usergroup,
-				'messages' => $groupMessages,
+				'messages' => $messages,
 				'type' => null === $type ? 'all' : $type,
 				'displayUser' => $userLoggedIn,
 				'messagesToNeighbors'=>$messagesToNeighbors,
 				'userObj' => $userObj,
-				'groupmembers' => $groupmembers
+				'groupmembers' => $groupmembers,
+                                'usergroup' => $usergroup
 				));
 	}
 	
@@ -1920,7 +2284,7 @@ class GroupprofileController extends Controller
 		$type = null;
 		$read = true;
 		$messenger = $this->get('fenchy.messenger');
-		$last_message = $messenger->findLastById($id, $read);
+		$last_message = $messenger->findLastByIdGroup($id, $read, $groupId);
 		$displayUser = $userLoggedIn;
 	
 		$form = $this->createForm(new UserLocationType(), $displayUser);
@@ -1935,7 +2299,7 @@ class GroupprofileController extends Controller
 		$request = $this->getRequest();
 		$userObj = $usergroup->getUser();
 		if($this->getRequest()->get('_format') == 'json') {
-			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type, $this->getRequest()->get('ids'),$userObj);
+			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type, $this->getRequest()->get('ids'),$usergroup);
 			$m = array();
 			foreach($messages as $msg) {
 				$m[] = array(
@@ -1950,7 +2314,7 @@ class GroupprofileController extends Controller
 			}
 			$messages = $m;
 		} else {
-			$messages = $this->get('fenchy.messenger')->findReceivedMessages($type);
+			$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type,null,$usergroup);
 		}
 	
 		$groupMessages = array();
@@ -1962,15 +2326,16 @@ class GroupprofileController extends Controller
 			}
 		}
 	
-		$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type,null,$userObj);
+		//$messages = $this->get('fenchy.messenger')->findReceivedMessagesOfGroup($type,null,$usergroup);
 	
-		$messages = $messenger->findThreadMessages();
+		$messagesView = $messenger->findThreadMessages();
 		
 		$form1 = null;
 		if ($last_message->isReplyable()) {
 			$form1 = $messenger->createForm()->createView();
 		}
-		
+		$em->getRepository('FenchyMessageBundle:Message')->updateGroupCountHeader($usergroup);
+                
 		return $this->render('FenchyRegularUserBundle:Groupprofile:groupMessagesView.html.twig', array(
 				'displayUser' => $displayUser,
 				'form' => $form->createView(),
@@ -1978,10 +2343,10 @@ class GroupprofileController extends Controller
 				'userId' => $displayUser->getId(),
 				'groupId' => $groupId,
 				'usergroup' => $usergroup,
-				'messages' => $groupMessages,
+				'messages' => $messages,
 				'type' => null === $type ? 'all' : $type,
 				'displayUser' => $userLoggedIn,
-				'messagesView' => $messages,
+				'messagesView' => $messagesView,
 				'form1' => $form1,
 				'userObj' => $userObj
 		));
@@ -2082,4 +2447,173 @@ class GroupprofileController extends Controller
 		return $users2;
 	}
 
+	public function groupPaymentAction($noticeType)
+	{
+		$user = $this->get('security.context')->getToken()->getUser();
+		 
+		if (!($user instanceof User)) {
+			return $this->redirect($this->generateUrl('fos_user_security_login'));
+		}
+	
+		$request = $this->getRequest();
+		$groupId = $request->get('groupId');
+		
+		$repository = $this->getDoctrine()
+		->getRepository('UserBundle:GroupPayment');
+		 
+		$query = $repository->createQueryBuilder('gp')
+			->where('gp.group = :group')
+			->setParameter('group', $groupId)
+			->getQuery();
+	
+		$payment = $query->getOneOrNullResult();
+		$isPayment = false;
+		$cvv_code= null;
+		if($payment)
+		{
+			$isPayment = true;
+			$cvv_code = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5('!p@a#b$o'), base64_decode($payment->getCvvCode()), MCRYPT_MODE_CBC, md5(md5('!p@a#b$o'))), "\0");
+		} 
+		return $this->render('FenchyRegularUserBundle:Groupprofile:groupPayment.html.twig',array(
+				'user' => $user,
+				'payment' => $payment,
+				'noticeType'=> $noticeType,
+				'groupId'=> $groupId,
+				'cvv_code'=> $cvv_code,
+		));
+	}
+	
+	public function saveGroupPaymentSettingAction()
+	{
+		$user = $this->get('security.context')->getToken()->getUser();
+	
+		if (!($user instanceof User)) {
+			return $this->redirect($this->generateUrl('fos_user_security_login'));
+		}
+		$request = $this->getRequest();
+		$account_holder = $request->get('account_holder')?$request->get('account_holder'):null;
+		$account_no = $request->get('account_no')?$request->get('account_no'):null;
+		$bank_code = $request->get('bank_code')?$request->get('bank_code'):null;
+		$paypal_email = $request->get('paypal_email')?$request->get('paypal_email'):null;
+		$card_type = $request->get('card_type')?$request->get('card_type'):null;
+		$card_no = $request->get('card_no')?$request->get('card_no'):null;
+		$cvv_code = $request->get('cvv_code')?$request->get('cvv_code'):null;
+		$card_holder = $request->get('card_holder')?$request->get('card_holder'):null;
+		$end_month = $request->get('end_month')? $request->get('end_month'):null;
+		$end_year = $request->get('end_year')?$request->get('end_year'):null;
+		$type= $request->get('type')?$request->get('type'):null;
+		$action= $request->get('action');
+		$groupId = $request->get('groupId'); 
+		
+		$em = $this->getDoctrine()->getEntityManager();
+		 
+		$repository = $this->getDoctrine()
+		->getRepository('UserBundle:GroupPayment');
+		 
+		$query = $repository->createQueryBuilder('gp')
+		->where('gp.group = :group')
+		->setParameter('group', $groupId)
+		->getQuery();
+	
+		$payment = $query->getOneOrNullResult();
+		if(!$payment)
+		{
+			$payment = new \Fenchy\UserBundle\Entity\GroupPayment();
+		}
+	
+		$key = '!p@a#b$o';
+		if($cvv_code)
+			$cvv_code = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key), $cvv_code, MCRYPT_MODE_CBC, md5(md5($key))));
+		 
+		$group = $this->getDoctrine()->getRepository('FenchyRegularUserBundle:UserGroup')->find($groupId);
+
+		$payment->setGroup($group);
+		$payment->setAccountHolder($account_holder);
+		$payment->setAccountNo($account_no);
+		$payment->setBankCode($bank_code);
+		$payment->setPaypalEmail($paypal_email);
+		$payment->setCardType($card_type);
+		$payment->setCardNo($card_no);
+		$payment->setCvvCode($cvv_code);
+		$payment->setCardHolder($card_holder);
+		$payment->setEndMonth($end_month);
+		$payment->setEndYear($end_year);
+		$payment->setType($type);
+		$payment->setAgreed(true);
+		$em->persist($payment);
+		$em->flush();
+		 
+		$typeindex = 1;
+		if($payment->getType() == 'debit')
+			$typeindex = 1;
+		if($payment->getType() == 'paypal')
+			$typeindex = 2;
+		if($payment->getType() == 'credit')
+			$typeindex = 3;
+		 
+		$str ='<div class="paymentdetails">';
+		$str.= '<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm('.$typeindex.')">';
+		$str .=	$this->get('translator')->trans('payment.change').'</a>';
+		$str .= '<a class="payment-button" href="javascript:void(0);" onclick="deletePaymentSetting('.$payment->getId().')">';
+		$str .=	$this->get('translator')->trans('payment.delete').'</a>';
+		$str .= '<div class="changeSettingButton">';
+		$str .= '<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm(\'1\')">';
+		$str .= $this->get('translator')->trans('payment.direct_debit').'</a>';
+		$str .= '<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm(\'2\')">';
+		$str .= $this->get('translator')->trans('payment.paypal').'</a>';
+		$str .= '<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm(\'3\')">';
+		$str .= $this->get('translator')->trans('payment.credit_card').'</a>';
+		$str .= '</div></div>';
+	
+		echo $str;
+		exit;
+	
+	}
+	public function deleteGroupPaymentSettingAction()
+	{
+		$user = $this->get('security.context')->getToken()->getUser();
+		 
+		if (!($user instanceof User)) {
+			return $this->redirect($this->generateUrl('fos_user_security_login'));
+		}
+		 
+		 
+		$request = $this->getRequest();
+		$id = $request->get('id');
+		if ('POST' == $request->getMethod())
+		{
+		
+			$em = $this->getDoctrine()->getManager();
+	
+			$payment = $em->getRepository('UserBundle:GroupPayment')->find($id);
+	
+			if (null === $payment) {
+				throw new NotFoundHttpException('Not installed payment!');
+			}
+	
+			if ($payment->getGroup()->getUser()->getId() !== $this->get('security.context')->getToken()->getUser()->getId()) {
+				throw new \Exception('You have not permission to delete this installation.');
+			}
+	
+	
+			$em->remove($payment);
+			$em->flush();
+		}
+		$str = '<p style="margin-bottom: 20px;">';
+		$str .= $this->get('translator')->trans('payment.no_default');
+		$str .= $this->get('translator')->trans('payment.choose_default');
+		$str .='</p><div class="paymentdetails">';
+		$str .='<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm(\'1\')">';
+		$str .= $this->get('translator')->trans('payment.direct_debit');
+		$str .= '</a>';
+		$str .= '<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm(\'2\')">';
+		$str .= $this->get('translator')->trans('payment.paypal');
+		$str .= '</a>';
+		$str .= '<a class="payment-button" href="javascript:void(0);" onclick="showPaymentForm(\'3\')">';
+		$str .= $this->get('translator')->trans('payment.credit_card');
+		$str .= '</a></div>';
+			
+		echo $str;
+		exit;
+	}
 }

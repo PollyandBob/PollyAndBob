@@ -1,0 +1,95 @@
+{# empty Twig template #}
+<script type="text/javascript">
+	$(function()
+	{
+		$("#all_neighbors").click(function () {
+		    if ($("#all_neighbors").is(':checked')) {
+		        $("input[name='invite_neighbors[]']").each(function () {
+		            $(this).attr("checked", true);
+		        });
+		
+		    } else {
+		        $("input[name='invite_neighbors[]']").each(function () {
+		            $(this).attr("checked", false);
+		        });
+		    }
+		});
+		$('.add_email').click( function () {
+			$('.friends_email1').append('<input type="email" name="friends_email1[]" style="margin-top: 5px;" placeholder="' + this.id + '" />');
+		});
+	});
+</script>
+<style>
+.neighboursdetils img
+{
+	border-radius:50%;
+	-moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    -khtml-border-radius:50%;
+}
+</style>
+{% set allneighbor = '' %} 
+{% for user in users2 %}
+	{% if(allneighbor) %}
+	{% set allneighbor = "#{allneighbor},#{user.id}" %}
+	{% else %}
+	{% set allneighbor = "#{user.id}" %}
+	{% endif %}
+	 
+{% endfor %}
+
+				
+               <form action="{{ path('fenchy_notice_invite_to_listing',{'noticeId': noticeId}) }}" name="inviteForListing" method="post">
+                    <div class="invite_neighbors">
+                    <div class="title">{{ 'regularuser.invite_neighbor'|trans|upper }}</div>	
+                        <div class="invite_group">
+                            <div class="left">
+                                <div class="invite_checkbox">
+                                    <input type="checkbox" name="" id="all_neighbors" value="{{ allneighbor }}" />
+                                    <label>{{ 'regularuser.invite_myneighbors'|trans }}</label>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <div class="invite_checkbox">
+                                    <input type="checkbox" name="invite_neighborsnext50">
+                                    <label>{{ 'regularuser.invite_next_50_around'|trans }}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="invite_single">
+                            <div class="left">
+                            {% if users2 %}
+                            {% for user in users2 %}	
+                            	<div class="invite_persen">
+                            		<a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice') }}/{{ user.id }}" target="_blank">
+                                    <img width="50" height="50" src="/{{ user.twitterusername }}" alt="{{ user.email }}" />
+                                    </a>
+                                    <div class="invite_checkbox">
+                                        <input type="checkbox" name="invite_neighbors[]" value="{{ user.id }}" />
+                                        <label>{{ 'regularuser.invite_this_neighbor'|trans }}</label>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% else %}
+	    						<div id="no_neighbours_onload"><h4 style="font-size: 15px;">{{ 'regularuser.message.no_neighbors'|trans }}</h4></div>
+							{% endif %}    
+                            </div>
+                            <div class="right">
+                                <div class="invite_another">
+                                	<p>{{ 'regularuser.invite_another_friends'|trans }} </p>
+                                    <div class="friends_email1">
+                                    <input type="email"  onfocus="myFocus(this);" onblur="myBlur(this);" name="friends_email1[]" placeholder="{{ 'regularuser.email'|trans }}">
+                                    <a href="javascript:void(0)" id="{{ 'regularuser.email'|trans }}" class="add_email"><img alt="" src="{{ asset('images/icon_add.png') }}"></a>
+                                    <div class="clearfix"></div>
+                                    </div>
+				                    <input style="background: none repeat scroll 0 0 #51B9D4; color: #FFFFFF; padding: 0 10px;" class="blue-button" type="submit" value="{{ 'notice.invite'|trans }}" />                
+				                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    
+                </form>
+				
+

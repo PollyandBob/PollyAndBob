@@ -24,7 +24,7 @@
     userSettingsViewModel = null;
 
     $(document).ready(function() {
-        geocoder = new google.maps.Geocoder();
+       {# geocoder = new google.maps.Geocoder();
         var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';
 
         userSettingsViewModel = new UserSettingsViewModel(geocoder, baseSearchViewUri);
@@ -33,61 +33,13 @@
 
         autocomplete = new GApiAutocomplete(
                 document.getElementById('fenchy_userbundle_user_locationtype_location_location'),
-                userSettingsViewModel);
+                userSettingsViewModel);#}
 
 
     });
-    function hasCoordinates()
-    {
-    	{% if app.user.hasRequiredLocation %}
-        	return true;
-        {% endif %}
-
-        return false;
-    }
-
-    function getLatitude()
-    {
-        return '{{ app.user.location.latitude }}'
-    }
-
-    function getLongitude()
-    {
-        return '{{ app.user.location.longitude }}';
-    }
-    </script>
     
-    <script src="{{ asset('js/geolocalization.js') }}"></script>
-    <script type="text/javascript">
-    $(document).ready(function() {
-        initialize();
-    });
-        </script>
-        <script type="text/javascript" src="{{ asset('js/regular_user/settings/form.js') }}"></script>
-        
-    <script type="text/javascript">
-		function verifyLocation()
-		{
-			var url = "{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}";
-			$.ajax({
-				url : url,
-				type : "post",
-				data : {
-					},
-				beforeSend : function() {
-					
-				},
-				success : function(response) {
-					alert(response);
-				},
-				error : function() {
-					alert('Something went wrong!');
-				},
-				complete : function() {					
-				}
-			});
-		}		
-	</script>
+    </script>
+   
 {% endblock %}
 
 {% block content %}
@@ -127,23 +79,31 @@
 		
        <div class="message">
 				<div class="left">
-                	<a href="{{ path('fenchy_regular_user_messages_index') }}" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>
+                	<a href="{{ path('fenchy_regular_user_user_groupprofile_groupmessages', {'groupId': groupId} ) }}" class="blue_button">{{ 'regularuser.write_message'|trans }}</a>
                     <div class="clearfix"></div>
                     <div class="messagedetail">
                     	{% if messages %}
                           {% for message in messages %}
-	                    	<a href="{{ path('fenchy_regular_user_user_groupprofile_groupmessages_view', {'groupId': groupId ,'id': message.id}) }}" {% if not message.read %} {% if message.receiver != app.user %} class="message-read" {% else %} class="message-unread" {% endif %} {% endif %}>
+	                    	<a href="{{ path('fenchy_regular_user_user_groupprofile_groupmessages_view', {'groupId': groupId ,'id': message.id}) }}" {% if not message.read %} {% if message.fromgroup %} class="message-read" {% else %} class="message-unread" {% endif %} {% endif %}>
 	                    	<div {% if message.read %}class="message-read"{% endif %}>
 	                            <div class="profilei">
-                          			{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
-                          		</div>
+                          		{% if message.fromgroup %}
+                                                {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.receiver.userregular.id } %}
+                                        {% else %}
+                                                {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
+                                        {% endif %}
+                                    </div>
 	                            {% if message.receiver != userObj %}
 	                            <img class="read_arrow" src="{{ asset('images/message-arrow1.png') }}" alt="" />
 	                            {% elseif message.receiver == userObj %}
 	                            <img class="read_arrow" src="{{ asset('images/message-arrow2.png') }}" alt="" />
 	                            {% endif %}
-	                            <p>{{ message.sender.userregular.firstname }}</p>
-	                            <p>{{ message.title }}</p>
+	                            {% if message.fromgroup %}
+                                        <p>{{ message.receiver.userregular.firstname }}</p>
+                                    {% else %}
+                                        <p>{{ message.sender.userregular.firstname }}</p>
+                                    {% endif %}
+                                    <p>{{ message.content|truncate(40) }}</p>
 	                        </div>
 	                        </a>
 	                    	
@@ -163,14 +123,24 @@
 									{% set userurl = 'fenchy_regular_user_user_otherprofile_aboutotherchoice' %}
 								{% endif %}
 								<a href="{{path(userurl, {'userId': message.sender.id})}}">
-					            <div class="profilei">	
-									{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
+					            <div class="profilei">
+                                                        {% if message.fromgroup %}
+                                                            <img src=" {% if not usergroup.webPath %} {{ absolute(asset('images/default_profile_picture.png')) }} {% else %} {{ absolute(asset(usergroup.webPath)) }}{% endif %}" alt=""/>
+                                                        {% else %}
+                                                            {% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': message.sender.userregular.id } %}
+                                                        {% endif %}
 					            </div>
 					            </a>
 					            
 					        <p class="name">{{ message.sender.userregular.firstname }}</p>
 		                    <div class="clearfix"></div>
-		                    <p class="message-all">{{ message.content|nl2br }}</p>
+                                    {% set msgcontent =  message.content%}
+                                    {% set link = msgcontent|split('|') %}
+		                    {% if '|' in msgcontent %}
+		                    <p class="message-all">{{ link[0]|nl2br }}<br><br><a style="color:#51B9D4;" href="{{ link[1] }}">{{'regularuser.click_here'|trans }}</a><br><br>{{ link[2]|nl2br }}</p>
+                                    {% else %}
+                                    <p class="message-all">{{ msgcontent|nl2br }}</p>
+                                    {% endif %} 
                     		<br/><br/><br/>
                     {% endfor %}
                     
@@ -179,11 +149,12 @@
                     	
                     	{{ form_widget(form1) }}
                     	<div class="profilei">
-                    		{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': app.user.id } %}
+                            <img src=" {% if not usergroup.webPath %} {{ absolute(asset('images/default_profile_picture.png')) }} {% else %} {{ absolute(asset(usergroup.webPath)) }}{% endif %}" alt=""/>
+                    		{#{% render "FenchyNoticeBundle:GlobalFilter:generateCode" with { 'userId': app.user.id } %}#}
                     	</div>
                     	{{ form_rest(form1) }}
                     	
-                        <input type="submit" id="continue" class="blue_button" value="{{ 'btn.send'|trans }}"/>
+                        <input type="submit" id="continue" class="blue_button" value="{{ 'btn.send_msg'|trans }}"/>
                     </form>
                      {% endif %}
                     <div class="bgbottom_right"><img alt="" src="{{ asset('images/bgbottom_contantinner.png') }}"></div>
@@ -199,10 +170,11 @@
 				<div id="dialog35" class="window">
 				   	<div class="big_popup">
 				      	<div class="big_popupclose"><a href="" class="close"></a></div>
-						<div id="messageForm">
+						<div class="title">
 							<p>{{ 'regularuser.msg_send'|trans }}</p>
 					</div>
 				</div>
+                                    <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
 			</div>
 			<div id="mask"></div>
 		</section>    
@@ -215,7 +187,8 @@
             		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
 						<button>{{ 'regularuser.ok'|trans|upper }}</button>
     	        	</form>
-        		</div>    
+        		</div>
+                        <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
     		</div>    
     		<div id="mask"></div>
     	</section>

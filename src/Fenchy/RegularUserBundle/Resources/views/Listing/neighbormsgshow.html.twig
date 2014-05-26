@@ -1,0 +1,216 @@
+{% extends 'FenchyGalleryBundle::galleryShowBase.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# any view specific stylesheets for this view #}    
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />        
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/jquery.tagit.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/tagit.ui-zendesk.css') }}" type="text/css" />       
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/article-box-v2.css')) }}" type="text/css" />    
+    <link rel="stylesheet" href="{{ absolute(asset('css/app/tabs-v2.css')) }}" type="text/css" />  
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
+     
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/user-profile-view-model.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('js/mvvm/listing-show-view-model.js') }}"></script>    
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.tinyscrollbar.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/fenchydropdown.js') }}"></script> 
+    <script type="text/javascript" src="{{ asset('js/jWindowCrop.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.timepicker.js') }}"></script>
+    <script type="text/javascript">
+        
+        var userProfileViewModel;
+        var spinnerHTML = '<div id="spinner-div"><i class="icon-spinner icon-spin"></i></div>';
+        var tabsJQ;
+
+        $(document).ready(function() {
+            $('#description-area').tinyscrollbar();
+            //$('.add-sticker').fancybox({type:'iframe'});
+            $('#desc').css('background', 'url("/images/bg_description.png")');
+        });
+        function toggeleDiv(element1,element2)
+        {
+            $('#tabs').children().hide();
+            $("."+element2).show();
+            if(element1=='review')
+            {
+                $("#tab").children().css('background', 'url("/images/bg_description_blue.png") no-repeat');
+                $("#"+element1).css('background', 'url("/images/bg_reviews_red.png") no-repeat');        	
+            }
+            else
+            {
+                 $("#tab").children().css('background', 'url("/images/bg_reviews.png") no-repeat');
+                 $("#"+element1).css('background', 'url("/images/bg_description.png") no-repeat');
+            }
+        }
+        
+                $(document).ready(function() {
+		$('.crop_me2').attr('src', '{{ absolute(asset(coverpath)) }}').load(function() {  
+		  //alert('Image Loaded');  
+		});
+		   	
+		    $('.crop_me2').jWindowCrop({
+				targetWidth: 970, //Width of facebook cover division
+				targetHeight: 262, //Height of cover division
+				loadingText: ''
+			});
+                        
+                    var vcropY = 0;
+                    {% if cropY %}
+                    vcropY = {{ cropY }};
+                    {% endif %}
+                    
+		    var newCropY = 2.13 * vcropY;
+		    newCropY = Math.ceil(newCropY);
+		    $('.crop_me2').css('left',{{ cropX }}+'px');
+		    $('.crop_me2').css('top',-newCropY+'px');
+		    $('.crop_me').css('left',{{ cropX }}+'px');
+		    $('.crop_me').css('top',-{{ cropY }}+'px');
+
+		    $('.placeholder').find('.jwc_controls').empty();
+	      
+		});	
+    </script>
+    {# any view specific JS scripts for this view #}
+{% endblock %}
+
+{% block content %}
+	<style>
+                #form_file {
+                        display: none;
+                    }
+                #form_file2 {
+                    display: none;
+                } 
+                .profileandcover_image .blue_button {
+                    margin-left: 60px !important;
+                    padding: 2px 5px 1px !important;
+                }
+
+                #placeholder {
+                    display: block;
+                    height: 123px;
+                    width: 455px;
+                    margin: 0 auto;
+                    position: relative;
+                    padding: 0 0 81px;
+                    top: 20px;
+                }
+                .placeholder {
+                    display: block;
+                    height: 262px;
+                    width: 970px;
+                    margin: 0 auto;
+                    position: relative;
+                }
+                .placeholder .crop_me2 {
+                    pointer-events: none !important;
+                }
+                .crop_me
+                {
+                    display: block !important;
+                }
+                #placeholder img {
+                    margin: auto;
+                    display: block;
+                    height: auto;
+                    position: absolute;
+                    width: 100%;
+                }
+
+                #placeholder .jwc_frame
+                {
+                    cursor: move !important;
+                }
+                .jwc_controls .dragger {
+                    background: url("{{ asset('images/drag.png') }}") no-repeat scroll 9px 8px rgba(84, 97, 133, 0.4);
+                    border-radius: 2px 2px 2px 2px;
+                    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12) inset;
+                    color: #FFFFFF;
+                    display: inline;
+                    font-family: mathletebulky;
+                    font-size: 17px;
+                    padding: 4px 9px 6px 24px;
+                    letter-spacing: 1px;
+                }
+                ._6_f {
+                max-width: 275px;
+                display: inline-block;
+                }
+                ._8_2 {
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-size: 24px;
+                line-height: 30px;
+                font-weight: bold;
+                display: inline-block;
+                padding-right: 30px;
+                }
+                ._8_2, .alternate {
+                color: #FFF;
+                text-rendering: optimizelegibility;
+                text-shadow: 0 0 3px rgba(0,0,0,0.8);
+                }
+                .alternate {
+                font-size: 20px;
+                font-weight: normal;
+                white-space: nowrap;
+                color: #fff;
+                }
+                .noticedata .findmedata
+                {
+                    min-height: 320px;
+                }
+	</style>
+	<section id="contentinner" style="margin-top: 12px;">
+	<div class="wrapper">  
+	<div class="notice-title">
+		{% set title = neighborhoodmsg.content|split(' ',4) %}
+                {{ title[0] }}{% if title|length > 1 %}&nbsp;{{ title[1] }}{% endif %}{% if(title|length > 2) and (title|length < 5) %}&nbsp;{{ title[2] }}{% endif %}...
+	</div>
+
+      	    
+   	<div class="profile">
+    	<!-- Image of Cover Profile -->
+        <div class="profile_bak" >
+                <div class="placeholder">
+                        {%  if coverpath %}
+                                <img alt="" width="970" class="crop_me2" src="">
+                        {% else %}
+                                <img alt="" src="{{ absolute(asset('images/bg_profileheader.png')) }}">
+                        {% endif %}
+                </div>
+	</div>
+	</div>
+	<div id="post watch-notice">
+		<div class="leftparts">
+			<div class="noticedata">
+				<div class="findmedata">
+				
+			         <div class="optionsdetail" id="tab">
+			        	<a id="desc" href="javascript:void(0);" class="blue_button" onclick="toggeleDiv('desc','descdata')">{{ 'listing.show.description'|trans }}</a>
+			         </div>
+                                 <div id="tabs">
+			            <div class="descdata">		            	
+			             	{{ neighborhoodmsg.content }}
+			            </div>
+                                 </div>
+				</div>
+				<div class="bgbottom-big"><img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}"></div>				
+			</div>			
+    	</div>
+    	{% include 'FenchyRegularUserBundle:Partials:neighbormsglistingSidebar.html.twig' %}
+   	</div>
+    <div class="clearfix"></div>
+    </div>
+    </section>
+
+{% endblock %}

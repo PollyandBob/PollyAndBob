@@ -1,0 +1,20 @@
+{% extends 'FenchyRegularUserBundle:Settings:layout.html.twig' %}
+
+{% block content %}
+<div class="rounded">
+    <div id="profile_left_menu">
+        {% include 'FenchyRegularUserBundle:Settings:menu.html.twig' %}
+    </div>
+    <div id="settings_loc">
+        <p style="margin-bottom: 10px;">{{ 'regularuser.delete_account_description'|trans }}</p>
+        <form action="{{ path('fenchy_regular_user_settings_general_delete') }}" method="post">
+            {{ form_widget(delete_form) }}
+            <div class="action-buttons">
+                <input type="submit" value="{{'regularuser.delete_account'|trans}}" />
+                <a href="{{ url('fenchy_regular_user_settings_general')}}" class="button1"><nobr>{{ 'regularuser.cancel'|trans }}</nobr></a>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="clear"></div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'UserBundle:Friend:index.html.twig' %}
+{% form_theme form '::transWatermark.html.twig' %}
+
+{% block invite_content %}
+
+<form action="{{ path('fenchy_user_friend_new_email') }}" method="post" {{ form_enctype(form) }}>
+    <div class="inv_email_block_error ">
+        {{ form_errors(form.email1) }}
+        {{ form_errors(form.email2) }}
+        {{ form_errors(form.email3) }}
+        {{ form_errors(form.note) }}
+    </div>
+    <div class="inv_email_block">    
+        {{ form_row(form.email1) }}
+    </div>
+    <div class="inv_email_block">    
+        {{ form_row(form.email2) }}
+    </div>
+    <div class="inv_email_block">    
+        {{ form_row(form.email3) }}
+    </div>
+    <div class="inv_email_block">    
+        {{ form_row(form.note) }}
+    </div>
+        {{ form_rest(form) }}
+    <input type="submit" value="{{ 'main.send'|trans }}" />
+</form>
+{% endblock %}

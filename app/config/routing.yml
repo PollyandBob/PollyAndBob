@@ -28,7 +28,11 @@ fenchy_frontend:
 util:
     resource: "@FenchyUtilBundle/Resources/config/routing.yml"
     prefix:   /
-    
+
+cunningsoft_chat_bundle:
+    resource: "@CunningsoftChatBundle/Controller"
+    type: annotation
+
 # Internal routing configuration to handle ESI
 #_internal:
 #    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"

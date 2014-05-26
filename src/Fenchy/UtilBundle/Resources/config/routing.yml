@@ -19,3 +19,9 @@ fenchy_create_review_sticker:
     defaults: { _controller: FenchyUtilBundle:Sticker:reviewSticker }
     requirements:
         id: \d+
+
+fenchy_create_group_sticker:
+    pattern:  /groupsticker/{id}
+    defaults: { _controller: FenchyUtilBundle:Sticker:groupSticker }
+    requirements:
+        id: \d+

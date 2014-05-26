@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
@@ -33,9 +34,10 @@ class AppKernel extends Kernel
             new Fenchy\UtilBundle\FenchyUtilBundle(),
             new Fenchy\AdminBundle\FenchyAdminBundle(),
             new PunkAve\FileUploaderBundle\PunkAveFileUploaderBundle(),
+        	new Cunningsoft\ChatBundle\CunningsoftChatBundle(),
         );
 
-        if (in_array($this->getEnvironment(), array('dev','test'))) {
+        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();

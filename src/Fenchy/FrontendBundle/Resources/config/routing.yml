@@ -83,3 +83,11 @@ fenchy_frontend_terms:
 fenchy_frontend_terms_popup:
     pattern:  /termspopup
     defaults: { _controller: FenchyFrontendBundle:Frontend:termsPopup }
+
+fenchy_regular_chatwindow:
+    pattern:  /chatwindow
+    defaults: { _controller: FenchyFrontendBundle:Frontend:chatWindow }
+
+fenchy_regular_popupChatWindow:
+    pattern:  /popupChatWindow
+    defaults: { _controller: FenchyFrontendBundle:Frontend:popupChatWindow }

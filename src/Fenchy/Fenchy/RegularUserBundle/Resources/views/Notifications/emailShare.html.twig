@@ -1,0 +1,78 @@
+{% block subject %}
+    {% autoescape false %}
+    
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_text %}{% autoescape false %}
+
+{% endautoescape %}{% endblock %}
+
+{% block body_html %}
+<html>
+    <body style="font-family: MYRIADPRO-REGULAR, sans-serif;">
+        <table style="border: 1px #000 solid; width: 100%; border-collapse: collapse;">
+            <tr style="
+                height: 61px;
+                background-color: #000000;
+                border: 3px #000000 solid;
+                background-image: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(1,1,1,0.1) 100%); /* FF3.6+ */
+                background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(1,1,1,0.1))); /* Chrome,Safari4+ */
+                background-image: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(1,1,1,0.1) 100%); /* Chrome10+,Safari5.1+ */
+                background-image: -o-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(1,1,1,0.1) 100%); /* Opera 11.10+ */
+                background-image: -ms-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(1,1,1,0.1) 100%); /* IE10+ */
+                background-image: linear-gradient(to top, rgba(1,1,1,0.1) 0%, rgba(255,255,255,0) 100%); /* W3C */    
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1affffff', endColorstr='#1a010101',GradientType=0 );
+                ">
+				<td style="padding: 12px 0 5px 20px">
+                <img src="{{absolute(asset('images/logo.png'))}}" height="94px" alt="Polly&Bob" />
+				</td>
+            </tr>
+            <tr style="
+                border: 3px #000 solid;
+                border-top: none;
+                ">
+				<td style="padding: 20px;">
+				<p></p>
+				<p>
+				Thank you for your trust. 
+				</p>
+				<p></p>
+				<p>Please transfer your share of € {{ total }} to this account:</p>
+				<br>
+			    <p></p>
+				<h3>Account holder: Polly & Bob UG</h2>
+				<p><b>Bank:</b> GLS Gemeinschaftsbank eG</p>
+				<p><b>BLZ:</b>43060967</p>
+				<p><b>Kto:</b>1152824900</p>
+				<p><b>IBAN:</b>DE52 4306 0967 1152 8249 00</p>
+				<p><b>BIC:</b>GENODEM1GLS</p>
+                </td>
+            </tr>
+            
+            <tr style="
+                border: 3px #000 solid;
+                border-top: none;
+                ">
+				<td style="padding: 20px;">
+				<p></p>
+				<p>
+				Vielen Dank für dein Vertrauen. 
+				</p>
+				<p></p>
+				<p>Überweise bitte die Beteiligungssumme von € {{ total }} auf das folgende Konto:</p>
+				<br>
+			    <p></p>
+				<h3>Kontoinhaber: Polly & Bob UG</h2>
+				<p><b>Bank:</b>GLS Gemeinschaftsbank eG</p>
+				<p><b>BLZ:</b>43060967</p>
+				<p><b>Kto:</b>1152824900</p>
+				<p><b>IBAN:</b>DE52 4306 0967 1152 8249 00</p>
+				<p><b>BIC:</b>GENODEM1GLS</p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
+
+{% endblock %}

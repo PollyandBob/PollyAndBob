@@ -2,18 +2,29 @@
 <style>
 .neighboursdetils img
 {
-	border-radius:50%;
-	-moz-border-radius:50%;
+    border-radius:50%;
+    -moz-border-radius:50%;
     -webkit-border-radius:50%;
     -khtml-border-radius:50%;
+    cursor: pointer;
 }
+.neighbour-comments input
+{
+    border-top: 1px solid #CCCCCC;
+    height: 40px;
+    width: 298px;	
+}
+
 </style>
 
 {% if users2 %}
 
-	<script type="text/javascript">
+	<script type="text/javascript">            
 		$(document).ready(function() {
-			{% for user in users2 %}
+                    $("div[id^='chatwindow_']").hide();	
+                    if($.session.get('position') == 'undefined')
+                        $.session.set('position',0);
+                    {% for user in users2 %}
 			$("#user_{{ user.id }}").tooltip({
 				cssClass: "ui-tooltips-neighbor", 
 				delay : 0,// time in milliseconds that you must leave the mouse over the link until the tooltip appears
@@ -23,12 +34,132 @@
 				opacity : 0, 
 				fadeDuration: 400 
 			});
-			{% endfor %}
+
+                         $.post('{{ path('fenchy_regular_popupChatWindow') }}',
+                          {sender : '{{ user.id }}', flag: 'true' },
+                            function(data) {
+                        });
+                                    
+                                    
+                        $("#user_{{ user.id }}").click(function(event) {
+                                                                    
+                                                                    
+                                if($('#user_{{ user.id }}').attr('href') === undefined)
+                                {
+					$("#chatwindow_{{ user.id }}").slideToggle('slow', function() {
+                                            var disp = $("#chatwindow_{{ user.id }}").css('display');
+                                            if(disp != 'none')
+                                            {
+{#                                                $.session.set("id{{ user.id }}",{{ user.id }});#}
+        
+                                                $.post('{{ path('fenchy_regular_chatwindow') }}',
+                                                        {userId : '{{ user.id }}', flag: 'add' },
+                                                          function(data) {
+                                                      });
+                                                      
+                                                $.session.set("position",0);
+                                                {% for user1 in users2 %}
+                                                    if($("#chatwindow_{{ user1.id }}").css('display') != 'none')
+                                                    {
+                                                        $.session.set("position",parseInt($.session.get('position'))+1);                                                        
+                                                    }                                                    
+                                                {% endfor %}
+                                                        if(parseInt($.session.get('position')) > 1)
+                                                        {
+                                                            var pos = ((parseInt($.session.get('position'))-1)*310) + 60;
+                                                            $("#chatwindow_{{ user.id }}").css('right',pos+'px');
+                                                        }
+                                                        else
+                                                            $("#chatwindow_{{ user.id }}").css('right','60px');
+                                            }
+                                            else
+                                            {
+{#                                                $.session.remove("id{{ user.id }}",{{ user.id }});#}
+    
+                                                $.post('{{ path('fenchy_regular_chatwindow') }}',
+                                                        {userId : '{{ user.id }}', flag: 'remove' },
+                                                          function(data) {                                                             
+                                                      });
+                                                $.session.set("position",0);
+                                                {% for user1 in users2 %}
+                                                    if($("#chatwindow_{{ user1.id }}").css('display') != 'none')
+                                                    {                                                       
+                                                        $.session.set("position",parseInt($.session.get('position'))+1);
+                                                        if(parseInt($.session.get('position')) > 1)
+                                                        {
+                                                            var pos = ((parseInt($.session.get('position'))-1)*310) + 60;
+                                                            $("#chatwindow_{{ user1.id }}").css('right',pos+'px');
+                                                        }
+                                                        else
+                                                            $("#chatwindow_{{ user1.id }}").css('right','60px');
+                                                    }
+                                                    
+                                                {% endfor %}
+                                            }
+					});
+                                        $("body, html").scrollTop($("#chatwindow_{{ user.id }}").offset().top);
+                                        $("#chatMessage{{ user.id }}").focus();
+                                         var a =  document.getElementById("chatwindow_{{ user.id }}").getElementsByClassName("comments-scroll")[0].scrollHeight - $('#chatwindow_{{ user.id }} .comments-scroll').height();
+                                         $('#chatwindow_{{ user.id }} .comments-scroll').scrollTop(a);
+                                }
+			});
 			
-		});
+                    {% endfor %}
+		});                
 	</script>
-	{% for user in users2 %}
-		<a id="user_{{ user.id }}" title="{{ user.userregular.firstname }}" href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice') }}/{{ user.id }}"><img width="50" height="50" src="/{{ user.twitterusername }}"/></a>
+        <script type="text/javascript">            
+            function updateOnlineUser()
+                {             
+                    {% for user in users2 %}
+                              
+                        $.post('{{ path('fenchy_regular_user_checkuserlogin') }}',
+                            {user : '{{ user.id }}' },
+                            function(data) {
+                                if(data != 'none')
+                                {
+                                    if(data == 'true')
+                                    {
+                                        $('#online_{{user.id}}').show();
+                                        $("#user_{{ user.id }}").removeAttr("href");
+
+                                    }
+                                    else
+                                    {
+                                        $('#online_{{user.id}}').hide();
+    {#                                    $("#chatwindow_{{ user.id }}").hide();#}
+                                        var url = '{{ path('fenchy_regular_user_messages_index', {'receiver' : user.id })}}';
+                                        $("#user_{{ user.id }}").attr("href", url);
+
+                                    }
+                                }
+                        });
+                    {% endfor %}
+                }
+        </script>
+        <script type="text/javascript">
+            $(window).load(function(){
+                window.setInterval(function(){
+                   updateOnlineUser();
+                }, 2600);
+                updateOnlineUser();
+              });
+        </script>
+	{% for user in users2 %}                
+		{% if user.isLogin %}
+		<a id="user_{{ user.id }}" title="{{ user.userregular.firstname }}">
+                        <div class="online" id="online_{{ user.id }}"><img src="{{ absolute(asset('images/icon_online.png')) }}"></div>
+			<img width="50" height="50" src="/{{ user.twitterusername }}"/>
+		</a>		
+                {% endif %}
+        
+        {% endfor %}
+        {% for user in users2 %}
+		{% if not user.isLogin %}
+			<a id="user_{{ user.id }}" title="{{ user.userregular.firstname }}" href="{{ path('fenchy_regular_user_messages_index', {'receiver' : user.id })}}">
+                            <div class="online" id="online_{{ user.id }}" style="display:none;"><img src="{{ absolute(asset('images/icon_online.png')) }}"></div>
+				<img width="50" height="50" src="/{{ user.twitterusername }}"/>
+			</a>
+		{% endif %}
 	{% endfor %}
 {% else %}
 	    <div id="no_neighbours_onload" ><h4>{{ 'regularuser.message.no_neighbors'|trans }}</h4></div>

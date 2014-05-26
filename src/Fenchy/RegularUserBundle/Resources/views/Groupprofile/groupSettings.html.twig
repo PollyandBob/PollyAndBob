@@ -60,7 +60,11 @@
     });
         </script>
         <script type="text/javascript" src="{{ asset('js/regular_user/settings/form.js') }}"></script>
-        
+         <script type="text/javascript">
+             $('#fenchy_regularuserbundle_usergroup_locationtype_location_location').change(function(e){
+                    setLocation();
+                });  
+        </script>
     <script type="text/javascript">
 		function verifyLocation()
 		{
@@ -96,7 +100,7 @@
 				{{ form_row(form.location.location) }}
                 <span>or</span>
 
-                <a class="button" href="#" onclick="putPin()">{{ 'regularuser.put_pin'|trans }}</a>
+                <a class="button" href="javascript:void(0);" onclick="putPin()">{{ 'regularuser.put_pin'|trans }}</a>
 				<div style="display: none">
 	            	{{form_rest(form)}}
 	            </div>
@@ -120,7 +124,8 @@
             		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
 						<button>{{ 'regularuser.ok'|trans|upper }}</button>
     	        	</form>
-        		</div>    
+        		</div>
+                        <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
     		</div>    
     		<div id="mask"></div>
     	</section>

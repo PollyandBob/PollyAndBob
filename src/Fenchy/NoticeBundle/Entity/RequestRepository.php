@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
 
 use Fenchy\UserBundle\Entity\User;
+use Fenchy\RegularUserBundle\Entity\UserGroup;
 use Symfony\Bundle\AsseticBundle\Factory\Worker\UseControllerWorker;
 /**
  * RequestRepository
@@ -15,6 +16,74 @@ use Symfony\Bundle\AsseticBundle\Factory\Worker\UseControllerWorker;
  */
 class RequestRepository extends EntityRepository
 {
+        public function getFullDetailedList ($filter = NULL) {
+
+            if(!($filter instanceof \Fenchy\AdminBundle\Entity\RequestsFilter)) {
+
+                return $this->createQueryBuilder('r')
+                        ->select('r, a, n, u')
+                        ->join('r.author', 'a')
+                        ->leftJoin('r.aboutNotice', 'n')
+                        ->leftJoin('r.aboutUser', 'u')
+                        ->leftJoin('r.aboutUserGroup', 'ug')                        
+                        ->getQuery()
+                        ->getResult();
+            } 
+
+           
+
+            $query = $this->createQueryBuilder('r')
+                        ->select('r, a')
+                        ->join('r.author', 'a');
+            $query->join('r.aboutUser', 'u');
+
+
+           
+
+             if($filter->text) {
+                $query->where('LOWER(r.text) like :text')
+                        ->setParameter('text', strtolower('%'.$filter->text.'%'));
+            }
+
+            if($filter->author) {
+                $query->andWhere('LOWER(a.email) like :email')
+                        ->setParameter('email', strtolower('%'.$filter->author.'%'));
+            }
+
+            if($filter->receiver) {               
+                $query->andWhere('LOWER(u.email) like :email1')
+                        ->setParameter('email1', strtolower('%'.$filter->receiver.'%'));
+            }
+
+            if($filter->target === 'user') {
+                $query->addSelect('u');
+
+            } elseif($filter->target === 'notice') {
+                $query->join('r.aboutNotice', 'n')
+                        ->addSelect('n');
+            }
+
+
+
+
+            if($filter->sort === 'stickersQ') {
+                return $query
+                        ->orderBy($filter->sort, $filter->order)
+                        ->getQuery()
+                        ->getResult();
+            }
+            if($filter->sort === 'receiver') {
+                return $query
+                        ->orderBy('r.aboutUser', $filter->order)
+                        ->getQuery()
+                        ->getResult();
+            }
+
+            return $query
+                        ->orderBy('r.'.$filter->sort, $filter->order)
+                        ->getQuery()
+                        ->getResult();
+        }
 	public function findByInJSON($router, array $criteria, array $orderBy, $limit, $offset) {
 		$requests = $this->findBy($criteria,$orderBy,$limit,$offset);
 		$requestsJSON = array();
@@ -63,7 +132,8 @@ class RequestRepository extends EntityRepository
 							'title' => $aboutNotice->getTitle(),
 							'image' => '',
 							'noticeUrl' => $aboutNoticeUrl,
-							'completed' => $aboutNotice->getCompleted()
+							'completed' => $aboutNotice->getCompleted(),
+							'type' => $aboutNotice->getType()
 					) : null,
 					'id' => $oneRequest->getId(),
 					'status' => $oneRequest->getStatus(),
@@ -79,7 +149,16 @@ class RequestRepository extends EntityRepository
 					'currency' => $oneRequest->getCurrency(),
 					'is_read' => $oneRequest->getIsRead(),
 					'is_read_status' => $oneRequest->getIsReadStatus(),
-					
+					'start_date'=> $oneRequest->getStartDate(),
+					'end_date' => $oneRequest->getEndDate(),
+					'start_time' => $oneRequest->getStartTime(),
+					'end_time' => $oneRequest->getEndTime(),
+                                        'blue'=> $oneRequest->getBlue(),
+                                        'req_blue' => $oneRequest->getRequestBlue(),
+                                        'my_review' => $oneRequest->getMyReview(),
+                                        'other_review' => $oneRequest->getOtherReview(),
+                                        'swap_msg' => $oneRequest->getSwapMsg(),
+                                        'proposed_location' => $oneRequest->getProposedLocation()
 			);
 		}
 
@@ -107,8 +186,79 @@ class RequestRepository extends EntityRepository
 		return $query->execute();
 
 	}
+        public function updateNeighborMsgBlueReadStatus($noticeId, $flag, $requestId)
+        {
+            if(!$requestId && $flag=='true')
+            {
+                    $query = $this->createQueryBuilder('r')
+                        ->update()
+                        ->set('r.request_blue', 'true')
+                        ->where('r.aboutNeighborhoodMsg = :aboutNeighborhoodMsg')
+                        ->getQuery();
+            }
+            else if($flag == 'false')
+            {
+                $query = $this->createQueryBuilder('r')
+                    ->update()
+                    ->set('r.blue', 'true')
+                    ->where('r.aboutNeighborhoodMsg = :aboutNeighborhoodMsg')
+                    ->getQuery();
+            }
+            $query->setParameter('aboutNeighborhoodMsg',$noticeId);
 
-	/**
+		return $query->execute();
+        }
+        
+        public function updateBlueReadStatus($noticeId, $flag, $requestId)
+        {
+            if($requestId && $flag=='true')
+            {
+                
+                    $query = $this->createQueryBuilder('r')
+                        ->update()
+                        ->set('r.blue', 'true')
+                        ->where('r.id = :request')
+                        ->setParameter('request',$requestId)
+                        ->getQuery();
+                     
+
+		return $query->execute();
+            }
+            else if($requestId)
+            {
+                    $query = $this->createQueryBuilder('r')
+                        ->update()
+                        ->set('r.request_blue', 'true')
+                        ->where('r.id = :request')
+                        ->setParameter('request',$requestId)
+                        ->getQuery();
+                     
+
+		return $query->execute();
+            }
+            
+            if(!$requestId && $flag=='true')
+            {
+                    $query = $this->createQueryBuilder('r')
+                        ->update()
+                        ->set('r.request_blue', 'true')
+                        ->where('r.aboutNotice = :notice')
+                        ->getQuery();
+            }
+            else if($flag == 'false')
+            {
+                $query = $this->createQueryBuilder('r')
+                    ->update()
+                    ->set('r.blue', 'true')
+                    ->where('r.aboutNotice = :notice')
+                    ->getQuery();
+            }
+            $query->setParameter('notice',$noticeId);
+
+		return $query->execute();
+        }
+
+        /**
 	 *
 	 * Return number of unread User's requests
 	 * @return integer
@@ -116,27 +266,15 @@ class RequestRepository extends EntityRepository
 	 */
 	public function countUnreadUsersRequests(User $user, $listings=NULL) {
 
-		$i = 0;
-		$listing1 = array();
 		if($listings)
-		{
-			foreach ($listings as $listing)
-			{
-				if($listing->getUserGroup()==null)
-				{
-					$listing1[$i++] = $listing;
-				}
-			}
-		}
-		if($listing1)
 		{
 			$query = $this->createQueryBuilder('r')
 			->select('COUNT(r.id)')
-			->where('r.is_read = :read and r.aboutUser = :user and r.aboutNotice IN(:listings)' )
+			->where('r.is_read = :read and r.aboutUser = :user and r.aboutNotice IS NOT NULL and r.aboutNotice NOT IN(:listings)' )
 			->setParameters(array(
 					'read' => 'false',
 					'user' => $user,
-					'listings'=> array_values($listing1)
+					'listings'=> array_values($listings)
 			))
 			->getQuery();
 		}
@@ -144,62 +282,65 @@ class RequestRepository extends EntityRepository
 		{
 			$query = $this->createQueryBuilder('r')
 			->select('COUNT(r.id)')
-			->where('r.is_read = :read and r.aboutUser = :user')
+			->where('r.is_read = :read and r.aboutUser = :user and r.aboutNotice IS NOT NULL')
 			->setParameters(array(
 					'read' => 'false',
 					'user' => $user
 			))
 			->getQuery();
 		}
-		$total = $query->getSingleScalarResult();
-		return $total;
-
-	}
-	
-	public function countUnreadUsersRequestsInGroup($notices) {
-	
-		$total = 0;
-		foreach($notices as $notice)
-		{	
-			$query = $this->createQueryBuilder('r')
+                
+                        $query1 = $this->createQueryBuilder('r')
 			->select('COUNT(r.id)')
-			->where('r.is_read = :read and r.aboutNotice = :notice')
+			->where('r.is_read = :read and r.aboutUser = :user and r.aboutNotice IS NULL')
 			->setParameters(array(
 					'read' => 'false',
-					'notice' => $notice
+					'user' => $user
 			))
 			->getQuery();
-	
-			$total += $query->getSingleScalarResult();
-		}
-		
+                        
+		$total = $query->getSingleScalarResult() + $query1->getSingleScalarResult();
 		return $total;
+
+	}
+	
+	public function countUnreadUsersRequestsInGroup($groupId) {
+	
+	        $query1 = $this->createQueryBuilder('r')
+			->select('COUNT(r.id)')
+			->where('r.is_read = :read and r.aboutUserGroup = :group')
+			->setParameters(array(
+                                        'read' => 'false',
+					'group' => $groupId		
+			))
+			->getQuery();
+                        
+                return  $query1->getSingleScalarResult();
+		
 	
 	}
+        public function updateGroupRequestReadStatus($groupId)
+        {
+              $query = $this->createQueryBuilder('r')
+                        ->update()
+                        ->set('r.is_read', 'true')
+                        ->where('r.aboutUserGroup = :group')
+                        ->setParameter('group', $groupId)
+                        ->getQuery();                     
 
+		return $query->execute();
+        }
 	public function countUnreadUsersStatusRequests(User $user, $listings) {
 	
-		$i = 0;
-		$listing1 = array();
 		if($listings)
-		{
-			foreach ($listings as $listing)
-			{
-				if($listing->getUserGroup()==null)
-				{
-					$listing1[$i++] = $listing;
-				}				
-			}
-		}
-		if($listing1)
 		{		
 			$query = $this->createQueryBuilder('r')
 			->select('COUNT(r.id)')
-			->where('r.is_read_status = :read and r.author = :user and r.aboutNotice IN(:listings)')
+			->where('r.is_read_status = :read and r.author = :user and r.aboutNotice IS NOT NULL and r.aboutNotice NOT IN(:listings)')
 			->setParameters(array(
 					'read' => 'false',
 					'user' => $user,
-					'listings'=> array_values($listing1)
+					'listings'=> array_values($listings)
 			))
 			->getQuery();
 		}
@@ -207,7 +348,7 @@ class RequestRepository extends EntityRepository
 		{
 			$query = $this->createQueryBuilder('r')
 			->select('COUNT(r.id)')
-			->where('r.is_read_status = :read and r.author = :user')
+			->where('r.is_read_status = :read and r.author = :user and r.aboutNotice IS NOT NULL')
 			->setParameters(array(
 					'read' => 'false',
 					'user' => $user,					
@@ -215,7 +356,16 @@ class RequestRepository extends EntityRepository
 			->getQuery();
 		}
 	
-		$total = $query->getSingleScalarResult();
+                $query1 = $this->createQueryBuilder('r')
+			->select('COUNT(r.id)')
+			->where('r.is_read_status = :read and r.author = :user and r.aboutNotice IS NULL')
+			->setParameters(array(
+					'read' => 'false',
+					'user' => $user
+			))
+			->getQuery();
+                
+		$total = $query->getSingleScalarResult()+ $query1->getSingleScalarResult();
 		return $total;
 	
 	}
@@ -283,9 +433,10 @@ class RequestRepository extends EntityRepository
 	{
 		return  $this->createQueryBuilder('r')
 				->select('r')				
-				->where('r.author = :author')
-				->setParameter('author', $user->getId())	
-				->getQuery()
+				->andWhere('r.author = :author')
+                                //->andWhere('r.aboutUserGroup IS NULL')
+                                ->setParameter('author', $user->getId())
+                                ->getQuery()
 				->getResult();
 	}
 	
@@ -293,9 +444,22 @@ class RequestRepository extends EntityRepository
 	{
 		return  $this->createQueryBuilder('r')
 		->select('r')
-		->where('r.author = :author')		
-		->setParameter('author', $user->getId())
-		->getQuery()
+		->andWhere('r.author = :author')		
+		->andWhere('r.aboutUserGroup IS NULL')
+                ->setParameter('author', $user->getId())
+                ->getQuery()
+		->getResult();
+	}
+        
+        public function getRequestsToUserGroup(User $user)
+	{
+		return  $this->createQueryBuilder('r')
+		->select('r')
+		->andWhere('r.author = :author')		
+		->andWhere('r.aboutUserGroup IS NOT NULL')
+                ->andWhere('r.aboutNotice IS NULL')
+                ->setParameter('author', $user->getId())
+                ->getQuery()
 		->getResult();
 	}
 	
@@ -319,13 +483,56 @@ class RequestRepository extends EntityRepository
 				->getQuery()
 				->getResult();
 	}
+        
+        public function getSingleUserGroupRequests(User $user, UserGroup $aboutusergroup)
+	{
+		return  $this->createQueryBuilder('r')
+				->select('r')
+				->where('r.author = :author and r.aboutUserGroup = :aboutusergroup')
+				->setParameter('author', $user->getId())
+				->setParameter('aboutusergroup', $aboutusergroup->getId())
+				->getQuery()
+				->getResult();
+	}
 	
 	public function getNeighboursRequests(User $user)
 	{
 		return  $this->createQueryBuilder('r')
 				->select('r')
-				->where('r.aboutUser = :aboutuser')
+				->andWhere('r.aboutUser = :aboutuser')
+                                ->andWhere('r.aboutNeighborhoodMsg IS NULL')
 				->setParameter('aboutuser', $user->getId())
+				->getQuery()
+				->getResult();
+	}
+        
+        public function getNeighbourhoodMsgRequests(User $user)
+	{
+		return  $this->createQueryBuilder('r')
+				->select('r')
+				->andWhere('r.aboutUser = :aboutuser')
+                                ->andWhere('r.aboutNeighborhoodMsg IS NOT NULL')
+				->setParameter('aboutuser', $user->getId())
+				->getQuery()
+				->getResult();
+	}
+        
+        public function getJoinClosedGroupsRequestsForMember(User $user)
+	{
+		return  $this->createQueryBuilder('r')
+				->select('r')
+				->where('r.author = :author and r.aboutUserGroup IS NOT NULL')
+				->setParameter('author', $user->getId())
+				->getQuery()
+				->getResult();
+	}
+        
+        public function getJoinClosedGroupsRequests(UserGroup $usergroup)
+	{
+		return  $this->createQueryBuilder('r')
+				->select('r')
+				->where('r.aboutUserGroup = :aboutusergroup')
+				->setParameter('aboutusergroup', $usergroup->getId())
 				->getQuery()
 				->getResult();
 	}
@@ -359,5 +566,28 @@ class RequestRepository extends EntityRepository
 	
 		$total = $query->getSingleScalarResult();
 		return $total;
+	}
+        
+        public function getUserRequest(User $user, $notice)
+	{
+		return  $this->createQueryBuilder('r')
+				->select('r')
+				->where('r.author = :author and r.aboutNotice = :notice')
+				->setParameter('author', $user->getId())
+				->setParameter('notice', $notice)
+				->getQuery()
+				->getOneOrNullResult();
+	}
+        
+        public function getOneRequest(User $user, User $author)
+	{
+		return  $this->createQueryBuilder('r')
+				->select('r')
+				->where('r.author = :author and r.aboutUser = :user and r.aboutNotice IS NULL')
+                                ->orWhere('r.author = :user and r.aboutUser = :author and r.aboutNotice IS NULL')
+				->setParameter('author', $author->getId())
+				->setParameter('user', $user->getId())
+				->getQuery()
+				->getOneOrNullResult();
 	}
 }

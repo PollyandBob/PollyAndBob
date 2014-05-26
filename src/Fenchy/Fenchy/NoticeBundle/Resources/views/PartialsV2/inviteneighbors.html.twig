@@ -1,0 +1,70 @@
+{# empty Twig template #}
+<style>
+.neighboursdetils img
+{
+	border-radius:50%;
+	-moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    -khtml-border-radius:50%;
+}
+</style>
+{% set allneighbor = '' %} 
+{% for user in users2 %}
+	{% if(allneighbor) %}
+	{% set allneighbor = "#{allneighbor},#{user.id}" %}
+	{% else %}
+	{% set allneighbor = "#{user.id}" %}
+	{% endif %}
+	 
+{% endfor %}
+{% if users2 %}
+
+				<form name="">
+                    <div class="invite_neighbors" style="margin-left: 74px;">
+                        <div class="invite_group">
+                            <div class="left">
+                                <div class="invite_checkbox">
+                                    <input type="checkbox" name="" id="all_neighbors" value="{{ allneighbor }}" />
+                                    <label>{{ 'regularuser.invite_myneighbors'|trans }}</label>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <div class="invite_checkbox">
+                                    <input type="checkbox" name="invite_neighborsnext50">
+                                    <label>{{ 'regularuser.invite_next_50_around'|trans }}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="invite_single">
+                            <div class="left">
+                            {% for user in users2 %}	
+                            	<div class="invite_persen">
+                            		<a href="{{ path('fenchy_regular_user_user_otherprofile_aboutotherchoice') }}/{{ user.id }}" target="_blank">
+                                    <img width="50" height="50" src="/{{ user.twitterusername }}" alt="{{ user.email }}" />
+                                    </a>
+                                    <div class="invite_checkbox">
+                                        <input type="checkbox" name="invite_neighbors[]" value="{{ user.id }}" />
+                                        <label>{{ 'regularuser.invite_this_neighbor'|trans }}</label>
+                                    </div>
+                                </div>
+                            {% endfor %}    
+                            </div>
+                            <div class="right">
+                                <div class="invite_another">
+                                	<p>{{ 'regularuser.invite_another_friends'|trans }} </p>
+                                    <div class="friends_email">
+                                    <input type="text" onfocus="myFocus(this);" onblur="myBlur(this);" name="friends_email[]" value="{{ 'regularuser.email'|trans }}">
+                                    <a href="javascript:void(0)" id="{{ 'regularuser.email'|trans }}" class="add_email"><img alt="" src="{{ asset('images/icon_add.png') }}"></a>
+                                    <div class="clearfix"></div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+				
+{% else %}
+	    <div id="no_neighbours_onload" ><h4>{{ 'regularuser.message.no_neighbors'|trans }}</h4></div>
+{% endif %}

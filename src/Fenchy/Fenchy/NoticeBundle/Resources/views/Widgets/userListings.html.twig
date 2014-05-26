@@ -1,0 +1,23 @@
+{% if listings %}                                
+	<div class="options">
+    	<h4>{{ 'notice.other_from_title' | trans }} {{user.getUserRegular.getFirstName}} {{user.getUserRegular.getLastName}}</h4>
+    	<ul class="profile-summary-list additional-user-info">
+            {% for item in listings %}
+            <li>
+                <div class="event-master clearfix">
+                    <div class="widget-image-recent">
+                    	<a style="color: #000000;" href="{{path('fenchy_notice_show_slug', {'slug': item.slug, 'year': item.createdAt|date('Y'), 'month': item.createdAt|date('m'), 'day': item.createdAt|date('d')  })}}">
+                        	<img src="{{ asset(item.avatar) }}" alt="" width="255" height="165"/>
+                        </a>
+                    </div>
+                    <div class="event-master-info">
+                        <h2 style="padding: 6px 0; margin-bottom: 5px;"><a style="color: #000000;" href="{{path('fenchy_notice_show_slug', {'slug': item.slug, 'year': item.createdAt|date('Y'), 'month': item.createdAt|date('m'), 'day': item.createdAt|date('d')  })}}">{{item.title|truncate(50)}}</a></h2>
+                        <!--<strong class="info-by-line"><a href="#" class="location"><i class="icon-map-marker"></i><span>{{item.location}}</span></a></strong>-->                                                    
+                    </div>
+                </div>                                          
+            </li>                                            
+            {% endfor %}     
+
+        </ul>
+   </div>
+{% endif %}

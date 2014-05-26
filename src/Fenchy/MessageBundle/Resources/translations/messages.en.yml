@@ -20,6 +20,6 @@ message:
   
   req_notification:
     email:
-      subject: New request from %username%
+      subject: New request/review from %username%
       
-      body: You have got new Request on Polly & Bob.
+      body: You have got new Request/Review on Polly & Bob.

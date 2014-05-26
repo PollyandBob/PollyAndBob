@@ -522,7 +522,7 @@ h3.no_find_newsfeeds{
     box-shadow: none !important;
     margin-bottom: 1px;
     opacity: 1 !important;
-    padding: 0 5px !important;
+    padding: 0 11px 0 0 !important;
 }
 
 #slider-range > a.ui-slider-handle:last-of-type .inner-tooltip

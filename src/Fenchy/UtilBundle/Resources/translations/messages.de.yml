@@ -71,6 +71,8 @@ btn:
   login: Login
 
   send: Senden
+  
+  send_msg: Senden Nachricht
 
   delete: Löschen
 

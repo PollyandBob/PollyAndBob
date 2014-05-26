@@ -26,7 +26,7 @@ class Document
     public $id;
 
     /**
-     * @ORM\Column(type="integer", length=255)
+     * @ORM\Column(type="integer", length=255, nullable=true)
      * @Assert\NotBlank
      */
     public $user_id;

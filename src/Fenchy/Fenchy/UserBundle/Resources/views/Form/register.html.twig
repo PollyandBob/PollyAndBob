@@ -1,0 +1,11 @@
+{% extends '::form.html.twig' %}
+{% block form_label %}
+
+{% endblock form_label %}
+
+{% block password_widget %}
+{% spaceless %}
+    {% set type = type|default('password') %}
+    {{ block('form_widget_simple') }}
+{% endspaceless %}
+{% endblock password_widget %}

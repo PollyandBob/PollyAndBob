@@ -1,0 +1,684 @@
+{% extends 'FenchyGalleryBundle::galleryBase.html.twig' %}
+{% form_theme form '::noLabelForm.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}        
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/jquery.tagit.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/aehlke-tag/css/tagit.ui-zendesk.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui-1.9.1.custom/css/custom-theme/jquery-ui-1.9.1.fenchy.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app/main-container-v2.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    
+    <script type="text/javascript" src="{{ asset('js/regular_user/listing/create.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/ko/knockout-2.2.1.debug.js') }}"></script>
+    {% include '::gmapsApiAsset.html.twig' %}
+    <script type="text/javascript" src="{{ asset('js/ko-extensions/jquery-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mvvm/landing-page-view-model.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/lib/gapi-autocomplete.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery.timepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jWindowCrop.js') }}"></script>
+    
+    <script type="text/javascript">
+
+        var landingPageViewModel;
+
+        $(document).ready(function() {
+
+        	$('ul').prop('spellcheck', true);
+            $('#fenchy_noticebundle_noticetype_start_date, #fenchy_noticebundle_noticetype_end_date').datepicker({dateFormat: 'dd.mm.yy'});
+        
+            geocoder = new google.maps.Geocoder();
+            var baseSearchViewUri = '{{ path('fenchy_notice_indexv2') }}';            
+            
+            landingPageViewModel = new LandingPageViewModel(geocoder, baseSearchViewUri);
+            
+            ko.applyBindings( landingPageViewModel, document.getElementsByTagName('body')[0] );
+            
+            autocomplete = new GApiAutocomplete(
+                document.getElementById('location_gapi'),
+                landingPageViewModel );
+           
+
+            $("#fenchy_noticebundle_noticetype_price").keydown(function(event) {
+            	if($('#fenchy_noticebundle_noticetype_free').is(':checked'))
+               	{
+                   	alert('You marked it free'); 
+               	}
+		        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+		           	return;
+		        } else {
+		            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+		                event.preventDefault();
+		            }
+		        }
+		    });
+
+            $("#fenchy_noticebundle_noticetype_pieces").keydown(function(event) {
+            	if($('#fenchy_noticebundle_noticetype_one_piece').is(':checked'))
+              	{
+                  	alert('You marked only one piece'); 
+              	}
+		        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+		           	return;
+		        } else {
+		            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+		                event.preventDefault();
+		            }
+		        }
+		    });
+		    
+            $("#fenchy_noticebundle_noticetype_spot").keydown(function(event) {
+            	if($('#fenchy_noticebundle_noticetype_unlimited').is(':checked'))
+              	{
+                  	alert('You marked unlimited'); 
+              	}
+		        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || (event.keyCode == 65 && event.ctrlKey === true) || (event.keyCode >= 35 && event.keyCode <= 39)) {
+		           	return;
+		        } else {
+		            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+		                event.preventDefault();
+		            }
+		        }
+		    });
+            
+
+            $('#fenchy_noticebundle_noticetype_type_value_2_value_0').click(function()
+        	{
+        	   if($('#fenchy_noticebundle_noticetype_free').is(':checked') || $('#fenchy_noticebundle_noticetype_type_value_2_value_5').is(':checked'))
+        	   {
+        		   alert('you marked it free');
+        			   $('#fenchy_noticebundle_noticetype_type_value_2_value_0').prop( "checked", false );
+        	   }	
+        	});
+            $('#fenchy_noticebundle_noticetype_type_value_5_value_0').prop('checked','checked');
+            $('#fenchy_noticebundle_noticetype_type_value_5_value_0').click(function()
+            {
+            	$('#fenchy_noticebundle_noticetype_type_value_5_value_0').prop('checked','checked');
+            });
+                        
+            $('#fenchy_noticebundle_noticetype_default_setting').click(function()
+           	{
+               	$('#fenchy_noticebundle_noticetype_default_setting').prop( "checked", true );
+               	
+            });
+
+            $('#fenchy_noticebundle_noticetype_type_value_2_value_5').click(function()
+            {                
+            	if($('#fenchy_noticebundle_noticetype_type_value_2_value_5').is(':checked'))
+            	{             	
+        			$('#fenchy_noticebundle_noticetype_price').attr('readonly','readonly');
+        			$('#fenchy_noticebundle_noticetype_price').val('');
+            	}
+            	else
+            	{
+            		$('#fenchy_noticebundle_noticetype_price').removeAttr('readonly');
+            	}
+            });
+
+            $('#fenchy_noticebundle_noticetype_free').click(function()
+            {                
+              	if($('#fenchy_noticebundle_noticetype_free').is(':checked'))
+               	{             	
+            		$('#fenchy_noticebundle_noticetype_price').attr('readonly','readonly');
+            		$('#fenchy_noticebundle_noticetype_price').val('');
+               	}
+               	else
+               	{
+               		$('#fenchy_noticebundle_noticetype_price').removeAttr('readonly');
+               	}
+	        });
+
+            $('#fenchy_noticebundle_noticetype_one_piece').click(function()
+            {                
+              	if($('#fenchy_noticebundle_noticetype_one_piece').is(':checked'))
+              	{             	
+              		$('#fenchy_noticebundle_noticetype_pieces').attr('readonly','readonly');
+             		$('#fenchy_noticebundle_noticetype_pieces').val('');
+               	}
+               	else
+               	{
+               		$('#fenchy_noticebundle_noticetype_pieces').removeAttr('readonly');
+               	}
+        	});
+
+            $('#fenchy_noticebundle_noticetype_unlimited').click(function()
+            {                
+              	if($('#fenchy_noticebundle_noticetype_unlimited').is(':checked'))
+              	{             	
+              		$('#fenchy_noticebundle_noticetype_spot').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_spot').val('');
+               	}
+               	else
+              	{
+              		$('#fenchy_noticebundle_noticetype_spot').removeAttr('readonly');
+              	}
+           });
+
+            $('#fenchy_noticebundle_noticetype_location_arrange').click(function()
+           	{                
+              	if($('#fenchy_noticebundle_noticetype_location_arrange').is(':checked'))
+              	{             	
+               		$('#location_gapi').attr('readonly','readonly');
+               		$('#location_gapi').val('');
+               	}
+              	else
+               	{
+               		$('#location_gapi').removeAttr('readonly');
+               	}
+            });
+            
+            $('#fenchy_noticebundle_noticetype_date_arrange').click(function()
+	      	{               	                            
+            	if($('#fenchy_noticebundle_noticetype_date_arrange').is(':checked'))
+              	{             	
+            		$('#fenchy_noticebundle_noticetype_start_date').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_start_date').val('');
+               		$('#fenchy_noticebundle_noticetype_start_date').datepicker('disable');
+               		$('#fenchy_noticebundle_noticetype_end_date').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_end_date').val('');
+               		$('#fenchy_noticebundle_noticetype_end_date').datepicker('disable');
+               	}
+              	else
+              	{
+               		$('#fenchy_noticebundle_noticetype_start_date').removeAttr('readonly');
+               		$('#fenchy_noticebundle_noticetype_end_date').removeAttr('readonly');
+               		$('#fenchy_noticebundle_noticetype_start_date').datepicker('enable');
+               		$('#fenchy_noticebundle_noticetype_end_date').datepicker('enable');
+               	}            	
+            });
+            $('#fenchy_noticebundle_noticetype_start_time_arrange').click(function()
+            {                
+              	if($('#fenchy_noticebundle_noticetype_start_time_arrange').is(':checked'))
+               	{             	
+               		$('#fenchy_noticebundle_noticetype_start_time').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_start_time').val('');
+               		$('#fenchy_noticebundle_noticetype_start_time').timepicker('disable');
+               		$('#fenchy_noticebundle_noticetype_end_time').attr('readonly','readonly');
+               		$('#fenchy_noticebundle_noticetype_end_time').val('');
+               		$('#fenchy_noticebundle_noticetype_end_time').timepicker('disable');
+               	}
+               	else
+               	{
+               		$('#fenchy_noticebundle_noticetype_start_time').removeAttr('readonly');
+               		$('#fenchy_noticebundle_noticetype_end_time').removeAttr('readonly');
+               		$('#fenchy_noticebundle_noticetype_start_time').timepicker('enable');
+               		$('#fenchy_noticebundle_noticetype_end_time').timepicker('enable');
+               	}
+            });               
+        });
+        
+        window.onload=function(){
+        $('li.selected:first').siblings().removeClass('selected');    
+	$('.crop_me4').jWindowCrop({
+
+                    targetWidth: 970, //Width of facebook cover division
+                    targetHeight: 326, //Height of cover division
+                    loadingText: '',
+                    onChange: function(result) {
+
+                            var strcropX = $(this).css('left');
+                            var strcropY = $(this).css('top');
+                            strcropX = strcropX.replace(/px/g, '');
+                            strcropX = strcropX.replace(/-/g, '');
+                            strcropY = strcropY.replace(/px/g, '');
+                            strcropY = strcropY.replace(/-/g, '');
+                            //alert($(this).parent().parent().parent('li.selected').index());
+                            var imageNumber = $('li.selected').index();
+                            if(imageNumber==0)
+                            {
+                            $('#form_cropX0').val(strcropX);
+                            $('#form_cropY0').val(strcropY);
+                            }
+                            if(imageNumber==1)
+                            {
+                            $('#form_cropX1').val(strcropX);
+                            $('#form_cropY1').val(strcropY);
+                            }
+                            if(imageNumber==2)
+                            {
+                            $('#form_cropX2').val(strcropX);
+                            $('#form_cropY2').val(strcropY);
+                            }
+                            if(imageNumber==3)
+                            {
+                            $('#form_cropX3').val(strcropX);
+                            $('#form_cropY3').val(strcropY);
+                            }
+                            /*console.log("separation from left- "+result.cropX);
+                            console.log("separation from left- "+result.cropY);
+                            console.log("width- "+result.cropW-455);
+                            console.log("Height- "+result.cropH-123);*/
+                    }
+                });
+                
+            
+            
+           
+            {% set i=0 %}        
+            {% for image in notice.gallery.images %}
+                {{ image.id }}
+                   $('#form_cropX{{ i }}').val({{ image.cropX }});
+                   $('#form_cropY{{ i }}').val({{ image.cropY }});
+                   
+                   $("[id^='{{image.name}}']").find('.crop_me4').css('left',{{ image.cropX }}+'px');
+                   $("[id^='{{image.name}}']").find('.crop_me4').css('top',-{{ image.cropY }}+'px');
+                   
+            {% set i = i+1 %}
+            {% endfor %}
+	};
+    </script>
+    <script type="text/javascript" src="{{ asset('js/regular_user/listing/form.js') }}"></script>
+    
+{% endblock %}
+
+{% block content %}
+    {{ parent() }}
+    <style>
+            .thumbnails .thumbnail .crop_me4
+            {
+                display:none !important;
+            }
+            .thumbnails .selected .crop_me4
+            {
+                display:block !important;
+            }
+            form label
+	    {
+		    color: #000000;
+		    font-family: code_boldregular;
+		    font-size: 12px;
+		    letter-spacing: 1px;
+	    }
+	    ul.tagit {
+		    margin-left: 175px;
+                    margin-top: -20px;
+		    border-width: 0px;
+		}
+		ul.tagit li.tagit-choice {
+		    background: none repeat scroll 0 0 #E14F45;
+		    font-weight: normal;
+		    
+		}
+		ul.tagit li.tagit-choice .tagit-label:not(a) {
+    		color: #FFF;
+    		font-family: code_boldregular;
+    		font-size: 12px;
+    		letter-spacing: 1px;
+    		padding: 2px 4px 1px;
+		}
+		ul.tagit li.tagit-choice:hover, ul.tagit li.tagit-choice.remove {
+    		background-color: #E14F45;
+    		border-color: #E14F45;
+		}
+		form textarea
+		{
+			width: 900px;
+			height: 130px;
+    		line-height: 2;
+		}
+		form input[type=text]
+		{
+			width: 900px;
+		}
+		#gallery-edit-images-container .empty:first-child .add-center .icon-plus-sign {
+		    font-size: 55px;
+		    color: #FFFFFF;
+		}
+		#gallery-edit-images-container .selected .add-center strong {
+		    color: #FFFFFF !important;
+		    display: none;
+		    font-size: 18px !important;
+		    text-align: left !important;
+		    text-transform: uppercase !important;
+		}
+		#gallery-edit-images-container .empty .add-center strong {
+		    color: #FFFFFF;
+		    display: block;
+		    font-family: code_boldregular;
+		    font-size: 14px;
+		    letter-spacing: 1px;
+		    margin-left: -29px;
+		    text-align: center;
+		    text-transform: uppercase;
+		}
+                .icon-plus-sign:before {
+                    content: "";
+                    margin-left: -14px;
+                    margin-top: 3px;
+                }
+                .icon-plus-sign:before {
+		    text-align: center;
+		    width: 100%;
+		}
+		.info-by-line {		
+		    margin-left: -50px;
+		}
+		#gallery-edit-images-container .thumbnail {
+    		background-color: #C0C0C0;
+                }	
+                #gallery-edit-images-container .thumbnail {    
+                        top: -18px;
+                }    	
+                #gallery-edit-images-container li.selected img.medium-image {
+                            display: inline;
+                            /*height: 330px;*/
+                            width: 100%;
+                        }
+                .placeholder_listing {
+                display: block;
+                width: 970px;
+                margin: 0 auto;
+                position: relative;
+                }    
+                .placeholder .jwc_frame, .placeholder_listing .jwc_frame
+                {
+                cursor: move !important;
+                }
+                ._6_f {
+                max-width: 275px;
+                display: inline-block;
+                }
+                ._8_2 {
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-size: 24px;
+                line-height: 30px;
+                font-weight: bold;
+                display: inline-block;
+                padding-right: 30px;
+                }
+                ._8_2, .alternate {
+                color: #FFF;
+                text-rendering: optimizelegibility;
+                text-shadow: 0 0 3px rgba(0,0,0,0.8);
+                }
+                .alternate {
+                font-size: 20px;
+                font-weight: normal;
+                white-space: nowrap;
+                color: #fff;
+                } 
+                .jwc_controls{
+                display: block !important;
+                margin-left: 421px !important;
+                margin-top: 148px !important;
+                }
+                .jwc_controls .dragger {
+                    background: url("{{ asset('images/drag.png') }}") no-repeat scroll 9px 8px rgba(84, 97, 133, 0.4);
+                    border-radius: 2px 2px 2px 2px;
+                    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12) inset;
+                    color: #FFFFFF;
+                    display: inline;
+                    font-family: mathletebulky;
+                    font-size: 17px;
+                    letter-spacing: 1px;
+                    padding: 4px 9px 6px 24px;
+                }
+	</style>	
+	
+	<a class="createtitle" href="javascript:void(0);" style="float: left; margin-top: -36px;">{{ ('listing.create.2.subtitle_'~type.name)|trans }}</a>
+    	<section id="contentinner">        
+		<div class="wrapper" style="margin-top: -45px;" >
+                    
+		<form class="form-wrapper listing-form" action="{{ path('fenchy_regular_user_notice_edit', { id: notice.id }) }}" method="post" {{ form_enctype(form) }}>
+	   		{{ block('galleryContainer') }}
+                        
+                        <input type="hidden" name="cropX0" id="form_cropX0" value="0">
+                        <input type="hidden" name="cropY0" id="form_cropY0" value="0">
+                        
+                        <input type="hidden" name="cropX1" id="form_cropX1" value="0">
+                        <input type="hidden" name="cropY1" id="form_cropY1" value="0">
+                        
+                        <input type="hidden" name="cropX2" id="form_cropX2" value="0">
+                        <input type="hidden" name="cropY2" id="form_cropY2" value="0">
+                        
+                        <input type="hidden" name="cropX3" id="form_cropX3" value="0">
+                        <input type="hidden" name="cropY3" id="form_cropY3" value="0">
+                        
+	   		<div class="clearfix"></div>    		
+    		<div class="persendata" style="margin-top: 5px"> 
+	        	<div class="aboutmedata">        	
+	        	 	{{ form_errors(form) }}
+	            	<h4>{{ 'notice.title'|trans|upper }}</h4>
+	        		<div class="about-details">
+	        			<div class="name">
+		            		{{ form_row(form.title) }}
+	            		</div>
+	            	</div>	            
+	            	<h4>{{ 'notice.description'|trans|upper }}</h4>
+	           		<div class="about-details">
+	           			<div class="name" style="height:130px;">
+	            			{{ form_row(form.content) }}
+	            		</div>
+	           	 	</div>
+	            <h4>{{ 'notice.tags'|trans|upper }}</h4>
+	            <div class="clearfix"></div>
+	           	<div class="createlistingdetail">
+	           	<label>{{ 'notice.tags1'|trans|upper }}</label>
+	            	{{ form_row(form.tags) }}
+	            </div>
+	            <br/><br/>
+	            {% if type.dateAvailable %}
+		            <div class="createlistingdata halfleft">
+		            	<h4>{{ 'notice.time'|trans|upper }}</h4>
+		            	<div class="createlistingdetail date-div">
+		            		<div class="left">
+	                    		<div class="date">
+	                    			<label>{{ 'notice.start'|trans|upper }}</label>
+	                    			{{ form_row(form.start_date) }}
+	                    			{{ form_row(form.start_time) }}
+	                    		</div>
+	                    		{% if type != 'offerevents' and type != 'events' %}
+		                    		<div class="checkbox">
+		                    			{{ form_row(form.date_arrange) }}
+		                    		</div>
+	                    		{% endif %}
+	                    	</div>
+	                    	<div class="left">
+	                        	<div class="date">
+	                            	<label>{{ 'notice.end'|trans|upper }}</label>
+	                            	{{ form_row(form.end_date) }}
+	                            	{{ form_row(form.end_time) }}
+	                            </div>
+	                            {% if type != 'offerevents' and type != 'events' %}
+		                            <div class="checkbox">
+		                    			{{ form_row(form.start_time_arrange) }}
+		                    		</div>
+	                    		{% endif %}
+	                            <!-- <div class="checkbox">
+	                            	{# {{ form_row(form.end_date_arrange) }} #}
+	                             </div>
+	                             <div class="checkbox">
+	                            	{# {{ form_row(form.end_time_arrange) }} #}
+	                            </div>-->
+	                       	</div>
+		            	</div>
+		            </div>
+	           	{% endif %}
+	            {% if type.locationChangeAvailable %}
+	             	<div class="createlistingdata halfright">
+                    	<h4>Location</h4>
+                        <div class="createlistingdetail">
+                          	<div class="location">   
+                           		<label>Place</label>
+                           		{% if notice.locationArrange %}                        		
+                            		<input type="text" value="" id="location_gapi"/>
+                            	{% else %}
+                            		<input type="text" value="{% if location %}{{location.location}}{% endif %}" id="location_gapi"/>
+                            	{% endif %}                            	
+                            	<div class="clearfix"></div>                            	
+	                      	</div>
+	                      	<div class="checkbox">
+									{{ form_row(form.location_arrange) }}
+	                        </div>
+                    	</div>
+                    </div>	            	
+	          	{% endif %}
+	          	{% set subId = type.subcategoryId %}
+	            {% if subId %}
+	          	<div class="clearfix"></div>
+	          	<div class="createlistingdata halfleft">
+	          		<h4>{{ 'notice.action'|trans|upper }}</h4>
+	          		<div class="createlistingdetail">
+	          			<p>{{ 'notice.what_other_person'|trans }}</p>
+	          			<div class="clearfix"></div>
+	          			<div class="actioncheck">
+                         	<div class="checkboxaction">
+                         		{{ form_widget(form.type['value_'~subId]) }}
+                            </div>
+                        </div>
+	          		</div>
+	          	</div>
+	           	{% endif %}
+	           	
+	            {% if type.pieceAvailable %}
+	           	 	<div class="createlistingdata halfright">
+                       	<h4>{{ 'notice.price_pieces'|trans|upper }}</h4>
+                        <div class="createlistingdetail">
+                            <div class="price-spots">
+                            {% if type == 'offergoods' %}
+                            	<div class="left">
+                            		<p>{{ 'notice.price'|trans|upper }}</p>
+                            		<div class="clearfix"></div>
+                                    <div class="price-textbox">
+                                    	{{ form_row(form.price, {'label': 'listing.create.price_piece'|trans|upper }) }}
+                                    </div>
+                                   	{{ form_row(form.currency) }}
+                                   	<div class="clearfix"></div>
+                                    <div class="checkbox">
+										{{ form_row(form.free) }}
+                                    </div>
+                            	</div>
+                            {% endif %}
+                            {% if type == 'goods' %}
+                            	<div class="left">
+                                	<p>{{ 'notice.piece'|trans|upper }}</p>
+                                	<div class="clearfix"></div>
+										{{ form_row(form.pieces) }}
+                                	<div class="checkbox">
+										{{ form_row(form.one_piece) }}
+                                	</div>
+                                </div>
+                            {% else %}                            
+                            	<div class="right">
+                                	<p>{{ 'notice.piece'|trans|upper }}</p>
+                                	<div class="clearfix"></div>
+										{{ form_row(form.pieces) }}
+                                	<div class="checkbox">
+										{{ form_row(form.one_piece) }}
+                                	</div>
+                                	<div class="checkbox">
+                            			{{ form_row(form.default_setting) }}
+                            		</div>                                
+                                	<!--  <a href="javascript:void(0);" class="blue_button">learn more about payment settings</a>-->
+                                </div>
+                           {% endif %}
+                           </div>
+                        </div>
+                	</div>	              	                                                                      	
+	         	{% endif %}
+	         	
+	            {% if type.spotAvailable %}
+	            	<div class="createlistingdata halfright">
+                       	<h4>{{ 'notice.price_spots'|trans|upper }}</h4>
+                        <div class="createlistingdetail">
+                            <div class="price-spots">
+                            {% if type == 'offerevents' %}
+                            	<div class="left">
+                            		<p>{{ 'notice.price'|trans|upper }}</p>
+                            		<div class="clearfix"></div>
+                                    <div class="price-textbox">
+                                    	{{ form_row(form.price, {'label': 'listing.create.price_spot'|trans|upper }) }}
+                                    </div>
+                                   	{{ form_row(form.currency) }}
+                                   	<div class="clearfix"></div>
+                                    <div class="checkbox">
+										{{ form_row(form.free) }}
+                                    </div>
+                            	</div>
+                            {% endif %}
+                            	<div class="right">
+                                	<p>{{ 'notice.spot'|trans|upper }}</p>
+                                	<div class="clearfix"></div>
+                                	{{ form_row(form.spot) }}
+                                	<div class="checkbox">
+                                		{{ form_row(form.unlimited) }}
+                                	</div>
+                                	<div class="checkbox">
+                            			{{ form_row(form.default_setting) }}
+                            		</div>                                
+                                	<!-- <a href="javascript:void(0);" class="blue_button">learn more about payment settings</a>-->
+                                </div>
+                            </div>
+                        </div>
+                	</div>
+	           	{% endif %}
+	            {% if type == 'offerservice' and type.priceAvailable %}
+	           		<div class="createlistingdata halfright">
+                       	<h4>{{ 'notice.price_hours'|trans|upper }}</h4>
+                        <div class="createlistingdetail">
+                            <div class="price-spots">
+                              	<div class="left">
+                            		<p>{{ 'notice.price'|trans|upper }}</p>
+                            		<div class="clearfix"></div>
+                                    <div class="price-textbox">
+                                    	{{ form_row(form.price, {'label': 'listing.create.price_hour'|trans|upper }) }}
+                                    </div>
+                                   	{{ form_row(form.currency) }}
+                                   	<div class="clearfix"></div>
+                                    <div class="checkbox">
+										{{ form_row(form.free) }}
+                                    </div>
+                            	</div> 
+                            	<div class="right">
+                            		<div class="checkbox">
+                            			{{ form_row(form.default_setting) }}
+                            		</div>
+                            		<!-- <a href="javascript:void(0);" class="blue_button">learn more about payment settings</a>-->
+                            	</div>                            	
+                            </div>
+                        </div>
+                	</div>	               	
+	         	{% endif %} 
+	            {% if form.put_on_fb is defined %}
+	                <div class="row grid_6">
+	                 	{{ form_row(form.put_on_fb) }}
+	                </div>
+	             {% endif %}
+	             <div class="form-type-fields-container">
+	              	{{ form_widget(form.type) }}
+	             </div>
+	             <div class="row fieldInput noticebundle grid_2" style="display:none;">
+	               {{ form_rest(form) }}
+	             </div>	      	                           
+	        	 <div class="right">
+	            	<a id="back" class="about_edit" href="{{ path('fenchy_regular_user_listing_manage') }}">
+	                	{{ 'regularuser.back'|trans|upper }}
+	                </a>
+	           	   	<input type="submit" id="continue" value="{{ 'btn.send'|trans|upper }}"/>
+	            </div>
+	    	</div>
+	    	</div>
+		</form>
+    	<div class="bgbottom">
+    		<img alt="" src="{{ absolute(asset('images/bgbottom_contantinner.png')) }}">
+    	</div>
+    </div>
+	</section>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var sampleTags = {{ tags|json_encode|raw }};
+        
+            createListing.step2.init();
+            
+            $('#fenchy_noticebundle_noticetype_tags').tagit({
+                availableTags: sampleTags,
+                allowSpaces: true
+            });
+        });
+    </script>
+{% endblock %}

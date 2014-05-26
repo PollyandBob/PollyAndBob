@@ -1,0 +1,26 @@
+{% extends 'FenchyFrontendBundle::static.html.twig' %}
+
+{% block content_static %}
+        <h1>{{ 'frontend.imprint.title'|trans }}</h1>
+        <div id="hcard-name-surn" class="vcard">
+            <h3 class="org">{{ 'frontend.imprint.fenchy_gmbh'|trans }}</h3>
+            <div class="adr">
+                <span class="street-address info-by-line">{{ 'frontend.imprint.fenchy_address_1'|trans }}</span>
+                <span class="postal-code locality">{{ 'frontend.imprint.fenchy_address_2'|trans }}</span>
+            </div>                                
+            <h3>{{ 'frontend.imprint.contact'|trans }}</h3>
+            <div>
+                <span class="info-by-line"><a href="www.fenchy.com">www.fenchy.com</a></span>
+                <span class="info-by-line tel">{{ 'frontend.imprint.phone'|trans }}</span>
+                <span class="info-by-line email"><a href="mailto:info@fenchy.com">{{ 'frontend.imprint.email'|trans }}</a></span>
+            </div>                                
+            <div class="org">
+                <span class="info-by-line">{{ 'frontend.imprint.registered_office'|trans }}</span>                                
+                <span class="info-by-line">{{ 'frontend.imprint.registered_court'|trans }}</span>                                
+                <span class="info-by-line">{{ 'frontend.imprint.managing_directiors'|trans }}</span>                                
+            </div>                                
+        </div>
+        <h3>{{ 'frontend.imprint.disclaimer'|trans }}</h3>
+        <p>{{ 'frontend.imprint.disclaimer_body'|trans }}</p>
+    
+{% endblock %}

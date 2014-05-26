@@ -1,0 +1,14 @@
+{% extends 'FenchyFrontendBundle::static.html.twig' %}
+
+{% block content_static %}
+    
+        <h1>{{ 'frontend.privacy.title'|trans }}</h1>
+        {% if locale == 'de'%}
+            {% include 'FenchyFrontendBundle:Frontend:privacy-content-de.html.twig' %}
+        {% elseif locale == 'en'%}
+            {% include 'FenchyFrontendBundle:Frontend:privacy-content-en.html.twig' %}
+        {% else %}
+            {% include 'FenchyFrontendBundle:Frontend:privacy-content-en.html.twig' %}
+        {% endif %}
+    
+{% endblock %}

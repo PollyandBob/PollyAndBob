@@ -1,0 +1,24 @@
+<div class="comboSearch comboSearchWide">
+    <form id="sb-form">
+        <fieldset>
+            <div class="fieldInput searchInput">
+                <input type="text" data-bind="jqAutocomplete: { autoFocus: false }, 
+                       jqAutocompleteSource: fenSuggestionsArr, 
+                       jqAutocompleteQuery: fenRetrieveSuggestions,
+                       jqAutocompleteValue: fcPhrase,
+                       jqAutocompleteAppendTo: '#sb-form'" placeholder="{{ 'frontend.placeholder_what'|trans }}" autocomplete="off" id="search" class="ui-autocomplete-input"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+            </div>
+            <div class="fieldInput locationInput">
+                <i class="icon-map-marker"></i>
+                <input type="text" data-bind="value: fcGFormattedAddress" id="location">
+            </div>                                        
+            <div class="submit">
+                <div data-bind="click: doSearch">
+                    <i class="icon-search"></i>
+                    <button type="button">{{'frontend.search'|trans}}</button>
+                </div>                       
+            </div>
+        </fieldset>
+        <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabindex="0" style="z-index: 1; display: none;"></ul>
+    </form>
+</div>

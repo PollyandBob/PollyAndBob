@@ -73,7 +73,25 @@ jQuery(document).ready(function() {
 		
 		jQuery('#mask').fadeOut(500);
 		jQuery('.window').fadeOut(500);
-	});	
+	});
+        
+        //if Escape(ESC) Key is pressed
+        jQuery(document).keypress(function(e) { 
+            if (e.keyCode == 27) { 
+                //Cancel the link behavior
+		e.preventDefault();
+		
+		jQuery('#mask').hide();
+		jQuery('.window').hide();
+            } 
+        });
+        // For on Enter Key Submit the Register(Sign Up) form
+        jQuery(document).keypress(function(e) { 
+            if (e.keyCode == 13) {
+                $( "#register-form" ).click();
+            }
+        });
+        
 	jQuery('.window .close1').click(function (e) {
 		//Cancel the link behavior
 		e.preventDefault();
@@ -127,22 +145,41 @@ jQuery(document).ready(function() {
 	//	jQuery('.window').hide();
 	});	
 	
-	jQuery('.reviews').click(function(event) {
-		//event.preventDefault();
-		jQuery(this).siblings(".reviewdetail").slideToggle('fast', function() {
-        });                 
-     });
+        //	jQuery('.reviews').click(function(event) {
+        //		//event.preventDefault();
+        //		jQuery(this).siblings(".reviewdetail").slideToggle('fast', function() {
+        //        });                 
+        //     });
+     
+       jQuery(".reviews").click(function(event){
+              jQuery(".commentdetail").slideUp("fast");
+               jQuery('.active').removeClass('active');
+           jQuery(this).siblings(".reviewdetail").slideToggle("fast");
+           jQuery(this).toggleClass("active");
+           return false;
+       });
+       
 	jQuery('.reviewopen').click(function(event) {
     	 //event.preventDefault();
-		jQuery(this).parent('.reviewdetail').slideToggle('fast', function() {
-     	});
-     });
+                    jQuery(this).parent('.reviewdetail').slideToggle('fast', function() {
+            });
+        });
 	
-	jQuery('.comments').click(function(event) {
-		//event.preventDefault();
-		jQuery(this).siblings(".commentdetail").slideToggle('fast', function() {
-        });                 
-     });
+        //	jQuery('.comments').click(function(event) {
+        //		//event.preventDefault();
+        //		jQuery(this).siblings(".commentdetail").slideToggle('fast', function() {
+        //        });                 
+        //     });
+     
+        jQuery(".comments").click(function(event){
+            //event.preventDefault();
+              jQuery(".reviewdetail").slideUp("fast");
+               jQuery('.active').removeClass('active');
+           jQuery(this).siblings(".commentdetail").slideToggle("fast");
+           jQuery(this).toggleClass("active");
+           return false;
+        });
+       
 	jQuery('.commentopen').click(function(event) {
     	 //event.preventDefault();
 		jQuery(this).parent('.commentdetail').slideToggle('fast', function() {

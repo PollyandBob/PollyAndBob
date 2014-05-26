@@ -10,79 +10,100 @@
     <link rel="stylesheet" href="{{ asset('css/gallery/punkave/galleryEdit-V2.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('css/gallery/punkave/editSmall.css') }}" type="text/css" />
     <style>
-    	#form_file {
-    		display: none;
-    	}
-    	#form_file2 {
-    		display: none;
-    	} 
-    	
-		#placeholder {
-		display: block;
-		height: 123px;
-		width: 455px;
-		margin: 0 auto;
-		position: relative;
-		padding: 0 0 81px;
-		}
-		.placeholder {
-		display: block;
-		height: 262px;
-		width: 970px;
-		margin: 0 auto;
-		position: relative;
-		}
-		
-		.crop_me
-		{
-			display: block !important;
-		}
-		#placeholder img {
-		margin: auto;
-		display: block;
-		height: auto;
-    	position: absolute;
-    	width: 100%;
-		}
-		
-		.jwc_controls .dragger {
-		    background: url("https://fbstatic-a.akamaihd.net/rsrc.php/v2/yl/r/Zi4SfiYNyqJ.png") no-repeat scroll 9px 8px rgba(84, 97, 133, 0.4);
-		    border-radius: 2px 2px 2px 2px;
-		    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12) inset;
-		    color: #FFFFFF;
-		    display: inline;
-		    font-family: mathletebulky;
-    		font-size: 17px;
-		    padding: 4px 9px 6px 24px;
-		    letter-spacing: 1px;
-		}
-		._6_f {
-		max-width: 275px;
-		display: inline-block;
-		}
-		._8_2 {
-		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-		font-size: 24px;
-		line-height: 30px;
-		font-weight: bold;
-		display: inline-block;
-		padding-right: 30px;
-		}
-		._8_2, .alternate {
-		color: #FFF;
-		text-rendering: optimizelegibility;
-		text-shadow: 0 0 3px rgba(0,0,0,0.8);
-		}
-		.alternate {
-		font-size: 20px;
-		font-weight: normal;
-		white-space: nowrap;
-		color: #fff;
-		}   	
+            #form_file {
+                display: none;
+            }
+            #form_file2 {
+                display: none;
+            } 
+            .profileandcover_image .blue_button {
+                margin-left: 60px !important;
+                padding: 2px 5px 1px !important;
+            }
+            
+            #placeholder {
+                display: block;
+                height: 123px;
+                width: 455px;
+                margin: 0 auto;
+                position: relative;
+                padding: 0 0 81px;
+                top: 20px;
+            }
+            .placeholder {
+                display: block;
+                height: 262px;
+                width: 970px;
+                margin: 0 auto;
+                position: relative;
+            }
+            .placeholder .crop_me2 {
+                pointer-events: none !important;
+            }
+            .crop_me
+            {
+                display: block !important;
+            }
+            #placeholder img {
+                margin: auto;
+                display: block;
+                height: auto;
+                position: absolute;
+                width: 100%;
+            }
+
+            #placeholder .jwc_frame
+            {
+                cursor: move !important;
+            }
+            .jwc_controls .dragger {
+                background: url("{{ asset('images/drag.png') }}") no-repeat scroll 9px 8px rgba(84, 97, 133, 0.4);
+                border-radius: 2px 2px 2px 2px;
+                box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12) inset;
+                color: #FFFFFF;
+                display: inline;
+                font-family: mathletebulky;
+                font-size: 17px;
+                padding: 4px 9px 6px 24px;
+                letter-spacing: 1px;
+            }
+            ._6_f {
+                max-width: 275px;
+                display: inline-block;
+            }
+            ._8_2 {
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-size: 24px;
+                line-height: 30px;
+                font-weight: bold;
+                display: inline-block;
+                padding-right: 30px;
+            }
+            ._8_2, .alternate {
+                color: #FFF;
+                text-rendering: optimizelegibility;
+                text-shadow: 0 0 3px rgba(0,0,0,0.8);
+            }
+            .alternate {
+                font-size: 20px;
+                font-weight: normal;
+                white-space: nowrap;
+                color: #fff;
+            }  
+
+            #mygroup_id
+            {
+                background-color: #E14F45 !important; 
+                background-image: none !important; 
+                left: 0px !important; 
+                position: absolute !important; 
+                margin-top: 30px !important;
+                width: 156px !important;        
+            }
 	</style>
 {% endblock %}
-        
-{% block javascripts %}    
+
+{% block javascripts %}
     <script type="text/javascript" src="{{ asset('js/underscore-min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery.fileupload.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery.iframe-transport.js') }}"></script>
@@ -93,7 +114,9 @@
     <script type="text/javascript" src="{{ asset('js/gallery/punkave/editSmall.js') }}"></script>
     <script type="text/javascript" src="{{ asset('plugins/aehlke-tag/js/tag-it.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jWindowCrop.js') }}"></script>
+    {% include '::gmapsApiAsset.html.twig' %}
     <script type="text/javascript">
+                
 		function verifyYourIdentity()
 		{
 			var url = "{{ path('fenchy_regular_user_user_myprofile_identityVerification') }}";
@@ -121,6 +144,12 @@
 		$(function(){
 		    Test = {
 		        UpdatePreview: function(obj){
+                            var f = obj.files[0];
+                            // Only process image files.
+                            if (!f.type.match('image.*')) {
+                                alert('{{ 'regularuser.alert_for_wrong_file'|trans}}');
+                                return;
+                            }  
 		          // if IE < 10 doesn't support FileReader
 		          if(!window.FileReader){
 		             // don't know how to proceed to assign src to image tag
@@ -139,6 +168,12 @@
 
 		    Test2 = {
 			        UpdatePreview: function(obj){
+                                    var f = obj.files[0];
+                                    // Only process image files.
+                                    if (!f.type.match('image.*')) {
+                                        alert('{{ 'regularuser.alert_for_wrong_file'|trans}}');
+                                        return;
+                                    } 
 			          // if IE < 10 doesn't support FileReader
 			          if(!window.FileReader){
 			             // don't know how to proceed to assign src to image tag
@@ -169,11 +204,18 @@
 		    $("#FormFileBrowse2").click(function(){
 		    	   $("#form_file2").click();
 		    });
+		    
 
+		});	
+  
+		$(document).ready(function() {
+		$('.crop_me2').attr('src', '{{ absolute(asset(coverpath)) }}').load(function() {  
+		  //alert('Image Loaded');  
+		});
 		    $('.crop_me').jWindowCrop({
 				targetWidth: 455, //Width of facebook cover division
 				targetHeight: 123, //Height of cover division
-				loadingText: 'Your Cover is uploading....',
+				loadingText: '',
 				onChange: function(result) {
 					var strcropX = $(this).css('left');
 					var strcropY = $(this).css('top');
@@ -193,25 +235,47 @@
 		    $('.crop_me2').jWindowCrop({
 				targetWidth: 970, //Width of facebook cover division
 				targetHeight: 262, //Height of cover division
-				loadingText: 'Your Cover is uploading....',
-				onChange: function(result) {
-					/*console.log("separation from left- "+result.cropX);
-					console.log("separation from left- "+result.cropY);
-					console.log("width- "+result.cropW-970);
-					console.log("Height- "+result.cropH-262);*/
-					//alert(result.cropY);
-					
-				}
+				loadingText: ''
 			});
-			var newCropY = 2.13 * {{ cropY }};
-			newCropY = Math.ceil(newCropY);
+                        
+                    var vcropY = 0;
+                    {% if cropY %}
+                    vcropY = {{ cropY }};
+                    {% endif %}
+                    
+		    var newCropY = 2.13 * vcropY;
+		    newCropY = Math.ceil(newCropY);
 		    $('.crop_me2').css('left',{{ cropX }}+'px');
 		    $('.crop_me2').css('top',-newCropY+'px');
 		    $('.crop_me').css('left',{{ cropX }}+'px');
 		    $('.crop_me').css('top',-{{ cropY }}+'px');
 
 		    $('.placeholder').find('.jwc_controls').empty();
-		});		
+	      
+             
+                    $('.verifylocation').submit(function(){                          
+                          var address = $('#street').val();
+                          address +=' '+$('#additional_address').val();
+                          address +=' '+ $('#city').val();
+                          address +=' '+ $('#district').val();
+                          address +=' '+ $('#state').val();
+                          address +=' '+ $('#postcode').val();
+                          address +=' '+ $('#country').val();
+                          $('#FullAddress').val(address);
+                        
+                        geocoder = new google.maps.Geocoder();
+
+                        geocoder.geocode({'address': address}, function(results, status) {
+                            if (status == 'OK') {   
+                                //alert(results[0].geometry.location.lat());
+                                $('#FullAddress_latitude').val(results[0].geometry.location.lat());
+                                $('#FullAddress_longitude').val(results[0].geometry.location.lng());
+                            }
+                        });
+                        //alert(address);
+                    });
+                
+		});	
 	</script>
 {% endblock %}
 
@@ -220,23 +284,23 @@
 				<div class="profile_bak" >
 					<div class="placeholder">
 						{%  if coverpath %}
-							<img alt="" width="970" class="crop_me2" src="{{ absolute(asset(coverpath)) }}">
+							<img alt="" width="970" class="crop_me2" src="">
 						{% else %}
-								<img alt="" src="{{ absolute(asset('images/bg_profileheader.png')) }}">
+							<img alt="" src="{{ absolute(asset('images/bg_profileheader.png')) }}">
 						{% endif %}
 					</div>
 				</div>
                 <div class="left">
                     <div class="persen">
                     {%  if profilepath %}
-					<img alt="" src="{{ absolute(asset(profilepath)) }}">
-					{% else %}
-					<img alt="" src="{{ absolute(asset('images/default_profile_picture.png')) }}">
-					{% endif %}
+			<img alt="" src="{{ absolute(asset(profilepath)) }}">
+                    {% else %}
+			<img alt="" src="{{ absolute(asset('images/default_profile_picture.png')) }}">
+                    {% endif %}
                         <div class="persenname">
                         	<p>{{ displayUser.regularuser.firstname|truncate(12) }}</p>
-                            <a href="#dialog36" name="modal" id="vzoom_1944" class="zoomthis">Edit</a>
-						</div>
+                            <a href="#dialog36" name="modal" id="vzoom_1944" class="zoomthis">{{ 'regularuser.edit'|trans }}</a>
+			</div>
                         <div class="neighbor {{ managertype[2] }}">
                         	<p>{{ managertype[1] }}</p>
                             <span>{{ displayUser.activity }}</span>
@@ -300,17 +364,27 @@
         <div class="big_popup">
             <div class="big_popupclose"><a href="" class="close"></a></div>
             
-				{% if verified %}
-            		<p>{{ 'regularuser.verified_location_message'|trans|upper }}</p>            								   	        		
-    	        {% else %}
+                        {% if verified %}
+                            <p>{{ 'regularuser.verified_location_message'|trans|upper }}</p>            								   	        		
+                        {% else %}
     	        	{% if verifyLocation %}
     		        		<p>{{ 'regularuser.verify_location_message'|trans|upper }}</p>			
-		            		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="form-settings verifylocation">
+		            		<form action="{{ path('fenchy_regular_user_user_myprofile_verifylocation') }}" method="post" class="verifylocation">
 			            		<input type="text" id="firstname" name="firstname" readonly="readonly" value="{{ displayUser.regularuser.name }}"/><br/>
-			            		<input type="text" id="lastname" name="lastname" text="{{ displayUser.regularuser.lastname }}" placeholder="{{ 'regularuser.lastname'|trans  }}"/><br/>
-			            		<textarea id="address" name="address" readonly="readonly">{{ displayUser.location.location }}</textarea><br/>
+			            		<input type="text" id="lastname" name="lastname" value="{{ displayUser.regularuser.lastname }}" placeholder="{{ 'regularuser.lastname'|trans  }}"/><br/>
+                                                <input type="text" id="street" name="street" value="{{ displayUser.location.streetNumber }}" placeholder="{{ 'regularuser.your_street'|trans  }}"/><br/>
+                                                <input type="text" id="additional_address" name="additional_address" value="{{ displayUser.location.route }}{% if displayUser.location.route !='' %}, {% endif %}{{ displayUser.location.sublocality }}" placeholder="{{ 'regularuser.additional_address'|trans  }}2"/><br/>
+                                                <input type="text" id="city" name="city" value="{{ displayUser.location.locality }}" placeholder="{{ 'regularuser.city'|trans  }}"/><br/>
+                                                <input type="text" id="district" name="district" value="{{ displayUser.location.administrativeAreaLevel2 }}" placeholder="{{ 'regularuser.district'|trans  }}"/><br/>
+                                                <input type="text" id="state" name="state" value="{{ displayUser.location.administrativeAreaLevel1 }}" placeholder="{{ 'regularuser.state'|trans  }}"/><br/>
+                                                <input type="text" id="postcode" name="postcode" value="{{ displayUser.location.postalCode }}" placeholder="{{ 'regularuser.postcode1'|trans  }}"/><br/>
+                                                <input type="text" id="country" name="country" value="{{ displayUser.location.country }}" placeholder="{{ 'regularuser.country'|trans  }}"/><br/>
+                                                <input type="hidden" id="FullAddress" name="FullAddress" value="{{ displayUser.location.location }}" /><br/>
+                                                <input type="hidden" id="FullAddress_latitude" name="FullAddress_latitude" value="{{ displayUser.location.latitude }}" /><br/>
+                                                <input type="hidden" id="FullAddress_longitude" name="FullAddress_longitude" value="{{ displayUser.location.longitude }}" /><br/>
+			            		{#<textarea id="address" name="address" readonly="readonly">{{ displayUser.location.location }}</textarea><br/>
 			            		<textarea id="additionaladdress" name="additionaladdress" placeholder="{{ 'regularuser.additional_address'|trans  }}"></textarea><br/>
-			           			<input type="text" id="pincode" name="pincode" placeholder="{{ 'regularuser.postcode1'|trans }}"/><br/>
+			           			<input type="text" id="pincode" name="pincode" placeholder="{{ 'regularuser.postcode1'|trans }}"/><br/>#}
 								<button type="submit"> {{ 'regularuser.ok'|trans|upper }}</button>
 		    	        	</form>
 						{% else %}							
@@ -324,61 +398,51 @@
     </section>
      <section id="boxes2">
             <div id="dialog36" class="window"> 
+                <form action="{{ path('fenchy_regular_user_settings_image') }}" method="post" {{ form_enctype(form3) }}>
+                <input type="submit" class="blue_button" style="z-index: 150;float: right; position: absolute; top: 349px; left: 395px;" value="Upload" />
                 <div class="big_popup">
                     <div class="big_popupclose"><a href="" class="close"></a></div>
-                    <!-- Your custom code here -->
-                    
-					{# {% render "FenchyRegularUserBundle:settings:basic" %} #}
-					
-					{# <div id="placeholder">#}
-					{# 	<img id="target3" class="crop_me" alt="" src="http://www.pollyandbob.jv/uploads/coverimages/1386580193_lalbaugcharaja2008.jpg" /> #}
-					{# </div>#}
-					
-					<div class="profileandcover_image">
-						<div class="profileimage">
-	                    	<div class="title">Profile Image</div>
-	                        <div class="clearfix"></div>
-	                        <form action="{{ path('fenchy_regular_user_settings_image') }}" method="post" {{ form_enctype(form3) }}>
+                    <div class="profileandcover_image">
+                        <div class="profileimage">
+                            <div class="title">{{ 'regularuser.profile_image'|trans}}</div>
+                            <div class="clearfix"></div>
 	                         	{{ form_row(form3.file) }}
 	                         	{% if profilepath =="" %}
-	                         		<img src="{{ asset('images/profileimage.png') }}" class="form_file" alt="" width="128" height="128" style="border-radius: 50% 50% 50% 50%" />
+                                    <img src="{{ asset('images/profileimage.png') }}" class="form_file" alt="" width="128" height="128" style="border-radius: 50% 50% 50% 50%" />
 	                         	{% else %}
-	                         		<img src="{{ asset(profilepath) }}" class="form_file" alt="" width="128" height="128" style="border-radius: 50% 50% 50% 50%"/>
+                                    <img src="{{ asset(profilepath) }}" class="form_file" alt="" width="128" height="128" style="border-radius: 50% 50% 50% 50%"/>
 	                         	{% endif %}
-	   							{{ form_row(form3.user_id) }}
-	   							<div style="display:none;">{{ form_rest(form3) }}</div>
-	   							<a id="FormFileBrowse1" href="#" class="blue_button">Select</a>
-	   							<input type="submit" class="blue_button" style="float: right;margin-right: 17px;" value="Upload" />
-	   						</form>                        
-	                        <div class="clearfix"></div>                                            
-	                    </div>
-						
-						<div class="coverimage">
-	                    	<div class="title">Cover Image</div>
-	                        <div class="clearfix"></div>
-	                        <form action="{{ path('fenchy_regular_user_settings_image') }}" method="post" {{ form_enctype(form4) }}>
-								<div id="placeholder">
-	   							{{ form_row(form4.file2) }}
+	   				{{ form_row(form3.user_id) }}
+                                    <div style="display:none;">{{ form_rest(form3) }}</div>
+                                    <a id="FormFileBrowse1" href="#" class="blue_button">Select</a>
+                                <div class="clearfix"></div>                                            
+                            </div>
+
+                            <div class="coverimage">
+                                <div class="title">{{ 'regularuser.cover_image'|trans}}</div>
+                                <div class="clearfix"></div>
+                                
+                                    <div id="placeholder">
+	   							{{ form_row(form3.file2) }}
 	                         	{% if coverpath =="" %}
-	                         		<img src="{{ asset('images/coverimage.png') }}" class="form_file2" alt="" width="455"/>
+                                            <img src="{{ asset('images/coverimage.png') }}" class="form_file2 crop_me" alt="" width="455"/>
 	                         	{% else %}
-	                         		<img src="{{ asset(coverpath) }}" class="form_file2 crop_me" alt="" width="455" />
+                                            <img src="{{ asset(coverpath) }}" class="form_file2 crop_me" alt="" width="455" />
 	                         	{% endif %}
-	                         	</div>
-	 							{{ form_row(form4.user_id) }}
-	 							{{ form_row(form4.cropX) }}
-	 							{{ form_row(form4.cropY) }}
-	 							<div style="display:none;">{{ form_rest(form4) }}</div>
-	   							<div class="clearfix"></div>
-	                        		<div class="coverimage_buttons">
-	                        			<a id="FormFileBrowse2" href="#" class="blue_button">Select</a>                        
-	   									<input type="submit" class="blue_button" style="float: right;margin-right: 17px;" value="Upload" />
-	   								</div>
-	   						</form>
-	                    </div>
-                </div>
-               	<!-- Your custom code end -->
-                </div>
+                                        </div>
+	 							{{ form_row(form3.user_id) }}
+	 							{{ form_row(form3.cropX) }}
+	 							{{ form_row(form3.cropY) }}
+                                        <div style="display:none;">{{ form_rest(form3) }}</div>
+                                        <div class="clearfix"></div>
+                                        <div class="coverimage_buttons">
+                                            <a id="FormFileBrowse2" href="#" class="blue_button">Select</a>                        
+                                        </div>
+                                </div>
+                            </div>
+                            <!-- Your custom code end -->
+                        </div>
+                </form>
                 <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">
             </div>
             <div id="mask"></div>
@@ -393,5 +457,6 @@
         </figure>
     </section>
      -->
-          
+     
 {% endblock %}
+

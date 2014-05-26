@@ -1,0 +1,62 @@
+user:
+  rest_pass_msg: Neues Passwort eingeben!
+
+  enter_pass_again: Neues Passwort nocheinmal eingeben!
+
+  forgot_your_password: Passwort vergessen?
+
+  password_changed_msg: Passwort erfolgreich geändert.
+
+  password_changed_link_msg: Klicke hier um fortzufahren.
+
+  password_changed_alternative: oder
+
+  sign_in: Login
+
+  back_to_login: zurück zum login
+
+  password_reset:
+    name: Passwort zurücksetzen.
+
+  account_deleted: Dein Profil wurde erfolgreich gelöscht.
+
+  could_not_get_token: Sorry, irgendwas lief da falsch. Versuche es bitte noch einmal.
+
+  could_not_verify_credentials_twitter: Sorry, wir konnten keine Verbindung mit deinem Twitter Konto herstellen. Versuche es bitte noch einmal. 
+
+  could_not_sign_in_via_facebook: Sorry, irgendwas lief da falsch. Versuche es bitte noch einmal. 
+
+  problem_with_logging_try_again: Sorry, irgendwas lief da falsch. Versuche es bitte noch einmal.
+
+  user_with_confirmation_token_not_exist: Der Nutzername existiert nicht. 
+
+  new_user_created: Das Konto wurde erfolgreich erstellt.
+
+  token_expired: Token ????
+
+  registration: Registrieren
+
+  go_to_main_page: Startseite
+change_password:
+  facebook_user_exists:
+    submit: Passwort ändern.
+
+    flash:
+      success: Das Passwort wurde erfolgreich geändert.
+register:
+  footer_message:
+    1: Mit dem Klick auf Registrieren stimmst du den
+
+    2: Nutzungsbedingungen 
+
+    3: und unseren
+
+    4: Datenschutzbestimmungen zu.
+
+  save_button: Registrieren
+
+  title: Registriere dich jetzt als Testnutzer!
+
+  with_fb: Registriere dich mit deinem Facbebook Konto. 
+
+  with_twitter: Registriere dich mit deinem Twitter Konto.

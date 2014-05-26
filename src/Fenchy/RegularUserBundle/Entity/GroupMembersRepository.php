@@ -49,4 +49,24 @@ class GroupMembersRepository extends EntityRepository
 		->getQuery()
 		->getResult();
 	}
+        
+        public function findMemberByGroupId($groupId,$user_id)
+	{
+		return $this->createQueryBuilder('um')
+		->where('um.neighbor = :neighbor')
+		->setParameter('neighbor', $user_id)
+		->andWhere('um.current = :id')
+		->setParameter('id', $groupId)
+		->getQuery()
+		->getOneOrNullResult();
+	}
+        public function removeAllById($groupId)
+        {
+            return $this->createQueryBuilder('um')
+                    ->delete()
+                    ->where('um.current = :groupId')
+                    ->setParameter('groupId', $groupId)
+                    ->getQuery()
+                    ->getResult();
+        }
 }

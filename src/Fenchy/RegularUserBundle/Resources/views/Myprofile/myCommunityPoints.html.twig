@@ -64,9 +64,9 @@
                       
                       <tr>
                         <td width="40%">{{ 'regularuser.invited_and_registered_users'|trans }}</td>
-                        <td width="10%"></td>
-                        <td width="10%"></td>
-                        <td width="40%"><a href="javascript:void(0);" class="categorylink">{{ 'regularuser.tell_friend_about_pollyandbob_now'|trans }}</a></td>
+                        <td width="10%">{{ inviteFriendPoint }}</td>
+                        <td width="10%">{{ inviteFriendPoint }}</td>
+                        <td width="40%"><a href="{{ path('fenchy_regular_user_user_myprofile_tellafriends')}}" class="categorylink">{{ 'regularuser.tell_friend_about_pollyandbob_now'|trans }}</a></td>
                       </tr>
                       
                       <tr>
@@ -81,13 +81,13 @@
                         <td width="40%">{{ 'regularuser.location_verified'|trans }}</td>
                         <td width="10%">{% if verified %}100{% else %}0{% endif %}</td>
                         <td width="10%">{% if verified %}100{% else %}0{% endif %}</td>
-                        <td width="40%"><a href="#dialog51" name="modal" id="vzoom_1944" class="zoomthis categorylink">{{ 'regularuser.verify_your_location_now'|trans }}</a></td>
+                        <td width="40%"><a href="#dialog8" name="modal" id="vzoom_1944" class="zoomthis categorylink">{{ 'regularuser.verify_your_location_now'|trans }}</a></td>
                       </tr>
                       
                       <tr>
                         <td width="40%">{{ 'regularuser.passport_verified'|trans }}</td>
-                        <td width="10%">{% if identity %}100{% else %}0{% endif %}</td>
-                        <td width="10%">{% if identity %}100{% else %}0{% endif %}</td>
+                        <td width="10%">{% if identity %}200{% else %}0{% endif %}</td>
+                        <td width="10%">{% if identity %}200{% else %}0{% endif %}</td>
                         <td width="40%"><a href="#dialog2" name="modal" id="vzoom_1944" class="zoomthis categorylink">{{ 'regularuser.verify_your_passport_now'|trans }}</a></td>
                       </tr>
                       
@@ -104,7 +104,7 @@
 		        <div class="big_popup">
 		            <div class="big_popupclose"><a href="" class="close"></a></div>
 		            
-						{% if verified %}
+				{% if verified %}
 		            		<p>{{ 'regularuser.verified_location_message'|trans|upper }}</p>            								   	        		
 		    	        {% else %}
 		    	        	{% if verifyLocation %}
@@ -117,10 +117,10 @@
 					           			<input type="text" id="pincode" name="pincode" placeholder="{{ 'regularuser.postcode1'|trans }}"/><br/>
 										<button type="submit"> {{ 'regularuser.ok'|trans|upper }}</button>
 				    	        	</form>
-								{% else %}							
+                                            {% else %}							
 				    	        	<p>{{ 'regularuser.verifing_location_message'|trans|upper }}</p>
-		    	        	{% endif %}
-		    	        {% endif %}
+                                            {% endif %}
+                                        {% endif %}
 		        </div> 
 		        <img class="popup_bottom" src="/images/popup_bottom.png" alt="" style="width: 100%; bottom: -9px;">   
 	    	</div>    

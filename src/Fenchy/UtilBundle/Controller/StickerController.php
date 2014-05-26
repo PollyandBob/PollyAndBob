@@ -166,4 +166,54 @@ class StickerController extends Controller
             'form'   => $form->createView()
         ));
     }
+    
+    public function groupStickerAction($id)
+    {
+        $sticker = new Sticker();
+
+        $em = $this->getDoctrine()
+                   ->getEntityManager();
+        
+        $usergroup = $em
+                ->getRepository('FenchyRegularUserBundle:UserGroup')
+                ->find($id);
+        
+        if(!($usergroup instanceof src\Fenchy\RegularUserBundle\Entity\UserGroup)) {
+            
+            $this->createNotFoundException();
+        }
+        
+        if($usergroup->getUser()->getId() === $this->get('security.context')->getToken()->getUser()->getId()) {
+            throw new \Exception('You cannot flag yourself!');
+        }
+        $form = $this->createForm(new StickerType(), $sticker);
+        
+        $sticker
+            ->setReportedBy($this->get('security.context')->getToken()->getUser())
+            ->setGroup($usergroup);
+        
+        $request = $this->getRequest();
+        
+        if($request->isMethod('POST')) {
+            
+            $form->bindRequest($request);
+
+            if ($form->isValid()) {
+
+                $em->persist($sticker);
+                $em->flush();
+
+                return $this->render('FenchyUtilBundle:Sticker:added.html.twig', array(
+                    'sticker' => $sticker
+                ));
+            }
+
+        }
+        
+        return $this->render('FenchyUtilBundle:Sticker:new.html.twig', array(
+            'sticker' => $sticker,
+            'form'   => $form->createView()
+        ));
+    }
+    
 }

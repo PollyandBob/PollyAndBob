@@ -1,0 +1,84 @@
+{# empty Twig template #}
+ <script type="text/javascript" src="{{ asset('js/regular_user/listing/jquery.session.js') }}"></script>
+<style>
+.neighboursdetils img
+{
+    border-radius:50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    -khtml-border-radius:50%;
+}
+.neighbour-comments input
+{
+    border-top: 1px solid #CCCCCC;
+    height: 40px;
+    width: 298px;	
+}
+</style>
+
+{% if users2 %}
+
+	<script type="text/javascript">
+            $(document).ready(function() {
+            {% for user in users2 %}
+                 $("#close_{{ user.id }}").click(function(event) {
+                        $("#chatwindow_{{ user.id }}").slideToggle('slow', function() {
+                        });
+                         $.session.remove("id",{{ user.id }});
+                 });
+            {% endfor %}
+            });         
+	</script>
+        <script type="text/javascript"> 
+            $(document).ready(function() {
+            {% for user in users2 %}
+                $("#chatwindow_{{ user.id }}").hover(function()
+                {
+                   var disp = $("#chatwindow_{{ user.id }}").css('display');
+                   if(disp == 'block')
+                   {
+                       $.post('{{ path('fenchy_regular_user_updatechatcount') }}',
+                            {'user' : {{ user.id }} },
+                            function(data) {                                
+                                $('.mailcount').html(data);
+                        });
+                   } 
+                });
+            {% endfor %}
+           });          
+	</script>
+        <script type="text/javascript">            
+            window.onload=function(){
+                    var id = $.session.get("id");                    
+                    if(id)
+                    {                       
+                        $("#chatwindow_"+id).show();
+                        var a =  document.getElementById("chatwindow_"+id).getElementsByClassName("comments-scroll")[0].scrollHeight - $('#chatwindow_'+id+' .comments-scroll').height();
+                                         $('#chatwindow_'+id+' .comments-scroll').scrollTop(a);
+                    }
+                }
+        </script>
+        
+	{% for user in users2 %}                
+		
+        <div class="chatwindowupdate_{{ user.id }}">
+                <div class="chatwindow" id="chatwindow_{{ user.id }}" style="display: none;">
+			<div class="neighbour-comments">
+				<div class="title">
+			    	<div class="left">{{ user.regularuser.firstname }}</div>
+			   		<div class="right">Online</div>
+                                        <div class="righttoright" id="close_{{ user.id }}"><img src="{{ absolute(asset('images/chat_close.png')) }}"></div>
+				</div>	
+				<div class="commentsdetail">
+                                   		
+                                        {% render 'CunningsoftChatBundle:Chat:show' with {'receiverId': user.id} %}
+                                   
+				</div>
+			</div>
+		</div>
+            </div>
+        {% endfor %}
+        
+{% else %}
+	  
+{% endif %}

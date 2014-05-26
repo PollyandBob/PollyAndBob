@@ -1,0 +1,16 @@
+## YAML Template.
+---
+createlisting:
+    end_time: End time should greater then start time
+    please_check: Please check option
+    please_check_one: Please check at least one option
+    max_two: You can check maximum two options
+    enter_piece: Either enter number of pieces or check checkbox
+    enter_spot: Either enter number of spots or check checkbox
+    enter_price: You need to enter price with buy option
+    createnote1: You need to check default payment settings
+    createnote2: You can't select free with this left side option
+    createnote3: Either enter price or select give it for free
+    createnote4: This option is not possible with give it for free
+    createnote5: EITHER CHECK PROPOSE A LOCATION OR CHECK OTHER THREE OPTION
+    set_price: When you want to sell the item, please set a price and defult payment settings!
